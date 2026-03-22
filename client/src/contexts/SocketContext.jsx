@@ -20,7 +20,7 @@ export const SocketProvider = ({ children }) => {
     // For production (Render): connect to same server (relative URL)
     // For development: use VITE_SERVER_URL env var or localhost:3001
     const SERVER_URL = import.meta.env.VITE_SERVER_URL || 
-                       (import.meta.env.PROD ? window.location.origin : "http://localhost:3001");
+                       (import.meta.env.PROD ? window.location.origin : "http://192.168.31.66:3001");
     
     const s = io.connect(SERVER_URL, {
       reconnection: true,

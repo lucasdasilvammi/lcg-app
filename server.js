@@ -557,9 +557,11 @@ app.use((req, res) => {
 });
 
 // --- START SERVER ---
-const PORT = process.env.PORT || 3001;  // Match client expectation
-server.listen(PORT, () => {
-  console.log(`🚀 SERVER RUNNING ON PORT ${PORT}`);
+const PORT = process.env.PORT || 3001;
+const HOST = process.env.HOST || '0.0.0.0';  // Listen on all interfaces for mobile testing
+server.listen(PORT, HOST, () => {
+  console.log(`🚀 SERVER RUNNING ON ${HOST}:${PORT}`);
   console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`✅ Health Check: GET /api/status`);
+  console.log(`📱 Mobile Access: http://192.168.31.66:${PORT}`);
 });
