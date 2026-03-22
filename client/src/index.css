@@ -1,0 +1,138 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Funnel';
+  src: url('./assets/FunnelDisplay-VariableFont_wght.ttf') format('truetype');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hakobi';
+  src: url('./assets/hakobi.ttf') format('truetype');
+  font-weight: normal;
+  font-display: swap;
+}
+
+@layer components {
+  .font-hakobi {
+    font-family: 'Hakobi', sans-serif;
+    display: inline-block;
+    vertical-align: baseline;
+  }
+  
+  .font-funnel {
+    font-family: 'Funnel', sans-serif;
+  }
+}
+
+@theme {
+  --color-bg: #101010;
+  --color-light-5: rgba(255, 246, 239, 0.05);
+  --color-light-8: rgba(255, 246, 239, 0.08);
+  --color-light-10: rgba(255, 246, 239, 0.1);
+  --color-light-15: rgba(255, 246, 239, 0.15);
+  --color-light: #FFF6EF;
+  
+  --color-blue-primary: #06C0F9;
+  --color-blue-secondary: #0D3C4A;
+  --color-red-primary: #F63609;
+  --color-red-secondary: #3F150B;
+  --color-yellow-primary: #FFC400;
+  --color-yellow-secondary: #4C3E0F;
+  --color-green-primary: #20CA4B;
+  --color-green-secondary: #143E1F;
+  --color-purple-primary: #9D0AFF;
+  --color-purple-secondary: #260A3A;
+  --color-orange-primary: #FF8A04;
+  --color-orange-secondary: #4C2E0D;
+  --color-darkblue-primary: #1C51FF;
+  --color-darkblue-secondary: #0C173C;
+  --color-pink-primary: #FF37A5;
+  --color-pink-secondary: #4C1A35;
+  
+  --color-alan: #06C0F9;
+  --color-donatien: #FF37A5;
+  --color-lucien: #20CA4B;
+  --color-virginie: #F63609;
+  --color-barbara: #9D0AFF;
+  --color-alex: #FFC400;
+  --color-lucie: #1C51FF;
+  --color-tanguy: #FF8A04;
+
+  --font-family-funnel: funnel, system-ui, sans-serif;
+  --font-family-hakobi: hakobi, system-ui, sans-serif;
+
+  --breakpoint-phone: 440px;
+}
+
+:root {
+
+  color-scheme: light dark;
+  color: #FFF6EF;
+  background-color: #101010;
+  font-family: funnel, sans-serif;
+
+  --color-alan: #06C0F9;
+  --color-donatien: #FF37A5;
+  --color-lucien: #20CA4B;
+  --color-virginie: #F63609;
+  --color-barbara: #9D0AFF;
+  --color-alex: #FFC400;
+  --color-lucie: #1C51FF;
+  --color-tanguy: #FF8A04;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer base {
+  h2[class] {
+    margin: 0;
+  }
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  place-items: center;
+  width: 100%;
+  max-height: 100vh;
+  height: 100vh;
+  background: #000;
+}
+
+@media (max-width: 440px) {
+  body {
+    background: #101010;
+  }
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}

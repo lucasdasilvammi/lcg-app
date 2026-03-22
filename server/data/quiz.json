@@ -1,0 +1,51 @@
+{
+  "_comment": "Questions de test - 5 difficultés x 6 catégories",
+  
+  "Culture graphique": [
+    {"q": "Qu’est-ce que le gris typographique, dans une composition ?", "options": ["L’équilibre d’opacité entre noir et gris pour hiérarchiser les informations", "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition", "La répartition du texte et des images pour créer un contraste visuel"], "correct": 1, "diff": 1, "category": "Culture graphique"},
+    {"q": "[Culture graphique - Diff 2] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 2, "category": "Culture graphique"},
+    {"q": "[Culture graphique - Diff 3] (C)", "options": ["Option A", "Option B", "Option C"], "correct": 2, "diff": 3, "category": "Culture graphique"},
+    {"q": "[Culture graphique - Diff 4] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 4, "category": "Culture graphique"},
+    {"q": "[Culture graphique - Diff 5] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 5, "category": "Culture graphique"}
+  ],
+  
+  "Signe et couleur": [
+    {"q": "Qu’est-ce que le gris typographique, dans une composition ?", "options": ["L’équilibre d’opacité entre noir et gris pour hiérarchiser les informations", "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition", "La répartition du texte et des images pour créer un contraste visuel"], "correct": 1, "diff": 1, "category": "Signe et couleur"},
+    {"q": "[Signe et couleur - Diff 2] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 2, "category": "Signe et couleur"},
+    {"q": "[Signe et couleur - Diff 3] (C)", "options": ["Option A", "Option B", "Option C"], "correct": 2, "diff": 3, "category": "Signe et couleur"},
+    {"q": "[Signe et couleur - Diff 4] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 4, "category": "Signe et couleur"},
+    {"q": "[Signe et couleur - Diff 5] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 5, "category": "Signe et couleur"}
+  ],
+
+  "Typographie": [
+    {"q": "[Typographie - Diff 1] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 1, "category": "Typographie"},
+    {"q": "[Typographie - Diff 2] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 2, "category": "Typographie"},
+    {"q": "[Typographie - Diff 3] (C)", "options": ["Option A", "Option B", "Option C"], "correct": 2, "diff": 3, "category": "Typographie"},
+    {"q": "[Typographie - Diff 4] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 4, "category": "Typographie"},
+    {"q": "Qu’est-ce que le gris typographique, dans une composition ?", "options": ["L’équilibre d’opacité entre noir et gris pour hiérarchiser les informations", "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition", "La répartition du texte et des images pour créer un contraste visuel"], "correct": 1, "diff": 5, "category": "Typographie"}
+  ],
+
+  "Logo": [
+    {"q": "[Logo - Diff 1] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 1, "category": "Logo"},
+    {"q": "[Logo - Diff 2] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 2, "category": "Logo"},
+    {"q": "[Logo - Diff 3] (C)", "options": ["Option A", "Option B", "Option C"], "correct": 2, "diff": 3, "category": "Logo"},
+    {"q": "[Logo - Diff 4] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 4, "category": "Logo"},
+    {"q": "Qu’est-ce que le gris typographique, dans une composition ?", "options": ["L’équilibre d’opacité entre noir et gris pour hiérarchiser les informations", "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition", "La répartition du texte et des images pour créer un contraste visuel"], "correct": 1, "diff": 5, "category": "Logo"}
+  ],
+
+  "Composition": [
+    {"q": "[Composition - Diff 1] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 1, "category": "Composition"},
+    {"q": "[Composition - Diff 2] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 2, "category": "Composition"},
+    {"q": "[Composition - Diff 3] (C)", "options": ["Option A", "Option B", "Option C"], "correct": 2, "diff": 3, "category": "Composition"},
+    {"q": "[Composition - Diff 4] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 4, "category": "Composition"},
+    {"q": "Qu’est-ce que le gris typographique, dans une composition ?", "options": ["L’équilibre d’opacité entre noir et gris pour hiérarchiser les informations", "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition", "La répartition du texte et des images pour créer un contraste visuel"], "correct": 1, "diff": 5, "category": "Composition"}
+  ],
+
+  "Production": [
+    {"q": "[Production - Diff 1] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 1, "category": "Production"},
+    {"q": "[Production - Diff 2] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 2, "category": "Production"},
+    {"q": "[Production - Diff 3] (C)", "options": ["Option A", "Option B", "Option C"], "correct": 2, "diff": 3, "category": "Production"},
+    {"q": "[Production - Diff 4] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 4, "category": "Production"},
+    {"q": "[Production - Diff 5] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 5, "category": "Production"}
+  ]
+}

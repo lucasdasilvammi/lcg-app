@@ -1,0 +1,140 @@
+﻿{
+  "_comment": "Défis - Support buzzer, vraioufaux et chiffres (toujours 3 jalons)",
+  
+  "buzzer": [
+    {
+      "type": "buzzer",
+      "question": "Qu'est-ce que le gris typographique ?",
+      "options": [
+        "L'équilibre d'opacité entre noir et gris pour hiérarchiser les informations",
+        "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition",
+        "La répartition du texte et des images pour créer un contraste visuel"
+      ],
+      "correct": 1,
+      "explanation": "Le gris typographique désigne l'équilibre visuel créé par la densité du texte sur une page."
+    },
+    {
+      "type": "buzzer",
+      "question": "Citez 3 formats d'image",
+      "options": [
+        "JPG, PNG, GIF",
+        "DOC, PDF, TXT",
+        "MP3, WAV, FLAC"
+      ],
+      "correct": 0,
+      "explanation": "Il existe de nombreux formats d'images adaptés à différents usages."
+    },
+    {
+      "type": "buzzer",
+      "question": "Quelle est la couleur complémentaire du rouge ?",
+      "options": [
+        "Le jaune",
+        "Le vert",
+        "Le violet"
+      ],
+      "correct": 1,
+      "explanation": "Dans le cercle chromatique, les couleurs complémentaires sont opposées."
+    },
+    {
+      "type": "buzzer",
+      "question": "Quel raccourci clavier permet de tout sélectionner ?",
+      "options": [
+        "Ctrl + A (Cmd + A)",
+        "Ctrl + C (Cmd + C)",
+        "Ctrl + Z (Cmd + Z)"
+      ],
+      "correct": 0,
+      "explanation": "Ce raccourci universel fonctionne dans la plupart des logiciels."
+    },
+    {
+      "type": "buzzer",
+      "question": "Qu'est-ce qu'une typographie serif ?",
+      "options": [
+        "Une typographie avec empattements",
+        "Une typographie uniquement en capitales",
+        "Une typographie sans contraste de pleins et déliés"
+      ],
+      "correct": 0,
+      "explanation": "Les serif sont souvent utilisées pour les textes longs car elles facilitent la lecture."
+    }
+  ],
+
+  "vraioufaux": [
+    {
+      "type": "vraioufaux",
+      "question": "Le RGB est un modèle de couleur additif",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 0,
+      "explanation": "Le RGB (Rouge, Vert, Bleu) est effectivement un modèle additif utilisé pour les écrans."
+    },
+    {
+      "type": "vraioufaux",
+      "question": "Une typographie sans serif s'appelle une serif font",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 1,
+      "explanation": "Faux : une typographie sans serif s'appelle une 'sans-serif' ou 'linéale'."
+    },
+    {
+      "type": "vraioufaux",
+      "question": "Le blanc d'un logo doit toujours être opaque",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 1,
+      "explanation": "Faux : le blanc peut être transparent ou opaque selon le contexte d'utilisation du logo."
+    },
+    {
+      "type": "vraioufaux",
+      "question": "La composition centrée crée toujours un effet formel et sérieux",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 1,
+      "explanation": "Faux : une composition centrée peut être moderne ou ludique selon les autres éléments."
+    },
+    {
+      "type": "vraioufaux",
+      "question": "L'utilisation de 4 couleurs différentes dans un design est toujours trop",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 1,
+      "explanation": "Faux : on peut utiliser 4 couleurs ou plus si elles sont bien harmonisées et justifiées."
+    }
+  ],
+
+  "chiffres": [
+    {
+      "type": "chiffres",
+      "question": "Donnez la valeur précise du nombre d'or ?",
+      "correct": 1618,
+      "digits": 4,
+      "decimalPosition": 1,
+      "explanation": "Le nombre d'or (phi) vaut 1,618... soit 1618 pour 4 chiffres significatifs."
+    },
+    {
+      "type": "chiffres",
+      "question": "Combien de centimetres ?",
+      "correct": 1564,
+      "digits": 4,
+      "decimalPosition": 2,
+      "explanation": "15,64 cm."
+    },
+    {
+      "type": "chiffres",
+      "question": "Nombre de points DPI standard pour l'impression offset ?",
+      "correct": 300,
+      "digits": 3,
+      "explanation": "300 DPI est le standard pour l'impression de qualité."
+    }
+  ]
+}

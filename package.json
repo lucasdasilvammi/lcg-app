@@ -1,0 +1,38 @@
+{
+  "name": "lcg-app",
+  "version": "1.0.0",
+  "description": "Le Cube Graphique - Web App Fullstack Mobile-First",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "install-all": "npm install && cd client && npm install",
+    "build": "npm run install-all && cd client && npm run build",
+    "start": "node server.js",
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "server:dev": "nodemon server.js",
+    "client:dev": "cd client && npm run dev"
+  },
+  "keywords": [
+    "game",
+    "real-time",
+    "socket.io",
+    "react"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "path": "^0.12.7",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "nodemon": "^3.1.11",
+    "socket.io-client": "^4.8.3"
+  },
+  "engines": {
+    "node": "18.x",
+    "npm": "9.x"
+  }
+}
