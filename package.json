@@ -32,7 +32,7 @@
     "socket.io-client": "^4.8.3"
   },
   "engines": {
-    "node": "16.x",
+    "node": "18.x",
     "npm": "8.x"
   }
 }
