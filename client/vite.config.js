@@ -8,4 +8,11 @@ export default defineConfig({
     outDir: '../build',
     emptyOutDir: true,
   },
+  server: {
+    // Configure HMR for mobile testing over network
+    hmr: {
+      host: '192.168.31.66',
+      port: 5173,
+    },
+  },
 })
