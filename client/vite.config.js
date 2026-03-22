@@ -9,10 +9,13 @@ export default defineConfig({
     emptyOutDir: true,
   },
   server: {
+    host: '0.0.0.0',  // Listen on all interfaces
+    port: 5173,
     // Configure HMR for mobile testing over network
     hmr: {
       host: '192.168.31.66',
       port: 5173,
+      protocol: 'ws',
     },
   },
 })
