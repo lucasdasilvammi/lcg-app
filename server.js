@@ -7,8 +7,8 @@ const app = express();
 const server = http.createServer(app);
 
 // --- CORS Configuration (Dynamic for Production) ---
-const allowedOrigins = process.env.NODE_ENV === 'production' 
-  ? [process.env.CLIENT_URL || 'https://yourdomain.com']
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? true  // Allow all origins in production for multiplayer game
   : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:3000'];
 
 const io = new Server(server, {
