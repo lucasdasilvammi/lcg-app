@@ -557,7 +557,7 @@ app.use((req, res) => {
 });
 
 // --- START SERVER ---
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;  // Match client expectation
 server.listen(PORT, () => {
   console.log(`🚀 SERVER RUNNING ON PORT ${PORT}`);
   console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
