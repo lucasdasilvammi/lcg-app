@@ -24,8 +24,8 @@ export default function DigitBox({ value, state = 'waiting', size = 'large' }) {
   }
 
   // Tailles: large (h-20 w-20) pour les duellistes, small (h-14 w-14) pour le lecteur
-  const sizeClass = size === 'small' ? 'h-14 w-14' : 'h-20 w-20'
-  const textSize = size === 'small' ? 'text-4xl' : 'text-5xl'
+  const sizeClass = size === 'small' ? 'h-14 w-14' : 'h-16 w-16 phone:h-18 phone:w-18'
+  const textSize = size === 'small' ? 'text-3xl' : 'text-[42px]'
 
   return (
     <div className={`relative ${sizeClass} flex items-center justify-center ${getStateColor()}`}>

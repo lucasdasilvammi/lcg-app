@@ -13,7 +13,6 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
     const activePlayer = roomData.players[roomData.turnIndex]
     const isActivePlayer = activePlayer?.id === currentUserId
     const readerPlayer = roomData.players.find(p => p.id === readerId)
-    const getCharacterColor = (charId) => `var(--color-${charId})`
     const getCategoryId = (categoryName) => {
       const mapping = {
         'Culture graphique': 'culture',
@@ -25,64 +24,81 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
       }
       return mapping[categoryName] || (categoryName ? categoryName.toLowerCase() : '')
     }
+
     return (
-      <div className="relative w-110 flex flex-col justify-between items-center h-screen py-16 px-4 text-center">
-      {!isMeReader && (
-        <div 
-          className="absolute inset-0 -left-4 -top-11 w-115 h-[110vh] pointer-events-none z-0"
-          style={{
-            backgroundImage: 'url(/assets/room-border.svg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        />
-      )}
-        <div className="flex items-center gap-2 w-full flex-wrap justify-center">
-          {activePlayer?.character && (
-            <img src={`/game/${activePlayer.character}.svg`} alt={activePlayer.character} className="w-10 h-10 object-contain" />
-          )}
-          <img src="/game/categorie/tag-quizz.png" alt="Quizz" className="h-7" />
-          <img src={`/game/categorie/${getCategoryId(data.category)}.png`} alt={data.category} className="h-7" />
-          <img src={`/game/categorie/diff-${data.diff}.png`} alt={`Difficulté ${data.diff}`} className="h-7" />
-        </div>
-        {isMeReader ? (
-          <div className='w-full h-full flex flex-col items-center justify-center gap-16 p-8'>
-            <p className="text-2xl font-medium font-family-funnel">"{data.q}"</p>
-            <div className="flex flex-col gap-3 w-full">
-              {data.options.map((option, index) => {
-                return (
-                  <QuizAnswerButton
-                  className='bg-light'
-                  key={index}
-                  onClick={() => resolveInteraction({ correct: index === data.correct, selectedIndex: index })}
-                  label={['A','B','C'][index]}
-                  text={option}
-                  />
-                )
-              })}
-            </div>
-          </div>
-        ) : (
-          <div className='w-full h-full flex flex-col items-center justify-center gap-8 p-8'>
-            {isActivePlayer && (
-              <>
-                <p className="text-5xl uppercase font-family-hakobi text-light">à toi de répondre</p>
-                <CharacterCard charId={readerPlayer?.character} size="low" />
-                <p className="text-xl text-light font-family-funnel -mt-6">te pose une question</p>
-              </>
-            )}
-            {!isActivePlayer && (
-              <>
-                <CharacterCard charId={readerPlayer?.character} size="low" />
-                <p className="text-xl text-light font-family-funnel opacity-70">pose une question à</p>
-                <CharacterCard charId={activePlayer?.character} size="low" />
-              </>
-            )}
-          </div>
+      <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
+        {!isMeReader && (
+          <>
+            <div
+              className="pointer-events-none absolute inset-0 z-0"
+              style={{
+                backgroundImage: 'url(/assets/home-border-verical.png)',
+                backgroundSize: 'auto 100%',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }}
+            />
+            <div
+              className="pointer-events-none absolute inset-0 z-0"
+              style={{
+                backgroundImage: 'url(/assets/home-border-horizontal.png)',
+                backgroundSize: '100% auto',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }}
+            />
+          </>
         )}
-        {isMeReader && <ButtonWithIcon onClick={() => {}} text="Suivant" className="opacity-0 pointer-events-none"/>}
-        {!isMeReader && <ScoreBar players={roomData.players} currentUserId={currentUserId} />}
+
+        <div className="relative z-10 mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-between gap-5 py-14 px-0 phone:px-8 text-center">
+          <div className="flex w-full items-center justify-center gap-2 flex-wrap">
+            {activePlayer?.character && (
+              <img src={`/game/${activePlayer.character}.svg`} alt={activePlayer.character} className="w-8 h-8 phone:w-10 phone:h-10 object-contain" />
+            )}
+            <img src="/game/categorie/tag-quizz.png" alt="Quizz" className="h-6 phone:h-7" />
+            <img src={`/game/categorie/${getCategoryId(data.category)}.png`} alt={data.category} className="h-6 phone:h-7" />
+            <img src={`/game/categorie/diff-${data.diff}.png`} alt={`Difficulté ${data.diff}`} className="h-6 phone:h-7" />
+          </div>
+
+          {isMeReader ? (
+            <div className='w-full flex-1 min-h-0 flex flex-col items-center justify-center gap-16 p-8'>
+              <p className="text-2xl font-medium font-family-funnel">"{data.q}"</p>
+              <div className="flex flex-col gap-3 w-full">
+                {data.options.map((option, index) => {
+                  return (
+                    <QuizAnswerButton
+                      className='bg-light'
+                      key={index}
+                      onClick={() => resolveInteraction({ correct: index === data.correct, selectedIndex: index })}
+                      label={['A','B','C'][index]}
+                      text={option}
+                    />
+                  )
+                })}
+              </div>
+            </div>
+          ) : (
+            <div className='flex w-full flex-1 flex-col items-center justify-center gap-6 phone:gap-8 px-4 phone:px-8'>
+              {isActivePlayer && (
+                <>
+                  <p className="text-4xl phone:text-5xl uppercase font-family-hakobi text-light">a toi de repondre</p>
+                  <CharacterCard charId={readerPlayer?.character} size="low" />
+                  <p className="text-lg phone:text-xl text-light font-family-funnel -mt-4 phone:-mt-6">te pose une question</p>
+                </>
+              )}
+              {!isActivePlayer && (
+                <>
+                  <CharacterCard charId={readerPlayer?.character} size="low" />
+                  <p className="text-lg phone:text-xl text-light font-family-funnel opacity-70">pose une question à</p>
+                  <CharacterCard charId={activePlayer?.character} size="low" />
+                </>
+              )}
+            </div>
+          )}
+
+          {isMeReader && <ButtonWithIcon onClick={() => {}} text="Suivant" className="opacity-0 pointer-events-none" />}
+          {!isMeReader && <ScoreBar players={roomData.players} currentUserId={currentUserId} />}
+        </div>
       </div>
     )
   }

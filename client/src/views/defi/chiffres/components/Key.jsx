@@ -18,7 +18,7 @@ export default function Key({ value, onClick, state = 'active', type = 'number' 
     <button
       onClick={isDisabled ? undefined : onClick}
       disabled={isDisabled}
-      className={`relative h-20 w-20 flex items-center justify-center ${getStateColor()} ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:scale-105 active:scale-95'} transition-transform`}
+      className={`relative h-16 w-16 phone:h-18 phone:w-18 flex items-center justify-center ${getStateColor()} ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:scale-105 active:scale-95'} transition-transform`}
     >
       {/* Background SVG */}
       <svg 
@@ -35,13 +35,13 @@ export default function Key({ value, onClick, state = 'active', type = 'number' 
       {/* Content */}
       <div className="relative z-10 flex items-center justify-center">
         {type === 'number' && (
-          <span className="text-5xl font-hakobi text-light -mb-2">{value}</span>
+          <span className="text-[42px] font-hakobi text-light -mb-2">{value}</span>
         )}
         {type === 'delete' && (
-          <img src="/game/icons/supprimer.svg" alt="Supprimer" className="w-12 h-12" />
+          <img src="/game/icons/supprimer.svg" alt="Supprimer" className="w-10 h-10" />
         )}
         {type === 'submit' && (
-          <img src="/game/icons/enter.svg" alt="Valider" className="w-12 h-12" />
+          <img src="/game/icons/enter.svg" alt="Valider" className="w-10 h-10" />
         )}
       </div>
     </button>

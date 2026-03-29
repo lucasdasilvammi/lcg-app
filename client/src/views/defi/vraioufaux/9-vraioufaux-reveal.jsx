@@ -18,14 +18,14 @@ export default function DuelReveal({ roomData, continueToFeedback, currentUserId
   const isMeReader = readerId === currentUserId
 
   return (
-    <div className="relative max-w-110 flex flex-col justify-between items-center h-screen py-16 px-6 text-center">
+    <div className="bg-bg relative max-w-110 flex flex-col justify-between items-center h-dvh py-14 px-6 text-center">
       {/* Navbar avec participants, tag défi et jalons */}
       <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
 
       {/* Contenu principal */}
-      <div className="flex flex-col items-center gap-8 w-full max-w-3xl">
+      <div className="relative flex flex-col items-center gap-10 w-full max-w-3xl">
         {/* Question */}
-        <p className="text-2xl font-bold font-funnel text-light">"{data?.question}"</p>
+        <p className="text-2xl font-medium font-family-funnel text-light">"{data?.question}"</p>
 
         {/* Options avec indicateurs */}
         <div className="flex flex-col gap-3 w-full">

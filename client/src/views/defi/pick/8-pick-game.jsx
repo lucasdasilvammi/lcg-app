@@ -130,12 +130,12 @@ export default function PickGame({ roomData, currentUserId }) {
     return () => clearTimeout(timer)
   }, [spectatorCountdown])
 
-  const updateColorFromPosition = (e) => {
+  const updateColorFromPosition = (clientX, clientY) => {
     if (!squareRef.current || hasSubmitted) return
     
     const rect = squareRef.current.getBoundingClientRect()
-    const x = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width))
-    const y = Math.max(0, Math.min(1, (e.clientY - rect.top) / rect.height))
+    const x = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
+    const y = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height))
     
     // X = saturation (0-100), Y = lightness (100-0, inversé)
     setSaturation(Math.round(x * 100))
@@ -144,7 +144,15 @@ export default function PickGame({ roomData, currentUserId }) {
 
   const handleSquareMouseDown = (e) => {
     if (hasSubmitted) return
-    updateColorFromPosition(e)
+    updateColorFromPosition(e.clientX, e.clientY)
+    setIsDragging(true)
+  }
+
+  const handleSquareTouchStart = (e) => {
+    if (hasSubmitted) return
+    const touch = e.touches[0]
+    if (!touch) return
+    updateColorFromPosition(touch.clientX, touch.clientY)
     setIsDragging(true)
   }
 
@@ -152,19 +160,36 @@ export default function PickGame({ roomData, currentUserId }) {
     if (!isDragging) return
 
     const handleMouseMove = (e) => {
-      updateColorFromPosition(e)
+      updateColorFromPosition(e.clientX, e.clientY)
     }
 
     const handleMouseUp = () => {
       setIsDragging(false)
     }
 
+    const handleTouchMove = (e) => {
+      const touch = e.touches[0]
+      if (!touch) return
+      e.preventDefault()
+      updateColorFromPosition(touch.clientX, touch.clientY)
+    }
+
+    const handleTouchEnd = () => {
+      setIsDragging(false)
+    }
+
     document.addEventListener('mousemove', handleMouseMove)
     document.addEventListener('mouseup', handleMouseUp)
+    document.addEventListener('touchmove', handleTouchMove, { passive: false })
+    document.addEventListener('touchend', handleTouchEnd)
+    document.addEventListener('touchcancel', handleTouchEnd)
 
     return () => {
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseup', handleMouseUp)
+      document.removeEventListener('touchmove', handleTouchMove)
+      document.removeEventListener('touchend', handleTouchEnd)
+      document.removeEventListener('touchcancel', handleTouchEnd)
     }
   }, [isDragging, hasSubmitted])
 
@@ -252,7 +277,7 @@ export default function PickGame({ roomData, currentUserId }) {
   }, [hue, saturation, lightness, isDuelist, socket, hasSubmitted])
 
   return (
-    <div className="relative max-w-110 flex flex-col justify-between items-center h-screen py-16 px-6 text-center">
+    <div className="bg-bg relative w-full max-w-110 mx-auto flex flex-col justify-between items-center h-dvh py-14 px-6 text-center">
       <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
       
       {isSpectator && (
@@ -362,7 +387,8 @@ export default function PickGame({ roomData, currentUserId }) {
           <div
             ref={squareRef}
             onMouseDown={handleSquareMouseDown}
-            className={`relative w-full aspect-square overflow-hidden ${hasSubmitted ? 'opacity-50 cursor-not-allowed' : 'cursor-crosshair'}`}
+            onTouchStart={handleSquareTouchStart}
+            className={`relative w-full aspect-square overflow-hidden touch-none ${hasSubmitted ? 'opacity-50 cursor-not-allowed' : 'cursor-crosshair'}`}
           >
             <canvas
               ref={canvasRef}

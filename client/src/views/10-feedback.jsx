@@ -50,15 +50,16 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
         : (lastResult.success ? "Elle était technique celle là, bien joué !" : "Allez c'est pas grave, ce sera pour une prochaine fois.")))
 
   return (
-    <CharacterBorder characterId={borderCharacterId}>
-      <div className="w-full max-w-110 h-screen py-20 px-10 border-4 flex flex-col justify-between items-center text-center bg-bg">
+    <div className="w-full max-w-110 mx-auto">
+      <CharacterBorder characterId={borderCharacterId}>
+        <div className="w-full h-dvh py-14 px-8 phone:px-10 flex flex-col justify-between items-center text-center bg-bg">
         {/* Groupe: Personnage, titre et description */}
-        <div className="flex flex-col gap-0 px-12 items-center">
+        <div className="flex flex-col gap-0 items-center">
           {/* Tête et nom du joueur */}
           {borderCharacterId && (
             <CharacterCard 
               charId={borderCharacterId} 
-              size="big" 
+              size="medium" 
             />
           )}
           <h2 className="text-[42px] font-family-hakobi uppercase -mb-2">{titleText}</h2>
@@ -86,7 +87,8 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
         ) : (
           <ButtonWithIcon onClick={() => {}} text="Suivant" className="opacity-0 pointer-events-none" />
         )}
-      </div>
-    </CharacterBorder>
+        </div>
+      </CharacterBorder>
+    </div>
   )
 } 

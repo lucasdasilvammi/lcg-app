@@ -25,7 +25,7 @@ export default function CharacterTag({ charId, text, className = '', hideName = 
 
   return (
     <div
-      className={`relative flex items-center gap-3 px-3 py-2 h-10 overflow-hidden mt-4 -mb-4 ${className}`}
+      className={`relative flex items-center gap-3 px-3 py-2 h-10 overflow-hidden ${className}`}
       style={{ color: baseColor, backgroundColor }}
     >
       {/* Left corner */}
@@ -40,7 +40,7 @@ export default function CharacterTag({ charId, text, className = '', hideName = 
             className="w-7 h-7 object-contain"
           />
         )}
-        {icon && <div className="w-6 h-6 flex-shrink-0">{icon}</div>}
+        {icon && <div className="w-6 h-6 shrink-0">{icon}</div>}
         <span className="font-funnel text-lg font-semibold">{hideName ? text : (text ? `${charName} ${text}` : displayText)}</span>
       </div>
 

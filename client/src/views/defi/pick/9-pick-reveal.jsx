@@ -111,7 +111,7 @@ export default function PickReveal({ roomData, continueToFeedback, currentUserId
   const canAdvance = isPickChallenge && isNextPlayer
 
   return (
-    <div className="relative max-w-110 flex flex-col items-center h-screen py-12 pb-20 px-6 text-center gap-6">
+    <div className="bg-bg relative w-full max-w-110 mx-auto flex flex-col items-center h-dvh py-14 px-6 text-center gap-4">
       <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
       <div className="flex flex-col items-center h-full w-full justify-between pt-8">
 

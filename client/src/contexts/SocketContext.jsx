@@ -3,6 +3,24 @@ import io from 'socket.io-client'
 
 const SocketContext = createContext()
 
+const SESSION_TOKEN_KEY = 'lcg_session_token'
+
+const createSessionToken = () => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID()
+  }
+  return `session_${Date.now()}_${Math.random().toString(36).slice(2, 10)}`
+}
+
+const getOrCreateSessionToken = () => {
+  if (typeof window === 'undefined') return null
+  const existing = window.localStorage.getItem(SESSION_TOKEN_KEY)
+  if (existing) return existing
+  const generated = createSessionToken()
+  window.localStorage.setItem(SESSION_TOKEN_KEY, generated)
+  return generated
+}
+
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null)
   const [roomData, setRoomData] = useState(null)
@@ -21,8 +39,12 @@ export const SocketProvider = ({ children }) => {
     // For development: use VITE_SERVER_URL env var or localhost:3001
     const SERVER_URL = import.meta.env.VITE_SERVER_URL || 
                        (import.meta.env.PROD ? window.location.origin : "http://192.168.31.66:3001");
+    const sessionToken = getOrCreateSessionToken()
     
     const s = io.connect(SERVER_URL, {
+      auth: {
+        sessionToken
+      },
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,

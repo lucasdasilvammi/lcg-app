@@ -6,12 +6,16 @@ const SIZE_CONFIG = {
     title: 'text-6xl'
   },
   low: {
-    image: 'w-32 h-32',
-    title: 'text-5xl'
+    image: 'w-28 h-28',
+    title: 'text-4xl'
   },
   big: {
     image: 'w-52 h-52',
     title: 'text-7xl'
+  },
+   medium: {
+    image: 'w-42 h-42',
+    title: 'text-6xl'
   },
   horizontal: {
     image: 'w-24 h-24',
@@ -71,7 +75,7 @@ export default function CharacterCard({ charId, size = 'default' }) {
 
   // Variante par défaut (verticale)
   return (
-    <div className={`flex flex-col items-center ${size === 'mini' ? 'gap-1' : 'gap-4'}`}>
+    <div className={`flex flex-col items-center ${size === 'mini' ? 'gap-1' : 'gap-2'}`}>
       {/* Image */}
       <img
         src={`/game/${charId}.svg`}

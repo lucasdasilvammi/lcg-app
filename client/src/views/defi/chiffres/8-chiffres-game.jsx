@@ -114,7 +114,7 @@ export default function ChiffresGame({ roomData, currentUserId }) {
   const isComplete = answer.every(d => d !== '')
 
   return (
-    <div className='relative max-w-110 flex flex-col justify-between items-center h-screen py-16 px-6 text-center'>
+    <div className='bg-bg relative max-w-110 flex flex-col justify-between items-center h-dvh py-14 px-6 text-center'>
       <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
 
       <div className='h-full flex items-end'>
@@ -232,7 +232,7 @@ export default function ChiffresGame({ roomData, currentUserId }) {
                   <React.Fragment key={index}>
                     <DigitBox value={digit} state={state} />
                     {decimalPosition && index === decimalPosition - 1 && (
-                      <img src="/game/icons/virgule.svg" alt="," className="h-20 w-6 -mb-20 -mx-3" />
+                      <img src="/game/icons/virgule.svg" alt="," className="h-20 w-6 -mb-20 -ml-6 -mr-3" />
                     )}
                   </React.Fragment>
                 )

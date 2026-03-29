@@ -53,7 +53,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, con
   // Support buzzer et vraioufaux
   if (type === 'buzzer' || type === 'vraioufaux') {
     return (
-      <div className="relative max-w-110 flex flex-col justify-between items-center h-screen py-16 px-6 text-center">
+      <div className="bg-bg relative max-w-110 flex flex-col justify-between items-center h-dvh py-14 px-6 text-center">
         {/* Navbar avec participants, tag défi et jalons */}
         <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
 
@@ -80,7 +80,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, con
           </div>
         ) : isMeReader ? (
           <div className="relative flex flex-col items-center gap-10 w-full max-w-3xl">
-            <h2 className="text-2xl font-medium font-family-funnel">{data.question}</h2>
+            <p className="text-2xl font-medium font-family-funnel text-light">"{data.question}"</p>
             <div className="flex flex-col gap-3 w-full">
               {(data.options || []).map((option, index) => (
                 <QuizAnswerButton
@@ -93,7 +93,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, con
                 />
               ))}
             </div>
-            <div className='absolute -bottom-48'>
+            <div className='absolute -bottom-24'>
               {hasSomeoneBuzzed && <CharacterTag charId={buzzedPlayer?.character} text="a buzzé !" />}
             </div>
           </div>
@@ -120,7 +120,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, con
               </div>
             ) : (
               isDuelist && (
-                <div className="flex flex-col items-center gap-6">
+                <div className="flex flex-col items-center px-8 gap-6">
                   <h2 
                     className="font-hakobi text-5xl uppercase"
                     style={{ color: getCharacterColor(duelPlayers.find(p => p.id === currentUserId)?.character) }}
@@ -131,7 +131,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, con
                     onClick={playerBuzz}
                     className="relative transition-all hover:scale-105 active:scale-95"
                   >
-                    <svg width="393" height="400" viewBox="0 0 393 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-72 h-72">
+                    <svg width="393" height="400" viewBox="0 0 393 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-fit">
                       <path d="M173.46 123.505L145.13 137.145L131.637 165.475V247.316L173.46 279.843L238.513 270.4L257.4 247.316V165.475L238.513 137.145L207.036 123.505H173.46Z" fill={getCharacterSecondaryColor(duelPlayers.find(p => p.id === currentUserId)?.character)}/>
                       <path fillRule="evenodd" clipRule="evenodd" d="M30.3972 392.758L119.046 400L343.544 400L381.491 389.399L392.048 358.829V148.483V43.8946L368.781 12.2363L310.843 2.88048L47.7016 0L12.3084 11.377L1.67671 60.2217L0 315.639L8.31936 380.063L30.3972 392.758ZM145.13 137.145L173.46 123.505H207.036L238.513 137.145L257.4 165.475V247.316L238.513 270.4L173.46 279.843L131.637 247.316V165.475L145.13 137.145Z" fill={getCharacterColor(duelPlayers.find(p => p.id === currentUserId)?.character)}/>
                     </svg>
@@ -154,7 +154,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, con
           <ButtonWithIcon 
             onClick={() => {}}
             text="Suivant"
-            className="w-full !opacity-0 !pointer-events-none invisible"
+            className="w-full opacity-0 pointer-events-none invisible"
             disabled
           />
         )}

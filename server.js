@@ -9,7 +9,7 @@ const server = http.createServer(app);
 // --- CORS Configuration (Dynamic for Production) ---
 const allowedOrigins = process.env.NODE_ENV === 'production'
   ? true  // Allow all origins in production for multiplayer game
-  : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:3000'];
+  : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:3000', 'http://192.168.31.66:5173'];
 
 const io = new Server(server, {
   cors: { 
@@ -76,13 +76,108 @@ app.get('/api/status', (req, res) => {
 
 // --- GAME STATE ---
 let rooms = {};
+const DISCONNECT_GRACE_MS = 120000;
+const pendingDisconnectTimers = new Map();
+
+const clearPendingDisconnect = (sessionToken) => {
+  if (!sessionToken) return;
+  const timer = pendingDisconnectTimers.get(sessionToken);
+  if (timer) {
+    clearTimeout(timer);
+    pendingDisconnectTimers.delete(sessionToken);
+  }
+};
+
+const findRoomByPlayerId = (playerId) => Object.values(rooms).find(r => r.players.some(p => p.id === playerId));
+
+const findPlayerBySessionToken = (sessionToken) => {
+  if (!sessionToken) return null;
+  for (const room of Object.values(rooms)) {
+    const player = room.players.find(p => p.sessionToken === sessionToken);
+    if (player) return { room, player };
+  }
+  return null;
+};
+
+const replacePlayerIdInRoom = (room, oldId, newId) => {
+  if (!room || !oldId || !newId || oldId === newId) return;
+
+  if (room.adminId === oldId) room.adminId = newId;
+  if (room.pendingQuestionerId === oldId) room.pendingQuestionerId = newId;
+
+  for (const player of room.players) {
+    if (player.id === oldId) player.id = newId;
+  }
+
+  const ci = room.currentInteraction;
+  if (ci) {
+    if (ci.readerId === oldId) ci.readerId = newId;
+    if (ci.questionerId === oldId) ci.questionerId = newId;
+    if (ci.buzzedPlayerId === oldId) ci.buzzedPlayerId = newId;
+    if (Array.isArray(ci.duelists)) ci.duelists = ci.duelists.map(id => id === oldId ? newId : id);
+    if (Array.isArray(ci.acknowledgedRules)) ci.acknowledgedRules = ci.acknowledgedRules.map(id => id === oldId ? newId : id);
+
+    if (ci.submittedAnswers && ci.submittedAnswers[oldId] !== undefined) {
+      ci.submittedAnswers[newId] = ci.submittedAnswers[oldId];
+      delete ci.submittedAnswers[oldId];
+    }
+    if (Array.isArray(ci.submissionOrder)) {
+      ci.submissionOrder = ci.submissionOrder.map(id => id === oldId ? newId : id);
+    }
+    if (ci.submittedColors && ci.submittedColors[oldId] !== undefined) {
+      ci.submittedColors[newId] = ci.submittedColors[oldId];
+      delete ci.submittedColors[oldId];
+    }
+  }
+
+  if (room.duelAnswers && room.duelAnswers[oldId] !== undefined) {
+    room.duelAnswers[newId] = room.duelAnswers[oldId];
+    delete room.duelAnswers[oldId];
+  }
+
+  const lr = room.lastResult;
+  if (lr) {
+    if (lr.winnerId === oldId) lr.winnerId = newId;
+    if (lr.buzzedPlayerId === oldId) lr.buzzedPlayerId = newId;
+    if (lr.questionerId === oldId) lr.questionerId = newId;
+    if (lr.readerId === oldId) lr.readerId = newId;
+    if (lr.verdictViewerId === oldId) lr.verdictViewerId = newId;
+    if (Array.isArray(lr.duelists)) lr.duelists = lr.duelists.map(id => id === oldId ? newId : id);
+
+    if (lr.submittedColors && lr.submittedColors[oldId] !== undefined) {
+      lr.submittedColors[newId] = lr.submittedColors[oldId];
+      delete lr.submittedColors[oldId];
+    }
+  }
+};
 
 // --- SOCKET.IO GAME LOGIC ---
 io.on('connection', (socket) => {
+  const sessionToken = socket.handshake.auth?.sessionToken;
   console.log('🔌 socket connected:', socket.id);
   
-  const findRoom = () => Object.values(rooms).find(r => r.players.some(p => p.id === socket.id));
+  const findRoom = () => findRoomByPlayerId(socket.id);
   const syncRoom = (room) => io.to(room.id).emit('update_room_state', room);
+
+  if (sessionToken) {
+    clearPendingDisconnect(sessionToken);
+
+    const existing = findPlayerBySessionToken(sessionToken);
+    if (existing && existing.player.id !== socket.id) {
+      const previousSocketId = existing.player.id;
+      replacePlayerIdInRoom(existing.room, previousSocketId, socket.id);
+      socket.join(existing.room.id);
+
+      const previousSocket = io.sockets.sockets.get(previousSocketId);
+      if (previousSocket) {
+        previousSocket.leave(existing.room.id);
+        previousSocket.disconnect(true);
+      }
+
+      console.log('♻️ player reconnected via session token:', socket.id, 'room:', existing.room.id);
+      syncRoom(existing.room);
+    }
+  }
 
   // --- LOBBY ---
   socket.on('create_room', () => {
@@ -93,7 +188,7 @@ io.on('connection', (socket) => {
       id: newRoomId,
       code: gameCode,
       adminId: socket.id,
-      players: [{ id: socket.id, character: null, score: 0 }],
+      players: [{ id: socket.id, sessionToken, character: null, score: 0 }],
       status: 'LOBBY',
       turnIndex: 0,
       currentInteraction: null,
@@ -126,7 +221,7 @@ io.on('connection', (socket) => {
     }
 
     socket.join(room.id);
-    room.players.push({ id: socket.id, character: null, score: 0 });
+  room.players.push({ id: socket.id, sessionToken, character: null, score: 0 });
     socket.emit('room_joined', { roomId: room.id, isAdmin: false });
     console.log('join_room_with_code: player joined', socket.id, '->', room.id);
     syncRoom(room);
@@ -542,11 +637,45 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     const room = findRoom();
-    if (room) {
-      room.players = room.players.filter(p => p.id !== socket.id);
-      if (room.players.length === 0) delete rooms[room.id];
-      else syncRoom(room);
+    if (!room) {
+      console.log('🔌 socket disconnected:', socket.id);
+      return;
     }
+
+    const player = room.players.find(p => p.id === socket.id);
+    if (!player) {
+      console.log('🔌 socket disconnected:', socket.id);
+      return;
+    }
+
+    if (player.sessionToken) {
+      clearPendingDisconnect(player.sessionToken);
+      const timer = setTimeout(() => {
+        const latest = findPlayerBySessionToken(player.sessionToken);
+        if (!latest) {
+          pendingDisconnectTimers.delete(player.sessionToken);
+          return;
+        }
+
+        latest.room.players = latest.room.players.filter(p => p.sessionToken !== player.sessionToken);
+        if (latest.room.players.length === 0) {
+          delete rooms[latest.room.id];
+        } else {
+          syncRoom(latest.room);
+        }
+
+        pendingDisconnectTimers.delete(player.sessionToken);
+        console.log('⏱️ player removed after disconnect grace timeout:', player.sessionToken);
+      }, DISCONNECT_GRACE_MS);
+
+      pendingDisconnectTimers.set(player.sessionToken, timer);
+      console.log('🔌 socket disconnected (grace period):', socket.id);
+      return;
+    }
+
+    room.players = room.players.filter(p => p.id !== socket.id);
+    if (room.players.length === 0) delete rooms[room.id];
+    else syncRoom(room);
     console.log('🔌 socket disconnected:', socket.id);
   });
 });

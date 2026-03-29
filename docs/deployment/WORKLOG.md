@@ -4,6 +4,22 @@
 
 ---
 
+## 📅 Dimanche 29 Mars 2026
+
+### 📱 Passe responsive globale (quasi complète)
+- **Objectif atteint** : harmonisation mobile sur la majorité des écrans gameplay et lobby, en conservant le comportement desktop existant.
+- **Périmètre traité** : home, création/rejoindre room, sélection perso, ordre, turn-start, game-loop, quiz (options/game/reveal), défis (buzzer, vrai/faux, chiffres, pick), feedback, composants UI partagés.
+- **Composants consolidés** : uniformisation des wrappers, tailles, espacements, boutons, cards, tags et navbars pour une lecture stable sur petit écran.
+- **Exceptions assumées** : écran debug selector non retouché (temporaire) et écran 11 round-end laissé de côté pour un traitement dédié ultérieur.
+
+### 🔌 Robustesse session: déco/reco sans sortie de partie
+- **Amélioration majeure** : un joueur peut se déconnecter puis revenir sans faire quitter la game en cours.
+- **Effet produit** : continuité de partie préservée côté room/state, meilleure tolérance réseau en condition réelle.
+- **Impact UX** : expérience plus fiable pendant les manches longues et moins de pertes de progression liées aux aléas de connexion.
+
+### 🗃️ Backup de travail
+- **Sauvegarde Git demandée** : préparation d'un commit global de backup après cette mise à jour du carnet de bord.
+
 ## 📅 Samedi 22 Mars 2026
 
 ### 🎨 Implémentation complète du défi "pick" (couleurs)

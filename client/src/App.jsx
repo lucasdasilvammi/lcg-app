@@ -52,6 +52,46 @@ function AppContent() {
   const [view, setView] = useState("HOME");
   const [inputCode, setInputCode] = useState([]);
 
+  // Keep a stable app height synced with the real visual viewport.
+  useEffect(() => {
+    const setAppHeight = () => {
+      const viewportHeight = window.visualViewport?.height || window.innerHeight
+      document.documentElement.style.setProperty('--app-height', `${Math.round(viewportHeight)}px`)
+    }
+
+    setAppHeight()
+    window.addEventListener('resize', setAppHeight)
+    window.addEventListener('orientationchange', setAppHeight)
+    window.visualViewport?.addEventListener('resize', setAppHeight)
+    document.addEventListener('fullscreenchange', setAppHeight)
+
+    return () => {
+      window.removeEventListener('resize', setAppHeight)
+      window.removeEventListener('orientationchange', setAppHeight)
+      window.visualViewport?.removeEventListener('resize', setAppHeight)
+      document.removeEventListener('fullscreenchange', setAppHeight)
+    }
+  }, [])
+
+  // Force fullscreen on first interaction (mobile only)
+  useEffect(() => {
+    const isMobileDevice = () => {
+      return window.innerWidth < 470 || /iPhone|iPad|Android|Mobile/.test(navigator.userAgent);
+    };
+
+    const requestFullscreenOnClick = () => {
+      if (isMobileDevice() && document.documentElement.requestFullscreen && !document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(() => {
+          // Ignore if fullscreen is not supported or user denies
+        });
+      }
+      document.removeEventListener("click", requestFullscreenOnClick);
+    };
+
+    document.addEventListener("click", requestFullscreenOnClick);
+    return () => document.removeEventListener("click", requestFullscreenOnClick);
+  }, []);
+
   useEffect(() => {
     if (roomData?.status) setView(roomData.status);
   }, [roomData]);
@@ -92,7 +132,7 @@ function AppContent() {
 
 
   return (
-    <div className="bg-bg phone:border-2 phone:border-light/10 phone:w-110 phone min-h-screen flex flex-col items-center gap-4 justify-center text-white font-sans transition-colors duration-500 phone:overflow-hidden">
+    <div className="bg-black flex w-full flex-col items-center justify-center text-white transition-colors duration-500 overflow-hidden" style={{ height: 'var(--app-height, 100dvh)' }}>
       
       <Toasts />
 

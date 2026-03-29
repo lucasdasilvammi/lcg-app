@@ -126,62 +126,85 @@ export default function SelectCharacter({ roomData, pickCharacter, confirmSelect
   return (
     <>
       <style>{popupStyles}</style>
-      <div className="relative w-110 flex flex-col justify-between items-center h-screen py-16 px-8 text-center">
-      <h2 className="text-light font-hakobi text-4xl uppercase">Incarne ton stagiaire</h2>
-      
-      <div className={`grid grid-cols-2 gap-6 max-w-4xl ${!isAdmin ? 'pb-12' : ''}`}>
-        {CHARACTERS.map((char) => {
-          const takenBy = roomData.players.find(p => p.character === char.id)
-          const isTaken = takenBy !== undefined
-          const isMe = takenBy?.id === currentUserId
-          const canClick = !isTaken || isMe
-          
-          const myChoice = roomData.players.find(p => p.id === currentUserId)?.character
-          const isAvailableButNotMyChoice = !isTaken && myChoice && char.id !== myChoice
+      <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
+        <div
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url(/assets/home-border-verical.png)',
+            backgroundSize: 'auto 100%',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
+        <div
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url(/assets/home-border-horizontal.png)',
+            backgroundSize: '100% auto',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
 
-          return (
-            <button
-              key={char.id}
-              onClick={() => canClick && handleCharacterClick(char.id)}
-              disabled={!canClick}
-              className={`relative transition-all w-28 z-10 ${canClick ? 'hover:scale-105 cursor-pointer' : 'cursor-not-allowed'} ${isAvailableButNotMyChoice ? 'opacity-60' : ''}`}
-            >
-              <img 
-                src={getCharacterImage(char.id, takenBy, isMe)}
-                alt={char.name}
-                className="w-full h-auto rounded-lg"
-                style={isMe ? {
-                  filter: `drop-shadow(0 0 12px var(--color-${char.id}))`
-                } : {}}
+        <div className="relative z-10 h-dvh w-full max-w-110 flex flex-col items-center justify-between py-14 px-8 phone:px-16 text-center">
+          <h2 className="text-light font-hakobi text-4xl uppercase">Incarne ton stagiaire</h2>
+
+          {/* <div className={`grid grid-cols-2 gap-6 max-w-4xl ${!isAdmin ? 'pb-12' : ''}`}> */}
+          <div className="grid grid-cols-2 gap-6 max-w-4xl h-full py-8">
+            {CHARACTERS.map((char) => {
+              const takenBy = roomData.players.find(p => p.character === char.id)
+              const isTaken = takenBy !== undefined
+              const isMe = takenBy?.id === currentUserId
+              const canClick = !isTaken || isMe
+
+              const myChoice = roomData.players.find(p => p.id === currentUserId)?.character
+              const isAvailableButNotMyChoice = !isTaken && myChoice && char.id !== myChoice
+
+              return (
+                <button
+                  key={char.id}
+                  onClick={() => canClick && handleCharacterClick(char.id)}
+                  disabled={!canClick}
+                  className={`relative z-10 w-24 phone:w-28 transition-all ${canClick ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed'} ${isAvailableButNotMyChoice ? 'opacity-60' : ''}`}
+                >
+                  <img
+                    src={getCharacterImage(char.id, takenBy, isMe)}
+                    alt={char.name}
+                    className="h-auto w-full rounded-lg"
+                    style={isMe ? {
+                      filter: `drop-shadow(0 0 12px var(--color-${char.id}))`
+                    } : {}}
+                  />
+                </button>
+              )
+            })}
+          </div>
+
+          {isAdmin && (
+            <div className="sticky bottom-4 z-20 mt-2 text-center">
+              <ButtonWithIcon
+                disabled={!roomData?.players.every(p => p.character !== null)}
+                onClick={confirmSelection}
+                text={roomData?.players.every(p => p.character !== null) ? "Valider les équipes" : "Attente des joueurs..."}
+                className="w-full"
               />
-            </button>
-          )
-        })}
-      </div>
-
-      {isAdmin && (
-        <div className="mt-2 text-center sticky bottom-4 z-20">
-          <ButtonWithIcon
-            disabled={!roomData?.players.every(p => p.character !== null)}
-            onClick={confirmSelection}
-            text={roomData?.players.every(p => p.character !== null) ? "Valider les équipes" : "Attente des joueurs..."}
-            className="w-full"
-          />
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       {/* Popup Modal */}
       {selectedCharForPopup && selectedCharData && (
         <div className="fixed inset-0 bg-black/50 z-30 pointer-events-auto flex items-end justify-center">
           <div 
-            className={`relative w-110 h-[75vh] bg-bg border-x-14 flex flex-col items-center justify-center px-8 py-12 transition-all duration-300 transform ${isClosing ? 'popup-exit' : 'popup-enter'}`}
+            className={`relative w-full max-w-110 bg-bg border-x-8 phone:border-x-14 flex flex-col items-center justify-center px-6 phone:px-8 py-10 phone:py-12 transition-all duration-300 transform ${isClosing ? 'popup-exit' : 'popup-enter'}`}
             style={{
               borderColor: `var(--color-${selectedCharForPopup})`,              
             }}
           >
             {/* Character Border SVG */}
             <div 
-              className="absolute -top-4 -left-3.5 w-110 h-full pointer-events-none"
+              className="absolute -top-3 -left-2 phone:-left-3.5 h-full w-110 pointer-events-none"
               style={{
                 WebkitMaskImage: 'url(/room/character-border.svg)',
                 maskImage: 'url(/room/character-border.svg)',
@@ -196,12 +219,12 @@ export default function SelectCharacter({ roomData, pickCharacter, confirmSelect
             />
             
             {/* Contenu du popup */}
-            <div className="flex flex-col items-center gap-6 w-full h-full justify-center">
+            <div className="flex h-full w-full flex-col items-center justify-center gap-5 overflow-y-auto phone:gap-6">
               {/* Image du personnage */}
               <CharacterCard charId={selectedCharForPopup} size="default" />
 
               {/* Description */}
-              <p className="font-funnel text-lg text-light opacity-80 max-w-2xl leading-relaxed">
+              <p className="max-w-2xl font-funnel text-base phone:text-lg leading-relaxed text-light opacity-80 text-center">
                 {selectedCharData.description}
               </p>
 
@@ -240,17 +263,6 @@ export default function SelectCharacter({ roomData, pickCharacter, confirmSelect
         </div>
       )}
 
-      {/* Background SVG */}
-      <div 
-        className="absolute inset-0 -left-4 -top-11 w-115 h-[110vh] pointer-events-none z-0"
-        style={{
-          backgroundImage: 'url(/assets/room-border.svg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat'
-        }}
-      />
-      </div>
     </>
   )
 }

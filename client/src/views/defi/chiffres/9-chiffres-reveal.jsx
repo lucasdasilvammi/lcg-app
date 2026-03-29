@@ -76,7 +76,7 @@ export default function ChiffresReveal({ roomData, continueToFeedback, currentUs
   const oneHasExact = player1HasExact || player2HasExact
 
   return (
-    <div className="relative max-w-110 flex flex-col justify-between items-center h-screen py-16 px-6 text-center">
+    <div className="bg-bg relative max-w-110 flex flex-col justify-between items-center h-dvh py-14 px-6 text-center">
       <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
 
       <div className="flex flex-col items-center gap-10 w-full">
