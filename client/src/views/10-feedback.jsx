@@ -21,7 +21,7 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
   // Determine who is allowed to advance: the person who asked the question
   const questionerId = lastResult.questionerId || roomData.currentInteraction?.questionerId || roomData.currentInteraction?.readerId
   const isQuestioner = questionerId === currentUserId
-  const isDefi = roomData.currentInteraction?.type === 'buzzer' || roomData.currentInteraction?.type === 'vraioufaux' || roomData.currentInteraction?.type === 'chiffres' || roomData.currentInteraction?.type === 'pick' || lastResult.type === 'buzzer' || lastResult.type === 'vraioufaux' || lastResult.type === 'chiffres' || lastResult.type === 'pick' || lastResult.interactionType === 'buzzer' || lastResult.interactionType === 'vraioufaux' || lastResult.interactionType === 'chiffres' || lastResult.interactionType === 'pick'
+  const isDefi = roomData.currentInteraction?.type === 'buzzer' || roomData.currentInteraction?.type === 'vraioufaux' || roomData.currentInteraction?.type === 'chiffres' || roomData.currentInteraction?.type === 'pick' || roomData.currentInteraction?.type === 'zoom' || lastResult.type === 'buzzer' || lastResult.type === 'vraioufaux' || lastResult.type === 'chiffres' || lastResult.type === 'pick' || lastResult.type === 'zoom' || lastResult.interactionType === 'buzzer' || lastResult.interactionType === 'vraioufaux' || lastResult.interactionType === 'chiffres' || lastResult.interactionType === 'pick' || lastResult.interactionType === 'zoom'
   
   // For Pick challenges, only next player can advance
   const isPickChallenge = lastResult.type === 'pick'

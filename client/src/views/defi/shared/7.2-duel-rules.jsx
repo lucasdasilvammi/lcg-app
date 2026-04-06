@@ -43,6 +43,17 @@ export default function DuelRules({ roomData, currentUserId, acknowledgeRules })
           ],
           hint: null
         }
+      case 'zoom':
+        return {
+          title: 'DÉFI ZOOM',
+          rules: [
+            'Le défi Zoom est une épreuve d’observation et de rapidité.',
+            'Le premier joueur à buzzer et à donner la bonne réponse gagne le défi et remporte 2 jalons.',
+            'En cas de mauvaise réponse, son adversaire remporte immédiatement les 2 jalons.',
+            'Si personne ne buzz après 15 secondes de dézoom, le reader reçoit 3 propositions pour aider le duel.'
+          ],
+          hint: 'Le lecteur valide oralement la réponse du joueur qui a buzzé avant de relancer le défi.'
+        }
       default:
         return {
           title: 'DÉFI',

@@ -13,7 +13,8 @@ export default function DebugDuelSelector({ roomData, currentUserId, selectDefiT
     { type: 'buzzer', label: '⚡ Buzzer (3 options)', icon: '🔔' },
     { type: 'vraioufaux', label: '✓✗ Vrai/Faux (2 options)', icon: '❓' },
     { type: 'chiffres', label: '🔢 Chiffres (trouver le nombre)', icon: '🎯' },
-    { type: 'pick', label: '🎨 Pick (color guesser)', icon: '🧪' }
+    { type: 'pick', label: '🎨 Pick (color guesser)', icon: '🧪' },
+    { type: 'zoom', label: '🔎 Zoom (deviner le logo)', icon: '🖼️' }
   ]
 
   const handleSelectType = (type) => {

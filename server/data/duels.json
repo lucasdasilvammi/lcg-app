@@ -1,5 +1,5 @@
 ﻿{
-  "_comment": "Défis - Support buzzer, vraioufaux et chiffres (toujours 3 jalons)",
+  "_comment": "Défis - Support buzzer, vraioufaux, chiffres et zoom",
   
   "buzzer": [
     {
@@ -135,6 +135,18 @@
       "correct": 300,
       "digits": 3,
       "explanation": "300 DPI est le standard pour l'impression de qualité."
+    }
+  ],
+
+  "zoom": [
+    {
+      "type": "zoom",
+      "question": "Quel est ce logo ?",
+      "image": "/game/defi-logo/logo-starbucks.png",
+      "answer": "Starbucks",
+      "options": ["Starbucks", "Shell", "Sony"],
+      "correct": 0,
+      "explanation": "Logo Starbucks pour test du zoom lineaire."
     }
   ]
 }

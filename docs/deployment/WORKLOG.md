@@ -4,7 +4,37 @@
 
 ---
 
+## 📅 Lundi 6 Avril 2026
+
+### 🚀 Défi Zoom intégré de bout en bout
+- **Nouvelles vues gameplay** : ajout de `8-zoom-game.jsx` et `9-zoom-reveal.jsx` avec logique reader/duellistes/spectateurs.
+- **Règles et routing** : intégration du type `zoom` dans le routeur principal, dans l'écran debug duel selector, dans les règles duel et dans le feedback.
+- **Data de défi** : ajout de la section `zoom` dans `server/data/duels.json` (image, réponse, options, explication).
+- **Assets dédiés** : ajout des logos de test zoom (`logo-starbucks`, `logo-shell`, `logo-sony`) et du tag défi `zoom`.
+
+### 🧭 Menu paramètres + sortie de room stabilisés
+- **Menu global** : modal paramètres accessible avec bouton dédié au lobby + appui long global (pointer events + seuil mouvement + fermeture Esc/overlay).
+- **Action quitter** : bouton `Quitter la partie` branché au flux `leave_room` avec ACK et retour client propre vers HOME.
+- **Exclusions prévues** : base `data-no-longpress` posée pour protéger les zones interactives sensibles.
+
+### 👑 Robustesse multi-joueurs et sessions
+- **Réassignation admin** : transfert automatique du rôle admin si l'admin quitte (leave volontaire ou déconnexion confirmée).
+- **Gestion leave serveur** : ajout d'une fonction de retrait joueur centralisée avec resynchronisation room.
+- **Session token** : reset du token local après leave pour éviter les reprises d'identité involontaires.
+- **Grace period de test** : timeout temporairement abaissé à 10s pour valider rapidement les scénarios de reconnexion.
+
+### 🎨 Ajustements UI/produit
+- **Branding web** : titre `Le Cube Graphique`, favicon SVG et apple-touch-icon ajoutés dans `client/index.html`.
+- **Thème** : verrouillage du `color-scheme` en mode sombre dans `client/src/index.css`.
+
+### 📝 Documentation et suivi
+- **Notes menu** : création de `docs/MENU_TECHNIQUE_NOTES.md` pour cadrer les prochaines passes appui long/menu.
+- **TODO enrichi** : ajout des tâches présence/messages room, exclusions appui long, non-sélection de texte UI, et reprise de slot après crash.
+- **Backup de session** : préparation d'un commit global de sauvegarde avec push distant après mise à jour du carnet.
+
 ## 📅 Dimanche 29 Mars 2026
+
+### Ajout du full screen sur mobile
 
 ### 📱 Passe responsive globale (quasi complète)
 - **Objectif atteint** : harmonisation mobile sur la majorité des écrans gameplay et lobby, en conservant le comportement desktop existant.
@@ -19,6 +49,51 @@
 
 ### 🗃️ Backup de travail
 - **Sauvegarde Git demandée** : préparation d'un commit global de backup après cette mise à jour du carnet de bord.
+
+### 🌙 Session du soir (depuis ~22h) : menu, sortie de room et robustesse multi-joueurs
+
+#### 🚪 Sortie volontaire de room fiable
+- **Nouveau flux `leave_room`** : ajout d'une vraie sortie volontaire côté client/serveur au lieu de dépendre d'un refresh navigateur.
+- **Retour propre à l'accueil** : le joueur qui quitte revient sur HOME sans écran noir.
+- **Lobby cohérent** : le compteur de joueurs est désormais bien décrémenté lors d'un leave volontaire, admin ou non-admin.
+- **Rejoin après leave** : après une vraie sortie, le joueur peut revenir plus tard via le code de room comme nouveau participant.
+
+#### 👑 Réassignation automatique de l'admin
+- **Cas gérés** : si l'admin quitte volontairement, le rôle admin est transféré immédiatement à un autre joueur restant.
+- **Continuité du lobby** : le nouvel admin récupère les permissions attendues, notamment le bouton `LANCER` sur l'écran 2.
+- **Déconnexion admin** : en cas de fermeture d'onglet / crash, une réassignation temporaire de l'admin est aussi effectuée pour éviter une room bloquée sans hôte.
+
+#### 🔌 Déconnexion, refresh et reconnexion
+- **Grace period serveur** : mise en place d'une fenêtre de reconnexion (abaissée temporairement à 10 secondes pour les tests du soir ; cible réelle inchangée: 120 secondes).
+- **Même appareil** : la reconnexion rapide avec le même `sessionToken` reprend correctement la session existante.
+- **Constat UX important** : lors d'un refresh, le joueur reste réservé dans la partie pendant la grace period, donc le compteur basé sur le roster ne baisse pas immédiatement.
+- **Décision produit retenue** : ne pas considérer un refresh comme un leave automatique ; la sortie explicite doit passer par le menu, et la future amélioration portera sur la distinction `joueurs dans la partie` vs `joueurs actuellement connectés`.
+
+#### 🧭 Menu paramètres / appui long
+- **Menu global introduit** : ajout d'une modal de menu avec au minimum l'action `Quitter la partie`.
+- **Découverte UX** : le bouton visible pour ouvrir le menu est conservé seulement sur l'écran 2 (lobby / room jointe), puis retiré à partir de l'écran 3+ pour laisser l'appui long prendre le relais.
+- **Appui long** : base technique posée pour l'ouverture globale du menu par maintien, avec sujets identifiés pour exclusions fines de zones interactives.
+
+#### 🐛 Debug et correction d'architecture
+- **Erreur d'aiguillage identifiée** : une partie des correctifs initiaux avait été appliquée dans `server/index.js` alors que l'application tourne en pratique via `server.js` (`npm run dev` / `npm start`).
+- **Correction appliquée au bon backend** : la logique active de `leave_room`, réassignation admin et timeout de reconnexion a été reportée dans `server.js`.
+- **Stabilisation du client** : suppression des races conditions côté leave (attente de l'ACK serveur avant reset local du client).
+
+#### 📝 Documentation / TODO de suivi
+- **Nouveau document technique** : création de `docs/MENU_TECHNIQUE_NOTES.md` pour lister les détails à traiter plus tard autour du menu par appui long.
+- **TODO enrichie** : ajout des sujets suivants
+  - exclusion de certaines zones de l'appui long (priorité: color picker)
+  - textes UI non sélectionnables
+  - messages système room (`admin a quitté`, `joueur crashé`, `joueur revenu`, etc.)
+  - distinction future entre présence temps réel et roster réservé de la partie
+  - harmonisation visuelle des messages d'erreur avec ces messages système
+
+#### ✅ Validation et clôture session
+- **État final** : Leave room + admin transfer + menu + reconnection grace period fonctionnent avec stabilité.
+- **Checklist testée** : 9/12 tests de validation PASS, 3 tests confirmés comme comportement volontaire (refresh grace period + session token model).
+- **Multijoueur robuste** : laisse/rejoin cohérent avec compteur room, admin transfer immédiat, continuité session adéquate.
+- **Prêt pour demain** : base technique solide pour passer à phase 2 = amélioration UX présence (distinction roster/connectés) + messages système room + exclusions menu appui long.
+- **Aucun blocage technique** : le refactor `server.js` et la coordination Socket client/serveur sont validés; toute la mécanique core fonctionne.
 
 ## 📅 Samedi 22 Mars 2026
 

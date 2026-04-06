@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { SocketProvider, useSocket } from './contexts/SocketContext'
 import CodeDisplay from './components/CodeDisplay'
 import Home from './views/1-home'
@@ -16,11 +16,13 @@ import BuzzerGame from './views/defi/buzzer/8-buzzer-game'
 import VraioufauxGame from './views/defi/vraioufaux/8-vraioufaux-game'
 import ChiffresGame from './views/defi/chiffres/8-chiffres-game'
 import PickGame from './views/defi/pick/8-pick-game'
+import ZoomGame from './views/defi/zoom/8-zoom-game'
 import QuizReveal from './views/quiz/9-quiz-reveal'
 import BuzzerReveal from './views/defi/buzzer/9-buzzer-reveal'
 import VraioufauxReveal from './views/defi/vraioufaux/9-vraioufaux-reveal'
 import ChiffresReveal from './views/defi/chiffres/9-chiffres-reveal'
 import PickReveal from './views/defi/pick/9-pick-reveal'
+import ZoomReveal from './views/defi/zoom/9-zoom-reveal'
 import Feedback from './views/10-feedback'
 import RoundEnd from './views/11-round-end'
 import DebugDuelSelector from './views/debug-duel-selector'
@@ -47,10 +49,79 @@ const PLAYABLE_CHARACTERS = [
 function AppContent() {
 
 
-  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel } = useSocket();
+  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel, leaveRoom } = useSocket();
 
   const [view, setView] = useState("HOME");
   const [inputCode, setInputCode] = useState([]);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const longPressTimerRef = useRef(null)
+  const pointerOriginRef = useRef(null)
+  const isLeavingRef = useRef(false)
+
+  const LONG_PRESS_MS = 650
+  const MOVE_CANCEL_PX = 12
+
+  const clearLongPressTimer = () => {
+    if (!longPressTimerRef.current) return
+    clearTimeout(longPressTimerRef.current)
+    longPressTimerRef.current = null
+  }
+
+  const canOpenSettings = Boolean(roomData)
+
+  const openSettingsMenu = () => {
+    if (!canOpenSettings) return
+    setIsSettingsOpen(true)
+  }
+
+  const closeSettingsMenu = () => {
+    setIsSettingsOpen(false)
+  }
+
+  const handleLeaveRoom = () => {
+    console.log('🚪 handleLeaveRoom called')
+    isLeavingRef.current = true
+    closeSettingsMenu()
+    leaveRoom()
+    setInputCode([])
+    setView('HOME')
+  }
+
+  useEffect(() => {
+    window.__LEAVE = handleLeaveRoom
+  }, [leaveRoom])
+
+  const isInteractiveTarget = (target) => {
+    if (!(target instanceof Element)) return false
+    return Boolean(target.closest('button, a, input, textarea, select, [role="button"], [data-no-longpress]'))
+  }
+
+  const handleRootPointerDown = (event) => {
+    if (!canOpenSettings || isSettingsOpen) return
+    if (event.button !== 0) return
+    if (isInteractiveTarget(event.target)) return
+
+    pointerOriginRef.current = { x: event.clientX, y: event.clientY }
+    clearLongPressTimer()
+    longPressTimerRef.current = window.setTimeout(() => {
+      setIsSettingsOpen(true)
+      longPressTimerRef.current = null
+    }, LONG_PRESS_MS)
+  }
+
+  const handleRootPointerMove = (event) => {
+    if (!longPressTimerRef.current || !pointerOriginRef.current) return
+    const dx = Math.abs(event.clientX - pointerOriginRef.current.x)
+    const dy = Math.abs(event.clientY - pointerOriginRef.current.y)
+    if (dx > MOVE_CANCEL_PX || dy > MOVE_CANCEL_PX) {
+      clearLongPressTimer()
+    }
+  }
+
+  const handleRootPointerEnd = () => {
+    clearLongPressTimer()
+    pointerOriginRef.current = null
+  }
 
   // Keep a stable app height synced with the real visual viewport.
   useEffect(() => {
@@ -93,12 +164,36 @@ function AppContent() {
   }, []);
 
   useEffect(() => {
+    if (isLeavingRef.current) {
+      if (!roomData) {
+        setView('HOME')
+        isLeavingRef.current = false
+      }
+      return
+    }
+
     if (roomData?.status) setView(roomData.status);
   }, [roomData]);
 
   useEffect(() => {
     if (errorMsg) setInputCode([]);
   }, [errorMsg]);
+
+  useEffect(() => {
+    return () => {
+      clearLongPressTimer()
+    }
+  }, [])
+
+  useEffect(() => {
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        closeSettingsMenu()
+      }
+    }
+    window.addEventListener('keydown', onKeyDown)
+    return () => window.removeEventListener('keydown', onKeyDown)
+  }, [])
 
   const handleKeypadClick = (id) => {
     if (inputCode.length < 5) {
@@ -132,9 +227,60 @@ function AppContent() {
 
 
   return (
-    <div className="bg-black flex w-full flex-col items-center justify-center text-white transition-colors duration-500 overflow-hidden" style={{ height: 'var(--app-height, 100dvh)' }}>
+    <div
+      className="bg-black flex w-full flex-col items-center justify-center text-white transition-colors duration-500 overflow-hidden"
+      style={{ height: 'var(--app-height, 100dvh)' }}
+      onPointerDown={handleRootPointerDown}
+      onPointerMove={handleRootPointerMove}
+      onPointerUp={handleRootPointerEnd}
+      onPointerCancel={handleRootPointerEnd}
+    >
       
       <Toasts />
+
+      {roomData && view === 'LOBBY' && (
+        <button
+          type="button"
+          onClick={openSettingsMenu}
+          data-no-longpress
+          className="fixed right-4 top-4 z-40 rounded-full border border-light/50 bg-black/70 px-4 py-2 font-family-funnel text-sm text-light backdrop-blur"
+        >
+          Menu
+        </button>
+      )}
+
+      {isSettingsOpen && roomData && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-black/60"
+          onClick={closeSettingsMenu}
+          data-no-longpress
+        >
+          <div
+            className="w-full max-w-110 rounded-t-3xl border border-light/20 bg-bg px-6 pb-8 pt-6"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <p className="text-center font-family-hakobi text-4xl uppercase text-light">Menu</p>
+            <p className="mt-2 text-center font-family-funnel text-sm text-light/70">Maintenir appuye sur l'ecran ouvre aussi ce menu.</p>
+
+            <div className="mt-6 flex flex-col gap-3">
+              <button
+                type="button"
+                onClick={handleLeaveRoom}
+                className="w-full rounded-xl border border-red-400/70 bg-red-500/20 px-4 py-3 font-family-hakobi text-2xl uppercase text-red-200"
+              >
+                Quitter la partie
+              </button>
+              <button
+                type="button"
+                onClick={closeSettingsMenu}
+                className="w-full rounded-xl border border-light/30 bg-black/30 px-4 py-3 font-family-hakobi text-2xl uppercase text-light"
+              >
+                Fermer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {view === "HOME" && (
         <Home onCreate={createRoom} onJoin={() => { setView("JOIN"); setInputCode([]); setErrorMsg(""); }} />
@@ -145,7 +291,7 @@ function AppContent() {
       )}
 
       {view === "LOBBY" && roomData && (
-        <Lobby roomData={roomData} isAdmin={isAdmin} onStart={startGame} onBack={() => { setView("HOME"); }} characters={CODE_CHARACTERS} />
+        <Lobby roomData={roomData} isAdmin={isAdmin} onStart={startGame} onBack={handleLeaveRoom} characters={CODE_CHARACTERS} />
       )}
 
       {view === "SELECT_CHARACTER" && roomData && (
@@ -196,6 +342,8 @@ function AppContent() {
           <ChiffresGame roomData={roomData} currentUserId={socket?.id} />
         ) : roomData.currentInteraction.type === 'pick' ? (
           <PickGame roomData={roomData} currentUserId={socket?.id} />
+        ) : roomData.currentInteraction.type === 'zoom' ? (
+          <ZoomGame roomData={roomData} currentUserId={socket?.id} playerBuzz={playerBuzz} zoomReaderVerdict={zoomReaderVerdict} continueToFeedback={continueToFeedback} />
         ) : (
           <div>Type de défi non supporté : {roomData.currentInteraction.type}</div>
         )
@@ -210,6 +358,8 @@ function AppContent() {
           <ChiffresReveal roomData={roomData} continueToFeedback={continueToFeedback} currentUserId={socket?.id} />
         ) : roomData.lastResult.type === 'pick' ? (
           <PickReveal roomData={roomData} continueToFeedback={continueToFeedback} currentUserId={socket?.id} />
+        ) : roomData.lastResult.type === 'zoom' ? (
+          <ZoomReveal roomData={roomData} continueToFeedback={continueToFeedback} currentUserId={socket?.id} />
         ) : (
           <div>Type de défi non supporté : {roomData.lastResult.type}</div>
         )

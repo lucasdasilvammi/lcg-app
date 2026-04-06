@@ -76,7 +76,7 @@ app.get('/api/status', (req, res) => {
 
 // --- GAME STATE ---
 let rooms = {};
-const DISCONNECT_GRACE_MS = 120000;
+const DISCONNECT_GRACE_MS = 10000;
 const pendingDisconnectTimers = new Map();
 
 const clearPendingDisconnect = (sessionToken) => {
@@ -128,6 +128,10 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
       ci.submittedColors[newId] = ci.submittedColors[oldId];
       delete ci.submittedColors[oldId];
     }
+    if (ci.blockedUntil && ci.blockedUntil[oldId] !== undefined) {
+      ci.blockedUntil[newId] = ci.blockedUntil[oldId];
+      delete ci.blockedUntil[oldId];
+    }
   }
 
   if (room.duelAnswers && room.duelAnswers[oldId] !== undefined) {
@@ -158,6 +162,44 @@ io.on('connection', (socket) => {
   
   const findRoom = () => findRoomByPlayerId(socket.id);
   const syncRoom = (room) => io.to(room.id).emit('update_room_state', room);
+  const pickNextAdminId = (room) => {
+    if (!room || !Array.isArray(room.players) || room.players.length === 0) return null;
+    return room.players[0].id;
+  };
+  const removePlayerFromRoom = ({ room, playerId = null, playerSessionToken = null, reason = 'unknown' }) => {
+    if (!room) return;
+
+    const removedPlayers = room.players.filter((p) => {
+      if (playerId && p.id === playerId) return true;
+      if (playerSessionToken && p.sessionToken && p.sessionToken === playerSessionToken) return true;
+      return false;
+    });
+
+    if (removedPlayers.length === 0) return;
+
+    const beforeCount = room.players.length;
+    room.players = room.players.filter((p) => !removedPlayers.includes(p));
+
+    if (room.players.length === 0) {
+      delete rooms[room.id];
+      console.log(`🗑️ room deleted (${room.id}) after ${reason}`);
+      return;
+    }
+
+    const removedAdmin = removedPlayers.some((p) => p.id === room.adminId);
+    if (removedAdmin || !room.players.some((p) => p.id === room.adminId)) {
+      const previousAdmin = room.adminId;
+      room.adminId = pickNextAdminId(room);
+      console.log(`👑 admin reassigned in room ${room.id}: ${previousAdmin} -> ${room.adminId}`);
+    }
+
+    if (room.turnIndex >= room.players.length) {
+      room.turnIndex = 0;
+    }
+
+    syncRoom(room);
+    console.log(`👋 removed ${removedPlayers.length} player(s) from room ${room.id} (${beforeCount} -> ${room.players.length}) reason=${reason}`);
+  };
 
   if (sessionToken) {
     clearPendingDisconnect(sessionToken);
@@ -225,6 +267,36 @@ io.on('connection', (socket) => {
     socket.emit('room_joined', { roomId: room.id, isAdmin: false });
     console.log('join_room_with_code: player joined', socket.id, '->', room.id);
     syncRoom(room);
+  });
+
+  socket.on('leave_room', (_payload, ack) => {
+    const room = findRoom();
+    console.log(`📤 leave_room requested by ${socket.id}, room=${room?.id}, players before=${room?.players?.length}`);
+
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    const player = room.players.find((p) => p.id === socket.id);
+    if (!player) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'player_not_found' });
+      return;
+    }
+
+    if (player.sessionToken) {
+      clearPendingDisconnect(player.sessionToken);
+    }
+
+    removePlayerFromRoom({
+      room,
+      playerId: socket.id,
+      reason: 'manual_leave'
+    });
+
+    socket.leave(room.id);
+    socket.emit('left_room');
+    if (typeof ack === 'function') ack({ ok: true });
   });
 
   // --- SETUP ---
@@ -296,6 +368,7 @@ io.on('connection', (socket) => {
     if (!room) return;
 
     const randomDuel = getRandomDuel(defiType);
+    const isZoomDuel = randomDuel.type === 'zoom';
     const p1Index = room.turnIndex;
     const p2Index = (room.turnIndex + 1) % room.players.length;
     const readerIndex = (room.turnIndex + 2) % room.players.length;
@@ -305,8 +378,22 @@ io.on('connection', (socket) => {
       duelists: [room.players[p1Index].id, room.players[p2Index].id],
       readerId: room.players[readerIndex].id,
       buzzedPlayerId: null,
-      potentialPoints: 3,
-      acknowledgedRules: []
+      potentialPoints: isZoomDuel ? 2 : 3,
+      acknowledgedRules: [],
+      ...(isZoomDuel
+        ? {
+            zoomStartAt: null,
+            zoomDurationMs: 30000,
+            zoomScaleStart: 10,
+            zoomScaleEnd: 1,
+            blockedUntil: {},
+            pausedDurationMs: 0,
+            pauseStartedAt: null,
+            zoomResolvedCorrect: false,
+            zoomFastRevealStartAt: null,
+            zoomFastRevealDurationMs: 1200
+          }
+        : {})
     };
     room.status = 'DUEL_START';
     syncRoom(room);
@@ -334,6 +421,9 @@ io.on('connection', (socket) => {
     const allAcknowledged = duelists.length > 0 && duelists.every(id => updatedAcks.includes(id));
 
     if (allAcknowledged) {
+      if (room.currentInteraction.type === 'zoom') {
+        room.currentInteraction.zoomStartAt = Date.now() + 3000;
+      }
       room.status = 'DUEL_GAME';
     }
 
@@ -553,10 +643,124 @@ io.on('connection', (socket) => {
 
   socket.on('player_buzz', () => {
     const room = findRoom();
-    if (room && room.currentInteraction && !room.currentInteraction.buzzedPlayerId) {
+    if (!room || !room.currentInteraction) return;
+
+    if (room.currentInteraction.type === 'zoom') {
+      const duelists = room.currentInteraction.duelists || [];
+      if (!duelists.includes(socket.id)) return;
+      if (room.currentInteraction.buzzedPlayerId) return;
+
+      const now = Date.now();
+      if (room.currentInteraction.zoomStartAt && now < room.currentInteraction.zoomStartAt) return;
+
+      const blockedUntil = room.currentInteraction.blockedUntil || {};
+      if (blockedUntil[socket.id] && blockedUntil[socket.id] > now) {
+        socket.emit('error_zoom', 'Tu es temporairement bloque, attends 5 secondes.');
+        return;
+      }
+
+      room.currentInteraction.buzzedPlayerId = socket.id;
+      room.currentInteraction.lastBuzzAt = now;
+      room.currentInteraction.pauseStartedAt = now;
+      syncRoom(room);
+      return;
+    }
+
+    if (!room.currentInteraction.buzzedPlayerId) {
       room.currentInteraction.buzzedPlayerId = socket.id;
       syncRoom(room);
     }
+  });
+
+  socket.on('zoom_reader_verdict', ({ correct, fromTimeoutOptions = false }) => {
+    const room = findRoom();
+    if (!room || !room.currentInteraction) return;
+    if (room.currentInteraction.type !== 'zoom') return;
+    if (socket.id !== room.currentInteraction.readerId) return;
+
+    const buzzedPlayerId = room.currentInteraction.buzzedPlayerId;
+    if (!buzzedPlayerId) return;
+
+    if (correct === true) {
+      const points = room.currentInteraction.potentialPoints || 2;
+      const winnerId = buzzedPlayerId;
+      const winner = room.players.find(p => p.id === winnerId);
+      if (winner) winner.score += points;
+
+      room.lastResult = {
+        success: true,
+        type: 'zoom',
+        winnerId,
+        points,
+        duelists: room.currentInteraction.duelists || [],
+        readerId: room.currentInteraction.readerId,
+        questionerId: room.currentInteraction.readerId,
+        buzzedPlayerId,
+        image: room.currentInteraction.data?.image,
+        answer: room.currentInteraction.data?.answer,
+        explanation: room.currentInteraction.data?.explanation
+      };
+
+      room.currentInteraction.zoomResolvedCorrect = true;
+      room.currentInteraction.zoomFastRevealStartAt = Date.now();
+      room.currentInteraction.pauseStartedAt = null;
+      syncRoom(room);
+      return;
+    }
+
+    if (fromTimeoutOptions) {
+      const duelists = room.currentInteraction.duelists || [];
+      const winnerId = duelists.find(id => id !== buzzedPlayerId) || null;
+      const points = room.currentInteraction.potentialPoints || 2;
+
+      if (winnerId) {
+        const winner = room.players.find(p => p.id === winnerId);
+        if (winner) winner.score += points;
+      }
+
+      room.lastResult = {
+        success: false,
+        type: 'zoom',
+        winnerId,
+        points,
+        duelists,
+        readerId: room.currentInteraction.readerId,
+        questionerId: room.currentInteraction.readerId,
+        buzzedPlayerId,
+        image: room.currentInteraction.data?.image,
+        answer: room.currentInteraction.data?.answer,
+        explanation: room.currentInteraction.data?.explanation
+      };
+
+      room.status = 'DUEL_REVEAL';
+      syncRoom(room);
+      return;
+    }
+
+    const now = Date.now();
+    const pauseStartedAt = room.currentInteraction.pauseStartedAt || now;
+    const pauseDurationMs = Math.max(0, now - pauseStartedAt);
+    room.currentInteraction.pausedDurationMs = (room.currentInteraction.pausedDurationMs || 0) + pauseDurationMs;
+    room.currentInteraction.pauseStartedAt = null;
+
+    // Freeze existing lock timers while a player is answering.
+    const currentBlockedUntil = room.currentInteraction.blockedUntil || {};
+    const adjustedBlockedUntil = {};
+    for (const [playerId, expiryTs] of Object.entries(currentBlockedUntil)) {
+      const expiry = typeof expiryTs === 'number' ? expiryTs : 0;
+      adjustedBlockedUntil[playerId] = expiry > pauseStartedAt ? expiry + pauseDurationMs : expiry;
+    }
+
+    const blockedUntilTs = now + 5000;
+    room.currentInteraction.blockedUntil = {
+      ...adjustedBlockedUntil,
+      [buzzedPlayerId]: blockedUntilTs
+    };
+    room.currentInteraction.lastWrongBuzzedId = buzzedPlayerId;
+    room.currentInteraction.lastWrongBuzzAt = now;
+    room.currentInteraction.lastWrongBlockedUntil = blockedUntilTs;
+    room.currentInteraction.buzzedPlayerId = null;
+    syncRoom(room);
   });
 
   // --- RESOLUTION ---
@@ -648,6 +852,15 @@ io.on('connection', (socket) => {
       return;
     }
 
+    if (room.adminId === socket.id && room.players.length > 1) {
+      const fallbackAdmin = room.players.find((p) => p.id !== socket.id);
+      if (fallbackAdmin) {
+        room.adminId = fallbackAdmin.id;
+        console.log(`👑 temporary admin reassigned on disconnect in room ${room.id}:`, room.adminId);
+        syncRoom(room);
+      }
+    }
+
     if (player.sessionToken) {
       clearPendingDisconnect(player.sessionToken);
       const timer = setTimeout(() => {
@@ -657,12 +870,11 @@ io.on('connection', (socket) => {
           return;
         }
 
-        latest.room.players = latest.room.players.filter(p => p.sessionToken !== player.sessionToken);
-        if (latest.room.players.length === 0) {
-          delete rooms[latest.room.id];
-        } else {
-          syncRoom(latest.room);
-        }
+        removePlayerFromRoom({
+          room: latest.room,
+          playerSessionToken: player.sessionToken,
+          reason: 'disconnect_timeout'
+        });
 
         pendingDisconnectTimers.delete(player.sessionToken);
         console.log('⏱️ player removed after disconnect grace timeout:', player.sessionToken);
@@ -673,9 +885,11 @@ io.on('connection', (socket) => {
       return;
     }
 
-    room.players = room.players.filter(p => p.id !== socket.id);
-    if (room.players.length === 0) delete rooms[room.id];
-    else syncRoom(room);
+    removePlayerFromRoom({
+      room,
+      playerId: socket.id,
+      reason: 'disconnect_no_session'
+    });
     console.log('🔌 socket disconnected:', socket.id);
   });
 });

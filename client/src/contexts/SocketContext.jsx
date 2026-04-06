@@ -21,6 +21,12 @@ const getOrCreateSessionToken = () => {
   return generated
 }
 
+const resetSessionToken = () => {
+  if (typeof window === 'undefined') return null
+  window.localStorage.removeItem(SESSION_TOKEN_KEY)
+  return getOrCreateSessionToken()
+}
+
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null)
   const [roomData, setRoomData] = useState(null)
@@ -52,14 +58,30 @@ export const SocketProvider = ({ children }) => {
     })
     setSocket(s)
 
-    s.on('connect', () => { console.log('⚡ socket connected', s.id) })
+    s.on('connect', () => {
+      console.log('⚡ socket connected', s.id)
+      window.__socket = s
+    })
     s.on('connect_error', (err) => { console.error('⚡ socket connect_error', err.message) })
 
     s.on("room_created", (data) => { setIsAdmin(true); console.log('room_created', data) })
     s.on("room_joined", (data) => { setIsAdmin(data.isAdmin); console.log('room_joined', data) })
+    s.on("left_room", () => {
+      setRoomData(null)
+      setIsAdmin(false)
+      setErrorMsg("")
+      console.log('left_room ack')
+    })
     s.on("error_join", (msg) => { addToast(msg, 'error'); console.warn('error_join', msg) })
     s.on("error_pick", (msg) => { addToast(msg, 'error'); console.warn('error_pick', msg) })
-    s.on("update_room_state", (room) => { setRoomData(room); setErrorMsg(""); window.__ROOM = room; console.log('update_room_state', room.status) })
+    s.on("error_zoom", (msg) => { addToast(msg, 'error'); console.warn('error_zoom', msg) })
+    s.on("update_room_state", (room) => {
+      setRoomData(room)
+      setIsAdmin(room?.adminId === s.id)
+      setErrorMsg("")
+      window.__ROOM = room
+      console.log('update_room_state', room.status)
+    })
 
     return () => {
       s.disconnect()
@@ -81,10 +103,27 @@ export const SocketProvider = ({ children }) => {
   const acknowledgeRules = () => socket?.emit("acknowledge_rules")
   const playerBuzz = () => socket?.emit("player_buzz")
   const resolveInteraction = (result) => socket?.emit("resolve_interaction", result)
+  const zoomReaderVerdict = (correct, fromTimeoutOptions = false) => socket?.emit('zoom_reader_verdict', { correct, fromTimeoutOptions })
   const continueToFeedback = () => socket?.emit("continue_to_feedback")
   const nextTurn = () => socket?.emit("next_turn")
   const startNewRound = () => socket?.emit("start_new_round")
   const debugTriggerDuel = (defiType) => socket?.emit("debug_trigger_duel", defiType)
+  const leaveRoom = () => {
+    console.log('🚪 leaveRoom() called, socket:', socket?.id, 'connected:', socket?.connected)
+    if (!socket) {
+      console.error('❌ leaveRoom: socket is null')
+      return
+    }
+
+    console.log('📤 emitting leave_room...')
+    socket.emit('leave_room', {}, (response) => {
+      console.log('✅ leave_room ack received', response)
+      setRoomData(null)
+      setIsAdmin(false)
+      setErrorMsg("")
+      resetSessionToken()
+    })
+  }
 
   // Helpers for debugging from browser console
   if (typeof window !== 'undefined') {
@@ -116,10 +155,12 @@ export const SocketProvider = ({ children }) => {
       acknowledgeRules,
       playerBuzz,
       resolveInteraction,
+      zoomReaderVerdict,
       continueToFeedback,
       nextTurn,
       startNewRound,
-      debugTriggerDuel
+      debugTriggerDuel,
+      leaveRoom
     }}>
       {children}
     </SocketContext.Provider>
