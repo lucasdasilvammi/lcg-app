@@ -4,11 +4,34 @@ const { Server } = require("socket.io");
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
+
+// REST CORS (pour les endpoints HTTP si besoin)
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 const server = http.createServer(app);
 
+const allowedOrigins = new Set([
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+  "http://192.168.31.66:5173",
+  "http://192.168.31.66:5174",
+  "http://192.168.31.66:5175"
+]);
+
 const io = new Server(server, {
-  cors: { origin: ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://192.168.31.66:5173"], methods: ["GET", "POST"] }
+  cors: {
+    origin: (origin, callback) => {
+      // origin peut être undefined (ex: appels same-origin / certains environnements)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.has(origin)) return callback(null, true);
+      return callback(new Error(`CORS Socket.IO refusé pour origin: ${origin}`), false);
+    },
+    methods: ["GET", "POST"],
+    credentials: true
+  }
 });
 
 // --- DATA ---
@@ -352,6 +375,35 @@ io.on('connection', (socket) => {
       room.status = "DEBUG_DUEL_SELECTOR";
       syncRoom(room);
     }
+    else if (actionType === "ACTIVITE") {
+      // Activity: Dessin de Logo
+      const brandNames = [
+        "Apple", "Nike", "McDo", "Starbucks", "Coca", "Pepsi", 
+        "Tesla", "Amazon", "Google", "Facebook", "Microsoft",
+        "Adidas", "Puma", "Lego", "IKEA", "Zara", "H&M"
+      ];
+      const randomBrand = brandNames[Math.floor(Math.random() * brandNames.length)];
+      
+      // Tous les joueurs participent
+      const participants = room.players.map(p => p.id);
+      
+      room.currentInteraction = {
+        type: 'logo',
+        brandName: randomBrand,
+        participants: participants,
+        readyPlayers: [],
+        finishedPlayers: [],
+        uploadedPhotos: {},
+        photos: [], // Array of {playerId, photoData}
+        votes: {},
+        currentPhotoIndex: 0,
+        voterIndex: 0,
+        timeUp: false,
+        activityTimer: null
+      };
+      room.status = "ACTIVITE_BRIEF";
+      syncRoom(room);
+    }
   });
 
   // DEBUG: Allow selecting specific duel type for testing
@@ -422,6 +474,188 @@ io.on('connection', (socket) => {
       room.status = "DUEL_GAME";
     }
 
+    syncRoom(room);
+  });
+
+  // --- ACTIVITÉ: DESSIN DE LOGO ---
+  
+  // Joueur confirme être prêt
+  socket.on("activite_acknowledge_ready", () => {
+    const room = findRoom();
+    if (!room || !room.currentInteraction || room.currentInteraction.type !== 'logo') return;
+    
+    const participants = room.currentInteraction.participants || [];
+    const readyPlayers = room.currentInteraction.readyPlayers || [];
+    
+    if (participants.includes(socket.id) && !readyPlayers.includes(socket.id)) {
+      room.currentInteraction.readyPlayers = [...readyPlayers, socket.id];
+    }
+    
+    // Vérifier si tous les joueurs sont prêts
+    const allReady = participants.length > 0 && participants.every(id => 
+      room.currentInteraction.readyPlayers.includes(id)
+    );
+    
+    if (allReady) {
+      // Démarrer le timer de 60 secondes
+      room.status = "ACTIVITE_CREATION";
+      room.currentInteraction.activityTimer = setTimeout(() => {
+        // Time's up for everyone
+        room.currentInteraction.timeUp = true;
+        room.status = "ACTIVITE_UPLOAD";
+        syncRoom(room);
+      }, 60000); // 60 seconds
+    }
+    
+    syncRoom(room);
+  });
+  
+  // Joueur termine son dessin
+  socket.on("activite_submit_drawing", () => {
+    const room = findRoom();
+    if (!room || !room.currentInteraction || room.currentInteraction.type !== 'logo') return;
+    
+    const finishedPlayers = room.currentInteraction.finishedPlayers || [];
+    
+    if (!finishedPlayers.includes(socket.id)) {
+      room.currentInteraction.finishedPlayers = [...finishedPlayers, socket.id];
+    }
+    
+    // Si tous ont terminé, passer à l'upload
+    const participants = room.currentInteraction.participants || [];
+    const allFinished = participants.length > 0 && participants.every(id => 
+      room.currentInteraction.finishedPlayers.includes(id)
+    );
+    
+    if (allFinished && !room.currentInteraction.timeUp) {
+      // Clear timer and move to upload
+      if (room.currentInteraction.activityTimer) {
+        clearTimeout(room.currentInteraction.activityTimer);
+      }
+      room.status = "ACTIVITE_UPLOAD";
+    }
+    
+    syncRoom(room);
+  });
+  
+  // Joueur upload sa photo
+  socket.on("activite_submit_photo", ({ photoData }) => {
+    const room = findRoom();
+    if (!room || !room.currentInteraction || room.currentInteraction.type !== 'logo') return;
+    
+    // Stocker la photo anonymement
+    const photos = room.currentInteraction.photos || [];
+    const existingIndex = photos.findIndex(p => p.playerId === socket.id);
+    
+    if (existingIndex >= 0) {
+      photos[existingIndex] = { playerId: socket.id, photoData };
+    } else {
+      photos.push({ playerId: socket.id, photoData });
+    }
+    
+    room.currentInteraction.photos = photos;
+    room.currentInteraction.uploadedPhotos = {
+      ...room.currentInteraction.uploadedPhotos,
+      [socket.id]: true
+    };
+    
+    // Vérifier si tous ont upload
+    const participants = room.currentInteraction.participants || [];
+    const allUploaded = participants.length > 0 && participants.every(id => 
+      room.currentInteraction.uploadedPhotos[id]
+    );
+    
+    if (allUploaded) {
+      // Passer au vote - mélanger les photos pour l'anonymat
+      const shuffledPhotos = [...photos].sort(() => Math.random() - 0.5);
+      room.currentInteraction.photos = shuffledPhotos;
+      room.currentInteraction.currentPhotoIndex = 0;
+      room.currentInteraction.voterIndex = 0;
+      room.status = "ACTIVITE_VOTE";
+    }
+    
+    syncRoom(room);
+  });
+  
+  // Joueur vote pour un logo
+  socket.on("activite_vote", ({ photoIndex, voteType }) => {
+    const room = findRoom();
+    if (!room || !room.currentInteraction || room.currentInteraction.type !== 'logo') return;
+    
+    const { photos, voterIndex, participants } = room.currentInteraction;
+    const currentVoter = participants[voterIndex];
+    
+    // Seul le joueur actuel peut voter
+    if (socket.id !== currentVoter) return;
+    
+    // Ne pas permettre de voter pour sa propre photo - passer au vote suivant
+    const currentPhoto = photos[photoIndex];
+    if (currentPhoto.playerId === socket.id) {
+      // Passer directement au vote suivant sans enregistrer
+      const nextVoterIndex = (voterIndex + 1) % participants.length;
+      const nextPhotoIndex = nextVoterIndex === 0 ? photoIndex + 1 : photoIndex;
+      
+      if (nextPhotoIndex >= photos.length) {
+        // Terminer les votes
+        calculateAndShowResults(room);
+      } else {
+        room.currentInteraction.voterIndex = nextVoterIndex;
+        room.currentInteraction.currentPhotoIndex = nextPhotoIndex;
+      }
+      syncRoom(room);
+      return;
+    }
+    
+    // Enregistrer le vote
+    const votes = room.currentInteraction.votes || {};
+    if (!votes[photoIndex]) {
+      votes[photoIndex] = { up: 0, neutral: 0, down: 0 };
+    }
+    votes[photoIndex][voteType] = (votes[photoIndex][voteType] || 0) + 1;
+    
+    // Marquer que ce joueur a voted pour cette photo
+    votes[`${photoIndex}_${socket.id}`] = voteType;
+    room.currentInteraction.votes = votes;
+    
+    // Passer au vote suivant
+    const nextVoterIndex = (voterIndex + 1) % participants.length;
+    const nextPhotoIndex = nextVoterIndex === 0 ? photoIndex + 1 : photoIndex;
+    
+    if (nextPhotoIndex >= photos.length) {
+      // Tous les votes terminés - calculer les résultats
+      const rankings = photos.map((photo, idx) => {
+        const photoVotes = votes[idx] || { up: 0, neutral: 0, down: 0 };
+        const totalVotes = photoVotes.up + photoVotes.neutral + photoVotes.down;
+        const score = totalVotes > 0 ? Math.round((photoVotes.up / totalVotes) * 100) : 0;
+        return {
+          playerId: photo.playerId,
+          upVotes: photoVotes.up,
+          neutralVotes: photoVotes.neutral,
+          downVotes: photoVotes.down,
+          score
+        };
+      }).sort((a, b) => b.score - a.score);
+      
+      const winnerId = rankings[0]?.playerId;
+      const winner = room.players.find(p => p.id === winnerId);
+      if (winner) {
+        winner.score += 2; // 2 jalons pour le gagnant
+      }
+      
+      room.lastResult = {
+        type: 'logo',
+        brandName: room.currentInteraction.brandName,
+        rankings,
+        winnerId,
+        points: 2
+      };
+      
+      room.status = "ACTIVITE_REVEAL";
+    } else {
+      room.currentInteraction.voterIndex = nextVoterIndex;
+      room.currentInteraction.currentPhotoIndex = nextPhotoIndex;
+    }
+    
     syncRoom(room);
   });
 
