@@ -17,6 +17,7 @@ import VraioufauxGame from './views/defi/vraioufaux/8-vraioufaux-game'
 import ChiffresGame from './views/defi/chiffres/8-chiffres-game'
 import PickGame from './views/defi/pick/8-pick-game'
 import ZoomGame from './views/defi/zoom/8-zoom-game'
+import EventGame from './views/event/7-event-game'
 import QuizReveal from './views/quiz/9-quiz-reveal'
 import BuzzerReveal from './views/defi/buzzer/9-buzzer-reveal'
 import VraioufauxReveal from './views/defi/vraioufaux/9-vraioufaux-reveal'
@@ -90,6 +91,18 @@ function AppContent() {
   useEffect(() => {
     window.__LEAVE = handleLeaveRoom
   }, [leaveRoom])
+
+  useEffect(() => {
+    // Block context menu on images/SVGs to prevent "Save Image" popup
+    const handleImageContextMenu = (e) => {
+      if (e.target.tagName === 'IMG' || e.target.tagName === 'SVG') {
+        e.preventDefault()
+      }
+    }
+
+    document.addEventListener('contextmenu', handleImageContextMenu, true)
+    return () => document.removeEventListener('contextmenu', handleImageContextMenu, true)
+  }, [])
 
   const isInteractiveTarget = (target) => {
     if (!(target instanceof Element)) return false
@@ -318,6 +331,11 @@ function AppContent() {
       {/* VUE 8 : CONFIG QUIZ (UX AMELIOREE) */}
       {view === "QUIZ_OPTIONS" && roomData && (
         <QuizOptions roomData={roomData} startSpecificQuiz={startSpecificQuiz} currentUserId={socket?.id} />
+      )}
+
+      {/* ÉVÉNEMENTS */}
+      {view === "EVENT_GAME" && roomData && roomData.currentInteraction && (
+        <EventGame roomData={roomData} currentUserId={socket?.id} continueToFeedback={continueToFeedback} />
       )}
 
       {view === "INTERACTION" && roomData && roomData.currentInteraction && (

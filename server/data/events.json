@@ -1,0 +1,28 @@
+{
+  "events": [
+    {
+      "type": "event",
+      "title": "Validé par le boss",
+      "description": "Wouhou ! Ton travail a tapé dans l'œil du boss. Ton efficacité paie, tu fais gagner au patron du temps et des ressources.\n\nDéplaces ton pion directement jusqu'à la prochaine case Bonus disponible sur le plateau. Une fois dessus, pioches une carte Bonus et tu l'ajoutes à ta main.",
+      "effect": "Tu ne relances pas le dé, ton tour s'arrête après avoir récupéré le bonnus."
+    },
+    {
+      "type": "event",
+      "title": "Les bons artistes copient, les grands artistes volent",
+      "description": "Tu as louché sur le travail de ton voisin et, franchement, c'était une excellente idée. Hop, c'est à toi maintenant !\n\nTu désignes un joueur de ton choix autour de la table et tu lui voles un bonus.",
+      "effect": "Si il en a accumulé plusieurs, le choix sera fait aléatoirement."
+    },
+    {
+      "type": "event",
+      "title": "Changement de Brief",
+      "description": "Catastrophe ! Le client vient d'envoyer un mail : \"Finalement, on préfère l'idée de la V1\". Ta position actuelle ne vaut plus rien, il faut s'adapter à la nouvelle direction... celle de ton collègue !\n\nChoisis n'importe quel joueur sur le plateau. Tu échanges ta place avec lui. Tu prends son pion et tu le mets sur ta case, et tu poses ton pion sur la sienne.",
+      "effect": "Aucun des deux ne déclenche l'effet de la case d'arrivée, c'est juste un déplacement."
+    },
+    {
+      "type": "event",
+      "title": "Le Piston",
+      "description": "Parfois, le talent ne suffit pas, il faut avoir les bons contacts. Tu as un \"ami\" bien placé qui te fait sauter les étapes.\n\nCet effet s'applique immédiatement à tout le monde :\n\nPour tes adversaires : Ils doivent tous reculer jusqu'à la case Quizz la plus proche située derrière eux.\n\nPour toi : Tu avances directement jusqu'à la case Quizz la plus proche devant toi (sans lancer le dé).",
+      "effect": "Tu ne joues pas le Quizz, tu te poses juste dessus et ton tour s'arrête."
+    }
+  ]
+}

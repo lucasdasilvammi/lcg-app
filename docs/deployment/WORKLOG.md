@@ -6,7 +6,7 @@
 
 ## 📅 Lundi 6 Avril 2026
 
-### 🚀 Défi Zoom intégré de bout en bout
+### 🚀 Défi Zoom intégré à 50%
 - **Nouvelles vues gameplay** : ajout de `8-zoom-game.jsx` et `9-zoom-reveal.jsx` avec logique reader/duellistes/spectateurs.
 - **Règles et routing** : intégration du type `zoom` dans le routeur principal, dans l'écran debug duel selector, dans les règles duel et dans le feedback.
 - **Data de défi** : ajout de la section `zoom` dans `server/data/duels.json` (image, réponse, options, explication).

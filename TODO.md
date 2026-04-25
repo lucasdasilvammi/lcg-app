@@ -74,6 +74,7 @@
 
 ## 🎮 Partie activité communes / bonus / évents
 - [ ] Commencer (0%)
+- [ ] Ajouter les 2 événements liés aux bonus une fois le système bonus intégré
 
 ## 📝 Rédaction des questions
 - [ ] Avancement ~20% (continuer la rédaction)

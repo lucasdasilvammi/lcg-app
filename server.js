@@ -24,6 +24,7 @@ const CODE_LENGTH = 5;
 const MAX_PLAYERS = 6;
 const quizData = require('./server/data/quiz.json');
 const duelsData = require('./server/data/duels.json');
+const eventsData = require('./server/data/events.json');
 
 // Flatten quiz database
 const QUIZ_DB = Object.keys(quizData)
@@ -35,6 +36,9 @@ const CATEGORIES = Object.keys(quizData).filter(key => key !== '_comment');
 const DUELS_DB = Object.keys(duelsData)
   .filter(key => !key.startsWith('_'))
   .flatMap(type => duelsData[type]);
+
+// Flatten events database
+const EVENTS_DB = eventsData.events || [];
 
 // --- UTILITIES ---
 const getDuelsByType = (type) => DUELS_DB.filter(d => d.type === type);
@@ -359,6 +363,15 @@ io.on('connection', (socket) => {
       syncRoom(room);
     } else if (actionType === 'DEFI') {
       room.status = 'DEBUG_DUEL_SELECTOR';
+      syncRoom(room);
+    } else if (actionType === 'EVENT') {
+      const randomEvent = EVENTS_DB[Math.floor(Math.random() * EVENTS_DB.length)];
+      room.currentInteraction = {
+        type: 'event',
+        data: randomEvent,
+        readerId: socket.id
+      };
+      room.status = 'EVENT_GAME';
       syncRoom(room);
     }
   });
@@ -819,7 +832,14 @@ io.on('connection', (socket) => {
       if (room.lastResult) {
         room.lastResult.verdictViewerId = socket.id;
       }
-      room.status = 'FEEDBACK';
+      if (room.currentInteraction?.type === 'event') {
+        // For events, directly go to next turn
+        const nextIndex = (room.turnIndex + 1) % room.players.length;
+        if (nextIndex === 0) room.status = 'ROUND_END';
+        else { room.turnIndex = nextIndex; room.status = 'TURN_START'; }
+      } else {
+        room.status = 'FEEDBACK';
+      }
       room.currentInteraction = null;
       syncRoom(room);
     }

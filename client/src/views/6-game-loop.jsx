@@ -44,8 +44,8 @@ export default function GameLoop({ roomData, triggerAction, currentUserId }) {
               className="bg-green-primary"
             />
             <BigButton
-              onClick={() => {}}
-              text="???"
+              onClick={() => triggerAction("EVENT")}
+              text="Évènement"
               icon={<img src="/game/icons/cases/evenement.svg" alt="jalon" className="w-8 h-8 phone:w-10 phone:h-10" />}
               className="bg-pink-primary"
             />

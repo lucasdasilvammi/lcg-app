@@ -15,13 +15,15 @@ const getColorHex = (charId) => CHAR_COLORS[charId] || '#FFF6EF'
 
 const capitalizeFirst = (str) => str ? str.charAt(0).toUpperCase() + str.slice(1) : ''
 
-export default function CharacterTag({ charId, text, className = '', hideName = false, icon = null }) {
+export default function CharacterTag({ charId, text, className = '', hideName = false, icon = null, reversed = false }) {
   if (!charId) return null
 
   const baseColor = getColorHex(charId)
   const backgroundColor = `${baseColor}33` // ~20% opacity
   const charName = capitalizeFirst(charId)
   const displayText = text || `${charName} pose la question`
+  
+  const tagText = hideName ? text : (text ? (reversed ? `${text} ${charName}` : `${charName} ${text}`) : displayText)
 
   return (
     <div
@@ -41,7 +43,7 @@ export default function CharacterTag({ charId, text, className = '', hideName = 
           />
         )}
         {icon && <div className="w-6 h-6 shrink-0">{icon}</div>}
-        <span className="font-funnel text-lg font-semibold">{hideName ? text : (text ? `${charName} ${text}` : displayText)}</span>
+        <span className="font-funnel text-lg font-semibold">{tagText}</span>
       </div>
 
       {/* Right corner */}

@@ -113,6 +113,9 @@ body {
   background: #000;
   overflow: hidden;
   overscroll-behavior: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
 }
 
 html,
@@ -133,4 +136,24 @@ h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
+
+img, svg {
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -webkit-user-drag: none !important;
+  user-select: none !important;
+  pointer-events: auto !important;
+}
+
+/* Extra protection for images inside buttons */
+button img,
+button svg {
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -webkit-user-drag: none !important;
+  -webkit-user-modify: read-only !important;
+  user-select: none !important;
+}
+
+
 

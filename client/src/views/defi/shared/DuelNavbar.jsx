@@ -10,9 +10,9 @@ export default function DuelNavbar({ duelPlayers = [], type = 'buzzer', diff = 3
       {duelPlayers[1] && (
         <img src={`/game/${duelPlayers[1].character}.svg`} alt={duelPlayers[1].character} className="w-8 h-8 phone:w-10 phone:h-10 object-contain" />
       )}
-      <img src="/game/categorie/tag-defis.png" alt="Défi" className="h-6 phone:h-8"/>
-      <img src={`/game/categorie/diff-${diff}.png`} alt={`${diff} jalons`} className="h-6 phone:h-8" />
-      <img src={`/game/defi-tag/${type}.png`} alt={type} className="h-6 phone:h-8" />
+      <img src="/game/categorie/tag-defis.png" alt="Défi" className="h-7 phone:h-8"/>
+      <img src={`/game/categorie/diff-${diff}.png`} alt={`${diff} jalons`} className="h-7 phone:h-8" />
+      <img src={`/game/defi-tag/${type}.png`} alt={type} className="h-7 phone:h-8" />
     </div>
   )
 }
