@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import CharacterCard from './CharacterCard'
 import ButtonWithIcon from './ButtonWithIcon'
 
@@ -197,7 +197,7 @@ function movePlayerInList(players, fromIndex, toIndex) {
   return nextPlayers
 }
 
-export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder, onClose }) {
+export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder, promoteAdmin, kickPlayer, undoLastAction, leaveRoom, onClose }) {
   const [isClosing, setIsClosing] = useState(false)
   const [activeMenu, setActiveMenu] = useState('lobby')
   const [now, setNow] = useState(() => Date.now())
@@ -205,51 +205,27 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
   const [orderedPlayers, setOrderedPlayers] = useState([])
   const [draggedPlayerId, setDraggedPlayerId] = useState(null)
   const [showOrderConfirm, setShowOrderConfirm] = useState(false)
+  const [pendingAction, setPendingAction] = useState(null)
   const orderListRef = useRef(null)
-  const rowRefsRef = useRef(new Map())
-  const previousRowRectsRef = useRef(new Map())
   const draggedPlayerIdRef = useRef(null)
   const playersCount = roomData?.players?.length || 0
+  const isCurrentUserAdmin = roomData?.adminId === currentUserId
+  const canUndo = Boolean(roomData?.canUndo) && isCurrentUserAdmin
   const menuPlayers = useMemo(() => {
     const roomPlayers = roomData?.players || []
     const playersWithCharacter = roomPlayers.filter(player => player.character)
     return orderPlayersByIds(playersWithCharacter, roomData?.pendingTurnOrderIds)
   }, [roomData?.players, roomData?.pendingTurnOrderIds])
   const displayedPlayers = isOrderMode ? orderedPlayers : menuPlayers
+  const currentUserPlayer = menuPlayers.find((player) => player.id === currentUserId) || null
+  const pendingActionTarget = pendingAction?.targetPlayerId
+    ? menuPlayers.find((player) => player.id === pendingAction.targetPlayerId) || null
+    : null
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
     return () => window.clearInterval(timer)
   }, [])
-
-  useLayoutEffect(() => {
-    const previousRects = previousRowRectsRef.current
-    const nextRects = new Map()
-
-    displayedPlayers.forEach((player) => {
-      const element = rowRefsRef.current.get(player.id)
-      if (!element) return
-
-      const nextRect = element.getBoundingClientRect()
-      nextRects.set(player.id, nextRect)
-
-      const previousRect = previousRects.get(player.id)
-      if (!previousRect || player.id === draggedPlayerId) return
-
-      const deltaY = previousRect.top - nextRect.top
-      if (Math.abs(deltaY) < 1) return
-
-      element.style.transition = 'none'
-      element.style.transform = `translateY(${deltaY}px)`
-
-      window.requestAnimationFrame(() => {
-        element.style.transition = 'transform 220ms cubic-bezier(0.22, 1, 0.36, 1), opacity 180ms ease, scale 180ms ease'
-        element.style.transform = ''
-      })
-    })
-
-    previousRowRectsRef.current = nextRects
-  }, [displayedPlayers, draggedPlayerId])
 
   useEffect(() => {
     if (!draggedPlayerId) return undefined
@@ -335,6 +311,30 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
     setIsOrderMode(false)
   }
 
+  const openActionConfirm = (type, targetPlayerId = null) => {
+    setPendingAction({ type, targetPlayerId })
+  }
+
+  const closeActionConfirm = () => {
+    setPendingAction(null)
+  }
+
+  const confirmPendingAction = () => {
+    if (!pendingAction) return
+
+    if (pendingAction.type === 'promote' && pendingAction.targetPlayerId) {
+      promoteAdmin?.(pendingAction.targetPlayerId)
+    } else if (pendingAction.type === 'kick' && pendingAction.targetPlayerId) {
+      kickPlayer?.(pendingAction.targetPlayerId)
+    } else if (pendingAction.type === 'leave') {
+      leaveRoom?.()
+    } else if (pendingAction.type === 'undo') {
+      undoLastAction?.()
+    }
+
+    setPendingAction(null)
+  }
+
   return (
     <>
       <style>{popupStyles}</style>
@@ -404,20 +404,19 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
                 const status = getPlayerMenuStatus(player)
                 const isAdminPlayer = roomData?.adminId === player.id
                 const primaryAction = getPlayerPrimaryAction({ player, status, isAdminPlayer })
-                const canPromote = status === 'connected' && !isAdminPlayer
+                const canPromote = isCurrentUserAdmin && status === 'connected' && !isAdminPlayer
                 const statusLabel = getPlayerStatusLabel(player, status, now)
                 const isDragging = draggedPlayerId === player.id
 
                 return (
                   <div
-                    ref={(node) => {
-                      if (node) rowRefsRef.current.set(player.id, node)
-                      else rowRefsRef.current.delete(player.id)
-                    }}
                     key={player.id}
                     data-order-player-id={player.id}
-                    className={`flex min-w-0 transform-gpu items-center justify-between gap-3 transition-[opacity,transform] duration-200 ease-out ${
-                      isDragging ? 'scale-[1.025] opacity-85' : 'scale-100 opacity-100'
+                    onPointerDown={isOrderMode ? (event) => startPlayerDrag(event, player.id) : undefined}
+                    className={`flex min-w-0 items-center justify-between gap-3 transition ${
+                      isOrderMode ? 'touch-none cursor-grab active:cursor-grabbing' : ''
+                    } ${
+                      isDragging ? 'scale-[1.02] opacity-80' : ''
                     }`}
                   >
                     <CharacterCard
@@ -434,8 +433,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
                       <button
                         type="button"
                         aria-label={`Deplacer ${player.character}`}
-                        onPointerDown={(event) => startPlayerDrag(event, player.id)}
-                        className={`absolute right-0 flex h-10 w-10 shrink-0 touch-none items-center justify-center text-light transition-all duration-200 ease-out active:scale-95 ${
+                        className={`absolute right-0 flex h-10 w-10 shrink-0 items-center justify-center text-light transition-all duration-200 ease-out ${
                           isOrderMode ? 'translate-x-0 scale-100 opacity-100' : 'pointer-events-none translate-x-2 scale-90 opacity-0'
                         }`}
                       >
@@ -450,14 +448,14 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
                         <MenuPlayerActionButton
                           label={primaryAction.label}
                           icon={primaryAction.icon}
-                          disabled={primaryAction.disabled}
-                          onClick={() => {}}
+                          disabled={!isCurrentUserAdmin || primaryAction.disabled}
+                          onClick={() => openActionConfirm(isAdminPlayer ? 'leave' : 'kick', player.id)}
                         />
                         <MenuPlayerActionButton
                           label={`Promouvoir ${player.character} admin`}
                           icon="/menu/icon/crown.svg"
                           disabled={!canPromote}
-                          onClick={() => {}}
+                          onClick={() => openActionConfirm('promote', player.id)}
                         />
                       </div>
                     </div>
@@ -490,7 +488,8 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
                 variant="menu"
                 text="Annuler l'action"
                 icon={<MenuColorIcon src="/menu/icon/enter.svg" />}
-                onClick={() => {}}
+                onClick={() => openActionConfirm('undo', currentUserId)}
+                disabled={!canUndo}
                 className="bg-red-secondary text-red-primary"
               />
               <ButtonWithIcon
@@ -537,6 +536,109 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
               onClick={confirmOrderChange}
               className="w-full"
             />
+          </div>
+        </div>
+      )}
+      {pendingAction && (
+        <div
+          className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 px-6"
+          onClick={closeActionConfirm}
+          data-no-longpress
+        >
+          <div
+            className="relative flex w-full max-w-110 flex-col items-center gap-8 bg-bg px-8 pb-12 pt-12 text-center"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div
+              className="pointer-events-none absolute -top-2 left-0 h-10 w-full"
+              style={{
+                WebkitMaskImage: 'url(/menu/menu-border-top.svg)',
+                maskImage: 'url(/menu/menu-border-top.svg)',
+                WebkitMaskSize: '100% auto',
+                maskSize: '100% auto',
+                WebkitMaskPosition: 'top center',
+                maskPosition: 'top center',
+                WebkitMaskRepeat: 'no-repeat',
+                maskRepeat: 'no-repeat',
+                backgroundColor: 'var(--color-light)',
+              }}
+            />
+
+            <p className="font-funnel text-xl leading-snug text-light">
+              {pendingAction.type === 'promote' && pendingActionTarget && (
+                <>Veux tu vraiment donner a <span style={{ color: `var(--color-${pendingActionTarget.character})` }}>{pendingActionTarget.character}</span> les droits administrateur de la partie ?</>
+              )}
+              {pendingAction.type === 'kick' && pendingActionTarget && (
+                <>Veux tu vraiment expulser <span style={{ color: `var(--color-${pendingActionTarget.character})` }}>{pendingActionTarget.character}</span> de la partie ?</>
+              )}
+              {pendingAction.type === 'leave' && currentUserPlayer && (
+                <>Veux tu vraiment quitter la partie ? L'administration sera transferee automatiquement.</>
+              )}
+              {pendingAction.type === 'undo' && currentUserPlayer && (
+                <>En annulant l'action, <span style={{ color: `var(--color-${currentUserPlayer.character})` }}>{currentUserPlayer.character}</span> reviendra au choix du type de case sur lequel il est tombe.</>
+              )}
+            </p>
+
+            {pendingAction.type === 'promote' && currentUserPlayer && pendingActionTarget && (
+              <div className="flex flex-col items-center gap-3">
+                <div className="flex flex-col items-center gap-1">
+                  <CharacterCard charId={currentUserPlayer.character} size="head-only" />
+                  <p className="font-hakobi text-5xl uppercase leading-none" style={{ color: `var(--color-${currentUserPlayer.character})` }}>
+                    {currentUserPlayer.character}
+                  </p>
+                </div>
+                <svg width="38" height="48" viewBox="0 0 38 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-light">
+                  <path d="M22.1123 0L21.125 15.3291L25.8633 15.0244L18.8672 24.0283L11.8682 33.0303L6.1377 25.9785L0.40625 18.9258L4.99707 19.7588L9.58789 20.5918L10.2803 10.2959L10.9727 0H22.1123Z" fill="currentColor" />
+                  <path d="M27.7197 27.4082L27.0273 37.7041L26.335 48H15.1953L16.1826 32.6719L11.4443 32.9766L18.4414 23.9727L25.4395 14.9697L31.1709 22.0225L36.9023 29.0752L32.3115 28.2422L27.7197 27.4082Z" fill="currentColor" />
+                </svg>
+                <div className="flex flex-col items-center gap-1">
+                  <div className="relative">
+                    <CharacterCard charId={pendingActionTarget.character} size="head-only" />
+                    <img
+                      src="/menu/icon/admin-crown.svg"
+                      alt=""
+                      aria-hidden="true"
+                      className="absolute -top-2 left-1/2 z-10 h-6 w-6 -translate-x-1/2 -rotate-[15deg]"
+                    />
+                  </div>
+                  <p className="font-hakobi text-5xl uppercase leading-none" style={{ color: `var(--color-${pendingActionTarget.character})` }}>
+                    {pendingActionTarget.character}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {pendingAction.type !== 'promote' && (pendingActionTarget || currentUserPlayer) && (
+              <div className="flex flex-col items-center gap-1">
+                <CharacterCard
+                  charId={(pendingActionTarget || currentUserPlayer).character}
+                  size="head-only"
+                />
+                <p
+                  className="font-hakobi text-5xl uppercase leading-none"
+                  style={{ color: `var(--color-${(pendingActionTarget || currentUserPlayer).character})` }}
+                >
+                  {(pendingActionTarget || currentUserPlayer).character}
+                </p>
+              </div>
+            )}
+
+            <div className="flex w-full items-center justify-center gap-3">
+              <ButtonWithIcon
+                variant="menu"
+                text="Non"
+                icon={<MenuColorIcon src="/menu/icon/disconnected.svg" />}
+                onClick={closeActionConfirm}
+                className="bg-red-secondary text-red-primary"
+              />
+              <ButtonWithIcon
+                variant="menu"
+                text="Oui"
+                icon={<MenuColorIcon src="/menu/icon/connected.svg" />}
+                onClick={confirmPendingAction}
+                className="!bg-green-secondary text-green-primary"
+              />
+            </div>
           </div>
         </div>
       )}

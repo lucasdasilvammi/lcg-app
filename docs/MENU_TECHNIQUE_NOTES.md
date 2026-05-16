@@ -61,8 +61,14 @@ Fonctions attendues :
 - Annuler une erreur de clic ou revenir sur une action, quand la logique serveur existera.
 - Afficher en bas du Lobby deux gros boutons `Annuler l'action` et `Pause` avec `ButtonWithIcon`, d'abord en UI seule puis avec confirmation/logique serveur plus tard.
 - Le bouton `Changer l'ordre` passe la liste en mode tri : statuts et actions caches, icone `drag.svg` visible, reordonnancement par pointer drag.
-- En mode tri, afficher `Annuler` et `Sauvegarder`; la sauvegarde ouvre un popup de confirmation. La validation envoie un ordre en attente au serveur, applique apres la fin du tour actuel.
-- Effet motion ajoute apres cette brique : transition douce du statut, fondu/scale entre actions joueur et icone drag, animation FLIP legere sur les lignes pendant le reordonnancement.
+- En mode tri, toute la ligne joueur sert de zone de drag pour rester confortable sur mobile.
+- En mode tri, afficher `Annuler` et `Sauvegarder`; la sauvegarde ouvre un popup de confirmation. La validation envoie un ordre en attente au serveur, applique apres la fin du tour de table actuel.
+- Effet motion ajoute apres cette brique : transition douce du statut et fondu/scale entre actions joueur et icone drag. L'animation FLIP des lignes pendant le drag a ete retiree car elle creait des bugs visuels.
+- Actions admin branchees avec popup de confirmation :
+  - `promote` transfere `adminId` a un joueur connecte,
+  - `kick` retire un autre joueur de la room et lui envoie `left_room`,
+  - `leave` fait sortir l'admin comme un kick sur lui-meme, avec reassignment auto du nouvel admin.
+- `Annuler l'action` repose sur un snapshot serveur hors payload client. Dans cette premiere passe, il capture l'etat juste avant `trigger_action` et restaure l'ecran de choix de case si l'admin veut corriger un mauvais clic. Le bouton est grise tant qu'aucun snapshot n'existe.
 
 Important : le bouton `Annuler` du futur menu admin ne doit pas quitter la partie. Quitter la room est une action differente.
 
@@ -95,6 +101,8 @@ Fonctions attendues :
 ## Regles d'ouverture du menu
 
 Le menu ne doit pas etre disponible partout. La regle generale est : les joueurs directement impliques dans une action de jeu ne doivent pas pouvoir ouvrir le menu, les spectateurs peuvent l'ouvrir quand cela ne perturbe pas l'action.
+
+Exception importante : l'admin peut ouvrir le menu sur n'importe quel ecran tant qu'il est bien dans une room. Les restrictions ci-dessous concernent donc les joueurs non-admin.
 
 ### Interdit
 

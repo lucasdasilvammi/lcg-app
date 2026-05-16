@@ -78,6 +78,7 @@ let rooms = {};
 // et peut couper temporairement la socket. On laisse une marge confortable.
 const DISCONNECT_GRACE_MS = 30000; // 30 secondes
 const pendingDisconnectTimers = new Map();
+const undoSnapshotsByRoomId = new Map();
 const activiteTimersByRoomId = new Map();
 const activiteVoteTimersByRoomId = new Map();
 
@@ -157,22 +158,17 @@ const resolveTurnOrderPayload = (room, payload) => {
 const advanceRoomToNextTurn = (room) => {
   if (!room || !Array.isArray(room.players) || room.players.length === 0) return;
 
-  const currentPlayerId = room.players[room.turnIndex]?.id;
-  if (Array.isArray(room.pendingTurnOrderIds) && room.pendingTurnOrderIds.length > 0) {
-    room.players = getPlayersInRequestedOrder(room, room.pendingTurnOrderIds);
-    delete room.pendingTurnOrderIds;
-
-    const currentIndex = room.players.findIndex(player => player.id === currentPlayerId);
-    if (currentIndex >= 0) {
-      room.turnIndex = currentIndex;
-    } else if (room.turnIndex >= room.players.length) {
-      room.turnIndex = 0;
-    }
-  }
-
   const nextIndex = (room.turnIndex + 1) % room.players.length;
-  if (nextIndex === 0) room.status = "ROUND_END";
-  else { room.turnIndex = nextIndex; room.status = "TURN_START"; }
+  if (nextIndex === 0) {
+    if (Array.isArray(room.pendingTurnOrderIds) && room.pendingTurnOrderIds.length > 0) {
+      room.players = getPlayersInRequestedOrder(room, room.pendingTurnOrderIds);
+      delete room.pendingTurnOrderIds;
+    }
+    room.status = "ROUND_END";
+  } else {
+    room.turnIndex = nextIndex;
+    room.status = "TURN_START";
+  }
 };
 
 const replacePlayerIdInRoom = (room, oldId, newId) => {
@@ -266,7 +262,33 @@ io.on('connection', (socket) => {
   const sessionToken = socket.handshake.auth?.sessionToken;
   console.log('🔌 socket connected:', socket.id);
   const findRoom = () => findRoomByPlayerId(socket.id);
-  const syncRoom = (room) => io.to(room.id).emit("update_room_state", room);
+  const syncRoom = (room) => io.to(room.id).emit("update_room_state", {
+    ...room,
+    canUndo: undoSnapshotsByRoomId.has(room.id)
+  });
+  const clearRoomUndo = (roomId) => {
+    if (!roomId) return;
+    undoSnapshotsByRoomId.delete(roomId);
+  };
+  const cloneRoomState = (room) => JSON.parse(JSON.stringify(room));
+  const captureUndoSnapshot = (room) => {
+    if (!room?.id) return;
+    undoSnapshotsByRoomId.set(room.id, cloneRoomState(room));
+  };
+  const restoreUndoSnapshot = (room) => {
+    if (!room?.id) return false;
+    const snapshot = undoSnapshotsByRoomId.get(room.id);
+    if (!snapshot) return false;
+
+    Object.keys(room).forEach((key) => {
+      if (!Object.prototype.hasOwnProperty.call(snapshot, key)) {
+        delete room[key];
+      }
+    });
+    Object.assign(room, cloneRoomState(snapshot));
+    clearRoomUndo(room.id);
+    return true;
+  };
   const clearActiviteVoteTimer = (roomId) => {
     const timer = activiteVoteTimersByRoomId.get(roomId);
     if (timer) {
@@ -409,6 +431,7 @@ io.on('connection', (socket) => {
         clearTimeout(existingVoteTimer);
         activiteVoteTimersByRoomId.delete(room.id);
       }
+      clearRoomUndo(room.id);
       delete rooms[room.id];
       console.log(`🗑️ room deleted (${room.id}) after player removal (${reason}), was ${beforeCount} players`);
       return;
@@ -532,6 +555,100 @@ io.on('connection', (socket) => {
     if (typeof ack === 'function') ack({ ok: true });
   });
 
+  socket.on('undo_last_action', (_payload, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    if (room.adminId !== socket.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
+    const restored = restoreUndoSnapshot(room);
+    if (!restored) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'nothing_to_undo' });
+      return;
+    }
+
+    syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true });
+  });
+
+  socket.on('promote_admin', ({ targetPlayerId } = {}, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    if (room.adminId !== socket.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
+    const targetPlayer = room.players.find((player) => player.id === targetPlayerId);
+    if (!targetPlayer) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'player_not_found' });
+      return;
+    }
+
+    const canPromote = targetPlayer.id !== socket.id && targetPlayer.connected !== false && !targetPlayer.isWaiting && !targetPlayer.isDisconnected;
+    if (!canPromote) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
+      return;
+    }
+
+    room.adminId = targetPlayer.id;
+    syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true });
+  });
+
+  socket.on('kick_player', ({ targetPlayerId } = {}, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    if (room.adminId !== socket.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
+    const targetPlayer = room.players.find((player) => player.id === targetPlayerId);
+    if (!targetPlayer) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'player_not_found' });
+      return;
+    }
+
+    if (targetPlayer.id === socket.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'cannot_kick_self' });
+      return;
+    }
+
+    if (targetPlayer.sessionToken) {
+      clearPendingDisconnect(targetPlayer.sessionToken);
+    }
+
+    removePlayerFromRoom({
+      room,
+      playerId: targetPlayer.id,
+      playerSessionToken: targetPlayer.sessionToken || null,
+      reason: 'admin_kick'
+    });
+
+    const targetSocket = io.sockets.sockets.get(targetPlayer.id);
+    if (targetSocket) {
+      targetSocket.leave(room.id);
+      targetSocket.emit('left_room');
+    }
+
+    if (typeof ack === 'function') ack({ ok: true });
+  });
+
   // --- SETUP ---
   socket.on("start_game", () => { const room = findRoom(); if (room) { room.status = "SELECT_CHARACTER"; syncRoom(room); }});
   socket.on("pick_character", (id) => {
@@ -613,6 +730,8 @@ io.on('connection', (socket) => {
       if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
       return;
     }
+
+    captureUndoSnapshot(room);
 
     if (actionType === "QUIZ") {
       const randomCat = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];

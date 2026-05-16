@@ -79,6 +79,7 @@ const getQuizQuestionerId = (roomData) => {
 
 const canOpenSettingsForContext = ({ view, roomData, currentUserId }) => {
   if (!roomData || !currentUserId) return false
+  if (roomData.adminId === currentUserId) return true
   if (SETUP_VIEWS.has(view)) return false
   if (ACTIVITY_VIEWS.has(view)) return false
 
@@ -127,7 +128,7 @@ const canOpenSettingsForContext = ({ view, roomData, currentUserId }) => {
 function AppContent() {
 
 
-  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel, acknowledgeReady, submitDrawing, submitPhoto, submitVote, leaveRoom } = useSocket();
+  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, undoLastAction, leaveRoom } = useSocket();
 
   const [view, setView] = useState("HOME");
   const [inputCode, setInputCode] = useState([]);
@@ -343,6 +344,10 @@ function AppContent() {
           roomData={roomData}
           currentUserId={socket?.id}
           updateTurnOrder={updateTurnOrder}
+          promoteAdmin={promoteAdmin}
+          kickPlayer={kickPlayer}
+          undoLastAction={undoLastAction}
+          leaveRoom={leaveRoom}
           onClose={closeSettingsMenu}
         />
       )}

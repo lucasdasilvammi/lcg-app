@@ -73,6 +73,7 @@ export const SocketProvider = ({ children }) => {
       setRoomData(null)
       setIsAdmin(false)
       setErrorMsg("")
+      resetSessionToken()
       console.log('left_room ack')
     })
     s.on("error_join", (msg) => { addToast(msg, 'error'); console.warn('error_join', msg) })
@@ -126,6 +127,9 @@ export const SocketProvider = ({ children }) => {
   const submitDrawing = () => socket?.emit("activite_submit_drawing")
   const submitPhoto = (photoData, ack) => socket?.emit("activite_submit_photo", { photoData }, ack)
   const submitVote = (photoIndex, voteType) => socket?.emit("activite_vote", { photoIndex, voteType })
+  const promoteAdmin = (targetPlayerId, ack) => socket?.emit('promote_admin', { targetPlayerId }, ack)
+  const kickPlayer = (targetPlayerId, ack) => socket?.emit('kick_player', { targetPlayerId }, ack)
+  const undoLastAction = (ack) => socket?.emit('undo_last_action', {}, ack)
   const leaveRoom = () => {
     console.log('🚪 leaveRoom() called, socket:', socket?.id, 'connected:', socket?.connected)
     if (!socket) {
@@ -182,6 +186,9 @@ export const SocketProvider = ({ children }) => {
       submitDrawing,
       submitPhoto,
       submitVote,
+      promoteAdmin,
+      kickPlayer,
+      undoLastAction,
       leaveRoom
     }}>
       {children}
