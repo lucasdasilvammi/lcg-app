@@ -27,6 +27,9 @@
 - [ ] Rendre les textes UI non selectionnables (sauf zones de saisie)
 	Prompt implementation:
 	"Appliquer user-select: none sur les textes d'interface non interactifs pour maximiser les zones utilisables pour l'appui long menu, tout en conservant la selection normale dans input/textarea/champs de saisie."
+- [ ] Ajouter un popup pedagogique au premier debut de partie pour presenter l'appui long menu
+	Prompt implementation:
+	"Au premier debut de partie, autour du premier ecran TURN_START, afficher un court popup pedagogique expliquant que maintenir appuye ouvre le menu Parametres. Le popup doit etre non bloquant apres validation, memorise localement pour ne pas revenir a chaque partie si souhaite, et ne doit pas apparaitre sur les ecrans ou le menu est interdit."
 
 ## 📡 Presence / Messages room
 - [ ] Ajouter des messages de statut room pour tous les cas de figure leave/crash/reco

@@ -9,9 +9,19 @@ const server = http.createServer(app);
 // --- CORS Configuration (Dynamic for Production) ---
 const allowedOrigins = process.env.NODE_ENV === 'production'
   ? true  // Allow all origins in production for multiplayer game
-  : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:3000', 'http://192.168.31.66:5173'];
+  : [
+      'http://localhost:5173',
+      'http://localhost:5174',
+      'http://localhost:5175',
+      'http://localhost:3000',
+      'http://192.168.31.66:5173',
+      'http://192.168.31.66:5174',
+      'http://192.168.31.66:5175'
+    ];
 
 const io = new Server(server, {
+  // Les photos (base64) peuvent être lourdes sur mobile → buffer plus grand
+  maxHttpBufferSize: 15e6, // 15 MB
   cors: { 
     origin: allowedOrigins, 
     methods: ['GET', 'POST'],
@@ -80,8 +90,13 @@ app.get('/api/status', (req, res) => {
 
 // --- GAME STATE ---
 let rooms = {};
-const DISCONNECT_GRACE_MS = 10000;
+// Sur mobile, l'ouverture de l'appareil photo met souvent l'app en arrière-plan
+// et peut couper temporairement la socket. On laisse une marge confortable.
+const DISCONNECT_GRACE_MS = 30000; // 30 secondes
 const pendingDisconnectTimers = new Map();
+// Timers (ne doivent JAMAIS être stockés dans l'état room envoyé au client)
+const activiteTimersByRoomId = new Map();
+const activiteVoteTimersByRoomId = new Map();
 
 const clearPendingDisconnect = (sessionToken) => {
   if (!sessionToken) return;
@@ -103,14 +118,94 @@ const findPlayerBySessionToken = (sessionToken) => {
   return null;
 };
 
+const markPlayerPresence = (player, presence) => {
+  if (!player) return;
+  const updatedAt = Date.now();
+  player.presence = presence;
+  player.connected = presence === 'connected';
+  player.isWaiting = presence === 'waiting';
+  player.isDisconnected = presence === 'disconnected';
+  player.presenceUpdatedAt = updatedAt;
+  if (presence === 'waiting') {
+    player.disconnectDeadlineAt = updatedAt + DISCONNECT_GRACE_MS;
+  } else {
+    delete player.disconnectDeadlineAt;
+  }
+};
+
+const getPlayersInRequestedOrder = (room, orderedIds) => {
+  if (!room || !Array.isArray(room.players) || !Array.isArray(orderedIds)) return room?.players || [];
+  const playersById = new Map(room.players.map(player => [player.id, player]));
+  const seen = new Set();
+  const orderedPlayers = [];
+
+  orderedIds.forEach((id) => {
+    const player = playersById.get(id);
+    if (!player || seen.has(id)) return;
+    orderedPlayers.push(player);
+    seen.add(id);
+  });
+
+  room.players.forEach((player) => {
+    if (seen.has(player.id)) return;
+    orderedPlayers.push(player);
+  });
+
+  return orderedPlayers;
+};
+
+const resolveTurnOrderPayload = (room, payload) => {
+  const requestedPlayers = Array.isArray(payload) ? payload : payload?.players;
+  if (!room || !Array.isArray(requestedPlayers)) return null;
+
+  const orderedIds = requestedPlayers
+    .map(player => typeof player === 'string' ? player : player?.id)
+    .filter(Boolean);
+
+  if (orderedIds.length === 0) return null;
+
+  return {
+    orderedIds,
+    players: getPlayersInRequestedOrder(room, orderedIds),
+    applyAfterCurrentTurn: !Array.isArray(payload) && payload?.applyAfterCurrentTurn === true
+  };
+};
+
+const advanceRoomToNextTurn = (room) => {
+  if (!room || !Array.isArray(room.players) || room.players.length === 0) return;
+
+  const currentPlayerId = room.players[room.turnIndex]?.id;
+  if (Array.isArray(room.pendingTurnOrderIds) && room.pendingTurnOrderIds.length > 0) {
+    room.players = getPlayersInRequestedOrder(room, room.pendingTurnOrderIds);
+    delete room.pendingTurnOrderIds;
+
+    const currentIndex = room.players.findIndex(player => player.id === currentPlayerId);
+    if (currentIndex >= 0) {
+      room.turnIndex = currentIndex;
+    } else if (room.turnIndex >= room.players.length) {
+      room.turnIndex = 0;
+    }
+  }
+
+  const nextIndex = (room.turnIndex + 1) % room.players.length;
+  if (nextIndex === 0) room.status = 'ROUND_END';
+  else { room.turnIndex = nextIndex; room.status = 'TURN_START'; }
+};
+
 const replacePlayerIdInRoom = (room, oldId, newId) => {
   if (!room || !oldId || !newId || oldId === newId) return;
 
   if (room.adminId === oldId) room.adminId = newId;
   if (room.pendingQuestionerId === oldId) room.pendingQuestionerId = newId;
+  if (Array.isArray(room.pendingTurnOrderIds)) {
+    room.pendingTurnOrderIds = room.pendingTurnOrderIds.map(id => id === oldId ? newId : id);
+  }
 
   for (const player of room.players) {
-    if (player.id === oldId) player.id = newId;
+    if (player.id === oldId) {
+      player.id = newId;
+      markPlayerPresence(player, 'connected');
+    }
   }
 
   const ci = room.currentInteraction;
@@ -120,6 +215,12 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
     if (ci.buzzedPlayerId === oldId) ci.buzzedPlayerId = newId;
     if (Array.isArray(ci.duelists)) ci.duelists = ci.duelists.map(id => id === oldId ? newId : id);
     if (Array.isArray(ci.acknowledgedRules)) ci.acknowledgedRules = ci.acknowledgedRules.map(id => id === oldId ? newId : id);
+    if (Array.isArray(ci.participants)) ci.participants = ci.participants.map(id => id === oldId ? newId : id);
+    if (Array.isArray(ci.readyPlayers)) ci.readyPlayers = ci.readyPlayers.map(id => id === oldId ? newId : id);
+    if (Array.isArray(ci.finishedPlayers)) ci.finishedPlayers = ci.finishedPlayers.map(id => id === oldId ? newId : id);
+    if (Array.isArray(ci.photos)) {
+      ci.photos = ci.photos.map(photo => photo?.playerId === oldId ? { ...photo, playerId: newId } : photo);
+    }
 
     if (ci.submittedAnswers && ci.submittedAnswers[oldId] !== undefined) {
       ci.submittedAnswers[newId] = ci.submittedAnswers[oldId];
@@ -136,6 +237,18 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
       ci.blockedUntil[newId] = ci.blockedUntil[oldId];
       delete ci.blockedUntil[oldId];
     }
+    if (ci.uploadedPhotos && ci.uploadedPhotos[oldId] !== undefined) {
+      ci.uploadedPhotos[newId] = ci.uploadedPhotos[oldId];
+      delete ci.uploadedPhotos[oldId];
+    }
+    if (ci.votes && typeof ci.votes === 'object') {
+      for (const photoVotes of Object.values(ci.votes)) {
+        if (photoVotes?.byPlayer?.[oldId] !== undefined) {
+          photoVotes.byPlayer[newId] = photoVotes.byPlayer[oldId];
+          delete photoVotes.byPlayer[oldId];
+        }
+      }
+    }
   }
 
   if (room.duelAnswers && room.duelAnswers[oldId] !== undefined) {
@@ -151,6 +264,9 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
     if (lr.readerId === oldId) lr.readerId = newId;
     if (lr.verdictViewerId === oldId) lr.verdictViewerId = newId;
     if (Array.isArray(lr.duelists)) lr.duelists = lr.duelists.map(id => id === oldId ? newId : id);
+    if (Array.isArray(lr.rankings)) {
+      lr.rankings = lr.rankings.map(rank => rank?.playerId === oldId ? { ...rank, playerId: newId } : rank);
+    }
 
     if (lr.submittedColors && lr.submittedColors[oldId] !== undefined) {
       lr.submittedColors[newId] = lr.submittedColors[oldId];
@@ -168,7 +284,8 @@ io.on('connection', (socket) => {
   const syncRoom = (room) => io.to(room.id).emit('update_room_state', room);
   const pickNextAdminId = (room) => {
     if (!room || !Array.isArray(room.players) || room.players.length === 0) return null;
-    return room.players[0].id;
+    const connectedPlayer = room.players.find((p) => p.connected !== false && !p.isWaiting && !p.isDisconnected);
+    return (connectedPlayer || room.players[0]).id;
   };
   const removePlayerFromRoom = ({ room, playerId = null, playerSessionToken = null, reason = 'unknown' }) => {
     if (!room) return;
@@ -185,6 +302,16 @@ io.on('connection', (socket) => {
     room.players = room.players.filter((p) => !removedPlayers.includes(p));
 
     if (room.players.length === 0) {
+      const existingTimer = activiteTimersByRoomId.get(room.id);
+      if (existingTimer) {
+        clearTimeout(existingTimer);
+        activiteTimersByRoomId.delete(room.id);
+      }
+      const existingVoteTimer = activiteVoteTimersByRoomId.get(room.id);
+      if (existingVoteTimer) {
+        clearTimeout(existingVoteTimer);
+        activiteVoteTimersByRoomId.delete(room.id);
+      }
       delete rooms[room.id];
       console.log(`🗑️ room deleted (${room.id}) after ${reason}`);
       return;
@@ -225,6 +352,111 @@ io.on('connection', (socket) => {
     }
   }
 
+  const clearActiviteVoteTimer = (roomId) => {
+    const timer = activiteVoteTimersByRoomId.get(roomId);
+    if (timer) {
+      clearTimeout(timer);
+      activiteVoteTimersByRoomId.delete(roomId);
+    }
+  };
+
+  const getActiviteEligibleVoters = (ci, photoIndex = ci?.currentPhotoIndex || 0) => {
+    const participants = Array.isArray(ci?.participants) ? ci.participants : [];
+    const currentPhoto = ci?.photos?.[photoIndex];
+    return participants.filter(id => id !== currentPhoto?.playerId);
+  };
+
+  const finalizeActiviteReveal = (room) => {
+    const ci = room?.currentInteraction;
+    if (!room || !ci || ci.type !== 'logo') return;
+
+    clearActiviteVoteTimer(room.id);
+
+    const photos = Array.isArray(ci.photos) ? ci.photos : [];
+    const votes = ci.votes || {};
+
+    const rankings = photos
+      .map((photo, idx) => {
+        const photoVotes = votes[idx] || { up: 0, neutral: 0, down: 0, byPlayer: {} };
+        const totalVotes = photoVotes.up + photoVotes.neutral + photoVotes.down;
+        const score = totalVotes > 0 ? Math.round((photoVotes.up / totalVotes) * 100) : 0;
+        return {
+          playerId: photo.playerId,
+          upVotes: photoVotes.up,
+          neutralVotes: photoVotes.neutral,
+          downVotes: photoVotes.down,
+          score
+        };
+      })
+      .sort((a, b) => b.score - a.score);
+
+    const winnerId = rankings[0]?.playerId;
+    const winner = room.players.find(p => p.id === winnerId);
+    if (winner) {
+      winner.score += 2; // 2 jalons pour le gagnant
+    }
+
+    room.lastResult = {
+      type: 'logo',
+      brandName: ci.brandName,
+      rankings,
+      winnerId,
+      points: 2,
+      success: true,
+      questionerId: ci.questionerId || room.players[room.turnIndex]?.id
+    };
+
+    room.status = 'ACTIVITE_REVEAL';
+  };
+
+  const startActiviteVoteRound = (room, photoIndex = 0, durationMs = 12000) => {
+    const ci = room?.currentInteraction;
+    if (!room || !ci || ci.type !== 'logo') return;
+
+    clearActiviteVoteTimer(room.id);
+
+    const photos = Array.isArray(ci.photos) ? ci.photos : [];
+    if (photoIndex >= photos.length) {
+      finalizeActiviteReveal(room);
+      syncRoom(room);
+      return;
+    }
+
+    ci.currentPhotoIndex = photoIndex;
+    ci.voteStartedAt = Date.now();
+    ci.voteEndsAt = ci.voteStartedAt + durationMs;
+    ci.voteDurationMs = durationMs;
+    room.status = 'ACTIVITE_VOTE';
+
+    const timer = setTimeout(() => {
+      advanceActiviteVoteRound(room, photoIndex);
+    }, durationMs);
+    activiteVoteTimersByRoomId.set(room.id, timer);
+  };
+
+  const advanceActiviteVoteRound = (room, expectedPhotoIndex = null) => {
+    const ci = room?.currentInteraction;
+    if (!room || !ci || ci.type !== 'logo' || room.status !== 'ACTIVITE_VOTE') return;
+    if (expectedPhotoIndex !== null && ci.currentPhotoIndex !== expectedPhotoIndex) return;
+
+    const nextPhotoIndex = (ci.currentPhotoIndex || 0) + 1;
+    startActiviteVoteRound(room, nextPhotoIndex, 12000);
+    syncRoom(room);
+  };
+
+  const tightenActiviteVoteTimer = (room) => {
+    const ci = room?.currentInteraction;
+    if (!room || !ci || ci.type !== 'logo' || room.status !== 'ACTIVITE_VOTE') return;
+
+    const now = Date.now();
+    if (!ci.voteEndsAt || ci.voteEndsAt - now <= 3000) return;
+
+    const photoIndex = ci.currentPhotoIndex || 0;
+    startActiviteVoteRound(room, photoIndex, 3000);
+    ci.voteStartedAt = now;
+    ci.voteEndsAt = now + 3000;
+  };
+
   // --- LOBBY ---
   socket.on('create_room', () => {
     const newRoomId = generateRoomId();
@@ -234,7 +466,7 @@ io.on('connection', (socket) => {
       id: newRoomId,
       code: gameCode,
       adminId: socket.id,
-      players: [{ id: socket.id, sessionToken, character: null, score: 0 }],
+      players: [{ id: socket.id, sessionToken, character: null, score: 0, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false }],
       status: 'LOBBY',
       turnIndex: 0,
       currentInteraction: null,
@@ -267,7 +499,7 @@ io.on('connection', (socket) => {
     }
 
     socket.join(room.id);
-  room.players.push({ id: socket.id, sessionToken, character: null, score: 0 });
+  room.players.push({ id: socket.id, sessionToken, character: null, score: 0, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false });
     socket.emit('room_joined', { roomId: room.id, isAdmin: false });
     console.log('join_room_with_code: player joined', socket.id, '->', room.id);
     syncRoom(room);
@@ -287,6 +519,8 @@ io.on('connection', (socket) => {
       if (typeof ack === 'function') ack({ ok: false, reason: 'player_not_found' });
       return;
     }
+
+    syncRoom(room);
 
     if (player.sessionToken) {
       clearPendingDisconnect(player.sessionToken);
@@ -346,14 +580,45 @@ io.on('connection', (socket) => {
   });
 
   socket.on('confirm_selection', () => { const room = findRoom(); if (room) { room.status = 'DEFINE_ORDER'; syncRoom(room); }});
-  socket.on('update_turn_order', (list) => { const room = findRoom(); if (room) { room.players = list; syncRoom(room); }});
+  socket.on('update_turn_order', (payload, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    const requestedOrder = resolveTurnOrderPayload(room, payload);
+    if (!requestedOrder) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_order' });
+      return;
+    }
+
+    if (requestedOrder.applyAfterCurrentTurn && room.status !== 'DEFINE_ORDER') {
+      room.pendingTurnOrderIds = requestedOrder.orderedIds;
+    } else {
+      const activePlayerId = room.players[room.turnIndex]?.id;
+      room.players = requestedOrder.players;
+      delete room.pendingTurnOrderIds;
+
+      const activeIndex = room.players.findIndex(player => player.id === activePlayerId);
+      if (activeIndex >= 0) room.turnIndex = activeIndex;
+      else if (room.turnIndex >= room.players.length) room.turnIndex = 0;
+    }
+
+    syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true, pending: Boolean(room.pendingTurnOrderIds) });
+  });
   socket.on('start_game_loop', () => { const room = findRoom(); if (room) { room.status = 'TURN_START'; room.turnIndex = 0; syncRoom(room); }});
   socket.on('roll_dice', () => { const room = findRoom(); if (room) { room.status = 'GAME_LOOP'; syncRoom(room); }});
 
   // --- ACTIONS ---
-  socket.on('trigger_action', (actionType) => {
+  socket.on('trigger_action', (actionType, ack) => {
     const room = findRoom();
-    if (!room) return;
+    if (!room) {
+      console.warn('trigger_action: player not in room', socket.id, 'actionType', actionType);
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
 
     if (actionType === 'QUIZ') {
       const randomCat = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
@@ -361,9 +626,11 @@ io.on('connection', (socket) => {
       room.pendingQuestionerId = socket.id;
       room.status = 'QUIZ_OPTIONS';
       syncRoom(room);
+      if (typeof ack === 'function') ack({ ok: true, status: room.status });
     } else if (actionType === 'DEFI') {
       room.status = 'DEBUG_DUEL_SELECTOR';
       syncRoom(room);
+      if (typeof ack === 'function') ack({ ok: true, status: room.status });
     } else if (actionType === 'EVENT') {
       const randomEvent = EVENTS_DB[Math.floor(Math.random() * EVENTS_DB.length)];
       room.currentInteraction = {
@@ -373,7 +640,179 @@ io.on('connection', (socket) => {
       };
       room.status = 'EVENT_GAME';
       syncRoom(room);
+      if (typeof ack === 'function') ack({ ok: true, status: room.status });
+    } else if (actionType === 'ACTIVITE') {
+      const brandNames = [
+        'Apple', 'Nike', 'McDo', 'Starbucks', 'Coca', 'Pepsi',
+        'Tesla', 'Amazon', 'Google', 'Facebook', 'Microsoft',
+        'Adidas', 'Puma', 'Lego', 'IKEA', 'Zara', 'H&M'
+      ];
+      const randomBrand = brandNames[Math.floor(Math.random() * brandNames.length)];
+
+      const participants = room.players.map(p => p.id);
+
+      room.currentInteraction = {
+        type: 'logo',
+        brandName: randomBrand,
+        questionerId: socket.id,
+        participants,
+        readyPlayers: [],
+        finishedPlayers: [],
+        uploadedPhotos: {},
+        photos: [], // Array of {playerId, photoData}
+        votes: {},
+        currentPhotoIndex: 0,
+        voteStartedAt: null,
+        voteEndsAt: null,
+        voteDurationMs: 12000,
+        timeUp: false
+      };
+      room.status = 'ACTIVITE_BRIEF';
+      syncRoom(room);
+      if (typeof ack === 'function') ack({ ok: true, status: room.status });
+    } else {
+      console.warn('trigger_action: unknown actionType', actionType, 'from', socket.id);
+      if (typeof ack === 'function') ack({ ok: false, reason: 'unknown_action' });
     }
+  });
+
+  // --- ACTIVITÉ: DESSIN DE LOGO ---
+  socket.on('activite_acknowledge_ready', () => {
+    const room = findRoom();
+    if (!room || !room.currentInteraction || room.currentInteraction.type !== 'logo') return;
+
+    const participants = room.currentInteraction.participants || [];
+    const readyPlayers = room.currentInteraction.readyPlayers || [];
+
+    if (participants.includes(socket.id) && !readyPlayers.includes(socket.id)) {
+      room.currentInteraction.readyPlayers = [...readyPlayers, socket.id];
+    }
+
+    const allReady = participants.length > 0 && participants.every(id =>
+      room.currentInteraction.readyPlayers.includes(id)
+    );
+
+    if (allReady) {
+      room.status = 'ACTIVITE_CREATION';
+      // IMPORTANT: ne pas stocker d'objet Timer dans room.currentInteraction (sinon crash socket.io)
+      const existingTimer = activiteTimersByRoomId.get(room.id);
+      if (existingTimer) {
+        clearTimeout(existingTimer);
+        activiteTimersByRoomId.delete(room.id);
+      }
+
+      const timer = setTimeout(() => {
+        room.currentInteraction.timeUp = true;
+        room.status = 'ACTIVITE_UPLOAD';
+        syncRoom(room);
+      }, 60000);
+      activiteTimersByRoomId.set(room.id, timer);
+    }
+
+    syncRoom(room);
+  });
+
+  socket.on('activite_submit_drawing', () => {
+    const room = findRoom();
+    if (!room || !room.currentInteraction || room.currentInteraction.type !== 'logo') return;
+
+    const finishedPlayers = room.currentInteraction.finishedPlayers || [];
+    if (!finishedPlayers.includes(socket.id)) {
+      room.currentInteraction.finishedPlayers = [...finishedPlayers, socket.id];
+    }
+
+    const participants = room.currentInteraction.participants || [];
+    const allFinished = participants.length > 0 && participants.every(id =>
+      room.currentInteraction.finishedPlayers.includes(id)
+    );
+
+    if (allFinished && !room.currentInteraction.timeUp) {
+      const timer = activiteTimersByRoomId.get(room.id);
+      if (timer) {
+        clearTimeout(timer);
+        activiteTimersByRoomId.delete(room.id);
+      }
+      room.status = 'ACTIVITE_UPLOAD';
+    }
+
+    syncRoom(room);
+  });
+
+  socket.on('activite_submit_photo', ({ photoData }, ack) => {
+    const room = findRoom();
+    if (!room || !room.currentInteraction || room.currentInteraction.type !== 'logo') {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'activity_not_active' });
+      return;
+    }
+
+    const photos = room.currentInteraction.photos || [];
+    const existingIndex = photos.findIndex(p => p.playerId === socket.id);
+
+    if (existingIndex >= 0) {
+      photos[existingIndex] = { playerId: socket.id, photoData };
+    } else {
+      photos.push({ playerId: socket.id, photoData });
+    }
+
+    room.currentInteraction.photos = photos;
+    room.currentInteraction.uploadedPhotos = {
+      ...room.currentInteraction.uploadedPhotos,
+      [socket.id]: true
+    };
+
+    const participants = room.currentInteraction.participants || [];
+    const allUploaded = participants.length > 0 && participants.every(id =>
+      room.currentInteraction.uploadedPhotos[id]
+    );
+
+    if (allUploaded) {
+      const shuffledPhotos = [...photos].sort(() => Math.random() - 0.5);
+      room.currentInteraction.photos = shuffledPhotos;
+      room.currentInteraction.votes = {};
+      startActiviteVoteRound(room, 0, 12000);
+    }
+
+    syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true, status: room.status });
+  });
+
+  socket.on('activite_vote', ({ photoIndex, voteType }) => {
+    const room = findRoom();
+    if (!room || !room.currentInteraction || room.currentInteraction.type !== 'logo') return;
+
+    const ci = room.currentInteraction;
+    const currentPhotoIndex = ci.currentPhotoIndex || 0;
+    const photos = Array.isArray(ci.photos) ? ci.photos : [];
+    const currentPhoto = photos[currentPhotoIndex];
+    const validVoteTypes = ['up', 'neutral', 'down'];
+
+    if (photoIndex !== currentPhotoIndex || !currentPhoto || !validVoteTypes.includes(voteType)) return;
+    if (currentPhoto.playerId === socket.id) return;
+
+    const eligibleVoters = getActiviteEligibleVoters(ci, currentPhotoIndex);
+    if (!eligibleVoters.includes(socket.id)) return;
+
+    const votes = ci.votes || {};
+    if (!votes[currentPhotoIndex]) {
+      votes[currentPhotoIndex] = { up: 0, neutral: 0, down: 0, byPlayer: {} };
+    }
+
+    const photoVotes = votes[currentPhotoIndex];
+    if (photoVotes.byPlayer?.[socket.id]) return;
+
+    photoVotes[voteType] = (photoVotes[voteType] || 0) + 1;
+    photoVotes.byPlayer = {
+      ...(photoVotes.byPlayer || {}),
+      [socket.id]: voteType
+    };
+    ci.votes = votes;
+
+    const allEligibleVoted = eligibleVoters.length > 0 && eligibleVoters.every(id => photoVotes.byPlayer?.[id]);
+    if (allEligibleVoted) {
+      tightenActiviteVoteTimer(room);
+    }
+
+    syncRoom(room);
   });
 
   socket.on('debug_trigger_duel', (defiType) => {
@@ -834,9 +1273,7 @@ io.on('connection', (socket) => {
       }
       if (room.currentInteraction?.type === 'event') {
         // For events, directly go to next turn
-        const nextIndex = (room.turnIndex + 1) % room.players.length;
-        if (nextIndex === 0) room.status = 'ROUND_END';
-        else { room.turnIndex = nextIndex; room.status = 'TURN_START'; }
+        advanceRoomToNextTurn(room);
       } else {
         room.status = 'FEEDBACK';
       }
@@ -848,9 +1285,7 @@ io.on('connection', (socket) => {
   socket.on('next_turn', () => {
     const room = findRoom();
     if (!room) return;
-    const nextIndex = (room.turnIndex + 1) % room.players.length;
-    if (nextIndex === 0) room.status = 'ROUND_END';
-    else { room.turnIndex = nextIndex; room.status = 'TURN_START'; }
+    advanceRoomToNextTurn(room);
     syncRoom(room);
   });
 
@@ -872,14 +1307,18 @@ io.on('connection', (socket) => {
       return;
     }
 
+    markPlayerPresence(player, 'waiting');
+
     if (room.adminId === socket.id && room.players.length > 1) {
-      const fallbackAdmin = room.players.find((p) => p.id !== socket.id);
+      const fallbackAdmin = room.players.find((p) => p.id !== socket.id && p.connected !== false && !p.isWaiting && !p.isDisconnected);
       if (fallbackAdmin) {
         room.adminId = fallbackAdmin.id;
         console.log(`👑 temporary admin reassigned on disconnect in room ${room.id}:`, room.adminId);
         syncRoom(room);
       }
     }
+
+    syncRoom(room);
 
     if (player.sessionToken) {
       clearPendingDisconnect(player.sessionToken);
@@ -890,14 +1329,11 @@ io.on('connection', (socket) => {
           return;
         }
 
-        removePlayerFromRoom({
-          room: latest.room,
-          playerSessionToken: player.sessionToken,
-          reason: 'disconnect_timeout'
-        });
+        markPlayerPresence(latest.player, 'disconnected');
+        syncRoom(latest.room);
 
         pendingDisconnectTimers.delete(player.sessionToken);
-        console.log('⏱️ player removed after disconnect grace timeout:', player.sessionToken);
+        console.log('⏱️ player marked disconnected after grace timeout:', player.sessionToken);
       }, DISCONNECT_GRACE_MS);
 
       pendingDisconnectTimers.set(player.sessionToken, timer);
@@ -905,11 +1341,8 @@ io.on('connection', (socket) => {
       return;
     }
 
-    removePlayerFromRoom({
-      room,
-      playerId: socket.id,
-      reason: 'disconnect_no_session'
-    });
+    markPlayerPresence(player, 'disconnected');
+    syncRoom(room);
     console.log('🔌 socket disconnected:', socket.id);
   });
 });

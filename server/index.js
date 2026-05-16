@@ -74,8 +74,12 @@ const getRandomDuel = (type = null) => {
 };
 
 let rooms = {};
-const DISCONNECT_GRACE_MS = 10000; // 10 seconds for testing
+// Sur mobile, l'ouverture de l'appareil photo met souvent l'app en arrière-plan
+// et peut couper temporairement la socket. On laisse une marge confortable.
+const DISCONNECT_GRACE_MS = 30000; // 30 secondes
 const pendingDisconnectTimers = new Map();
+const activiteTimersByRoomId = new Map();
+const activiteVoteTimersByRoomId = new Map();
 
 const clearPendingDisconnect = (sessionToken) => {
   if (!sessionToken) return;
@@ -97,14 +101,94 @@ const findPlayerBySessionToken = (sessionToken) => {
   return null;
 };
 
+const markPlayerPresence = (player, presence) => {
+  if (!player) return;
+  const updatedAt = Date.now();
+  player.presence = presence;
+  player.connected = presence === 'connected';
+  player.isWaiting = presence === 'waiting';
+  player.isDisconnected = presence === 'disconnected';
+  player.presenceUpdatedAt = updatedAt;
+  if (presence === 'waiting') {
+    player.disconnectDeadlineAt = updatedAt + DISCONNECT_GRACE_MS;
+  } else {
+    delete player.disconnectDeadlineAt;
+  }
+};
+
+const getPlayersInRequestedOrder = (room, orderedIds) => {
+  if (!room || !Array.isArray(room.players) || !Array.isArray(orderedIds)) return room?.players || [];
+  const playersById = new Map(room.players.map(player => [player.id, player]));
+  const seen = new Set();
+  const orderedPlayers = [];
+
+  orderedIds.forEach((id) => {
+    const player = playersById.get(id);
+    if (!player || seen.has(id)) return;
+    orderedPlayers.push(player);
+    seen.add(id);
+  });
+
+  room.players.forEach((player) => {
+    if (seen.has(player.id)) return;
+    orderedPlayers.push(player);
+  });
+
+  return orderedPlayers;
+};
+
+const resolveTurnOrderPayload = (room, payload) => {
+  const requestedPlayers = Array.isArray(payload) ? payload : payload?.players;
+  if (!room || !Array.isArray(requestedPlayers)) return null;
+
+  const orderedIds = requestedPlayers
+    .map(player => typeof player === 'string' ? player : player?.id)
+    .filter(Boolean);
+
+  if (orderedIds.length === 0) return null;
+
+  return {
+    orderedIds,
+    players: getPlayersInRequestedOrder(room, orderedIds),
+    applyAfterCurrentTurn: !Array.isArray(payload) && payload?.applyAfterCurrentTurn === true
+  };
+};
+
+const advanceRoomToNextTurn = (room) => {
+  if (!room || !Array.isArray(room.players) || room.players.length === 0) return;
+
+  const currentPlayerId = room.players[room.turnIndex]?.id;
+  if (Array.isArray(room.pendingTurnOrderIds) && room.pendingTurnOrderIds.length > 0) {
+    room.players = getPlayersInRequestedOrder(room, room.pendingTurnOrderIds);
+    delete room.pendingTurnOrderIds;
+
+    const currentIndex = room.players.findIndex(player => player.id === currentPlayerId);
+    if (currentIndex >= 0) {
+      room.turnIndex = currentIndex;
+    } else if (room.turnIndex >= room.players.length) {
+      room.turnIndex = 0;
+    }
+  }
+
+  const nextIndex = (room.turnIndex + 1) % room.players.length;
+  if (nextIndex === 0) room.status = "ROUND_END";
+  else { room.turnIndex = nextIndex; room.status = "TURN_START"; }
+};
+
 const replacePlayerIdInRoom = (room, oldId, newId) => {
   if (!room || !oldId || !newId || oldId === newId) return;
 
   if (room.adminId === oldId) room.adminId = newId;
   if (room.pendingQuestionerId === oldId) room.pendingQuestionerId = newId;
+  if (Array.isArray(room.pendingTurnOrderIds)) {
+    room.pendingTurnOrderIds = room.pendingTurnOrderIds.map(id => id === oldId ? newId : id);
+  }
 
   for (const player of room.players) {
-    if (player.id === oldId) player.id = newId;
+    if (player.id === oldId) {
+      player.id = newId;
+      markPlayerPresence(player, 'connected');
+    }
   }
 
   const ci = room.currentInteraction;
@@ -114,6 +198,12 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
     if (ci.buzzedPlayerId === oldId) ci.buzzedPlayerId = newId;
     if (Array.isArray(ci.duelists)) ci.duelists = ci.duelists.map(id => id === oldId ? newId : id);
     if (Array.isArray(ci.acknowledgedRules)) ci.acknowledgedRules = ci.acknowledgedRules.map(id => id === oldId ? newId : id);
+    if (Array.isArray(ci.participants)) ci.participants = ci.participants.map(id => id === oldId ? newId : id);
+    if (Array.isArray(ci.readyPlayers)) ci.readyPlayers = ci.readyPlayers.map(id => id === oldId ? newId : id);
+    if (Array.isArray(ci.finishedPlayers)) ci.finishedPlayers = ci.finishedPlayers.map(id => id === oldId ? newId : id);
+    if (Array.isArray(ci.photos)) {
+      ci.photos = ci.photos.map(photo => photo?.playerId === oldId ? { ...photo, playerId: newId } : photo);
+    }
 
     if (ci.submittedAnswers && ci.submittedAnswers[oldId] !== undefined) {
       ci.submittedAnswers[newId] = ci.submittedAnswers[oldId];
@@ -130,6 +220,18 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
       ci.blockedUntil[newId] = ci.blockedUntil[oldId];
       delete ci.blockedUntil[oldId];
     }
+    if (ci.uploadedPhotos && ci.uploadedPhotos[oldId] !== undefined) {
+      ci.uploadedPhotos[newId] = ci.uploadedPhotos[oldId];
+      delete ci.uploadedPhotos[oldId];
+    }
+    if (ci.votes && typeof ci.votes === 'object') {
+      for (const photoVotes of Object.values(ci.votes)) {
+        if (photoVotes?.byPlayer?.[oldId] !== undefined) {
+          photoVotes.byPlayer[newId] = photoVotes.byPlayer[oldId];
+          delete photoVotes.byPlayer[oldId];
+        }
+      }
+    }
   }
 
   if (room.duelAnswers && room.duelAnswers[oldId] !== undefined) {
@@ -145,6 +247,9 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
     if (lr.readerId === oldId) lr.readerId = newId;
     if (lr.verdictViewerId === oldId) lr.verdictViewerId = newId;
     if (Array.isArray(lr.duelists)) lr.duelists = lr.duelists.map(id => id === oldId ? newId : id);
+    if (Array.isArray(lr.rankings)) {
+      lr.rankings = lr.rankings.map(rank => rank?.playerId === oldId ? { ...rank, playerId: newId } : rank);
+    }
 
     if (lr.submittedColors && lr.submittedColors[oldId] !== undefined) {
       lr.submittedColors[newId] = lr.submittedColors[oldId];
@@ -162,9 +267,114 @@ io.on('connection', (socket) => {
   console.log('🔌 socket connected:', socket.id);
   const findRoom = () => findRoomByPlayerId(socket.id);
   const syncRoom = (room) => io.to(room.id).emit("update_room_state", room);
+  const clearActiviteVoteTimer = (roomId) => {
+    const timer = activiteVoteTimersByRoomId.get(roomId);
+    if (timer) {
+      clearTimeout(timer);
+      activiteVoteTimersByRoomId.delete(roomId);
+    }
+  };
+
+  const getActiviteEligibleVoters = (ci, photoIndex = ci?.currentPhotoIndex || 0) => {
+    const participants = Array.isArray(ci?.participants) ? ci.participants : [];
+    const currentPhoto = ci?.photos?.[photoIndex];
+    return participants.filter(id => id !== currentPhoto?.playerId);
+  };
+
+  const finalizeActiviteReveal = (room) => {
+    const ci = room?.currentInteraction;
+    if (!room || !ci || ci.type !== 'logo') return;
+
+    clearActiviteVoteTimer(room.id);
+
+    const photos = Array.isArray(ci.photos) ? ci.photos : [];
+    const votes = ci.votes || {};
+
+    const rankings = photos
+      .map((photo, idx) => {
+        const photoVotes = votes[idx] || { up: 0, neutral: 0, down: 0, byPlayer: {} };
+        const totalVotes = photoVotes.up + photoVotes.neutral + photoVotes.down;
+        const score = totalVotes > 0 ? Math.round((photoVotes.up / totalVotes) * 100) : 0;
+        return {
+          playerId: photo.playerId,
+          upVotes: photoVotes.up,
+          neutralVotes: photoVotes.neutral,
+          downVotes: photoVotes.down,
+          score
+        };
+      })
+      .sort((a, b) => b.score - a.score);
+
+    const winnerId = rankings[0]?.playerId;
+    const winner = room.players.find(p => p.id === winnerId);
+    if (winner) {
+      winner.score += 2;
+    }
+
+    room.lastResult = {
+      type: 'logo',
+      brandName: ci.brandName,
+      rankings,
+      winnerId,
+      points: 2,
+      success: true,
+      questionerId: ci.questionerId || room.players[room.turnIndex]?.id
+    };
+
+    room.status = "ACTIVITE_REVEAL";
+  };
+
+  const startActiviteVoteRound = (room, photoIndex = 0, durationMs = 12000) => {
+    const ci = room?.currentInteraction;
+    if (!room || !ci || ci.type !== 'logo') return;
+
+    clearActiviteVoteTimer(room.id);
+
+    const photos = Array.isArray(ci.photos) ? ci.photos : [];
+    if (photoIndex >= photos.length) {
+      finalizeActiviteReveal(room);
+      syncRoom(room);
+      return;
+    }
+
+    ci.currentPhotoIndex = photoIndex;
+    ci.voteStartedAt = Date.now();
+    ci.voteEndsAt = ci.voteStartedAt + durationMs;
+    ci.voteDurationMs = durationMs;
+    room.status = "ACTIVITE_VOTE";
+
+    const timer = setTimeout(() => {
+      advanceActiviteVoteRound(room, photoIndex);
+    }, durationMs);
+    activiteVoteTimersByRoomId.set(room.id, timer);
+  };
+
+  const advanceActiviteVoteRound = (room, expectedPhotoIndex = null) => {
+    const ci = room?.currentInteraction;
+    if (!room || !ci || ci.type !== 'logo' || room.status !== 'ACTIVITE_VOTE') return;
+    if (expectedPhotoIndex !== null && ci.currentPhotoIndex !== expectedPhotoIndex) return;
+
+    const nextPhotoIndex = (ci.currentPhotoIndex || 0) + 1;
+    startActiviteVoteRound(room, nextPhotoIndex, 12000);
+    syncRoom(room);
+  };
+
+  const tightenActiviteVoteTimer = (room) => {
+    const ci = room?.currentInteraction;
+    if (!room || !ci || ci.type !== 'logo' || room.status !== 'ACTIVITE_VOTE') return;
+
+    const now = Date.now();
+    if (!ci.voteEndsAt || ci.voteEndsAt - now <= 3000) return;
+
+    const photoIndex = ci.currentPhotoIndex || 0;
+    startActiviteVoteRound(room, photoIndex, 3000);
+    ci.voteStartedAt = now;
+    ci.voteEndsAt = now + 3000;
+  };
   const pickNextAdminId = (room) => {
     if (!room || !Array.isArray(room.players) || room.players.length === 0) return null;
-    return room.players[0].id;
+    const connectedPlayer = room.players.find((p) => p.connected !== false && !p.isWaiting && !p.isDisconnected);
+    return (connectedPlayer || room.players[0]).id;
   };
   const removePlayerFromRoom = ({ room, playerId = null, playerSessionToken = null, reason = 'unknown' }) => {
     if (!room) {
@@ -189,6 +399,16 @@ io.on('connection', (socket) => {
     room.players = room.players.filter((p) => !removedPlayers.includes(p));
 
     if (room.players.length === 0) {
+      const existingTimer = activiteTimersByRoomId.get(room.id);
+      if (existingTimer) {
+        clearTimeout(existingTimer);
+        activiteTimersByRoomId.delete(room.id);
+      }
+      const existingVoteTimer = activiteVoteTimersByRoomId.get(room.id);
+      if (existingVoteTimer) {
+        clearTimeout(existingVoteTimer);
+        activiteVoteTimersByRoomId.delete(room.id);
+      }
       delete rooms[room.id];
       console.log(`🗑️ room deleted (${room.id}) after player removal (${reason}), was ${beforeCount} players`);
       return;
@@ -238,7 +458,7 @@ io.on('connection', (socket) => {
       id: newRoomId,
       code: gameCode,
       adminId: socket.id,
-      players: [{ id: socket.id, sessionToken, character: null, score: 0 }],
+      players: [{ id: socket.id, sessionToken, character: null, score: 0, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false }],
       status: "LOBBY",
       turnIndex: 0,
       currentInteraction: null,
@@ -273,7 +493,7 @@ io.on('connection', (socket) => {
 
     // Add player
     socket.join(room.id);
-    room.players.push({ id: socket.id, sessionToken, character: null, score: 0 });
+    room.players.push({ id: socket.id, sessionToken, character: null, score: 0, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false });
     socket.emit("room_joined", { roomId: room.id, isAdmin: false });
     console.log(`📥 join_room_with_code: player ${socket.id} joined room ${room.id}, now ${room.players.length} players, admin=${room.adminId}`);
     syncRoom(room);
@@ -354,14 +574,45 @@ io.on('connection', (socket) => {
     syncRoom(room);
   });
   socket.on("confirm_selection", () => { const room = findRoom(); if (room) { room.status = "DEFINE_ORDER"; syncRoom(room); }});
-  socket.on("update_turn_order", (list) => { const room = findRoom(); if (room) { room.players = list; syncRoom(room); }});
+  socket.on("update_turn_order", (payload, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    const requestedOrder = resolveTurnOrderPayload(room, payload);
+    if (!requestedOrder) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_order' });
+      return;
+    }
+
+    if (requestedOrder.applyAfterCurrentTurn && room.status !== "DEFINE_ORDER") {
+      room.pendingTurnOrderIds = requestedOrder.orderedIds;
+    } else {
+      const activePlayerId = room.players[room.turnIndex]?.id;
+      room.players = requestedOrder.players;
+      delete room.pendingTurnOrderIds;
+
+      const activeIndex = room.players.findIndex(player => player.id === activePlayerId);
+      if (activeIndex >= 0) room.turnIndex = activeIndex;
+      else if (room.turnIndex >= room.players.length) room.turnIndex = 0;
+    }
+
+    syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true, pending: Boolean(room.pendingTurnOrderIds) });
+  });
   socket.on("start_game_loop", () => { const room = findRoom(); if (room) { room.status = "TURN_START"; room.turnIndex = 0; syncRoom(room); }});
   socket.on("roll_dice", () => { const room = findRoom(); if (room) { room.status = "GAME_LOOP"; syncRoom(room); }});
 
   // --- ACTIONS ---
-  socket.on("trigger_action", (actionType) => {
+  socket.on("trigger_action", (actionType, ack) => {
     const room = findRoom();
-    if (!room) return;
+    if (!room) {
+      console.warn('trigger_action: player not in room', socket.id, 'actionType', actionType);
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
 
     if (actionType === "QUIZ") {
       const randomCat = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
@@ -369,11 +620,13 @@ io.on('connection', (socket) => {
       room.pendingQuestionerId = socket.id; // who started the quiz configuration
       room.status = "QUIZ_OPTIONS";
       syncRoom(room);
+      if (typeof ack === 'function') ack({ ok: true, status: room.status });
     }
     else if (actionType === "DEFI") {
       // DEBUG MODE: Go to selector screen instead of starting duel directly
       room.status = "DEBUG_DUEL_SELECTOR";
       syncRoom(room);
+      if (typeof ack === 'function') ack({ ok: true, status: room.status });
     }
     else if (actionType === "ACTIVITE") {
       // Activity: Dessin de Logo
@@ -390,6 +643,7 @@ io.on('connection', (socket) => {
       room.currentInteraction = {
         type: 'logo',
         brandName: randomBrand,
+        questionerId: socket.id,
         participants: participants,
         readyPlayers: [],
         finishedPlayers: [],
@@ -397,12 +651,18 @@ io.on('connection', (socket) => {
         photos: [], // Array of {playerId, photoData}
         votes: {},
         currentPhotoIndex: 0,
-        voterIndex: 0,
-        timeUp: false,
-        activityTimer: null
+        voteStartedAt: null,
+        voteEndsAt: null,
+        voteDurationMs: 12000,
+        timeUp: false
       };
       room.status = "ACTIVITE_BRIEF";
       syncRoom(room);
+      if (typeof ack === 'function') ack({ ok: true, status: room.status });
+    }
+    else {
+      console.warn('trigger_action: unknown actionType', actionType, 'from', socket.id);
+      if (typeof ack === 'function') ack({ ok: false, reason: 'unknown_action' });
     }
   });
 
@@ -499,12 +759,18 @@ io.on('connection', (socket) => {
     if (allReady) {
       // Démarrer le timer de 60 secondes
       room.status = "ACTIVITE_CREATION";
-      room.currentInteraction.activityTimer = setTimeout(() => {
-        // Time's up for everyone
+      const existingTimer = activiteTimersByRoomId.get(room.id);
+      if (existingTimer) {
+        clearTimeout(existingTimer);
+        activiteTimersByRoomId.delete(room.id);
+      }
+
+      const timer = setTimeout(() => {
         room.currentInteraction.timeUp = true;
         room.status = "ACTIVITE_UPLOAD";
         syncRoom(room);
-      }, 60000); // 60 seconds
+      }, 60000);
+      activiteTimersByRoomId.set(room.id, timer);
     }
     
     syncRoom(room);
@@ -528,9 +794,10 @@ io.on('connection', (socket) => {
     );
     
     if (allFinished && !room.currentInteraction.timeUp) {
-      // Clear timer and move to upload
-      if (room.currentInteraction.activityTimer) {
-        clearTimeout(room.currentInteraction.activityTimer);
+      const timer = activiteTimersByRoomId.get(room.id);
+      if (timer) {
+        clearTimeout(timer);
+        activiteTimersByRoomId.delete(room.id);
       }
       room.status = "ACTIVITE_UPLOAD";
     }
@@ -539,9 +806,12 @@ io.on('connection', (socket) => {
   });
   
   // Joueur upload sa photo
-  socket.on("activite_submit_photo", ({ photoData }) => {
+  socket.on("activite_submit_photo", ({ photoData }, ack) => {
     const room = findRoom();
-    if (!room || !room.currentInteraction || room.currentInteraction.type !== 'logo') return;
+    if (!room || !room.currentInteraction || room.currentInteraction.type !== 'logo') {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'activity_not_active' });
+      return;
+    }
     
     // Stocker la photo anonymement
     const photos = room.currentInteraction.photos || [];
@@ -569,12 +839,12 @@ io.on('connection', (socket) => {
       // Passer au vote - mélanger les photos pour l'anonymat
       const shuffledPhotos = [...photos].sort(() => Math.random() - 0.5);
       room.currentInteraction.photos = shuffledPhotos;
-      room.currentInteraction.currentPhotoIndex = 0;
-      room.currentInteraction.voterIndex = 0;
-      room.status = "ACTIVITE_VOTE";
+      room.currentInteraction.votes = {};
+      startActiviteVoteRound(room, 0, 12000);
     }
     
     syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true, status: room.status });
   });
   
   // Joueur vote pour un logo
@@ -582,78 +852,37 @@ io.on('connection', (socket) => {
     const room = findRoom();
     if (!room || !room.currentInteraction || room.currentInteraction.type !== 'logo') return;
     
-    const { photos, voterIndex, participants } = room.currentInteraction;
-    const currentVoter = participants[voterIndex];
+    const ci = room.currentInteraction;
+    const currentPhotoIndex = ci.currentPhotoIndex || 0;
+    const photos = Array.isArray(ci.photos) ? ci.photos : [];
+    const currentPhoto = photos[currentPhotoIndex];
+    const validVoteTypes = ['up', 'neutral', 'down'];
     
-    // Seul le joueur actuel peut voter
-    if (socket.id !== currentVoter) return;
-    
-    // Ne pas permettre de voter pour sa propre photo - passer au vote suivant
-    const currentPhoto = photos[photoIndex];
-    if (currentPhoto.playerId === socket.id) {
-      // Passer directement au vote suivant sans enregistrer
-      const nextVoterIndex = (voterIndex + 1) % participants.length;
-      const nextPhotoIndex = nextVoterIndex === 0 ? photoIndex + 1 : photoIndex;
-      
-      if (nextPhotoIndex >= photos.length) {
-        // Terminer les votes
-        calculateAndShowResults(room);
-      } else {
-        room.currentInteraction.voterIndex = nextVoterIndex;
-        room.currentInteraction.currentPhotoIndex = nextPhotoIndex;
-      }
-      syncRoom(room);
-      return;
-    }
+    if (photoIndex !== currentPhotoIndex || !currentPhoto || !validVoteTypes.includes(voteType)) return;
+    if (currentPhoto.playerId === socket.id) return;
+
+    const eligibleVoters = getActiviteEligibleVoters(ci, currentPhotoIndex);
+    if (!eligibleVoters.includes(socket.id)) return;
     
     // Enregistrer le vote
-    const votes = room.currentInteraction.votes || {};
-    if (!votes[photoIndex]) {
-      votes[photoIndex] = { up: 0, neutral: 0, down: 0 };
+    const votes = ci.votes || {};
+    if (!votes[currentPhotoIndex]) {
+      votes[currentPhotoIndex] = { up: 0, neutral: 0, down: 0, byPlayer: {} };
     }
-    votes[photoIndex][voteType] = (votes[photoIndex][voteType] || 0) + 1;
+    const photoVotes = votes[currentPhotoIndex];
+    if (photoVotes.byPlayer?.[socket.id]) return;
+
+    photoVotes[voteType] = (photoVotes[voteType] || 0) + 1;
     
-    // Marquer que ce joueur a voted pour cette photo
-    votes[`${photoIndex}_${socket.id}`] = voteType;
-    room.currentInteraction.votes = votes;
-    
-    // Passer au vote suivant
-    const nextVoterIndex = (voterIndex + 1) % participants.length;
-    const nextPhotoIndex = nextVoterIndex === 0 ? photoIndex + 1 : photoIndex;
-    
-    if (nextPhotoIndex >= photos.length) {
-      // Tous les votes terminés - calculer les résultats
-      const rankings = photos.map((photo, idx) => {
-        const photoVotes = votes[idx] || { up: 0, neutral: 0, down: 0 };
-        const totalVotes = photoVotes.up + photoVotes.neutral + photoVotes.down;
-        const score = totalVotes > 0 ? Math.round((photoVotes.up / totalVotes) * 100) : 0;
-        return {
-          playerId: photo.playerId,
-          upVotes: photoVotes.up,
-          neutralVotes: photoVotes.neutral,
-          downVotes: photoVotes.down,
-          score
-        };
-      }).sort((a, b) => b.score - a.score);
-      
-      const winnerId = rankings[0]?.playerId;
-      const winner = room.players.find(p => p.id === winnerId);
-      if (winner) {
-        winner.score += 2; // 2 jalons pour le gagnant
-      }
-      
-      room.lastResult = {
-        type: 'logo',
-        brandName: room.currentInteraction.brandName,
-        rankings,
-        winnerId,
-        points: 2
-      };
-      
-      room.status = "ACTIVITE_REVEAL";
-    } else {
-      room.currentInteraction.voterIndex = nextVoterIndex;
-      room.currentInteraction.currentPhotoIndex = nextPhotoIndex;
+    photoVotes.byPlayer = {
+      ...(photoVotes.byPlayer || {}),
+      [socket.id]: voteType
+    };
+    ci.votes = votes;
+
+    const allEligibleVoted = eligibleVoters.length > 0 && eligibleVoters.every(id => photoVotes.byPlayer?.[id]);
+    if (allEligibleVoted) {
+      tightenActiviteVoteTimer(room);
     }
     
     syncRoom(room);
@@ -1054,9 +1283,7 @@ io.on('connection', (socket) => {
   socket.on("next_turn", () => {
     const room = findRoom();
     if (!room) return;
-    const nextIndex = (room.turnIndex + 1) % room.players.length;
-    if (nextIndex === 0) room.status = "ROUND_END";
-    else { room.turnIndex = nextIndex; room.status = "TURN_START"; }
+    advanceRoomToNextTurn(room);
     syncRoom(room);
   });
 
@@ -1072,14 +1299,18 @@ io.on('connection', (socket) => {
     const player = room.players.find(p => p.id === socket.id);
     if (!player) return;
 
+    markPlayerPresence(player, 'waiting');
+
     if (room.adminId === socket.id && room.players.length > 1) {
-      const fallbackAdmin = room.players.find((p) => p.id !== socket.id);
+      const fallbackAdmin = room.players.find((p) => p.id !== socket.id && p.connected !== false && !p.isWaiting && !p.isDisconnected);
       if (fallbackAdmin) {
         room.adminId = fallbackAdmin.id;
         console.log(`👑 temporary admin reassigned on disconnect in room ${room.id}:`, room.adminId);
         syncRoom(room);
       }
     }
+
+    syncRoom(room);
 
     // A disconnected player gets a grace period to reconnect with the same session token.
     if (player.sessionToken) {
@@ -1091,25 +1322,19 @@ io.on('connection', (socket) => {
           return;
         }
 
-        removePlayerFromRoom({
-          room: latest.room,
-          playerSessionToken: player.sessionToken,
-          reason: 'disconnect_timeout'
-        });
+        markPlayerPresence(latest.player, 'disconnected');
+        syncRoom(latest.room);
 
         pendingDisconnectTimers.delete(player.sessionToken);
-        console.log('⏱️ player removed after disconnect grace timeout:', player.sessionToken);
+        console.log('⏱️ player marked disconnected after grace timeout:', player.sessionToken);
       }, DISCONNECT_GRACE_MS);
 
       pendingDisconnectTimers.set(player.sessionToken, timer);
       return;
     }
 
-    removePlayerFromRoom({
-      room,
-      playerId: socket.id,
-      reason: 'disconnect_no_session'
-    });
+    markPlayerPresence(player, 'disconnected');
+    syncRoom(room);
   });
 });
 

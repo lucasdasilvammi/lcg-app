@@ -42,9 +42,12 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     // For production (Render): connect to same server (relative URL)
-    // For development: use VITE_SERVER_URL env var or localhost:3001
+    // For development: use localhost on PC, IP address on mobile
+    const isMobile = typeof window !== 'undefined' && (
+      window.innerWidth < 470 || /iPhone|iPad|Android|Mobile/.test(navigator.userAgent)
+    );
     const SERVER_URL = import.meta.env.VITE_SERVER_URL || 
-                       (import.meta.env.PROD ? window.location.origin : "http://192.168.31.66:3001");
+                       (import.meta.env.PROD ? window.location.origin : (isMobile ? "http://192.168.31.66:3001" : "http://localhost:3001"));
     const sessionToken = getOrCreateSessionToken()
     
     const s = io.connect(SERVER_URL, {
@@ -97,7 +100,16 @@ export const SocketProvider = ({ children }) => {
   const updateTurnOrder = (list) => socket?.emit("update_turn_order", list)
   const startGameLoop = () => socket?.emit("start_game_loop")
   const rollDice = () => socket?.emit("roll_dice")
-  const triggerAction = (actionType) => socket?.emit("trigger_action", actionType)
+  const triggerAction = (actionType) => {
+    if (!socket) {
+      console.warn('triggerAction called but socket is null', actionType)
+      return
+    }
+    console.log('🎯 triggerAction -> emitting', actionType, 'socket', socket.id, 'connected', socket.connected)
+    socket.emit("trigger_action", actionType, (response) => {
+      console.log('🎯 triggerAction ack', actionType, response)
+    })
+  }
   const startSpecificQuiz = (payload) => socket?.emit("start_specific_quiz", payload)
   const startDuel = () => socket?.emit("start_duel")
   const acknowledgeRules = () => socket?.emit("acknowledge_rules")
@@ -108,6 +120,12 @@ export const SocketProvider = ({ children }) => {
   const nextTurn = () => socket?.emit("next_turn")
   const startNewRound = () => socket?.emit("start_new_round")
   const debugTriggerDuel = (defiType) => socket?.emit("debug_trigger_duel", defiType)
+  
+  // Activité: Dessin de Logo
+  const acknowledgeReady = () => socket?.emit("activite_acknowledge_ready")
+  const submitDrawing = () => socket?.emit("activite_submit_drawing")
+  const submitPhoto = (photoData, ack) => socket?.emit("activite_submit_photo", { photoData }, ack)
+  const submitVote = (photoIndex, voteType) => socket?.emit("activite_vote", { photoIndex, voteType })
   const leaveRoom = () => {
     console.log('🚪 leaveRoom() called, socket:', socket?.id, 'connected:', socket?.connected)
     if (!socket) {
@@ -160,6 +178,10 @@ export const SocketProvider = ({ children }) => {
       nextTurn,
       startNewRound,
       debugTriggerDuel,
+      acknowledgeReady,
+      submitDrawing,
+      submitPhoto,
+      submitVote,
       leaveRoom
     }}>
       {children}
