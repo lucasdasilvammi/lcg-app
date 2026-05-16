@@ -125,10 +125,61 @@ const canOpenSettingsForContext = ({ view, roomData, currentUserId }) => {
   }
 }
 
+function PauseIcon({ className = 'h-16 w-16' }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`shrink-0 bg-current ${className}`}
+      style={{
+        WebkitMaskImage: 'url(/menu/icon/pause.svg)',
+        maskImage: 'url(/menu/icon/pause.svg)',
+        WebkitMaskSize: 'contain',
+        maskSize: 'contain',
+        WebkitMaskPosition: 'center',
+        maskPosition: 'center',
+        WebkitMaskRepeat: 'no-repeat',
+        maskRepeat: 'no-repeat'
+      }}
+    />
+  )
+}
+
+function PauseOverlay({ isAdmin, resumeGame }) {
+  const handleResumeGame = () => {
+    resumeGame?.()
+  }
+
+  return (
+    <div className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 px-8 text-center backdrop-blur-xs" data-no-longpress>
+      <div className="flex w-full flex-col items-center justify-center gap-6">
+        <PauseIcon className="h-16 w-16 text-light" />
+        <p className="font-hakobi text-3xl uppercase leading-tight text-light">
+          {isAdmin ? 'Tu as mis la partie en pause' : 'La partie est en pause'}
+        </p>
+        {isAdmin && (
+          <button
+            type="button"
+            aria-label="Reprendre la partie"
+            onClick={handleResumeGame}
+            className="transition active:scale-95"
+          >
+            <img
+              src="/menu/icon/btn-play.svg"
+              alt=""
+              aria-hidden="true"
+              className="h-13 w-auto"
+            />
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
 function AppContent() {
 
 
-  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, undoLastAction, leaveRoom } = useSocket();
+  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, undoLastAction, pauseGame, resumeGame, leaveRoom } = useSocket();
 
   const [view, setView] = useState("HOME");
   const [inputCode, setInputCode] = useState([]);
@@ -347,6 +398,7 @@ function AppContent() {
           promoteAdmin={promoteAdmin}
           kickPlayer={kickPlayer}
           undoLastAction={undoLastAction}
+          pauseGame={pauseGame}
           leaveRoom={leaveRoom}
           onClose={closeSettingsMenu}
         />
@@ -472,6 +524,10 @@ function AppContent() {
 
       {view === "ROUND_END" && roomData && (
         <RoundEnd roomData={roomData} startNewRound={startNewRound} />
+      )}
+
+      {roomData?.isPaused && (
+        <PauseOverlay isAdmin={isAdmin} resumeGame={resumeGame} />
       )}
     </div>
   )

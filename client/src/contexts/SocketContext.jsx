@@ -130,6 +130,13 @@ export const SocketProvider = ({ children }) => {
   const promoteAdmin = (targetPlayerId, ack) => socket?.emit('promote_admin', { targetPlayerId }, ack)
   const kickPlayer = (targetPlayerId, ack) => socket?.emit('kick_player', { targetPlayerId }, ack)
   const undoLastAction = (ack) => socket?.emit('undo_last_action', {}, ack)
+  const pauseGame = (ack) => socket?.emit('pause_game', {}, ack)
+  const resumeGame = (ack) => socket?.emit('resume_game', {}, ack)
+  const debugGiveBonus = (bonusId = 'ctrl-z', quantity = 1, playerId = socket?.id) => {
+    socket?.emit('debug_give_bonus', { bonusId, quantity, playerId }, (response) => {
+      console.log('debug_give_bonus ack', response)
+    })
+  }
   const leaveRoom = () => {
     console.log('🚪 leaveRoom() called, socket:', socket?.id, 'connected:', socket?.connected)
     if (!socket) {
@@ -152,6 +159,8 @@ export const SocketProvider = ({ children }) => {
     window.__ADD_TOAST = (msg, type='info') => addToast(msg, type)
     window.__JOIN = (code) => joinRoomWithCode(code)
     window.__LOG_SOCKET = () => console.log('socket id', socket?.id, 'connected', socket?.connected)
+    window.__GIVE_BONUS = debugGiveBonus
+    window.__BONUS_IDS = ['ctrl-z', 'coffee-boss', 'choose-quiz']
   }
 
   return (
@@ -189,6 +198,8 @@ export const SocketProvider = ({ children }) => {
       promoteAdmin,
       kickPlayer,
       undoLastAction,
+      pauseGame,
+      resumeGame,
       leaveRoom
     }}>
       {children}

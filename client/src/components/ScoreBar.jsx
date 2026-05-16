@@ -1,10 +1,34 @@
 import React from 'react'
 
-export default function ScoreBar({ players, currentUserId }) {
+function getBonusCount(player) {
+  return Object.values(player.bonuses || {}).reduce((total, count) => total + Number(count || 0), 0)
+}
+
+function ScoreBarMaskIcon({ src, className = 'h-5 w-5' }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`shrink-0 bg-current ${className}`}
+      style={{
+        WebkitMaskImage: `url(${src})`,
+        maskImage: `url(${src})`,
+        WebkitMaskSize: 'contain',
+        maskSize: 'contain',
+        WebkitMaskPosition: 'center',
+        maskPosition: 'center',
+        WebkitMaskRepeat: 'no-repeat',
+        maskRepeat: 'no-repeat'
+      }}
+    />
+  )
+}
+
+export default function ScoreBar({ players, currentUserId, showBonusCount = false }) {
   return (
     <div className="relative z-10 flex gap-x-5 gap-y-2 items-center justify-center w-full flex-wrap">
       {players.map(p => {
         const isMe = p.id === currentUserId
+        const bonusCount = getBonusCount(p)
         return (
           <div key={p.id} className="flex flex-col items-center">
             <img 
@@ -26,6 +50,18 @@ export default function ScoreBar({ players, currentUserId }) {
               <path d="M28.8504 44.3695L33.3757 13.412L28.8504 2.45959L0 0H33.3757V13.412V55.4837H6.75606L23.1684 51.2791L28.8504 44.3695Z" fill="#101010"/>
               </svg>
             </div>
+            {showBonusCount && (
+              <div className={`relative mt-1.5 flex h-8 items-center justify-center gap-1 pr-2 pl-3 ${isMe ? 'bg-green-secondary text-green-primary' : 'bg-light5 text-light'}`}>
+                <svg width="44" height="56" viewBox="0 0 44 56" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -left-2.5 top-0 h-8.25">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M43.4953 0H0V39.8779V55.4838H17.618L3.56385 51.1631L0 39.8779L3.56385 4.18879L43.4953 0Z" fill="#101010"/>
+                </svg>
+                <span className="font-family-hakobi -mb-1 text-2xl uppercase">{bonusCount}</span>
+                <ScoreBarMaskIcon src="/menu/icon/bonus.svg" />
+                <svg width="34" height="56" viewBox="0 0 34 56" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -right-2 top-0 h-8.25">
+                  <path d="M28.8504 44.3695L33.3757 13.412L28.8504 2.45959L0 0H33.3757V13.412V55.4837H6.75606L23.1684 51.2791L28.8504 44.3695Z" fill="#101010"/>
+                </svg>
+              </div>
+            )}
           </div>
         )
       })}

@@ -69,6 +69,7 @@ Fonctions attendues :
   - `kick` retire un autre joueur de la room et lui envoie `left_room`,
   - `leave` fait sortir l'admin comme un kick sur lui-meme, avec reassignment auto du nouvel admin.
 - `Annuler l'action` repose sur un snapshot serveur hors payload client. Dans cette premiere passe, il capture l'etat juste avant `trigger_action` et restaure l'ecran de choix de case si l'admin veut corriger un mauvais clic. Le bouton est grise tant qu'aucun snapshot n'existe.
+- `Pause` branche `pause_game` / `resume_game` cote serveur. Quand `room.isPaused` est actif, un overlay global bloque toutes les vues avec fond noir 60% + blur. Les joueurs voient uniquement l'etat pause; l'admin voit un bouton `Play` et ne peut pas fermer l'overlay autrement.
 
 Important : le bouton `Annuler` du futur menu admin ne doit pas quitter la partie. Quitter la room est une action differente.
 
@@ -80,6 +81,8 @@ Fonctions attendues :
 
 - Voir le classement actuel.
 - Voir ses bonus disponibles.
+- Les bonus de premiere version sont centralises cote front dans `client/src/data/bonusCatalog.js`.
+- L'inventaire joueur est stocke dans `player.bonuses` sous forme d'objet `{ bonusId: quantite }`, par exemple `{ "ctrl-z": 2 }`, pour pouvoir etre reutilise plus tard dans les reminders et les regles d'utilisation.
 - Afficher une carte par bonus : nom, icone, quantite, description courte.
 - Pouvoir ouvrir le detail d'un bonus.
 - Pouvoir utiliser un bonus si les regles du moment l'autorisent.

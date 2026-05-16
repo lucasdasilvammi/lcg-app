@@ -11,6 +11,7 @@ export default {
         'black-8': 'var(--black-8)',
         'black-10': 'var(--black-10)',
         'black-15': 'var(--black-15)',
+        'light5': 'var(--color-light5)',
         'light': 'var(--light)',
         'blue-primary': 'var(--blue-primary)',
         'blue-secondary': 'var(--blue-secondary)',
@@ -39,6 +40,7 @@ export default {
       },
       textColor: {
         'bg': 'var(--bg)',
+        'light5': 'var(--color-light5)',
         'light': 'var(--light)',
         'blue-primary': 'var(--blue-primary)',
         'blue-secondary': 'var(--blue-secondary)',
@@ -67,6 +69,7 @@ export default {
       },
       borderColor: {
         'bg': 'var(--bg)',
+        'light5': 'var(--color-light5)',
         'light': 'var(--light)',
         'blue-primary': 'var(--blue-primary)',
         'blue-secondary': 'var(--blue-secondary)',
