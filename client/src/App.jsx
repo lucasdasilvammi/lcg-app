@@ -18,6 +18,11 @@ import ChiffresGame from './views/defi/chiffres/8-chiffres-game'
 import PickGame from './views/defi/pick/8-pick-game'
 import ZoomGame from './views/defi/zoom/8-zoom-game'
 import EventGame from './views/event/7-event-game'
+import ActiviteBrief from './views/activite/1-activite-brief'
+import ActiviteCreation from './views/activite/2-activite-creation'
+import ActiviteUpload from './views/activite/3-activite-upload'
+import ActiviteVote from './views/activite/4-activite-vote'
+import ActiviteReveal from './views/activite/5-activite-reveal'
 import QuizReveal from './views/quiz/9-quiz-reveal'
 import BuzzerReveal from './views/defi/buzzer/9-buzzer-reveal'
 import VraioufauxReveal from './views/defi/vraioufaux/9-vraioufaux-reveal'
@@ -28,6 +33,7 @@ import Feedback from './views/10-feedback'
 import RoundEnd from './views/11-round-end'
 import DebugDuelSelector from './views/debug-duel-selector'
 import Toasts from './components/Toasts'
+import SettingsMenu from './components/SettingsMenu'
 
 const CODE_CHARACTERS = [
   { id: 0, name: "Donatien" },
@@ -47,10 +53,82 @@ const PLAYABLE_CHARACTERS = [
   { id: 'tanguy', name: "Tanguy" }
 ];
 
+const ACTIVITY_VIEWS = new Set([
+  'ACTIVITE_BRIEF',
+  'ACTIVITE_CREATION',
+  'ACTIVITE_UPLOAD',
+  'ACTIVITE_VOTE',
+  'ACTIVITE_REVEAL'
+])
+
+const SETUP_VIEWS = new Set([
+  'LOBBY',
+  'SELECT_CHARACTER',
+  'DEFINE_ORDER'
+])
+
+const isDuelSpectator = (interaction, currentUserId) => {
+  if (!interaction || !currentUserId) return false
+  const duelists = interaction.duelists || []
+  return interaction.readerId !== currentUserId && !duelists.includes(currentUserId)
+}
+
+const getQuizQuestionerId = (roomData) => {
+  return roomData?.pendingQuestionerId || roomData?.currentInteraction?.questionerId || roomData?.currentInteraction?.readerId || roomData?.lastResult?.questionerId || roomData?.players?.[roomData.turnIndex]?.id
+}
+
+const canOpenSettingsForContext = ({ view, roomData, currentUserId }) => {
+  if (!roomData || !currentUserId) return false
+  if (roomData.adminId === currentUserId) return true
+  if (SETUP_VIEWS.has(view)) return false
+  if (ACTIVITY_VIEWS.has(view)) return false
+
+  const interaction = roomData.currentInteraction
+
+  switch (view) {
+    case 'TURN_START':
+    case 'GAME_LOOP':
+      return true
+
+    case 'QUIZ_OPTIONS':
+      return getQuizQuestionerId(roomData) !== currentUserId
+
+    case 'INTERACTION': {
+      if (interaction?.type === 'QUIZ') {
+        const activePlayerId = roomData.players?.[roomData.turnIndex]?.id
+        return interaction.readerId !== currentUserId && activePlayerId !== currentUserId
+      }
+      return isDuelSpectator(interaction, currentUserId)
+    }
+
+    case 'REVEAL':
+      return getQuizQuestionerId(roomData) !== currentUserId
+
+    case 'EVENT_GAME':
+      return interaction?.readerId !== currentUserId
+
+    case 'DUEL_START':
+    case 'DUEL_RULES':
+    case 'DUEL_GAME':
+      return isDuelSpectator(interaction, currentUserId)
+
+    case 'DUEL_REVEAL': {
+      const readerId = interaction?.readerId || roomData.lastResult?.readerId
+      return readerId !== currentUserId
+    }
+
+    case 'FEEDBACK':
+    case 'ROUND_END':
+    case 'DEBUG_DUEL_SELECTOR':
+    default:
+      return false
+  }
+}
+
 function AppContent() {
 
 
-  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel, leaveRoom } = useSocket();
+  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, undoLastAction, leaveRoom } = useSocket();
 
   const [view, setView] = useState("HOME");
   const [inputCode, setInputCode] = useState([]);
@@ -68,7 +146,11 @@ function AppContent() {
     longPressTimerRef.current = null
   }
 
-  const canOpenSettings = Boolean(roomData)
+  const canOpenSettings = canOpenSettingsForContext({
+    view,
+    roomData,
+    currentUserId: socket?.id
+  })
 
   const openSettingsMenu = () => {
     if (!canOpenSettings) return
@@ -193,6 +275,12 @@ function AppContent() {
   }, [errorMsg]);
 
   useEffect(() => {
+    if (!canOpenSettings && isSettingsOpen) {
+      closeSettingsMenu()
+    }
+  }, [canOpenSettings, isSettingsOpen])
+
+  useEffect(() => {
     return () => {
       clearLongPressTimer()
     }
@@ -251,48 +339,17 @@ function AppContent() {
       
       <Toasts />
 
-      {roomData && view === 'LOBBY' && (
-        <button
-          type="button"
-          onClick={openSettingsMenu}
-          data-no-longpress
-          className="fixed right-4 top-4 z-40 rounded-full border border-light/50 bg-black/70 px-4 py-2 font-family-funnel text-sm text-light backdrop-blur"
-        >
-          Menu
-        </button>
-      )}
-
       {isSettingsOpen && roomData && (
-        <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/60"
-          onClick={closeSettingsMenu}
-          data-no-longpress
-        >
-          <div
-            className="w-full max-w-110 rounded-t-3xl border border-light/20 bg-bg px-6 pb-8 pt-6"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <p className="text-center font-family-hakobi text-4xl uppercase text-light">Menu</p>
-            <p className="mt-2 text-center font-family-funnel text-sm text-light/70">Maintenir appuye sur l'ecran ouvre aussi ce menu.</p>
-
-            <div className="mt-6 flex flex-col gap-3">
-              <button
-                type="button"
-                onClick={handleLeaveRoom}
-                className="w-full rounded-xl border border-red-400/70 bg-red-500/20 px-4 py-3 font-family-hakobi text-2xl uppercase text-red-200"
-              >
-                Quitter la partie
-              </button>
-              <button
-                type="button"
-                onClick={closeSettingsMenu}
-                className="w-full rounded-xl border border-light/30 bg-black/30 px-4 py-3 font-family-hakobi text-2xl uppercase text-light"
-              >
-                Fermer
-              </button>
-            </div>
-          </div>
-        </div>
+        <SettingsMenu
+          roomData={roomData}
+          currentUserId={socket?.id}
+          updateTurnOrder={updateTurnOrder}
+          promoteAdmin={promoteAdmin}
+          kickPlayer={kickPlayer}
+          undoLastAction={undoLastAction}
+          leaveRoom={leaveRoom}
+          onClose={closeSettingsMenu}
+        />
       )}
 
       {view === "HOME" && (
@@ -336,6 +393,27 @@ function AppContent() {
       {/* ÉVÉNEMENTS */}
       {view === "EVENT_GAME" && roomData && roomData.currentInteraction && (
         <EventGame roomData={roomData} currentUserId={socket?.id} continueToFeedback={continueToFeedback} />
+      )}
+
+      {/* ACTIVITÉS */}
+      {view === "ACTIVITE_BRIEF" && roomData && roomData.currentInteraction && (
+        <ActiviteBrief roomData={roomData} currentUserId={socket?.id} acknowledgeReady={acknowledgeReady} />
+      )}
+
+      {view === "ACTIVITE_CREATION" && roomData && roomData.currentInteraction && (
+        <ActiviteCreation roomData={roomData} currentUserId={socket?.id} submitDrawing={submitDrawing} />
+      )}
+
+      {view === "ACTIVITE_UPLOAD" && roomData && roomData.currentInteraction && (
+        <ActiviteUpload roomData={roomData} currentUserId={socket?.id} submitPhoto={submitPhoto} />
+      )}
+
+      {view === "ACTIVITE_VOTE" && roomData && roomData.currentInteraction && (
+        <ActiviteVote roomData={roomData} currentUserId={socket?.id} submitVote={submitVote} />
+      )}
+
+      {view === "ACTIVITE_REVEAL" && roomData && roomData.lastResult && (
+        <ActiviteReveal roomData={roomData} currentUserId={socket?.id} continueToFeedback={continueToFeedback} />
       )}
 
       {view === "INTERACTION" && roomData && roomData.currentInteraction && (

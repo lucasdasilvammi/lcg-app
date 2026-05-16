@@ -4,6 +4,59 @@
 
 ---
 
+## 📅 Samedi 16 Mai 2026
+
+### 🧭 Menu admin/lobby finalisé côté UX
+- **Menu accessible pour l'admin partout** : levée des restrictions d'ouverture pour l'admin, qui peut désormais ouvrir le menu sur n'importe quel écran tant qu'il est dans une room.
+- **Liste joueurs enrichie** : affichage des joueurs avec tête de personnage, nom, statut de présence, couronne admin et tag `moi`.
+- **Statuts de présence lisibles** : `Connecté`, `En attente`, `Déconnecté` avec codes couleur et countdown visible pendant la phase d'attente.
+- **Boutons d'action joueurs** : intégration visuelle des actions `kick`, `leave`, `promote` et `ajouter` avec fond SVG dédié et états grisés selon le contexte.
+- **Boutons bas de menu** : ajout de `Annuler l'action` et `Pause` avec variante dédiée de `ButtonWithIcon` pour le menu.
+
+### 🔁 Changement d'ordre de jeu robuste
+- **Mode `Changer l'ordre`** : nouvelle vue temporaire dans le menu avec disparition douce des statuts et remplacement des actions par l'icône de drag.
+- **Drag sur toute la ligne** : la zone draggable couvre désormais toute la ligne joueur pour être confortable sur mobile.
+- **Popup de validation** : confirmation explicite avant sauvegarde avec message indiquant que le nouvel ordre s'appliquera après la fin du tour de table actuel.
+- **Animation conservée** : micro-motion gardée pour l'entrée en mode réordonnancement, avec retrait de l'animation FLIP de drag qui générait des bugs.
+- **Persistance serveur** : nouvel ordre stocké en attente puis appliqué uniquement après que tous les joueurs du tour en cours ont joué.
+
+### 👑 Actions admin branchées de bout en bout
+- **Promote admin** : transfert immédiat des droits admin vers un joueur connecté après confirmation.
+- **Kick joueur** : expulsion définitive d'un joueur de la room sans bloquer la suite de la partie.
+- **Leave admin** : sortie volontaire de l'admin avec réassignation automatique du rôle au joueur suivant disponible.
+- **Popups de confirmation** : harmonisation des confirmations `promote`, `kick`, `leave` et `annuler l'action` dans le style du menu.
+
+### ↩️ Annuler l'action implémenté
+- **Undo room-level** : capture d'un snapshot serveur avant le lancement d'une action de case.
+- **Retour au choix de case** : restauration de l'état précédent si l'admin annule une action lancée par erreur.
+- **Disponibilité contextuelle** : bouton grisé tant qu'aucune action annulable n'existe.
+
+### 🔌 Présence et reconnexion consolidées
+- **Grace period raccourcie à 30 secondes** pour les tests et l'usage actuel.
+- **États serveur explicites** : passage `waiting` puis `disconnected` sans retirer automatiquement le joueur de la partie.
+- **Reconnexion même appareil** : reprise de session fiable avec conservation du score, du slot et de la logique de tour.
+- **Admin transfer plus juste** : réassignation admin priorisée vers un joueur réellement connecté.
+
+### 📝 Documentation
+- **Notes techniques enrichies** : mise à jour continue de `docs/MENU_TECHNIQUE_NOTES.md` avec les choix UX, les contraintes techniques et les prochaines étapes.
+
+## 📅 Jeudi 14 Mai 2026
+
+### 🧪 Activité commune réparée et fiabilisée
+- **Parcours d'upload revu** : correction du blocage après import des photos joueurs.
+- **Retour fullscreen** : l'application repasse correctement en plein écran quand le joueur revient valider sa photo.
+- **Relecture du flow activité** : nettoyage du parcours global pour préparer une base plus stable avant les futures passes design.
+
+### 🗳️ Vote simultané de l'activité
+- **Refonte du système de vote** : abandon du vote joueur par joueur au profit d'un vote simultané façon `Gartic Phone` / `Make it Meme`.
+- **Timer dynamique** : décompte de 12 secondes réduit à 3 secondes quand tous les votes sont reçus.
+- **Logique multi-joueurs simplifiée** : tous les joueurs votent en parallèle, ce qui raccourcit fortement la séquence.
+
+### 🧰 Fondations du nouveau menu
+- **Remise à zéro assumée** : abandon de l'ancienne implémentation du settings menu pour repartir sur une base saine.
+- **Bottom sheet de référence** : reconstruction du menu sur le modèle du pop-up montant déjà utilisé dans la sélection de personnage.
+- **Cadrage fonctionnel** : formalisation des deux onglets finaux `Lobby` / `Bonus`, de la partie admin, des bonus et des futurs contrôles de partie.
+
 ## 📅 Lundi 6 Avril 2026
 
 ### 🚀 Défi Zoom intégré à 50%
