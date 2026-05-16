@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import CharacterCard from './CharacterCard'
 import ButtonWithIcon from './ButtonWithIcon'
+import ScoreBar from './ScoreBar'
+import { BONUS_CATALOG, EMPTY_BONUS_SLOTS } from '../data/bonusCatalog'
 
 const popupStyles = `
   @keyframes settingsSlideUpFromBottom {
@@ -27,6 +29,18 @@ const popupStyles = `
 
   .settings-popup-exit {
     animation: settingsSlideDownToBottom 0.25s ease-in;
+  }
+
+  @media (max-width: 480px) {
+    .settings-confirm-overlay {
+      align-items: stretch;
+    }
+
+    .settings-confirm-panel {
+      min-height: var(--app-height, 100dvh);
+      max-height: var(--app-height, 100dvh);
+      justify-content: center;
+    }
   }
 `
 
@@ -129,6 +143,138 @@ function MenuColorIcon({ src, className = 'h-7 w-7' }) {
   )
 }
 
+function formatCharacterName(name) {
+  if (!name) return ''
+  return `${name.charAt(0).toUpperCase()}${name.slice(1)}`
+}
+
+function getPlayerBonusEntries(player) {
+  const inventory = player?.bonuses || {}
+
+  return BONUS_CATALOG
+    .map((bonus) => ({
+      ...bonus,
+      quantity: Number(inventory[bonus.id] || 0)
+    }))
+    .filter((bonus) => bonus.quantity > 0)
+}
+
+function BonusCardIcon({ type, isPlaceholder = false }) {
+  if (isPlaceholder) {
+    return (
+      <img
+        src="/menu/icon/interrogation.svg"
+        alt=""
+        aria-hidden="true"
+        className="h-8 w-8 object-contain"
+      />
+    )
+  }
+
+  return (
+    <img
+      src={`/bonus/${type}.svg`}
+      alt=""
+      aria-hidden="true"
+      className="h-8 w-8 object-contain"
+    />
+  )
+}
+
+function BonusInventoryCard({ bonus }) {
+  return (
+    <div className="relative flex min-h-21 w-full items-center gap-3 overflow-hidden bg-light5 pr-3 pl-5 py-3 text-left">
+      <img
+        src="/menu/bonus-btn-left.svg"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-0 h-full w-auto"
+      />
+      <img
+        src="/menu/bonus-btn-right.svg"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-0.5 top-0 h-full w-auto"
+      />
+      <div
+        className="relative z-10 flex h-14 w-14 shrink-0 items-center justify-center bg-contain bg-center bg-no-repeat text-bg"
+        style={{ backgroundImage: 'url(/menu/bg-btn.svg)' }}
+      >
+        <BonusCardIcon type={bonus.icon} />
+        <span
+          className="absolute -right-3 -top-3 rotate-9 flex h-8 w-8 items-center justify-center bg-contain bg-center bg-no-repeat text-green-primary"
+          style={{ backgroundImage: 'url(/menu/number-bonus.svg)' }}
+        >
+          <span className="translate-y-[2px] font-hakobi text-xl leading-none">
+            {bonus.quantity}
+          </span>
+        </span>
+      </div>
+      <div className="relative z-10 flex min-w-0 flex-col gap-1">
+        <h3 className="font-funnel text-lg font-semibold leading-none text-light">{bonus.name}</h3>
+        <p className="font-funnel text-sm leading-tight text-light">{bonus.description}</p>
+      </div>
+    </div>
+  )
+}
+
+function BonusPlaceholderCard({ faded = false }) {
+  return (
+    <div className={`flex min-h-16 w-full items-center gap-4 ${faded ? 'opacity-20' : 'opacity-20'}`}>
+      <div
+        className="flex h-15 w-15 shrink-0 items-center justify-center bg-contain bg-center bg-no-repeat"
+        style={{ backgroundImage: 'url(/menu/bg-btn.svg)' }}
+      >
+        <BonusCardIcon isPlaceholder />
+      </div>
+      <div className="flex min-w-0 flex-1 flex-col gap-2 items-start">
+        <img src="/menu/line-1.svg" alt="" aria-hidden="true" className="h-3 object-fill opacity-60" />
+        <img src="/menu/line-2.svg" alt="" aria-hidden="true" className="h-3 w-full object-fill opacity-60" />
+      </div>
+    </div>
+  )
+}
+
+function BonusMenuView({ players, currentUserId, currentUserPlayer }) {
+  const bonusEntries = getPlayerBonusEntries(currentUserPlayer)
+  const missingSlots = Math.max(0, EMPTY_BONUS_SLOTS - bonusEntries.length)
+  const gradientHeightClass = bonusEntries.length === 0 ? 'h-56' : bonusEntries.length === 1 ? 'h-36' : 'h-16'
+
+  return (
+    <div className="relative z-10 flex min-h-0 flex-1 flex-col gap-8">
+      <div className="flex flex-col gap-8">
+        {bonusEntries.length === 0 && (
+          <h2 className="font-hakobi text-5xl uppercase leading-[100%] text-light">
+            Tu n'as pas encore<br />de bonus...
+          </h2>
+        )}
+
+        <div className="relative">
+          <div className="flex flex-col gap-4">
+            {bonusEntries.map((bonus) => (
+              <BonusInventoryCard key={bonus.id} bonus={bonus} />
+            ))}
+            {Array.from({ length: missingSlots }).map((_, index) => (
+              <BonusPlaceholderCard key={`placeholder-${index}`} faded={bonusEntries.length + index >= 2} />
+            ))}
+          </div>
+          {missingSlots > 0 && (
+            <div
+              aria-hidden="true"
+              className={`pointer-events-none absolute inset-x-0 bottom-0 ${gradientHeightClass}`}
+              style={{ background: 'linear-gradient(to top, #101010 0%, rgba(16, 16, 16, 0) 100%)' }}
+            />
+          )}
+        </div>
+      </div>
+
+      <div className="mt-auto">
+        <ScoreBar players={players} currentUserId={currentUserId} showBonusCount />
+      </div>
+    </div>
+  )
+}
+
 function getPlayerMenuStatus(player) {
   if (player.presence === 'waiting' || player.isWaiting || player.status === 'waiting') return 'waiting'
   if (player.presence === 'disconnected' || player.isDisconnected || player.status === 'disconnected' || player.connected === false) return 'disconnected'
@@ -197,7 +343,7 @@ function movePlayerInList(players, fromIndex, toIndex) {
   return nextPlayers
 }
 
-export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder, promoteAdmin, kickPlayer, undoLastAction, leaveRoom, onClose }) {
+export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder, promoteAdmin, kickPlayer, undoLastAction, pauseGame, leaveRoom, onClose }) {
   const [isClosing, setIsClosing] = useState(false)
   const [activeMenu, setActiveMenu] = useState('lobby')
   const [now, setNow] = useState(() => Date.now())
@@ -335,6 +481,20 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
     setPendingAction(null)
   }
 
+  const openLobbyMenu = () => {
+    setActiveMenu('lobby')
+  }
+
+  const openBonusMenu = () => {
+    if (isOrderMode) cancelOrderMode()
+    setActiveMenu('bonus')
+  }
+
+  const handlePauseGame = () => {
+    pauseGame?.()
+    onClose?.()
+  }
+
   return (
     <>
       <style>{popupStyles}</style>
@@ -372,31 +532,33 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
               <MenuButton
                 text="Lobby"
                 active={activeMenu === 'lobby'}
-                onClick={() => setActiveMenu('lobby')}
+                onClick={openLobbyMenu}
                 icon={<img src="/menu/icon/crown.svg" alt="" aria-hidden="true" className="h-7 w-7" />}
               />
               <MenuButton
                 text="Bonus"
                 active={activeMenu === 'bonus'}
-                onClick={() => setActiveMenu('bonus')}
+                onClick={openBonusMenu}
                 icon={<img src="/menu/icon/bonus.svg" alt="" aria-hidden="true" className="h-7 w-7" />}
               />
           </div>
 
-          <div className="relative z-10 flex h-full w-full flex-col gap-8">
+          <div className={`relative z-10 flex h-full w-full flex-col gap-8 ${activeMenu === 'lobby' ? '' : 'hidden'}`}>
             <div className="flex w-full items-center justify-between">
               <h2 className="font-hakobi text-5xl uppercase leading-none text-light -mb-3">
                 {playersCount} Joueurs
               </h2>
-              <button
-                type="button"
-                onClick={enterOrderMode}
-                disabled={isOrderMode}
-                className={`flex items-center gap-1 transition ${isOrderMode ? 'opacity-30' : ''}`}
-              >
-                <img src="/menu/icon/ordre.svg" alt="" className='h-5 w-5' />
-                <p className='font-family-funnel text-base'>Changer l'ordre</p>
-              </button>
+              {isCurrentUserAdmin && (
+                <button
+                  type="button"
+                  onClick={enterOrderMode}
+                  disabled={isOrderMode}
+                  className={`flex items-center gap-1 transition ${isOrderMode ? 'opacity-30' : ''}`}
+                >
+                  <img src="/menu/icon/ordre.svg" alt="" className='h-5 w-5' />
+                  <p className='font-family-funnel text-base'>Changer l'ordre</p>
+                </button>
+              )}
             </div>
 
             <div ref={orderListRef} className="flex flex-col gap-3">
@@ -429,42 +591,51 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
                       isCurrentUser={player.id === currentUserId}
                     />
 
-                    <div className="relative flex h-10 w-[88px] shrink-0 items-center justify-end">
-                      <button
-                        type="button"
-                        aria-label={`Deplacer ${player.character}`}
-                        className={`absolute right-0 flex h-10 w-10 shrink-0 items-center justify-center text-light transition-all duration-200 ease-out ${
-                          isOrderMode ? 'translate-x-0 scale-100 opacity-100' : 'pointer-events-none translate-x-2 scale-90 opacity-0'
-                        }`}
-                      >
-                        <MenuColorIcon src="/menu/icon/drag.svg" className="h-8 w-8" />
-                      </button>
+                    {isCurrentUserAdmin && (
+                      <div className="relative flex h-10 w-[88px] shrink-0 items-center justify-end">
+                        <button
+                          type="button"
+                          aria-label={`Deplacer ${player.character}`}
+                          className={`absolute right-0 flex h-10 w-10 shrink-0 items-center justify-center text-light transition-all duration-200 ease-out ${
+                            isOrderMode ? 'translate-x-0 scale-100 opacity-100' : 'pointer-events-none translate-x-2 scale-90 opacity-0'
+                          }`}
+                        >
+                          <MenuColorIcon src="/menu/icon/drag.svg" className="h-8 w-8" />
+                        </button>
 
-                      <div
-                        className={`absolute right-0 flex shrink-0 items-center gap-2 transition-all duration-200 ease-out ${
-                          isOrderMode ? 'pointer-events-none -translate-x-2 scale-95 opacity-0' : 'translate-x-0 scale-100 opacity-100'
-                        }`}
-                      >
-                        <MenuPlayerActionButton
-                          label={primaryAction.label}
-                          icon={primaryAction.icon}
-                          disabled={!isCurrentUserAdmin || primaryAction.disabled}
-                          onClick={() => openActionConfirm(isAdminPlayer ? 'leave' : 'kick', player.id)}
-                        />
-                        <MenuPlayerActionButton
-                          label={`Promouvoir ${player.character} admin`}
-                          icon="/menu/icon/crown.svg"
-                          disabled={!canPromote}
-                          onClick={() => openActionConfirm('promote', player.id)}
-                        />
+                        <div
+                          className={`absolute right-0 flex shrink-0 items-center gap-2 transition-all duration-200 ease-out ${
+                            isOrderMode ? 'pointer-events-none -translate-x-2 scale-95 opacity-0' : 'translate-x-0 scale-100 opacity-100'
+                          }`}
+                        >
+                          <MenuPlayerActionButton
+                            label={primaryAction.label}
+                            icon={primaryAction.icon}
+                            disabled={primaryAction.disabled}
+                            onClick={() => openActionConfirm(isAdminPlayer ? 'leave' : 'kick', player.id)}
+                          />
+                          <MenuPlayerActionButton
+                            label={`Promouvoir ${player.character} admin`}
+                            icon="/menu/icon/crown.svg"
+                            disabled={!canPromote}
+                            onClick={() => openActionConfirm('promote', player.id)}
+                          />
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
                 )
               })}
             </div>
           </div>
-          <div className="flex w-full items-center gap-2 pt-2 justify-center">
+          {activeMenu === 'bonus' && (
+            <BonusMenuView
+              players={menuPlayers}
+              currentUserId={currentUserId}
+              currentUserPlayer={currentUserPlayer}
+            />
+          )}
+          <div className={`flex w-full items-center gap-2 pt-2 justify-center ${activeMenu === 'lobby' && isCurrentUserAdmin ? '' : 'hidden'}`}>
             {isOrderMode ? (
               <>
                 <ButtonWithIcon
@@ -496,7 +667,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
                 variant="menu"
                 text="Pause"
                 icon={<MenuColorIcon src="/menu/icon/pause.svg" />}
-                onClick={() => {}}
+                onClick={handlePauseGame}
                 className=""
               />
               </>
@@ -506,12 +677,12 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
       </div>
       {showOrderConfirm && (
         <div
-          className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 px-6"
+          className="settings-confirm-overlay fixed inset-0 z-[60] flex items-end justify-center bg-black/60"
           onClick={() => setShowOrderConfirm(false)}
           data-no-longpress
         >
           <div
-            className="relative flex w-full max-w-110 flex-col items-center gap-10 bg-bg px-8 pb-12 pt-12 text-center"
+            className="settings-confirm-panel relative flex w-full max-w-110 flex-col items-center gap-10 bg-bg px-8 pb-12 pt-12 text-center"
             onClick={(event) => event.stopPropagation()}
           >
             <div
@@ -541,12 +712,12 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
       )}
       {pendingAction && (
         <div
-          className="fixed inset-0 z-[60] flex items-end justify-center bg-black/60 px-6"
+          className="settings-confirm-overlay fixed inset-0 z-[60] flex items-end justify-center bg-black/60"
           onClick={closeActionConfirm}
           data-no-longpress
         >
           <div
-            className="relative flex w-full max-w-110 flex-col items-center gap-8 bg-bg px-8 pb-12 pt-12 text-center"
+            className="settings-confirm-panel relative flex w-full max-w-110 flex-col items-center gap-8 bg-bg px-8 py-12 text-center"
             onClick={(event) => event.stopPropagation()}
           >
             <div
@@ -566,39 +737,41 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
 
             <p className="font-funnel text-xl leading-snug text-light">
               {pendingAction.type === 'promote' && pendingActionTarget && (
-                <>Veux tu vraiment donner a <span style={{ color: `var(--color-${pendingActionTarget.character})` }}>{pendingActionTarget.character}</span> les droits administrateur de la partie ?</>
+                <>Veux-tu vraiment donner à <span style={{ color: `var(--color-${pendingActionTarget.character})` }}>{formatCharacterName(pendingActionTarget.character)}</span> les droits d'administrateur de la partie ?</>
               )}
               {pendingAction.type === 'kick' && pendingActionTarget && (
-                <>Veux tu vraiment expulser <span style={{ color: `var(--color-${pendingActionTarget.character})` }}>{pendingActionTarget.character}</span> de la partie ?</>
+                <>Veux-tu vraiment expulser <span style={{ color: `var(--color-${pendingActionTarget.character})` }}>{formatCharacterName(pendingActionTarget.character)}</span> de la partie ?</>
               )}
               {pendingAction.type === 'leave' && currentUserPlayer && (
-                <>Veux tu vraiment quitter la partie ? L'administration sera transferee automatiquement.</>
+                <>Veux-tu vraiment quitter la partie ? L'administration sera transferee automatiquement.</>
               )}
               {pendingAction.type === 'undo' && currentUserPlayer && (
-                <>En annulant l'action, <span style={{ color: `var(--color-${currentUserPlayer.character})` }}>{currentUserPlayer.character}</span> reviendra au choix du type de case sur lequel il est tombe.</>
+                <>En annulant l'action, <span style={{ color: `var(--color-${currentUserPlayer.character})` }}>{formatCharacterName(currentUserPlayer.character)}</span> reviendra au choix du type de case sur lequel il est tombe.</>
               )}
             </p>
 
             {pendingAction.type === 'promote' && currentUserPlayer && pendingActionTarget && (
               <div className="flex flex-col items-center gap-3">
                 <div className="flex flex-col items-center gap-1">
-                  <CharacterCard charId={currentUserPlayer.character} size="head-only" />
+                  <CharacterCard charId={currentUserPlayer.character} size="head-only-big" />
                   <p className="font-hakobi text-5xl uppercase leading-none" style={{ color: `var(--color-${currentUserPlayer.character})` }}>
                     {currentUserPlayer.character}
                   </p>
                 </div>
-                <svg width="38" height="48" viewBox="0 0 38 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-light">
-                  <path d="M22.1123 0L21.125 15.3291L25.8633 15.0244L18.8672 24.0283L11.8682 33.0303L6.1377 25.9785L0.40625 18.9258L4.99707 19.7588L9.58789 20.5918L10.2803 10.2959L10.9727 0H22.1123Z" fill="currentColor" />
-                  <path d="M27.7197 27.4082L27.0273 37.7041L26.335 48H15.1953L16.1826 32.6719L11.4443 32.9766L18.4414 23.9727L25.4395 14.9697L31.1709 22.0225L36.9023 29.0752L32.3115 28.2422L27.7197 27.4082Z" fill="currentColor" />
-                </svg>
+                <img
+                  src="/menu/icon/swap.svg"
+                  alt=""
+                  aria-hidden="true"
+                  className="h-12 w-12 object-contain"
+                />
                 <div className="flex flex-col items-center gap-1">
                   <div className="relative">
-                    <CharacterCard charId={pendingActionTarget.character} size="head-only" />
+                    <CharacterCard charId={pendingActionTarget.character} size="head-only-big" />
                     <img
                       src="/menu/icon/admin-crown.svg"
                       alt=""
                       aria-hidden="true"
-                      className="absolute -top-2 left-1/2 z-10 h-6 w-6 -translate-x-1/2 -rotate-[15deg]"
+                      className="absolute -top-2.5 left-2/5 z-10 h-6 w-6 -translate-x-1/2 -rotate-[15deg]"
                     />
                   </div>
                   <p className="font-hakobi text-5xl uppercase leading-none" style={{ color: `var(--color-${pendingActionTarget.character})` }}>
@@ -612,7 +785,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
               <div className="flex flex-col items-center gap-1">
                 <CharacterCard
                   charId={(pendingActionTarget || currentUserPlayer).character}
-                  size="head-only"
+                  size="head-only-big"
                 />
                 <p
                   className="font-hakobi text-5xl uppercase leading-none"

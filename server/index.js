@@ -37,6 +37,7 @@ const io = new Server(server, {
 // --- DATA ---
 const CODE_LENGTH = 5;
 const MAX_PLAYERS = 6;
+const VALID_BONUS_IDS = new Set(['ctrl-z', 'coffee-boss', 'choose-quiz']);
 const quizData = require('./data/quiz.json');
 const duelsData = require('./data/duels.json');
 
@@ -481,8 +482,10 @@ io.on('connection', (socket) => {
       id: newRoomId,
       code: gameCode,
       adminId: socket.id,
-      players: [{ id: socket.id, sessionToken, character: null, score: 0, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false }],
+      players: [{ id: socket.id, sessionToken, character: null, score: 0, bonuses: {}, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false }],
       status: "LOBBY",
+      isPaused: false,
+      pausedById: null,
       turnIndex: 0,
       currentInteraction: null,
       lastResult: null,
@@ -516,7 +519,7 @@ io.on('connection', (socket) => {
 
     // Add player
     socket.join(room.id);
-    room.players.push({ id: socket.id, sessionToken, character: null, score: 0, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false });
+    room.players.push({ id: socket.id, sessionToken, character: null, score: 0, bonuses: {}, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false });
     socket.emit("room_joined", { roomId: room.id, isAdmin: false });
     console.log(`📥 join_room_with_code: player ${socket.id} joined room ${room.id}, now ${room.players.length} players, admin=${room.adminId}`);
     syncRoom(room);
@@ -575,6 +578,69 @@ io.on('connection', (socket) => {
 
     syncRoom(room);
     if (typeof ack === 'function') ack({ ok: true });
+  });
+
+  socket.on('pause_game', (_payload, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    if (room.adminId !== socket.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
+    room.isPaused = true;
+    room.pausedById = socket.id;
+    syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true });
+  });
+
+  socket.on('resume_game', (_payload, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    if (room.adminId !== socket.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
+    room.isPaused = false;
+    room.pausedById = null;
+    syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true });
+  });
+
+  socket.on('debug_give_bonus', ({ bonusId = 'ctrl-z', quantity = 1, playerId = socket.id } = {}, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    if (!VALID_BONUS_IDS.has(bonusId)) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_bonus' });
+      return;
+    }
+
+    const player = room.players.find((roomPlayer) => roomPlayer.id === playerId) || room.players.find((roomPlayer) => roomPlayer.id === socket.id);
+    if (!player) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'player_not_found' });
+      return;
+    }
+
+    const amount = Number.isFinite(Number(quantity)) ? Math.trunc(Number(quantity)) : 1;
+    player.bonuses = player.bonuses || {};
+    player.bonuses[bonusId] = Math.max(0, Number(player.bonuses[bonusId] || 0) + amount);
+    if (player.bonuses[bonusId] === 0) delete player.bonuses[bonusId];
+
+    syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true, playerId: player.id, bonusId, quantity: player.bonuses[bonusId] || 0 });
   });
 
   socket.on('promote_admin', ({ targetPlayerId } = {}, ack) => {

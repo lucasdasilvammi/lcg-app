@@ -33,6 +33,10 @@ const SIZE_CONFIG = {
     image: 'w-18 h-18',
     title: 'text-5xl'
   },
+  'head-only-big': {
+    image: 'w-24 h-24',
+    title: 'text-5xl'
+  },
   mini: {
     image: 'w-20 h-20',
     title: 'text-3xl'
@@ -62,7 +66,7 @@ export default function CharacterCard({ charId, size = 'default', status = 'conn
   const getCharacterColor = (id) => `var(--color-${id})`
   const statusConfig = STATUS_CONFIG[status] || STATUS_CONFIG.connected
 
-  if (size === 'head-only') {
+  if (size === 'head-only' || size === 'head-only-big') {
     return (
       <img
         src={`/game/${charId}.svg`}

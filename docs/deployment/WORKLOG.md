@@ -4,6 +4,20 @@
 
 ---
 
+## 📅 Dimanche 17 Mai 2026
+
+### ⚙️ V2 du Menu Settings
+- **Vue Lobby validée en lecture pour tous** : les joueurs non-admin peuvent consulter le lobby, mais les actions sensibles restent masquées (`Changer l'ordre`, boutons joueurs, `Annuler l'action`, `Pause`).
+- **Pause de partie branchée** : ajout des événements serveur `pause_game` / `resume_game`, overlay global noir avec blur, blocage des interactions pour tous les joueurs et bouton `Play` réservé à l'admin.
+- **Bouton Play DA** : remplacement du bouton texte par l'asset `btn-play.svg` pour coller au style graphique du menu.
+- **Onglet Bonus fonctionnel** : toggle Lobby/Bonus actif, inventaire bonus visible, états vides avec placeholders, cartes bonus stylées avec icônes, compteur et décor SVG.
+- **Catalogue bonus centralisé** : création de `client/src/data/bonusCatalog.js` pour stocker les bonus V1 (`CTRL + Z`, `Va faire le café du boss`, `C'est moi qui choisis !`) et préparer leur réutilisation ailleurs dans la partie.
+- **Stockage des bonus joueur** : ajout de `player.bonuses` côté serveur, sous forme `{ bonusId: quantité }`, pour garder les bonus persistants dans la room.
+- **Helper de test bonus** : ajout de `window.__GIVE_BONUS(...)` côté client et de l'événement serveur `debug_give_bonus` pour tester rapidement les états 0, 1, 2 ou 3 bonus.
+- **ScoreBar enrichie** : ajout de l'affichage du nombre de bonus dans le classement, avec style différent pour le joueur local et les autres joueurs.
+- **Token couleur `light5`** : ajout de la variable CSS/Tailwind `light5` pour les fonds secondaires sombres du menu.
+- **Motion plus sobre** : transition plus douce entre les vues Lobby et Bonus, sans effet rebond ni animation trop gadget.
+
 ## 📅 Samedi 16 Mai 2026
 
 ### 🧭 Menu admin/lobby finalisé côté UX
