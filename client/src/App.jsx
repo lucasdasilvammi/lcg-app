@@ -33,7 +33,7 @@ import Feedback from './views/10-feedback'
 import RoundEnd from './views/11-round-end'
 import DebugDuelSelector from './views/debug-duel-selector'
 import Toasts from './components/Toasts'
-import SettingsMenu from './components/SettingsMenu'
+import SettingsMenu from './menu/SettingsMenu'
 
 const CODE_CHARACTERS = [
   { id: 0, name: "Donatien" },
