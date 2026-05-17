@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import CharacterCard from './CharacterCard'
-import ButtonWithIcon from './ButtonWithIcon'
-import BonusPopup, { BonusIconBadge } from './BonusPopup'
-import ScoreBar from './ScoreBar'
+import CharacterCard from '../components/CharacterCard'
+import ButtonWithIcon from '../components/ButtonWithIcon'
+import BonusPopup, { BonusIconBadge } from '../components/BonusPopup'
+import ScoreBar from '../components/ScoreBar'
 import { BONUS_CATALOG, EMPTY_BONUS_SLOTS } from '../data/bonusCatalog'
+import RulesOverlay from './regles/RulesOverlay'
 
 const popupStyles = `
   @keyframes settingsSlideUpFromBottom {
@@ -662,6 +663,9 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
   const [isBonusDetailClosing, setIsBonusDetailClosing] = useState(false)
   const [selectedBonusId, setSelectedBonusId] = useState(null)
   const [closingBonusId, setClosingBonusId] = useState(null)
+  const [isRulesOpen, setIsRulesOpen] = useState(false)
+  const [rulesStep, setRulesStep] = useState('portal')
+  const [highestUnlockedRuleStepIndex, setHighestUnlockedRuleStepIndex] = useState(0)
   const orderListRef = useRef(null)
   const draggedPlayerIdRef = useRef(null)
   const playersCount = roomData?.players?.length || 0
@@ -741,6 +745,19 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
   const requestFullscreen = () => {
     document.documentElement.requestFullscreen?.().catch(() => {})
   }
+
+  const openRules = () => {
+    setRulesStep('portal')
+    setIsRulesOpen(true)
+  }
+
+  const closeRules = () => {
+    setIsRulesOpen(false)
+  }
+
+  const unlockRuleStepIndex = useCallback((stepIndex) => {
+    setHighestUnlockedRuleStepIndex((current) => Math.max(current, stepIndex))
+  }, [])
 
   const enterOrderMode = () => {
     setOrderedPlayers(menuPlayers)
@@ -860,7 +877,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
           />
 
           <div className={`absolute right-6 -top-5 z-10 items-center gap-2 ${isBonusDetailOpen ? 'hidden' : 'flex'}`}>
-            <MenuIconButton label="Regles" icon="/menu/rules.svg" onClick={() => {}} />
+            <MenuIconButton label="Regles" icon="/menu/rules.svg" onClick={openRules} />
             <MenuIconButton label="Plein ecran" icon="/menu/fullscreen.svg" onClick={requestFullscreen} />
             <MenuIconButton label="Fermer le menu" icon="/menu/close.svg" onClick={closeWithAnimation} />
           </div>
@@ -1159,6 +1176,15 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
             </div>
           </div>
         </div>
+      )}
+      {isRulesOpen && (
+        <RulesOverlay
+          currentStep={rulesStep}
+          highestUnlockedStepIndex={highestUnlockedRuleStepIndex}
+          unlockStepIndex={unlockRuleStepIndex}
+          onOpenStep={setRulesStep}
+          onClose={closeRules}
+        />
       )}
     </>
   )
