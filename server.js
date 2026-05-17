@@ -96,6 +96,7 @@ let rooms = {};
 const DISCONNECT_GRACE_MS = 30000; // 30 secondes
 const pendingDisconnectTimers = new Map();
 const undoSnapshotsByRoomId = new Map();
+const TEST_DEFAULT_BONUSES = { 'ctrl-z': 1, 'coffee-boss': 1, 'choose-quiz': 1 };
 // Timers (ne doivent JAMAIS être stockés dans l'état room envoyé au client)
 const activiteTimersByRoomId = new Map();
 const activiteVoteTimersByRoomId = new Map();
@@ -176,6 +177,7 @@ const resolveTurnOrderPayload = (room, payload) => {
 const advanceRoomToNextTurn = (room) => {
   if (!room || !Array.isArray(room.players) || room.players.length === 0) return;
 
+  delete room.currentTurnBonusUse;
   const nextIndex = (room.turnIndex + 1) % room.players.length;
   if (nextIndex === 0) {
     if (Array.isArray(room.pendingTurnOrderIds) && room.pendingTurnOrderIds.length > 0) {
@@ -194,6 +196,12 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
 
   if (room.adminId === oldId) room.adminId = newId;
   if (room.pendingQuestionerId === oldId) room.pendingQuestionerId = newId;
+  if (room.currentTurnBonusUse?.playerId === oldId) room.currentTurnBonusUse.playerId = newId;
+  if (room.pendingChooseQuizBonus?.byPlayerId === oldId) room.pendingChooseQuizBonus.byPlayerId = newId;
+  if (room.pendingChooseQuizBonus?.targetPlayerId === oldId) room.pendingChooseQuizBonus.targetPlayerId = newId;
+  for (const player of room.players) {
+    if (player.skipNextTurn?.byPlayerId === oldId) player.skipNextTurn.byPlayerId = newId;
+  }
   if (Array.isArray(room.pendingTurnOrderIds)) {
     room.pendingTurnOrderIds = room.pendingTurnOrderIds.map(id => id === oldId ? newId : id);
   }
@@ -490,7 +498,7 @@ io.on('connection', (socket) => {
       id: newRoomId,
       code: gameCode,
       adminId: socket.id,
-      players: [{ id: socket.id, sessionToken, character: null, score: 0, bonuses: {}, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false }],
+      players: [{ id: socket.id, sessionToken, character: null, score: 0, bonuses: { ...TEST_DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false }],
       status: 'LOBBY',
       isPaused: false,
       pausedById: null,
@@ -525,7 +533,7 @@ io.on('connection', (socket) => {
     }
 
     socket.join(room.id);
-  room.players.push({ id: socket.id, sessionToken, character: null, score: 0, bonuses: {}, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false });
+  room.players.push({ id: socket.id, sessionToken, character: null, score: 0, bonuses: { ...TEST_DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false });
     socket.emit('room_joined', { roomId: room.id, isAdmin: false });
     console.log('join_room_with_code: player joined', socket.id, '->', room.id);
     syncRoom(room);
@@ -646,6 +654,83 @@ io.on('connection', (socket) => {
 
     syncRoom(room);
     if (typeof ack === 'function') ack({ ok: true, playerId: player.id, bonusId, quantity: player.bonuses[bonusId] || 0 });
+  });
+
+  socket.on('use_bonus', ({ bonusId, targetPlayerId } = {}, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    if (!VALID_BONUS_IDS.has(bonusId)) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_bonus' });
+      return;
+    }
+
+    const player = room.players.find((roomPlayer) => roomPlayer.id === socket.id);
+    if (!player) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'player_not_found' });
+      return;
+    }
+
+    player.bonuses = player.bonuses || {};
+    const currentQuantity = Number(player.bonuses[bonusId] || 0);
+    if (currentQuantity <= 0) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'bonus_unavailable' });
+      return;
+    }
+
+    player.bonuses[bonusId] = currentQuantity - 1;
+    if (player.bonuses[bonusId] <= 0) delete player.bonuses[bonusId];
+
+    if (bonusId === 'ctrl-z') {
+      room.currentTurnBonusUse = {
+        bonusId,
+        playerId: player.id,
+        turnIndex: room.turnIndex,
+        usedAt: Date.now()
+      };
+    } else if (bonusId === 'coffee-boss') {
+      const targetPlayer = room.players.find((roomPlayer) => roomPlayer.id === targetPlayerId);
+      if (!targetPlayer || targetPlayer.id === player.id) {
+        player.bonuses[bonusId] = currentQuantity;
+        if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
+        return;
+      }
+
+      targetPlayer.skipNextTurn = {
+        bonusId,
+        byPlayerId: player.id,
+        usedAt: Date.now()
+      };
+    } else if (bonusId === 'choose-quiz') {
+      const targetPlayer = room.players.find((roomPlayer) => roomPlayer.id === targetPlayerId);
+      if (!targetPlayer || targetPlayer.id === player.id) {
+        player.bonuses[bonusId] = currentQuantity;
+        if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
+        return;
+      }
+      if (room.pendingChooseQuizBonus) {
+        player.bonuses[bonusId] = currentQuantity;
+        const reason = room.pendingChooseQuizBonus.targetPlayerId === targetPlayer.id
+          ? 'choose_quiz_already_pending'
+          : 'choose_quiz_room_pending';
+        if (typeof ack === 'function') ack({ ok: false, reason });
+        return;
+      }
+
+      room.pendingChooseQuizBonus = {
+        bonusId,
+        byPlayerId: player.id,
+        targetPlayerId: targetPlayer.id,
+        awaitingTargetAck: false,
+        usedAt: Date.now()
+      };
+    }
+
+    syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true, playerId: player.id, bonusId, targetPlayerId, quantity: player.bonuses[bonusId] || 0 });
   });
 
   socket.on('promote_admin', ({ targetPlayerId } = {}, ack) => {
@@ -791,8 +876,8 @@ io.on('connection', (socket) => {
     syncRoom(room);
     if (typeof ack === 'function') ack({ ok: true, pending: Boolean(room.pendingTurnOrderIds) });
   });
-  socket.on('start_game_loop', () => { const room = findRoom(); if (room) { room.status = 'TURN_START'; room.turnIndex = 0; syncRoom(room); }});
-  socket.on('roll_dice', () => { const room = findRoom(); if (room) { room.status = 'GAME_LOOP'; syncRoom(room); }});
+  socket.on('start_game_loop', () => { const room = findRoom(); if (room) { room.status = 'TURN_START'; room.turnIndex = 0; delete room.currentTurnBonusUse; syncRoom(room); }});
+  socket.on('roll_dice', () => { const room = findRoom(); if (room) { const activePlayer = room.players[room.turnIndex]; if (activePlayer?.skipNextTurn) return; room.status = 'GAME_LOOP'; syncRoom(room); }});
 
   // --- ACTIONS ---
   socket.on('trigger_action', (actionType, ack) => {
@@ -807,8 +892,13 @@ io.on('connection', (socket) => {
 
     if (actionType === 'QUIZ') {
       const randomCat = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
+      const chooseQuizBonus = room.pendingChooseQuizBonus?.targetPlayerId === socket.id
+        ? room.pendingChooseQuizBonus
+        : null;
+      if (chooseQuizBonus) chooseQuizBonus.awaitingTargetAck = true;
       room.pendingCategory = randomCat;
-      room.pendingQuestionerId = socket.id;
+      delete room.pendingQuizDifficulty;
+      room.pendingQuestionerId = chooseQuizBonus?.byPlayerId || socket.id;
       room.status = 'QUIZ_OPTIONS';
       syncRoom(room);
       if (typeof ack === 'function') ack({ ok: true, status: room.status });
@@ -1253,25 +1343,80 @@ io.on('connection', (socket) => {
     io.to(opponentId).emit('pick_opponent_submitted', { playerId });
   });
 
+  socket.on('ack_choose_quiz_bonus', (_payload = {}, ack) => {
+    const room = findRoom();
+    if (!room?.pendingChooseQuizBonus) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'bonus_not_pending' });
+      return;
+    }
+
+    if (room.pendingChooseQuizBonus.targetPlayerId !== socket.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
+    room.pendingChooseQuizBonus.awaitingTargetAck = false;
+    syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true });
+  });
+
+  socket.on('select_quiz_difficulty', ({ difficulty } = {}, ack) => {
+    const room = findRoom();
+    if (!room?.pendingChooseQuizBonus || room.status !== 'QUIZ_OPTIONS') {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'quiz_not_pending' });
+      return;
+    }
+
+    const activePlayer = room.players[room.turnIndex];
+    const activeChooseQuizBonus = room.pendingChooseQuizBonus.targetPlayerId === activePlayer?.id
+      ? room.pendingChooseQuizBonus
+      : null;
+    const selectedDifficulty = Number(difficulty);
+
+    if (!activeChooseQuizBonus || activeChooseQuizBonus.awaitingTargetAck || activeChooseQuizBonus.byPlayerId !== socket.id || ![1, 2, 3, 4, 5].includes(selectedDifficulty)) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
+    room.pendingQuizDifficulty = selectedDifficulty;
+    syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true, difficulty: selectedDifficulty });
+  });
+
   socket.on('start_specific_quiz', ({ difficulty }) => {
     const room = findRoom();
     if (!room) return;
     console.log('start_specific_quiz called by', socket.id, 'difficulty', difficulty);
+    if (room.pendingChooseQuizBonus) {
+      const activePlayer = room.players[room.turnIndex];
+      const activeChooseQuizBonus = room.pendingChooseQuizBonus.targetPlayerId === activePlayer?.id
+        ? room.pendingChooseQuizBonus
+        : null;
+      if (activeChooseQuizBonus?.awaitingTargetAck) return;
+      if (activeChooseQuizBonus && activeChooseQuizBonus.byPlayerId !== socket.id) return;
+    }
+    const selectedDifficulty = Number(difficulty || room.pendingQuizDifficulty);
+    if (![1, 2, 3, 4, 5].includes(selectedDifficulty)) return;
     const category = room.pendingCategory || 'Culture graphique';
-    let matching = QUIZ_DB.filter(q => q.diff === difficulty && q.category === category);
+    let matching = QUIZ_DB.filter(q => q.diff === selectedDifficulty && q.category === category);
     if (matching.length === 0) matching = QUIZ_DB;
 
     const selectedQuestion = matching[Math.floor(Math.random() * matching.length)];
     const nextPlayer = room.players[(room.turnIndex + 1) % room.players.length];
     const questionerId = nextPlayer?.id || room.pendingQuestionerId || socket.id;
+    const chosenByBonus = room.pendingChooseQuizBonus?.targetPlayerId === room.players[room.turnIndex]?.id
+      && room.pendingChooseQuizBonus?.byPlayerId === socket.id;
     room.currentInteraction = {
       type: 'QUIZ',
       data: selectedQuestion,
       readerId: questionerId,
       questionerId,
-      potentialPoints: difficulty
+      potentialPoints: selectedDifficulty,
+      chosenByBonus: chosenByBonus ? room.pendingChooseQuizBonus : null
     };
     delete room.pendingQuestionerId;
+    if (chosenByBonus) delete room.pendingChooseQuizBonus;
+    delete room.pendingQuizDifficulty;
     room.pendingCategory = null;
 
     room.status = 'INTERACTION';
@@ -1470,13 +1615,17 @@ io.on('connection', (socket) => {
   socket.on('next_turn', () => {
     const room = findRoom();
     if (!room) return;
+    const activePlayer = room.players[room.turnIndex];
+    if (room.status === 'TURN_START' && activePlayer?.skipNextTurn) {
+      delete activePlayer.skipNextTurn;
+    }
     advanceRoomToNextTurn(room);
     syncRoom(room);
   });
 
   socket.on('start_new_round', () => {
     const room = findRoom();
-    if (room) { room.turnIndex = 0; room.status = 'TURN_START'; syncRoom(room); }
+    if (room) { room.turnIndex = 0; room.status = 'TURN_START'; delete room.currentTurnBonusUse; syncRoom(room); }
   });
 
   socket.on('disconnect', () => {

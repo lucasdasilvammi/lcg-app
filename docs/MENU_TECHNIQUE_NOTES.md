@@ -181,3 +181,18 @@ Pour ces trois etapes :
 - Aucun clic dans le popup ne traverse vers l'ecran derriere.
 - `Escape` ferme le popup.
 - Les interactions marquees `data-no-longpress` n'ouvrent pas le menu.
+
+## A ne pas oublier pour le test final
+
+- Tester les bonus apres un changement d'ordre applique en fin de tour de table.
+- Tester `Va faire le cafe du boss` quand la cible est le joueur actif au moment de l'utilisation : le skip doit attendre son prochain tour, meme si un classement et un nouveau round passent entre temps.
+- Tester `Va faire le cafe du boss` quand la cible joue plus tard dans le meme tour de table.
+- Tester `Va faire le cafe du boss` avec annulation d'action et changement de round.
+- Tester que le bonus consomme bien l'inventaire du joueur qui l'utilise, et pas celui de la cible.
+- Tester les reconnects avant le tour saute : la cible doit garder son statut de tour a passer.
+- Retester les trois bonus de bout en bout avant release : `CTRL + Z`, `Va faire le cafe du boss`, `C'est moi qui choisis !`.
+- Tester les collisions entre bonus : bonus utilises au meme tour, bonus en attente, bonus deja pose sur un joueur, annulation d'action apres bonus.
+- Tester les bonus avec 3 joueurs puis avec 4 joueurs, notamment les passages de round, le changement d'ordre et les tours sautes.
+- Verifier que `C'est moi qui choisis !` ne s'active que quand la cible exacte tombe sur une case Quizz.
+- Revoir le design des popups bonus 2 et 3 : espacements, hierarchie, boutons, et etats de selection.
+- Repasser les textes des bonus pour corriger les accents et libelles manquants : de, difficulte, designe, connecte, deconnecte, en attente, etc.

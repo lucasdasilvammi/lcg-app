@@ -121,6 +121,8 @@ export const SocketProvider = ({ children }) => {
   const nextTurn = () => socket?.emit("next_turn")
   const startNewRound = () => socket?.emit("start_new_round")
   const debugTriggerDuel = (defiType) => socket?.emit("debug_trigger_duel", defiType)
+  const acknowledgeChooseQuizBonus = (ack) => socket?.emit('ack_choose_quiz_bonus', {}, ack)
+  const selectQuizDifficulty = (difficulty, ack) => socket?.emit('select_quiz_difficulty', { difficulty }, ack)
   
   // Activité: Dessin de Logo
   const acknowledgeReady = () => socket?.emit("activite_acknowledge_ready")
@@ -132,6 +134,11 @@ export const SocketProvider = ({ children }) => {
   const undoLastAction = (ack) => socket?.emit('undo_last_action', {}, ack)
   const pauseGame = (ack) => socket?.emit('pause_game', {}, ack)
   const resumeGame = (ack) => socket?.emit('resume_game', {}, ack)
+  const useBonus = (bonusId, payloadOrAck, ack) => {
+    const payload = typeof payloadOrAck === 'function' ? {} : (payloadOrAck || {})
+    const callback = typeof payloadOrAck === 'function' ? payloadOrAck : ack
+    socket?.emit('use_bonus', { bonusId, ...payload }, callback)
+  }
   const debugGiveBonus = (bonusId = 'ctrl-z', quantity = 1, playerId = socket?.id) => {
     socket?.emit('debug_give_bonus', { bonusId, quantity, playerId }, (response) => {
       console.log('debug_give_bonus ack', response)
@@ -191,6 +198,8 @@ export const SocketProvider = ({ children }) => {
       nextTurn,
       startNewRound,
       debugTriggerDuel,
+      acknowledgeChooseQuizBonus,
+      selectQuizDifficulty,
       acknowledgeReady,
       submitDrawing,
       submitPhoto,
@@ -200,6 +209,7 @@ export const SocketProvider = ({ children }) => {
       undoLastAction,
       pauseGame,
       resumeGame,
+      useBonus,
       leaveRoom
     }}>
       {children}

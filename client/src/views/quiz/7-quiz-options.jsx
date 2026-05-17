@@ -1,10 +1,72 @@
 import React, { useState } from 'react'
 import BigButton from '../../components/BigButton'
 import ButtonWithIcon from '../../components/ButtonWithIcon'
+import { BonusIconBadge, MaskIcon } from '../../components/BonusPopup'
+import CharacterBorder from '../../components/CharacterBorder'
 import CharacterCard from '../../components/CharacterCard'
+import CharacterTag from '../../components/CharacterTag'
 import ScoreBar from '../../components/ScoreBar'
+import { BONUS_CATALOG } from '../../data/bonusCatalog'
 
-export default function QuizOptions({ roomData, startSpecificQuiz, currentUserId }) {
+const CHOOSE_QUIZ_BONUS = BONUS_CATALOG.find((bonus) => bonus.id === 'choose-quiz')
+
+function formatCharacterName(name) {
+  if (!name) return ''
+  return `${name.charAt(0).toUpperCase()}${name.slice(1)}`
+}
+
+function BonusUsedTag() {
+  return (
+    <span className="inline-flex items-center gap-1 rounded-[3px] bg-green-secondary px-2 py-1 align-middle text-green-primary">
+      <MaskIcon src="/menu/icon/bonus.svg" className="h-4 w-4" />
+      <span className="font-funnel text-sm font-bold leading-none">Bonus</span>
+    </span>
+  )
+}
+
+function CharacterIdentity({ character }) {
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <CharacterCard charId={character} size="head-only-big" />
+      <h2
+        className="font-hakobi text-5xl uppercase leading-none"
+        style={{ color: `var(--color-${character})` }}
+      >
+        {formatCharacterName(character)}
+      </h2>
+    </div>
+  )
+}
+
+function ChooseQuizInfoCard() {
+  if (!CHOOSE_QUIZ_BONUS) return null
+
+  return (
+    <div className="relative flex min-h-21 w-full items-center gap-3 overflow-hidden bg-light5 pr-3 pl-5 py-3 text-left">
+      <img
+        src="/menu/bonus-btn-left.svg"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute left-0 top-0 h-full w-auto"
+      />
+      <img
+        src="/menu/bonus-btn-right.svg"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-0.5 top-0 h-full w-auto"
+      />
+      <div className="relative z-10">
+        <BonusIconBadge bonus={{ ...CHOOSE_QUIZ_BONUS, quantity: 1 }} showQuantity={false} />
+      </div>
+      <div className="relative z-10 flex min-w-0 flex-col gap-1">
+        <h3 className="font-funnel text-lg font-semibold leading-none text-light">{CHOOSE_QUIZ_BONUS.name}</h3>
+        <p className="font-funnel text-sm leading-tight text-light">{CHOOSE_QUIZ_BONUS.description}</p>
+      </div>
+    </div>
+  )
+}
+
+export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeChooseQuizBonus, selectQuizDifficulty, currentUserId }) {
   const [selectedDiff, setSelectedDiff] = useState(null)
   if (!roomData) return null
 
@@ -22,10 +84,86 @@ export default function QuizOptions({ roomData, startSpecificQuiz, currentUserId
   }
 
   const pendingQuestionerId = roomData.pendingQuestionerId
+  const activePlayer = roomData.players[roomData.turnIndex]
   const questioner = pendingQuestionerId ? roomData.players.find(p => p.id === pendingQuestionerId) : roomData.players[roomData.turnIndex]
   const isQuestioner = pendingQuestionerId ? currentUserId === pendingQuestionerId : roomData.players[roomData.turnIndex].id === currentUserId
+  const chooseQuizBonus = roomData.pendingChooseQuizBonus?.targetPlayerId === activePlayer?.id
+    ? roomData.pendingChooseQuizBonus
+    : null
+  const chooseQuizUser = chooseQuizBonus?.byPlayerId
+    ? roomData.players.find((player) => player.id === chooseQuizBonus.byPlayerId)
+    : null
+  const chooseQuizTarget = chooseQuizBonus?.targetPlayerId
+    ? roomData.players.find((player) => player.id === chooseQuizBonus.targetPlayerId)
+    : null
+  const isChooseQuizActive = Boolean(chooseQuizBonus && chooseQuizUser && chooseQuizTarget)
+  const isChooseQuizTarget = chooseQuizTarget?.id === currentUserId
+  const isChooseQuizChooser = chooseQuizUser?.id === currentUserId
+  const isWaitingForChooseQuizAck = Boolean(isChooseQuizActive && chooseQuizBonus.awaitingTargetAck)
+  const visibleSelectedDiff = isChooseQuizActive
+    ? (Number(roomData.pendingQuizDifficulty || selectedDiff) || null)
+    : selectedDiff
 
-  if (isQuestioner) {
+  const handleDifficultySelect = (difficulty) => {
+    if (!isQuestioner) return
+    setSelectedDiff(difficulty)
+    if (isChooseQuizActive) {
+      selectQuizDifficulty?.(difficulty)
+    }
+  }
+
+  if (isChooseQuizActive && isWaitingForChooseQuizAck) {
+    return (
+      <div className="w-full max-w-110 mx-auto">
+        <CharacterBorder characterId={chooseQuizUser.character}>
+          <div className="relative w-full overflow-hidden bg-bg">
+            <div className="relative z-10 h-dvh w-full flex flex-col items-center justify-between gap-7 py-14 px-10 phone:px-16 text-center">
+              <div className="flex flex-col items-center gap-5 pt-12">
+                <CharacterIdentity character={chooseQuizUser.character} />
+                <p className="font-hakobi text-4xl uppercase leading-none text-light">
+                  C'est moi qui choisis !
+                </p>
+                <p className="max-w-76 font-funnel text-lg leading-snug text-light/80">
+                  <span
+                    className="font-semibold"
+                    style={{ color: `var(--color-${chooseQuizUser.character})` }}
+                  >
+                    {formatCharacterName(chooseQuizUser.character)}
+                  </span>
+                  {' '}a utilise un <BonusUsedTag /> C'est lui qui va choisir la difficulte de la question de{' '}
+                  <span
+                    className="font-semibold"
+                    style={{ color: `var(--color-${chooseQuizTarget.character})` }}
+                  >
+                    {formatCharacterName(chooseQuizTarget.character)}
+                  </span>
+                  .
+                </p>
+              </div>
+
+              <ChooseQuizInfoCard />
+
+              {isChooseQuizTarget ? (
+                <ButtonWithIcon
+                  text="Suivant"
+                  onClick={() => acknowledgeChooseQuizBonus?.()}
+                  className="bg-light text-bg"
+                />
+              ) : (
+                <div className="pb-2 text-center">
+                  <p className="font-family-funnel text-lg opacity-65">
+                    En attente de {formatCharacterName(chooseQuizTarget.character)}...
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </CharacterBorder>
+      </div>
+    )
+  }
+
+  if (isQuestioner || (isChooseQuizActive && !isWaitingForChooseQuizAck)) {
     return (
       <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
         <div className="relative z-10 mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-between gap-8 py-12 px-12 phone:px-16 text-center">
@@ -43,53 +181,93 @@ export default function QuizOptions({ roomData, startSpecificQuiz, currentUserId
           </div>
           <div className="flex w-full flex-col gap-2 font-family-hakobi text-3xl phone:text-xl uppercase">
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-1-jalon.png" alt="difficultee 1" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${selectedDiff !== null && selectedDiff !== 1 ? 'hidden' : ''}`} />
+              <img src="/game/categorie/tag-1-jalon.png" alt="difficultee 1" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 1 ? 'hidden' : ''}`} />
               <BigButton
-                onClick={() => setSelectedDiff(1)}
+                onClick={() => handleDifficultySelect(1)}
                 text="Pour les nuls"
-                className={`bg-green-primary w-full ${selectedDiff !== null && selectedDiff !== 1 ? 'opacity-50' : ''}`}
+                className={`bg-green-primary w-full ${visibleSelectedDiff !== null && visibleSelectedDiff !== 1 ? 'opacity-50' : ''}`}
               />
             </div>
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-2-jalon.png" alt="difficultee 2" className={`absolute -top-1 right-0 h-7 phone:h-8 z-10 rotate-7 ${selectedDiff !== null && selectedDiff !== 2 ? 'hidden' : ''}`} />
+              <img src="/game/categorie/tag-2-jalon.png" alt="difficultee 2" className={`absolute -top-1 right-0 h-7 phone:h-8 z-10 rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 2 ? 'hidden' : ''}`} />
               <BigButton
-                onClick={() => setSelectedDiff(2)}
+                onClick={() => handleDifficultySelect(2)}
                 text="Facile"
-                className={`bg-blue-primary w-full ${selectedDiff !== null && selectedDiff !== 2 ? 'opacity-50' : ''}`}
+                className={`bg-blue-primary w-full ${visibleSelectedDiff !== null && visibleSelectedDiff !== 2 ? 'opacity-50' : ''}`}
               />
             </div>
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-3-jalon.png" alt="difficultee 3" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${selectedDiff !== null && selectedDiff !== 3 ? 'hidden' : ''}`} />
+              <img src="/game/categorie/tag-3-jalon.png" alt="difficultee 3" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 3 ? 'hidden' : ''}`} />
               <BigButton
-                onClick={() => setSelectedDiff(3)}
+                onClick={() => handleDifficultySelect(3)}
                 text="Moyen"
-                className={`bg-yellow-primary w-full ${selectedDiff !== null && selectedDiff !== 3 ? 'opacity-50' : ''}`}
+                className={`bg-yellow-primary w-full ${visibleSelectedDiff !== null && visibleSelectedDiff !== 3 ? 'opacity-50' : ''}`}
               />
             </div>
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-4-jalon.png" alt="difficultee 4" className={`absolute -top-1 right-0 h-7 phone:h-8 z-10 rotate-7 ${selectedDiff !== null && selectedDiff !== 4 ? 'hidden' : ''}`} />
+              <img src="/game/categorie/tag-4-jalon.png" alt="difficultee 4" className={`absolute -top-1 right-0 h-7 phone:h-8 z-10 rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 4 ? 'hidden' : ''}`} />
               <BigButton
-                onClick={() => setSelectedDiff(4)}
+                onClick={() => handleDifficultySelect(4)}
                 text="Difficile"
-                className={`bg-orange-primary w-full ${selectedDiff !== null && selectedDiff !== 4 ? 'opacity-50' : ''}`}
+                className={`bg-orange-primary w-full ${visibleSelectedDiff !== null && visibleSelectedDiff !== 4 ? 'opacity-50' : ''}`}
               />
             </div>
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-5-jalon.png" alt="difficultee 5" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${selectedDiff !== null && selectedDiff !== 5 ? 'hidden' : ''}`} />
+              <img src="/game/categorie/tag-5-jalon.png" alt="difficultee 5" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 5 ? 'hidden' : ''}`} />
               <BigButton
-                onClick={() => setSelectedDiff(5)}
+                onClick={() => handleDifficultySelect(5)}
                 text="Expert"
-                className={`bg-red-primary w-full ${selectedDiff !== null && selectedDiff !== 5 ? 'opacity-50' : ''}`}
+                className={`bg-red-primary w-full ${visibleSelectedDiff !== null && visibleSelectedDiff !== 5 ? 'opacity-50' : ''}`}
               />
             </div>
           </div>
 
-          <ButtonWithIcon
-            onClick={() => startSpecificQuiz({ difficulty: selectedDiff })}
-            text="Valider"
-            disabled={selectedDiff == null}
-            className="max-w-55"
-          />
+          <div className="flex flex-col items-center gap-3">
+            {isQuestioner && (
+              <ButtonWithIcon
+                onClick={() => startSpecificQuiz({ difficulty: visibleSelectedDiff })}
+                text={isChooseQuizActive ? 'Suivant' : 'Valider'}
+                disabled={visibleSelectedDiff == null}
+                className="max-w-55"
+              />
+            )}
+            {isChooseQuizActive && (
+              <CharacterTag charId={chooseQuizUser.character} text="choisit" />
+            )}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (isChooseQuizActive) {
+    return (
+      <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
+        <div
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url(/assets/home-border-verical.png)',
+            backgroundSize: 'auto 100%',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
+        <div
+          className="pointer-events-none absolute inset-0 z-0"
+          style={{
+            backgroundImage: 'url(/assets/home-border-horizontal.png)',
+            backgroundSize: '100% auto',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        />
+        <div className="relative z-10 mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-center gap-8 px-8 text-center">
+          <CharacterTag charId={chooseQuizUser.character} text="choisit" />
+          <p className="max-w-78 font-funnel text-lg leading-snug text-light/70">
+            {isChooseQuizChooser
+              ? 'A toi de choisir la difficulte.'
+              : `C'est ${formatCharacterName(chooseQuizUser.character)} qui choisit la difficulte de ${formatCharacterName(chooseQuizTarget.character)}.`}
+          </p>
         </div>
       </div>
     )
