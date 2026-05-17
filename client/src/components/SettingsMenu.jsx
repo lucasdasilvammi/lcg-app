@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import CharacterCard from './CharacterCard'
 import ButtonWithIcon from './ButtonWithIcon'
+import BonusPopup, { BonusIconBadge } from './BonusPopup'
 import ScoreBar from './ScoreBar'
 import { BONUS_CATALOG, EMPTY_BONUS_SLOTS } from '../data/bonusCatalog'
 
@@ -29,6 +30,14 @@ const popupStyles = `
 
   .settings-popup-exit {
     animation: settingsSlideDownToBottom 0.25s ease-in;
+  }
+
+  .bonus-panel-enter {
+    animation: settingsSlideUpFromBottom 0.25s ease-out;
+  }
+
+  .bonus-panel-exit {
+    animation: settingsSlideDownToBottom 0.25s ease-in forwards;
   }
 
   @media (max-width: 480px) {
@@ -181,9 +190,13 @@ function BonusCardIcon({ type, isPlaceholder = false }) {
   )
 }
 
-function BonusInventoryCard({ bonus }) {
+function BonusInventoryCard({ bonus, onClick }) {
   return (
-    <div className="relative flex min-h-21 w-full items-center gap-3 overflow-hidden bg-light5 pr-3 pl-5 py-3 text-left">
+    <button
+      type="button"
+      onClick={onClick}
+      className="relative flex min-h-21 w-full items-center gap-3 overflow-hidden bg-light5 pr-3 pl-5 py-3 text-left transition active:scale-[0.99]"
+    >
       <img
         src="/menu/bonus-btn-left.svg"
         alt=""
@@ -196,25 +209,14 @@ function BonusInventoryCard({ bonus }) {
         aria-hidden="true"
         className="pointer-events-none absolute -right-0.5 top-0 h-full w-auto"
       />
-      <div
-        className="relative z-10 flex h-14 w-14 shrink-0 items-center justify-center bg-contain bg-center bg-no-repeat text-bg"
-        style={{ backgroundImage: 'url(/menu/bg-btn.svg)' }}
-      >
-        <BonusCardIcon type={bonus.icon} />
-        <span
-          className="absolute -right-3 -top-3 rotate-9 flex h-8 w-8 items-center justify-center bg-contain bg-center bg-no-repeat text-green-primary"
-          style={{ backgroundImage: 'url(/menu/number-bonus.svg)' }}
-        >
-          <span className="translate-y-[2px] font-hakobi text-xl leading-none">
-            {bonus.quantity}
-          </span>
-        </span>
+      <div className="relative z-10">
+        <BonusIconBadge bonus={bonus} />
       </div>
       <div className="relative z-10 flex min-w-0 flex-col gap-1">
         <h3 className="font-funnel text-lg font-semibold leading-none text-light">{bonus.name}</h3>
         <p className="font-funnel text-sm leading-tight text-light">{bonus.description}</p>
       </div>
-    </div>
+    </button>
   )
 }
 
@@ -235,10 +237,314 @@ function BonusPlaceholderCard({ faded = false }) {
   )
 }
 
-function BonusMenuView({ players, currentUserId, currentUserPlayer }) {
+function BonusTargetPlayerButton({ player, selected, faded, disabled = false, note = null, onClick }) {
+  return (
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={disabled ? undefined : onClick}
+      className={`flex w-full items-center gap-4 text-left transition duration-150 ease-out active:scale-[0.99] ${
+        selected ? 'translate-x-2 scale-[1.02]' : ''
+      } ${
+        faded ? 'opacity-20' : 'opacity-100'
+      } ${
+        disabled ? 'cursor-not-allowed opacity-30' : ''
+      }`}
+    >
+      <img
+        src={`/game/${player.character}.svg`}
+        alt={player.character}
+        className="h-16 w-16 shrink-0 object-contain"
+      />
+      <span className="flex min-w-0 flex-col">
+        <span
+          className="font-hakobi text-5xl uppercase leading-none"
+          style={{ color: `var(--color-${player.character})` }}
+        >
+          {player.character}
+        </span>
+        {note && (
+          <span className="font-funnel text-sm leading-none text-light">
+            {note}
+          </span>
+        )}
+      </span>
+    </button>
+  )
+}
+
+function CoffeeConfirmationView({ targetPlayer, onDone }) {
+  return (
+    <div className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center gap-8 text-center text-light">
+      <CharacterCard charId={targetPlayer.character} size="head-only-big" />
+      <h2
+        className="font-hakobi text-5xl uppercase leading-none"
+        style={{ color: `var(--color-${targetPlayer.character})` }}
+      >
+        {formatCharacterName(targetPlayer.character)}
+      </h2>
+      <p className="max-w-74 font-funnel text-base leading-snug text-light">
+        {formatCharacterName(targetPlayer.character)} devra aller faire le cafe du Boss au prochain tour !
+      </p>
+      <ButtonWithIcon
+        variant="menu"
+        text="Suivant"
+        onClick={onDone}
+        className="bg-light text-bg"
+      />
+    </div>
+  )
+}
+
+function QuizCaseTag() {
+  return (
+    <span className="inline-flex items-center gap-1 rounded-[3px] bg-yellow-secondary px-2 py-0.5 align-middle text-yellow-primary">
+      <img
+        src="/game/icons/cases/quizz.svg"
+        alt=""
+        aria-hidden="true"
+        className="h-4 w-4"
+      />
+      <span className="font-funnel text-sm font-bold leading-none">Quizz</span>
+    </span>
+  )
+}
+
+function ChooseQuizConfirmationView({ targetPlayer, onDone }) {
+  return (
+    <div className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center gap-8 text-center text-light">
+      <CharacterCard charId={targetPlayer.character} size="head-only-big" />
+      <h2
+        className="font-hakobi text-5xl uppercase leading-none"
+        style={{ color: `var(--color-${targetPlayer.character})` }}
+      >
+        {formatCharacterName(targetPlayer.character)}
+      </h2>
+      <p className="max-w-86 font-funnel text-base leading-snug text-light/80">
+        DÃƒÂ¨s que{' '}
+        <span
+          className="font-semibold"
+          style={{ color: `var(--color-${targetPlayer.character})` }}
+        >
+          {formatCharacterName(targetPlayer.character)}
+        </span>
+        {' '}tombera sur une case <QuizCaseTag /> l'application te donnera la main : c'est toi qui choisiras la difficulte de sa question parmi les 5 niveaux.
+      </p>
+      <ButtonWithIcon
+        variant="menu"
+        text="Suivant"
+        onClick={onDone}
+        className="bg-light text-bg"
+      />
+    </div>
+  )
+}
+
+function BonusDetailView({ bonus, onBack, players, currentUserId, consumeBonus, pendingChooseQuizBonus, onDone }) {
+  const [targetFlowBonusId, setTargetFlowBonusId] = useState(null)
+  const [selectedTargetId, setSelectedTargetId] = useState(null)
+  const [confirmedCoffeeTarget, setConfirmedCoffeeTarget] = useState(null)
+  const [confirmedChooseQuizTarget, setConfirmedChooseQuizTarget] = useState(null)
+  const [actionError, setActionError] = useState('')
+  const canUseFromMenu = bonus.id === 'coffee-boss' || bonus.id === 'choose-quiz'
+  const targetPlayers = (players || []).filter((player) => player.id !== currentUserId && player.character)
+  const selectedTarget = targetPlayers.find((player) => player.id === selectedTargetId)
+  const isTargetFlowOpen = targetFlowBonusId === bonus.id
+
+  const startUseFlow = () => {
+    if (bonus.id === 'coffee-boss' || bonus.id === 'choose-quiz') {
+      setSelectedTargetId(null)
+      setActionError('')
+      setTargetFlowBonusId(bonus.id)
+    }
+  }
+
+  const closeUseFlow = () => {
+    setSelectedTargetId(null)
+    setTargetFlowBonusId(null)
+  }
+
+  const validateTarget = () => {
+    if (!selectedTarget) return
+
+    if (bonus.id === 'choose-quiz') {
+      consumeBonus?.('choose-quiz', { targetPlayerId: selectedTarget.id }, (response) => {
+        if (!response?.ok) {
+          setActionError(response?.reason === 'choose_quiz_already_pending'
+            ? `${formatCharacterName(selectedTarget.character)} a deja recu ce bonus.`
+            : response?.reason === 'choose_quiz_room_pending'
+              ? "Un sabotage Quizz est deja en attente."
+              : "Impossible d'utiliser ce bonus pour le moment.")
+          return
+        }
+        setConfirmedChooseQuizTarget(selectedTarget)
+      })
+      return
+    }
+
+    consumeBonus?.('coffee-boss', { targetPlayerId: selectedTarget.id }, (response) => {
+      if (!response?.ok) return
+      setConfirmedCoffeeTarget(selectedTarget)
+    })
+  }
+
+  if (bonus.id === 'coffee-boss' && confirmedCoffeeTarget) {
+    return (
+      <CoffeeConfirmationView
+        targetPlayer={confirmedCoffeeTarget}
+        onDone={onDone}
+      />
+    )
+  }
+
+  if (bonus.id === 'choose-quiz' && confirmedChooseQuizTarget) {
+    return (
+      <ChooseQuizConfirmationView
+        targetPlayer={confirmedChooseQuizTarget}
+        onDone={onDone}
+      />
+    )
+  }
+
+  if (isTargetFlowOpen) {
+    return (
+      <BonusPopup
+        bonus={bonus}
+        title={bonus.id === 'coffee-boss' ? 'DÃ©signe le joueur qui devra passer son tour :' : 'DÃ©signe le joueur que tu veux saboter :'}
+        titleClassName="max-w-72 text-center font-funnel text-lg leading-snug text-light"
+        contentClassName="flex-1 justify-center"
+        actions={(
+          <div className="flex w-full items-center justify-center gap-3">
+            <ButtonWithIcon
+              variant="menu"
+              text="Retour"
+              icon={<MenuColorIcon src="/menu/icon/enter.svg" />}
+              onClick={closeUseFlow}
+              className="bg-red-secondary text-red-primary"
+            />
+            <ButtonWithIcon
+              variant="menu"
+              text="Valider"
+              icon={<MenuColorIcon src="/menu/icon/bonus.svg" />}
+              onClick={validateTarget}
+              disabled={!selectedTargetId}
+              className="bg-light text-bg"
+            />
+          </div>
+        )}
+      >
+        <div className="flex w-full flex-col gap-5">
+          {targetPlayers.map((player) => {
+            const hasChooseQuizPending = bonus.id === 'choose-quiz' && pendingChooseQuizBonus?.targetPlayerId === player.id
+            return (
+              <BonusTargetPlayerButton
+                key={player.id}
+                player={player}
+                selected={selectedTargetId === player.id}
+                faded={Boolean(selectedTargetId) && selectedTargetId !== player.id}
+                disabled={hasChooseQuizPending}
+                note={hasChooseQuizPending ? 'A deja recu ce bonus' : null}
+                onClick={() => {
+                  setActionError('')
+                  setSelectedTargetId(player.id)
+                }}
+              />
+            )
+          })}
+          {actionError && (
+            <p className="font-funnel text-sm leading-snug text-red-primary">
+              {actionError}
+            </p>
+          )}
+        </div>
+      </BonusPopup>
+    )
+  }
+
+  return (
+    <BonusPopup
+      bonus={bonus}
+      actions={(
+        <div className="flex w-full items-center justify-center gap-3">
+          <ButtonWithIcon
+            variant="menu"
+            text="Retour"
+            icon={<MenuColorIcon src="/menu/icon/enter.svg" />}
+            onClick={onBack}
+            className="bg-red-secondary text-red-primary"
+          />
+          {canUseFromMenu && (
+            <ButtonWithIcon
+              variant="menu"
+              text="Utiliser"
+              icon={<MenuColorIcon src="/menu/icon/bonus.svg" />}
+              onClick={startUseFlow}
+              className="bg-light text-bg"
+            />
+          )}
+        </div>
+      )}
+    />
+  )
+}
+
+function BonusMenuView({
+  players,
+  currentUserId,
+  currentUserPlayer,
+  consumeBonus,
+  pendingChooseQuizBonus,
+  onDetailDone,
+  selectedBonusId,
+  setSelectedBonusId,
+  closingBonusId,
+  setClosingBonusId,
+  onDetailOpenChange
+}) {
   const bonusEntries = getPlayerBonusEntries(currentUserPlayer)
+  const selectedBonus = bonusEntries.find((bonus) => bonus.id === selectedBonusId)
+    || (selectedBonusId ? BONUS_CATALOG.find((bonus) => bonus.id === selectedBonusId) : null)
+    || null
   const missingSlots = Math.max(0, EMPTY_BONUS_SLOTS - bonusEntries.length)
   const gradientHeightClass = bonusEntries.length === 0 ? 'h-56' : bonusEntries.length === 1 ? 'h-36' : 'h-16'
+
+  useEffect(() => {
+    onDetailOpenChange?.({
+      open: Boolean(selectedBonus || closingBonusId),
+      closing: Boolean(closingBonusId)
+    })
+  }, [onDetailOpenChange, selectedBonus, closingBonusId])
+
+  const openBonusDetail = (bonusId) => {
+    setClosingBonusId(null)
+    setSelectedBonusId(bonusId)
+    onDetailOpenChange?.({ open: true, closing: false })
+  }
+
+  const closeBonusDetail = () => {
+    if (!selectedBonusId) return
+    setClosingBonusId(selectedBonusId)
+    onDetailOpenChange?.({ open: true, closing: true })
+    window.setTimeout(() => {
+      setSelectedBonusId(null)
+      setClosingBonusId(null)
+      onDetailOpenChange?.({ open: false, closing: false })
+    }, 250)
+  }
+
+  if (selectedBonus) {
+    return (
+      <BonusDetailView
+        bonus={selectedBonus}
+        onBack={closeBonusDetail}
+        players={players}
+        currentUserId={currentUserId}
+        consumeBonus={consumeBonus}
+        pendingChooseQuizBonus={pendingChooseQuizBonus}
+        onDone={onDetailDone}
+      />
+    )
+  }
 
   return (
     <div className="relative z-10 flex min-h-0 flex-1 flex-col gap-8">
@@ -252,7 +558,7 @@ function BonusMenuView({ players, currentUserId, currentUserPlayer }) {
         <div className="relative">
           <div className="flex flex-col gap-4">
             {bonusEntries.map((bonus) => (
-              <BonusInventoryCard key={bonus.id} bonus={bonus} />
+              <BonusInventoryCard key={bonus.id} bonus={bonus} onClick={() => openBonusDetail(bonus.id)} />
             ))}
             {Array.from({ length: missingSlots }).map((_, index) => (
               <BonusPlaceholderCard key={`placeholder-${index}`} faded={bonusEntries.length + index >= 2} />
@@ -343,7 +649,7 @@ function movePlayerInList(players, fromIndex, toIndex) {
   return nextPlayers
 }
 
-export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder, promoteAdmin, kickPlayer, undoLastAction, pauseGame, leaveRoom, onClose }) {
+export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder, promoteAdmin, kickPlayer, undoLastAction, pauseGame, consumeBonus, leaveRoom, onClose }) {
   const [isClosing, setIsClosing] = useState(false)
   const [activeMenu, setActiveMenu] = useState('lobby')
   const [now, setNow] = useState(() => Date.now())
@@ -352,6 +658,10 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
   const [draggedPlayerId, setDraggedPlayerId] = useState(null)
   const [showOrderConfirm, setShowOrderConfirm] = useState(false)
   const [pendingAction, setPendingAction] = useState(null)
+  const [isBonusDetailOpen, setIsBonusDetailOpen] = useState(false)
+  const [isBonusDetailClosing, setIsBonusDetailClosing] = useState(false)
+  const [selectedBonusId, setSelectedBonusId] = useState(null)
+  const [closingBonusId, setClosingBonusId] = useState(null)
   const orderListRef = useRef(null)
   const draggedPlayerIdRef = useRef(null)
   const playersCount = roomData?.players?.length || 0
@@ -367,6 +677,13 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
   const pendingActionTarget = pendingAction?.targetPlayerId
     ? menuPlayers.find((player) => player.id === pendingAction.targetPlayerId) || null
     : null
+  const settingsPanelAnimationClass = isClosing
+    ? 'settings-popup-exit'
+    : isBonusDetailClosing
+      ? 'bonus-panel-exit'
+      : isBonusDetailOpen
+        ? 'bonus-panel-enter'
+        : 'settings-popup-enter'
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
@@ -482,13 +799,32 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
   }
 
   const openLobbyMenu = () => {
+    setIsBonusDetailOpen(false)
+    setIsBonusDetailClosing(false)
+    setSelectedBonusId(null)
+    setClosingBonusId(null)
     setActiveMenu('lobby')
   }
 
   const openBonusMenu = () => {
     if (isOrderMode) cancelOrderMode()
+    setIsBonusDetailOpen(false)
+    setIsBonusDetailClosing(false)
+    setSelectedBonusId(null)
+    setClosingBonusId(null)
     setActiveMenu('bonus')
   }
+
+  const handleBonusDetailOpenChange = useCallback((state) => {
+    if (typeof state === 'boolean') {
+      setIsBonusDetailOpen(state)
+      setIsBonusDetailClosing(false)
+      return
+    }
+
+    setIsBonusDetailOpen(Boolean(state?.open))
+    setIsBonusDetailClosing(Boolean(state?.closing))
+  }, [])
 
   const handlePauseGame = () => {
     pauseGame?.()
@@ -499,12 +835,13 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
     <>
       <style>{popupStyles}</style>
       <div
-        className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 pointer-events-auto"
-        onClick={closeWithAnimation}
+        className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 backdrop-blur-xs pointer-events-auto"
+        onClick={isBonusDetailOpen ? undefined : closeWithAnimation}
         data-no-longpress
       >
         <div
-          className={`relative flex gap-12 w-full max-w-110 flex-col bg-bg px-6 py-8 pt-16 settings-popup-enter ${isClosing ? 'settings-popup-exit' : ''}`}
+          key={isBonusDetailOpen ? 'bonus-detail-panel' : 'settings-panel'}
+          className={`relative flex w-full max-w-110 flex-col bg-bg px-6 pb-8 ${isBonusDetailOpen ? 'gap-8 pt-10' : 'gap-12 pt-16'} ${settingsPanelAnimationClass}`}
           onClick={(event) => event.stopPropagation()}
         >
           <div
@@ -522,13 +859,13 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
             }}
           />
 
-          <div className="absolute right-6 -top-5 z-10 flex items-center gap-2">
+          <div className={`absolute right-6 -top-5 z-10 items-center gap-2 ${isBonusDetailOpen ? 'hidden' : 'flex'}`}>
             <MenuIconButton label="Regles" icon="/menu/rules.svg" onClick={() => {}} />
             <MenuIconButton label="Plein ecran" icon="/menu/fullscreen.svg" onClick={requestFullscreen} />
             <MenuIconButton label="Fermer le menu" icon="/menu/close.svg" onClick={closeWithAnimation} />
           </div>
 
-          <div className="flex w-full justify-center gap-3">
+          <div className={`w-full justify-center gap-3 ${activeMenu === 'bonus' && isBonusDetailOpen ? 'hidden' : 'flex'}`}>
               <MenuButton
                 text="Lobby"
                 active={activeMenu === 'lobby'}
@@ -633,6 +970,14 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
               players={menuPlayers}
               currentUserId={currentUserId}
               currentUserPlayer={currentUserPlayer}
+              consumeBonus={consumeBonus}
+              pendingChooseQuizBonus={roomData?.pendingChooseQuizBonus}
+              onDetailDone={closeWithAnimation}
+              selectedBonusId={selectedBonusId}
+              setSelectedBonusId={setSelectedBonusId}
+              closingBonusId={closingBonusId}
+              setClosingBonusId={setClosingBonusId}
+              onDetailOpenChange={handleBonusDetailOpenChange}
             />
           )}
           <div className={`flex w-full items-center gap-2 pt-2 justify-center ${activeMenu === 'lobby' && isCurrentUserAdmin ? '' : 'hidden'}`}>
@@ -677,7 +1022,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
       </div>
       {showOrderConfirm && (
         <div
-          className="settings-confirm-overlay fixed inset-0 z-[60] flex items-end justify-center bg-black/60"
+          className="settings-confirm-overlay fixed inset-0 z-[60] flex items-end justify-center bg-black/60 backdrop-blur-xs"
           onClick={() => setShowOrderConfirm(false)}
           data-no-longpress
         >
@@ -712,7 +1057,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
       )}
       {pendingAction && (
         <div
-          className="settings-confirm-overlay fixed inset-0 z-[60] flex items-end justify-center bg-black/60"
+          className="settings-confirm-overlay fixed inset-0 z-[60] flex items-end justify-center bg-black/60 backdrop-blur-xs"
           onClick={closeActionConfirm}
           data-no-longpress
         >
@@ -737,7 +1082,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
 
             <p className="font-funnel text-xl leading-snug text-light">
               {pendingAction.type === 'promote' && pendingActionTarget && (
-                <>Veux-tu vraiment donner à <span style={{ color: `var(--color-${pendingActionTarget.character})` }}>{formatCharacterName(pendingActionTarget.character)}</span> les droits d'administrateur de la partie ?</>
+                <>Veux-tu vraiment donner ÃƒÂ  <span style={{ color: `var(--color-${pendingActionTarget.character})` }}>{formatCharacterName(pendingActionTarget.character)}</span> les droits d'administrateur de la partie ?</>
               )}
               {pendingAction.type === 'kick' && pendingActionTarget && (
                 <>Veux-tu vraiment expulser <span style={{ color: `var(--color-${pendingActionTarget.character})` }}>{formatCharacterName(pendingActionTarget.character)}</span> de la partie ?</>

@@ -179,7 +179,7 @@ function PauseOverlay({ isAdmin, resumeGame }) {
 function AppContent() {
 
 
-  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, undoLastAction, pauseGame, resumeGame, leaveRoom } = useSocket();
+  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel, acknowledgeChooseQuizBonus, selectQuizDifficulty, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, undoLastAction, pauseGame, resumeGame, useBonus, leaveRoom } = useSocket();
 
   const [view, setView] = useState("HOME");
   const [inputCode, setInputCode] = useState([]);
@@ -399,6 +399,7 @@ function AppContent() {
           kickPlayer={kickPlayer}
           undoLastAction={undoLastAction}
           pauseGame={pauseGame}
+          consumeBonus={useBonus}
           leaveRoom={leaveRoom}
           onClose={closeSettingsMenu}
         />
@@ -425,11 +426,11 @@ function AppContent() {
       )}
 
       {view === "TURN_START" && roomData && (
-        <TurnStart roomData={roomData} rollDice={rollDice} currentUserId={socket?.id} />
+        <TurnStart roomData={roomData} rollDice={rollDice} nextTurn={nextTurn} currentUserId={socket?.id} />
       )}
 
       {view === "GAME_LOOP" && roomData && (
-        <GameLoop roomData={roomData} triggerAction={triggerAction} currentUserId={socket?.id} goToDebugDuelSelector={goToDebugDuelSelector} />
+        <GameLoop roomData={roomData} triggerAction={triggerAction} consumeBonus={useBonus} currentUserId={socket?.id} goToDebugDuelSelector={goToDebugDuelSelector} />
       )}
 
       {/* DEBUG SCREEN - Development only */}
@@ -439,7 +440,7 @@ function AppContent() {
 
       {/* VUE 8 : CONFIG QUIZ (UX AMELIOREE) */}
       {view === "QUIZ_OPTIONS" && roomData && (
-        <QuizOptions roomData={roomData} startSpecificQuiz={startSpecificQuiz} currentUserId={socket?.id} />
+        <QuizOptions roomData={roomData} startSpecificQuiz={startSpecificQuiz} acknowledgeChooseQuizBonus={acknowledgeChooseQuizBonus} selectQuizDifficulty={selectQuizDifficulty} currentUserId={socket?.id} />
       )}
 
       {/* ÉVÉNEMENTS */}
