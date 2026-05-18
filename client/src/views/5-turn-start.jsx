@@ -37,10 +37,10 @@ export default function TurnStart({ roomData, rollDice, nextTurn, currentUserId 
                       >
                         {formatCharacterName(skipAuthor.character)}
                       </span>
-                      {' '}a balance au Boss que tu t'ennuyais en ce moment... C'est a toi d'aller lui preparer son cafe.
+                      {' '}a balancé au Boss que tu t'ennuyais en ce moment... C'est à toi d'aller lui préparer son café.
                     </>
                   ) : (
-                    "Le Boss a besoin d'un cafe. C'est a toi d'aller lui preparer."
+                    "Le Boss a besoin d'un café. C'est à toi d'aller lui préparer."
                   )}
                 </p>
               </div>
@@ -48,14 +48,14 @@ export default function TurnStart({ roomData, rollDice, nextTurn, currentUserId 
 
             {!skipBonus && isMyTurn && (
               <div className="flex flex-col gap-2 pt-8">
-                <h2 className="text-light font-hakobi text-5xl phone:text-6xl uppercase">a toi de jouer :</h2>
-                <p className="font-family-funnel text-base phone:text-lg opacity-65">Lance le de !</p>
+                <h2 className="text-light font-hakobi text-5xl phone:text-6xl uppercase">À toi de jouer :</h2>
+                <p className="font-family-funnel text-base phone:text-lg opacity-65">Lance le dé !</p>
               </div>
             )}
 
             {!skipBonus && !isMyTurn && (
               <h2 className="text-light font-hakobi text-5xl uppercase pt-8">
-                C'est a {activePlayer.character}<br />de jouer !
+                C'est à {activePlayer.character}<br />de jouer !
               </h2>
             )}
 
@@ -66,7 +66,7 @@ export default function TurnStart({ roomData, rollDice, nextTurn, currentUserId 
             {skipBonus && (
               <div className="flex flex-col items-center gap-6">
                 <p className="max-w-80 font-family-funnel text-base phone:text-lg leading-snug text-light">
-                  Le boss prend deux sucres et n'aime pas attendre. On se revoit au tour d'apres, si tu ne renverses rien !
+                  Le boss prend deux sucres et n'aime pas attendre. On se revoit au tour d'après, si tu ne renverses rien !
                 </p>
                 {isMyTurn ? (
                   <ButtonWithIcon

@@ -62,7 +62,7 @@ export default function RuleScreen({ children, onClose, borderColor = 'var(--col
         <div className="relative z-10 flex min-h-0 w-full flex-col px-10 py-12">
           <header className="flex items-start justify-between gap-5">
             <RulesLogo />
-            <RulesIconButton label="Fermer les regles" icon="/menu/close.svg" onClick={onClose} />
+            <RulesIconButton label="Fermer les règles" icon="/menu/close.svg" onClick={onClose} />
           </header>
           {children}
         </div>
