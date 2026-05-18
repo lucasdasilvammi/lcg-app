@@ -1,9 +1,106 @@
-import React from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import ButtonWithIcon from '../components/ButtonWithIcon'
 
-export default function DefineOrder({ roomData, isAdmin, movePlayer, startGameLoop }) {
+function DragIcon({ className = 'h-8 w-8' }) {
+  return (
+    <span
+      aria-hidden="true"
+      className={`shrink-0 bg-current ${className}`}
+      style={{
+        WebkitMaskImage: 'url(/menu/icon/drag.svg)',
+        maskImage: 'url(/menu/icon/drag.svg)',
+        WebkitMaskSize: 'contain',
+        maskSize: 'contain',
+        WebkitMaskPosition: 'center',
+        maskPosition: 'center',
+        WebkitMaskRepeat: 'no-repeat',
+        maskRepeat: 'no-repeat'
+      }}
+    />
+  )
+}
+
+function movePlayerInList(players, fromIndex, toIndex) {
+  if (fromIndex === toIndex || fromIndex < 0 || toIndex < 0) return players
+  const nextPlayers = [...players]
+  const [movedPlayer] = nextPlayers.splice(fromIndex, 1)
+  nextPlayers.splice(toIndex, 0, movedPlayer)
+  return nextPlayers
+}
+
+export default function DefineOrder({ roomData, isAdmin, updateTurnOrder, startGameLoop }) {
+  const [orderedPlayers, setOrderedPlayers] = useState([])
+  const [draggedPlayerId, setDraggedPlayerId] = useState(null)
+  const orderListRef = useRef(null)
+  const draggedPlayerIdRef = useRef(null)
+  const orderedPlayersRef = useRef([])
+  const getNameColor = (id) => `var(--color-${id})`
+  const roomPlayers = useMemo(() => roomData?.players || [], [roomData?.players])
+  const displayedPlayers = isAdmin ? orderedPlayers : roomPlayers
+
+  useEffect(() => {
+    if (draggedPlayerIdRef.current) return
+    setOrderedPlayers(roomPlayers)
+    orderedPlayersRef.current = roomPlayers
+  }, [roomPlayers])
+
+  useEffect(() => {
+    orderedPlayersRef.current = orderedPlayers
+  }, [orderedPlayers])
+
+  useEffect(() => {
+    if (!draggedPlayerId) return undefined
+
+    const handlePointerMove = (event) => {
+      const activePlayerId = draggedPlayerIdRef.current
+      const listElement = orderListRef.current
+      if (!activePlayerId || !listElement) return
+
+      event.preventDefault()
+
+      const rows = Array.from(listElement.querySelectorAll('[data-order-player-id]'))
+      if (rows.length === 0) return
+
+      const targetIndex = rows.findIndex((row) => {
+        const rect = row.getBoundingClientRect()
+        return event.clientY < rect.top + rect.height / 2
+      })
+      const nextIndex = targetIndex === -1 ? rows.length - 1 : targetIndex
+
+      setOrderedPlayers((currentPlayers) => {
+        const currentIndex = currentPlayers.findIndex(player => player.id === activePlayerId)
+        if (currentIndex === -1 || currentIndex === nextIndex) return currentPlayers
+        return movePlayerInList(currentPlayers, currentIndex, nextIndex)
+      })
+    }
+
+    const handlePointerEnd = () => {
+      draggedPlayerIdRef.current = null
+      setDraggedPlayerId(null)
+      updateTurnOrder?.(orderedPlayersRef.current)
+    }
+
+    window.addEventListener('pointermove', handlePointerMove, { passive: false })
+    window.addEventListener('pointerup', handlePointerEnd)
+    window.addEventListener('pointercancel', handlePointerEnd)
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove)
+      window.removeEventListener('pointerup', handlePointerEnd)
+      window.removeEventListener('pointercancel', handlePointerEnd)
+    }
+  }, [draggedPlayerId, updateTurnOrder])
+
+  const startPlayerDrag = (event, playerId) => {
+    if (!isAdmin) return
+    event.preventDefault()
+    event.stopPropagation()
+    draggedPlayerIdRef.current = playerId
+    setDraggedPlayerId(playerId)
+  }
+
   if (!roomData) return null
-  const getNameColor = (id) => `var(--color-${id})`;
+
   return (
     <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
       <div
@@ -28,10 +125,20 @@ export default function DefineOrder({ roomData, isAdmin, movePlayer, startGameLo
       <div className="relative z-10 h-dvh w-full max-w-110 mx-auto flex flex-col items-center justify-between py-14 px-8 phone:px-16 text-center">
         <h2 className="text-light font-hakobi text-4xl phone:text-5xl uppercase">Ordre du Tour :</h2>
 
-        <div className="flex flex-col gap-3 phone:gap-4 w-full">
-          {roomData.players.map((player, index) => {
+        <div ref={orderListRef} className="flex flex-col gap-3 phone:gap-4 w-full">
+          {displayedPlayers.map((player, index) => {
+            const isDragging = draggedPlayerId === player.id
             return (
-              <div key={player.id} className="flex items-center gap-2">
+              <div
+                key={player.id}
+                data-order-player-id={player.id}
+                onPointerDown={isAdmin ? (event) => startPlayerDrag(event, player.id) : undefined}
+                className={`flex items-center gap-2 transition ${
+                  isAdmin ? 'touch-none cursor-grab active:cursor-grabbing' : ''
+                } ${
+                  isDragging ? 'scale-[1.02] opacity-80' : ''
+                }`}
+              >
                 <div className="font-normal font-family-funnel text-light opacity-40 w-8">#{index + 1}</div>
                 <img
                   src={`/game/${player.character}.svg`}
@@ -45,21 +152,8 @@ export default function DefineOrder({ roomData, isAdmin, movePlayer, startGameLo
                   {player.character}
                 </div>
                 {isAdmin && (
-                  <div className="flex flex-col gap-1">
-                    <button
-                      onClick={() => movePlayer(index, -1)}
-                      disabled={index === 0}
-                      className="disabled:hidden"
-                    >
-                      <img src="/ordre/btn-up.svg" alt="monter" className="w-8 h-8" />
-                    </button>
-                    <button
-                      onClick={() => movePlayer(index, 1)}
-                      disabled={index === roomData.players.length - 1}
-                      className="disabled:opacity-20"
-                    >
-                      <img src="/ordre/btn-down.svg" alt="descendre" className="w-8 h-8" />
-                    </button>
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center text-light">
+                    <DragIcon />
                   </div>
                 )}
               </div>

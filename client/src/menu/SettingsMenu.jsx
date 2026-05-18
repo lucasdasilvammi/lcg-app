@@ -285,7 +285,7 @@ function CoffeeConfirmationView({ targetPlayer, onDone }) {
         {formatCharacterName(targetPlayer.character)}
       </h2>
       <p className="max-w-74 font-funnel text-base leading-snug text-light">
-        {formatCharacterName(targetPlayer.character)} devra aller faire le cafe du Boss au prochain tour !
+        {formatCharacterName(targetPlayer.character)} devra aller faire le café du Boss au prochain tour !
       </p>
       <ButtonWithIcon
         variant="menu"
@@ -299,15 +299,11 @@ function CoffeeConfirmationView({ targetPlayer, onDone }) {
 
 function QuizCaseTag() {
   return (
-    <span className="inline-flex items-center gap-1 rounded-[3px] bg-yellow-secondary px-2 py-0.5 align-middle text-yellow-primary">
-      <img
-        src="/game/icons/cases/quizz.svg"
-        alt=""
-        aria-hidden="true"
-        className="h-4 w-4"
-      />
-      <span className="font-funnel text-sm font-bold leading-none">Quizz</span>
-    </span>
+    <img
+      src="/game/categorie/tag-quizz.png"
+      alt="Quizz"
+      className="inline-block h-6 align-middle"
+    />
   )
 }
 
@@ -322,14 +318,14 @@ function ChooseQuizConfirmationView({ targetPlayer, onDone }) {
         {formatCharacterName(targetPlayer.character)}
       </h2>
       <p className="max-w-86 font-funnel text-base leading-snug text-light/80">
-        DÃƒÂ¨s que{' '}
+        Dès que{' '}
         <span
           className="font-semibold"
           style={{ color: `var(--color-${targetPlayer.character})` }}
         >
           {formatCharacterName(targetPlayer.character)}
         </span>
-        {' '}tombera sur une case <QuizCaseTag /> l'application te donnera la main : c'est toi qui choisiras la difficulte de sa question parmi les 5 niveaux.
+        {' '}tombera sur une case <QuizCaseTag />, l'application te donnera la main : c'est toi qui choisiras la difficulté de sa question parmi les 5 niveaux.
       </p>
       <ButtonWithIcon
         variant="menu"
@@ -372,9 +368,9 @@ function BonusDetailView({ bonus, onBack, players, currentUserId, consumeBonus, 
       consumeBonus?.('choose-quiz', { targetPlayerId: selectedTarget.id }, (response) => {
         if (!response?.ok) {
           setActionError(response?.reason === 'choose_quiz_already_pending'
-            ? `${formatCharacterName(selectedTarget.character)} a deja recu ce bonus.`
+            ? `${formatCharacterName(selectedTarget.character)} a déjà reçu ce bonus.`
             : response?.reason === 'choose_quiz_room_pending'
-              ? "Un sabotage Quizz est deja en attente."
+              ? "Un sabotage Quizz est déjà en attente."
               : "Impossible d'utiliser ce bonus pour le moment.")
           return
         }
@@ -411,7 +407,7 @@ function BonusDetailView({ bonus, onBack, players, currentUserId, consumeBonus, 
     return (
       <BonusPopup
         bonus={bonus}
-        title={bonus.id === 'coffee-boss' ? 'DÃ©signe le joueur qui devra passer son tour :' : 'DÃ©signe le joueur que tu veux saboter :'}
+        title={bonus.id === 'coffee-boss' ? 'Désigne le joueur qui devra passer son tour :' : 'Désigne le joueur que tu veux saboter :'}
         titleClassName="max-w-72 text-center font-funnel text-lg leading-snug text-light"
         contentClassName="flex-1 justify-center"
         actions={(
@@ -444,7 +440,7 @@ function BonusDetailView({ bonus, onBack, players, currentUserId, consumeBonus, 
                 selected={selectedTargetId === player.id}
                 faded={Boolean(selectedTargetId) && selectedTargetId !== player.id}
                 disabled={hasChooseQuizPending}
-                note={hasChooseQuizPending ? 'A deja recu ce bonus' : null}
+                note={hasChooseQuizPending ? 'A déjà reçu ce bonus' : null}
                 onClick={() => {
                   setActionError('')
                   setSelectedTargetId(player.id)
@@ -551,7 +547,7 @@ function BonusMenuView({
     <div className="relative z-10 flex min-h-0 flex-1 flex-col gap-8">
       <div className="flex flex-col gap-8">
         {bonusEntries.length === 0 && (
-          <h2 className="font-hakobi text-5xl uppercase leading-[100%] text-light">
+          <h2 className="font-hakobi text-[42px] uppercase leading-[100%] text-light">
             Tu n'as pas encore<br />de bonus...
           </h2>
         )}
@@ -609,7 +605,7 @@ function getPlayerPrimaryAction({ player, status, isAdminPlayer }) {
   if (status === 'disconnected') {
     return {
       icon: '/menu/icon/ajouter.svg',
-      label: `Reinviter ${player.character}`,
+      label: `Réinviter ${player.character}`,
       disabled: false
     }
   }
@@ -877,8 +873,8 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
           />
 
           <div className={`absolute right-6 -top-5 z-10 items-center gap-2 ${isBonusDetailOpen ? 'hidden' : 'flex'}`}>
-            <MenuIconButton label="Regles" icon="/menu/rules.svg" onClick={openRules} />
-            <MenuIconButton label="Plein ecran" icon="/menu/fullscreen.svg" onClick={requestFullscreen} />
+            <MenuIconButton label="Règles" icon="/menu/rules.svg" onClick={openRules} />
+            <MenuIconButton label="Plein écran" icon="/menu/fullscreen.svg" onClick={requestFullscreen} />
             <MenuIconButton label="Fermer le menu" icon="/menu/close.svg" onClick={closeWithAnimation} />
           </div>
 
@@ -1062,7 +1058,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
               }}
             />
             <p className="font-funnel text-xl text-light">
-              L'ordre sera effectif apres la fin du tour de table actuel !
+              L'ordre sera effectif après la fin du tour de table actuel !
             </p>
             <ButtonWithIcon
               text="Suivant"
@@ -1099,16 +1095,16 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
 
             <p className="font-funnel text-xl leading-snug text-light">
               {pendingAction.type === 'promote' && pendingActionTarget && (
-                <>Veux-tu vraiment donner ÃƒÂ  <span style={{ color: `var(--color-${pendingActionTarget.character})` }}>{formatCharacterName(pendingActionTarget.character)}</span> les droits d'administrateur de la partie ?</>
+                <>Veux-tu vraiment donner à <span style={{ color: `var(--color-${pendingActionTarget.character})` }}>{formatCharacterName(pendingActionTarget.character)}</span> les droits d'administrateur de la partie ?</>
               )}
               {pendingAction.type === 'kick' && pendingActionTarget && (
                 <>Veux-tu vraiment expulser <span style={{ color: `var(--color-${pendingActionTarget.character})` }}>{formatCharacterName(pendingActionTarget.character)}</span> de la partie ?</>
               )}
               {pendingAction.type === 'leave' && currentUserPlayer && (
-                <>Veux-tu vraiment quitter la partie ? L'administration sera transferee automatiquement.</>
+                <>Veux-tu vraiment quitter la partie ? L'administration sera transférée automatiquement.</>
               )}
               {pendingAction.type === 'undo' && currentUserPlayer && (
-                <>En annulant l'action, <span style={{ color: `var(--color-${currentUserPlayer.character})` }}>{formatCharacterName(currentUserPlayer.character)}</span> reviendra au choix du type de case sur lequel il est tombe.</>
+                <>En annulant l'action, <span style={{ color: `var(--color-${currentUserPlayer.character})` }}>{formatCharacterName(currentUserPlayer.character)}</span> reviendra au choix du type de case sur lequel il est tombé.</>
               )}
             </p>
 

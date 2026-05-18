@@ -11,7 +11,7 @@ export default function ButDuJeu() {
           <ul className="ml-5 mt-1 flex list-disc flex-col gap-2">
             <li>Répondre à des questions <RuleImageTag type="quiz" alt="Quizz" className="h-6 pl-2" /></li>
             <li>Affronter d'autres stagiaires <br/> dans des <RuleImageTag type="defi" alt="Défis" className="h-6 pl-2"/></li>
-            <li>Participer à des <RuleImageTag type="activite" alt="Activites" className="h-6 pl-2" /></li>
+            <li>Participer à des <RuleImageTag type="activite" alt="Activités" className="h-6 pl-2" /></li>
           </ul>
         </div>
         <p>À la fin de la partie, on compare les scores : celui qui a le plus de jalons remporte le stage de 2 mois.</p>

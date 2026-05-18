@@ -138,7 +138,10 @@
 ## Partie activité communes / bonus / events
 - [x] Commencer la partie bonus.
 - [x] Implémenter le parcours activité commune photo/vote/résultat.
+- [ ] Optimiser le stockage et l'envoi des photos d'activité commune : sortir les base64 de `room.currentInteraction`, garder une room légère, envoyer uniquement les photos nécessaires au vote/résultat, puis nettoyer les photos à la fin de l'épreuve.
+- [ ] Créer les derniers événements qui n'ont pas encore été intégrés.
 - [ ] Ajouter les 2 événements liés aux bonus une fois le système bonus intégré.
+- [ ] Ajouter de nouvelles activités communes pour enrichir la variété des manches.
 - [ ] Revoir le design de l'activité commune depuis les maquettes Figma.
 
 ## Rédaction des questions

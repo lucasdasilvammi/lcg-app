@@ -50,6 +50,7 @@ const DUELS_DB = Object.keys(duelsData)
 
 // Flatten events database
 const EVENTS_DB = eventsData.events || [];
+const BONUS_IDS = Array.from(VALID_BONUS_IDS);
 
 // --- UTILITIES ---
 const getDuelsByType = (type) => DUELS_DB.filter(d => d.type === type);
@@ -96,7 +97,7 @@ let rooms = {};
 const DISCONNECT_GRACE_MS = 30000; // 30 secondes
 const pendingDisconnectTimers = new Map();
 const undoSnapshotsByRoomId = new Map();
-const TEST_DEFAULT_BONUSES = { 'ctrl-z': 1, 'coffee-boss': 1, 'choose-quiz': 1 };
+const DEFAULT_BONUSES = {};
 // Timers (ne doivent JAMAIS être stockés dans l'état room envoyé au client)
 const activiteTimersByRoomId = new Map();
 const activiteVoteTimersByRoomId = new Map();
@@ -498,7 +499,7 @@ io.on('connection', (socket) => {
       id: newRoomId,
       code: gameCode,
       adminId: socket.id,
-      players: [{ id: socket.id, sessionToken, character: null, score: 0, bonuses: { ...TEST_DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false }],
+      players: [{ id: socket.id, sessionToken, character: null, score: 0, bonuses: { ...DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false }],
       status: 'LOBBY',
       isPaused: false,
       pausedById: null,
@@ -533,7 +534,7 @@ io.on('connection', (socket) => {
     }
 
     socket.join(room.id);
-  room.players.push({ id: socket.id, sessionToken, character: null, score: 0, bonuses: { ...TEST_DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false });
+  room.players.push({ id: socket.id, sessionToken, character: null, score: 0, bonuses: { ...DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false });
     socket.emit('room_joined', { roomId: room.id, isAdmin: false });
     console.log('join_room_with_code: player joined', socket.id, '->', room.id);
     syncRoom(room);
@@ -916,6 +917,32 @@ io.on('connection', (socket) => {
       room.status = 'EVENT_GAME';
       syncRoom(room);
       if (typeof ack === 'function') ack({ ok: true, status: room.status });
+    } else if (actionType === 'BONUS') {
+      const randomBonusId = BONUS_IDS[Math.floor(Math.random() * BONUS_IDS.length)];
+      const activePlayer = room.players[room.turnIndex];
+      if (!activePlayer || activePlayer.id !== socket.id) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+        return;
+      }
+
+      activePlayer.bonuses = activePlayer.bonuses || {};
+      activePlayer.bonuses[randomBonusId] = Number(activePlayer.bonuses[randomBonusId] || 0) + 1;
+      room.currentInteraction = {
+        type: 'bonus',
+        bonusId: randomBonusId,
+        readerId: socket.id,
+        claimed: true
+      };
+      room.status = 'BONUS_GAME';
+      syncRoom(room);
+      if (typeof ack === 'function') {
+        ack({
+          ok: true,
+          status: room.status,
+          bonusId: randomBonusId,
+          quantity: activePlayer.bonuses[randomBonusId] || 0
+        });
+      }
     } else if (actionType === 'ACTIVITE') {
       const brandNames = [
         'Apple', 'Nike', 'McDo', 'Starbucks', 'Coca', 'Pepsi',
@@ -948,6 +975,46 @@ io.on('connection', (socket) => {
     } else {
       console.warn('trigger_action: unknown actionType', actionType, 'from', socket.id);
       if (typeof ack === 'function') ack({ ok: false, reason: 'unknown_action' });
+    }
+  });
+
+  socket.on('claim_case_bonus', (_payload, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    const activePlayer = room.players[room.turnIndex];
+    const interaction = room.currentInteraction;
+
+    if (room.status !== 'BONUS_GAME' || interaction?.type !== 'bonus') {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_state' });
+      return;
+    }
+
+    if (!activePlayer || activePlayer.id !== socket.id || interaction.readerId !== socket.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
+    if (!VALID_BONUS_IDS.has(interaction.bonusId)) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_bonus' });
+      return;
+    }
+
+    room.currentInteraction = null;
+
+    advanceRoomToNextTurn(room);
+    syncRoom(room);
+
+    if (typeof ack === 'function') {
+      ack({
+        ok: true,
+        bonusId: interaction.bonusId,
+        quantity: activePlayer.bonuses?.[interaction.bonusId] || 0,
+        status: room.status
+      });
     }
   });
 

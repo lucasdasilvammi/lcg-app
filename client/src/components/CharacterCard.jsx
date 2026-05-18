@@ -50,7 +50,7 @@ const STATUS_CONFIG = {
     icon: '/menu/icon/connected.svg'
   },
   disconnected: {
-    label: 'Deconnecte',
+    label: 'Déconnecté',
     color: 'text-red-primary',
     icon: '/menu/icon/disconnected.svg'
   },
@@ -61,7 +61,15 @@ const STATUS_CONFIG = {
   }
 }
 
-export default function CharacterCard({ charId, size = 'default', status = 'connected', statusLabel = null, showStatus = true, isAdmin = false, isCurrentUser = false }) {
+export default function CharacterCard({
+  charId,
+  size = 'default',
+  status = 'connected',
+  statusLabel = null,
+  showStatus = true,
+  isAdmin = false,
+  isCurrentUser = false
+}) {
   const config = SIZE_CONFIG[size] || SIZE_CONFIG.default
   const getCharacterColor = (id) => `var(--color-${id})`
   const statusConfig = STATUS_CONFIG[status] || STATUS_CONFIG.connected

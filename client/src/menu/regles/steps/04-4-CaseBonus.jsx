@@ -11,7 +11,7 @@ export default function CaseBonus() {
         <p>Quand vous tombez sur une case Bonus :</p>
         <p>L'application vous donne directement un bonus.</p>
         <p>Vous découvrez son effet à l'écran.</p>
-        <p>Pour l'utiliser vous devrez passer par le menu en maintenant le clique sur l'écran.</p>
+        <p>Pour l'utiliser, vous devrez passer par le menu en maintenant le clic sur l'écran.</p>
         <p>Vous pouvez l'utiliser plus tard pour vous aider ou pour gêner un autre joueur.</p>
       </div>
     </>

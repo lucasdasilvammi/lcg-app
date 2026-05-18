@@ -123,6 +123,7 @@ export const SocketProvider = ({ children }) => {
   const debugTriggerDuel = (defiType) => socket?.emit("debug_trigger_duel", defiType)
   const acknowledgeChooseQuizBonus = (ack) => socket?.emit('ack_choose_quiz_bonus', {}, ack)
   const selectQuizDifficulty = (difficulty, ack) => socket?.emit('select_quiz_difficulty', { difficulty }, ack)
+  const claimCaseBonus = (ack) => socket?.emit('claim_case_bonus', {}, ack)
   
   // Activité: Dessin de Logo
   const acknowledgeReady = () => socket?.emit("activite_acknowledge_ready")
@@ -200,6 +201,7 @@ export const SocketProvider = ({ children }) => {
       debugTriggerDuel,
       acknowledgeChooseQuizBonus,
       selectQuizDifficulty,
+      claimCaseBonus,
       acknowledgeReady,
       submitDrawing,
       submitPhoto,

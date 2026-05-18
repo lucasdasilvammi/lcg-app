@@ -18,6 +18,7 @@ import ChiffresGame from './views/defi/chiffres/8-chiffres-game'
 import PickGame from './views/defi/pick/8-pick-game'
 import ZoomGame from './views/defi/zoom/8-zoom-game'
 import EventGame from './views/event/7-event-game'
+import BonusGame from './views/bonus/7-bonus-game'
 import ActiviteBrief from './views/activite/1-activite-brief'
 import ActiviteCreation from './views/activite/2-activite-creation'
 import ActiviteUpload from './views/activite/3-activite-upload'
@@ -107,6 +108,9 @@ const canOpenSettingsForContext = ({ view, roomData, currentUserId }) => {
     case 'EVENT_GAME':
       return interaction?.readerId !== currentUserId
 
+    case 'BONUS_GAME':
+      return true
+
     case 'DUEL_START':
     case 'DUEL_RULES':
     case 'DUEL_GAME':
@@ -179,7 +183,7 @@ function PauseOverlay({ isAdmin, resumeGame }) {
 function AppContent() {
 
 
-  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel, acknowledgeChooseQuizBonus, selectQuizDifficulty, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, undoLastAction, pauseGame, resumeGame, useBonus, leaveRoom } = useSocket();
+  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel, acknowledgeChooseQuizBonus, selectQuizDifficulty, claimCaseBonus, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, undoLastAction, pauseGame, resumeGame, useBonus, leaveRoom } = useSocket();
 
   const [view, setView] = useState("HOME");
   const [inputCode, setInputCode] = useState([]);
@@ -422,7 +426,7 @@ function AppContent() {
       )}
 
       {view === "DEFINE_ORDER" && roomData && (
-        <DefineOrder roomData={roomData} isAdmin={isAdmin} movePlayer={movePlayer} startGameLoop={startGameLoop} />
+        <DefineOrder roomData={roomData} isAdmin={isAdmin} updateTurnOrder={updateTurnOrder} startGameLoop={startGameLoop} />
       )}
 
       {view === "TURN_START" && roomData && (
@@ -449,6 +453,10 @@ function AppContent() {
       )}
 
       {/* ACTIVITÉS */}
+      {view === "BONUS_GAME" && roomData && roomData.currentInteraction && (
+        <BonusGame roomData={roomData} currentUserId={socket?.id} claimCaseBonus={claimCaseBonus} />
+      )}
+
       {view === "ACTIVITE_BRIEF" && roomData && roomData.currentInteraction && (
         <ActiviteBrief roomData={roomData} currentUserId={socket?.id} acknowledgeReady={acknowledgeReady} />
       )}

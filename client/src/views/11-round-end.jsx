@@ -18,7 +18,7 @@ export default function RoundEnd({ roomData, startNewRound }) {
           )
         })}
       </div>
-      <button onClick={startNewRound} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-4 rounded-xl text-xl shadow-lg animate-pulse">ROUND SUIVANT 🏁</button>
+      <button onClick={startNewRound} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black font-bold py-4 rounded-xl text-xl shadow-lg animate-pulse transition active:scale-95">ROUND SUIVANT 🏁</button>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import BigButton from '../../components/BigButton'
 import ButtonWithIcon from '../../components/ButtonWithIcon'
-import { BonusIconBadge, MaskIcon } from '../../components/BonusPopup'
+import { BonusIconBadge } from '../../components/BonusPopup'
 import CharacterBorder from '../../components/CharacterBorder'
 import CharacterCard from '../../components/CharacterCard'
 import CharacterTag from '../../components/CharacterTag'
@@ -17,10 +17,11 @@ function formatCharacterName(name) {
 
 function BonusUsedTag() {
   return (
-    <span className="inline-flex items-center gap-1 rounded-[3px] bg-green-secondary px-2 py-1 align-middle text-green-primary">
-      <MaskIcon src="/menu/icon/bonus.svg" className="h-4 w-4" />
-      <span className="font-funnel text-sm font-bold leading-none">Bonus</span>
-    </span>
+    <img
+      src="/game/categorie/tag-bonus.png"
+      alt="Bonus"
+      className="inline-block h-6 align-middle"
+    />
   )
 }
 
@@ -54,7 +55,7 @@ function ChooseQuizInfoCard() {
         alt=""
         aria-hidden="true"
         className="pointer-events-none absolute -right-0.5 top-0 h-full w-auto"
-      />
+      /> 
       <div className="relative z-10">
         <BonusIconBadge bonus={{ ...CHOOSE_QUIZ_BONUS, quantity: 1 }} showQuantity={false} />
       </div>
@@ -130,7 +131,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
                   >
                     {formatCharacterName(chooseQuizUser.character)}
                   </span>
-                  {' '}a utilise un <BonusUsedTag /> C'est lui qui va choisir la difficulte de la question de{' '}
+                  {' '}a utilisé un <BonusUsedTag /> C'est lui qui va choisir la difficulté de la question de{' '}
                   <span
                     className="font-semibold"
                     style={{ color: `var(--color-${chooseQuizTarget.character})` }}
@@ -141,21 +142,23 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
                 </p>
               </div>
 
-              <ChooseQuizInfoCard />
+              <div className="flex w-full flex-col items-center gap-8">
+                <ChooseQuizInfoCard />
 
-              {isChooseQuizTarget ? (
-                <ButtonWithIcon
-                  text="Suivant"
-                  onClick={() => acknowledgeChooseQuizBonus?.()}
-                  className="bg-light text-bg"
-                />
-              ) : (
-                <div className="pb-2 text-center">
-                  <p className="font-family-funnel text-lg opacity-65">
-                    En attente de {formatCharacterName(chooseQuizTarget.character)}...
-                  </p>
-                </div>
-              )}
+                {isChooseQuizTarget ? (
+                  <ButtonWithIcon
+                    text="Suivant"
+                    onClick={() => acknowledgeChooseQuizBonus?.()}
+                    className="bg-light text-bg"
+                  />
+                ) : (
+                  <div className="text-center">
+                    <p className="font-family-funnel text-lg opacity-65">
+                      En attente de {formatCharacterName(chooseQuizTarget.character)}...
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </CharacterBorder>
@@ -169,7 +172,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
         <div className="relative z-10 mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-between gap-8 py-12 px-12 phone:px-16 text-center">
           <div className="flex flex-col items-center gap-2">
             <img src="/game/categorie/tag-quizz.png" alt="Quizz" className="h-8 phone:h-9 mb-2 phone:mb-4"/>
-            <p className="text-light opacity-75 text-base phone:text-lg font-family-funnel">Theme :</p>
+            <p className="text-light opacity-75 text-base phone:text-lg font-family-funnel">Thème :</p>
             <div className="flex w-full items-center justify-center gap-2">
               <img
                 src={`/game/categorie/icon-${getCategoryId(roomData.pendingCategory)}.png`}
@@ -181,7 +184,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
           </div>
           <div className="flex w-full flex-col gap-2 font-family-hakobi text-3xl phone:text-xl uppercase">
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-1-jalon.png" alt="difficultee 1" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 1 ? 'hidden' : ''}`} />
+              <img src="/game/categorie/tag-1-jalon.png" alt="difficulté 1" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 1 ? 'hidden' : ''}`} />
               <BigButton
                 onClick={() => handleDifficultySelect(1)}
                 text="Pour les nuls"
@@ -189,7 +192,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
               />
             </div>
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-2-jalon.png" alt="difficultee 2" className={`absolute -top-1 right-0 h-7 phone:h-8 z-10 rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 2 ? 'hidden' : ''}`} />
+              <img src="/game/categorie/tag-2-jalon.png" alt="difficulté 2" className={`absolute -top-1 right-0 h-7 phone:h-8 z-10 rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 2 ? 'hidden' : ''}`} />
               <BigButton
                 onClick={() => handleDifficultySelect(2)}
                 text="Facile"
@@ -197,7 +200,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
               />
             </div>
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-3-jalon.png" alt="difficultee 3" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 3 ? 'hidden' : ''}`} />
+              <img src="/game/categorie/tag-3-jalon.png" alt="difficulté 3" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 3 ? 'hidden' : ''}`} />
               <BigButton
                 onClick={() => handleDifficultySelect(3)}
                 text="Moyen"
@@ -205,7 +208,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
               />
             </div>
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-4-jalon.png" alt="difficultee 4" className={`absolute -top-1 right-0 h-7 phone:h-8 z-10 rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 4 ? 'hidden' : ''}`} />
+              <img src="/game/categorie/tag-4-jalon.png" alt="difficulté 4" className={`absolute -top-1 right-0 h-7 phone:h-8 z-10 rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 4 ? 'hidden' : ''}`} />
               <BigButton
                 onClick={() => handleDifficultySelect(4)}
                 text="Difficile"
@@ -213,7 +216,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
               />
             </div>
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-5-jalon.png" alt="difficultee 5" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 5 ? 'hidden' : ''}`} />
+              <img src="/game/categorie/tag-5-jalon.png" alt="difficulté 5" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 5 ? 'hidden' : ''}`} />
               <BigButton
                 onClick={() => handleDifficultySelect(5)}
                 text="Expert"
@@ -265,8 +268,8 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
           <CharacterTag charId={chooseQuizUser.character} text="choisit" />
           <p className="max-w-78 font-funnel text-lg leading-snug text-light/70">
             {isChooseQuizChooser
-              ? 'A toi de choisir la difficulte.'
-              : `C'est ${formatCharacterName(chooseQuizUser.character)} qui choisit la difficulte de ${formatCharacterName(chooseQuizTarget.character)}.`}
+              ? 'À toi de choisir la difficulté.'
+              : `C'est ${formatCharacterName(chooseQuizUser.character)} qui choisit la difficulté de ${formatCharacterName(chooseQuizTarget.character)}.`}
           </p>
         </div>
       </div>
@@ -301,7 +304,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
           <div className="mb-8 flex flex-col items-center gap-4">
             <CharacterCard charId={questioner.character} size="default" />
             <div className='flex gap-0 flex-col items-center justify-center'>
-              <p className='font-family-funnel text-light text-base phone:text-lg font-medium'>Theme du quizz :</p>
+              <p className='font-family-funnel text-light text-base phone:text-lg font-medium'>Thème du quizz :</p>
               <img
                 src={`/game/categorie/${getCategoryId(roomData.pendingCategory)}.png`}
                 alt={roomData.pendingCategory}

@@ -340,8 +340,8 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, curren
               className="bg-orange-primary"
             />
             <BigButton
-              onClick={() => {}}
-              text="???"
+              onClick={() => triggerAction("BONUS")}
+              text="Bonus"
               icon={<img src="/game/icons/cases/bonus.svg" alt="jalon" className="w-8 h-8 phone:w-10 phone:h-10" />}
               className="bg-green-primary"
             />

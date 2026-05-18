@@ -230,24 +230,17 @@ export default function SelectCharacter({ roomData, pickCharacter, confirmSelect
 
               {/* Boutons */}
               <div className="flex gap-4 items-center mt-8 w-full max-w-md flex-col">
-                <div 
+                <ButtonWithIcon
+                  onClick={handleCloseAndKeep}
+                  text="Verrouiller"
+                  icon={
+                    <img src="/game/icons/lock.svg" alt="lock" className="h-8 w-8"/>
+                  }
+                  className="text-bg"
                   style={{
                     backgroundColor: `var(--color-${selectedCharForPopup})`,
                   }}
-                  className="relative"
-                >
-                  <ButtonWithIcon
-                    onClick={handleCloseAndKeep}
-                    text="Verrouiller"
-                    icon={
-                      <img src="/game/icons/lock.svg" alt="lock" className="h-8 w-8"/>
-                    }
-                    className="bg-transparent"
-                    style={{
-                    backgroundColor: `var(--color-${selectedCharForPopup})`,
-                  }}
-                  />
-                </div>
+                />
                 <ButtonWithIcon
                   onClick={handleCloseAndDeselect}
                   text="Retour"

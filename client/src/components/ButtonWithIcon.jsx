@@ -1,13 +1,14 @@
 import React from 'react'
 
-export default function ButtonWithIcon({ onClick, text, icon, className = "", disabled = false, variant = 'default' }) {
+export default function ButtonWithIcon({ onClick, text, icon, className = "", disabled = false, variant = 'default', style = undefined }) {
   if (variant === 'menu') {
     return (
       <button
         type="button"
         onClick={disabled ? undefined : onClick}
         disabled={disabled}
-        className={`relative bg-light text-bg flex h-11 items-center justify-center gap-1 overflow-hidden pr-4 pl-2 text-nowrap ${disabled ? "opacity-20 cursor-not-allowed" : ""} ${className}`}
+        style={style}
+        className={`relative bg-light text-bg flex h-11 items-center justify-center gap-1 overflow-hidden pr-4 pl-2 text-nowrap transition ${disabled ? "opacity-20 cursor-not-allowed" : "active:scale-95"} ${className}`}
       >
         {/* Menu left SVG */}
         <svg
@@ -57,7 +58,8 @@ export default function ButtonWithIcon({ onClick, text, icon, className = "", di
       type="button"
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
-      className={`relative bg-light text-bg flex items-center justify-center gap-1 h-13 px-8 overflow-hidden ${disabled ? "opacity-20 cursor-not-allowed" : ""} ${className}`}
+      style={style}
+      className={`relative bg-light text-bg flex items-center justify-center gap-1 h-13 px-8 overflow-hidden transition ${disabled ? "opacity-20 cursor-not-allowed" : "active:scale-95"} ${className}`}
     >
       {/* Left SVG */}
       <svg
