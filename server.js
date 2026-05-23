@@ -31,7 +31,7 @@ const io = new Server(server, {
 
 // --- DATA LOADING ---
 const CODE_LENGTH = 5;
-const MAX_PLAYERS = 6;
+const MAX_PLAYERS = 4;
 const VALID_BONUS_IDS = new Set(['ctrl-z', 'coffee-boss', 'choose-quiz']);
 const quizData = require('./server/data/quiz.json');
 const duelsData = require('./server/data/duels.json');

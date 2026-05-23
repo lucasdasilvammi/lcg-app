@@ -40,7 +40,7 @@ export default function Lobby({ roomData, isAdmin, onStart, onBack, characters }
 
         <div>
           <p className="mb-3 text-xl font-family-funnel text-light">En attente de joueurs</p>
-          <p className="font-family-hakobi text-7xl font-bold phone:text-8xl">{roomData.players.length} / 6</p>
+          <p className="font-family-hakobi text-7xl font-bold phone:text-8xl">{roomData.players.length} / 4</p>
           <p className="font-family-funnel text-light opacity-70">Joueurs</p>
         </div>
 
