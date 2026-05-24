@@ -5,7 +5,9 @@ export default function DuelStart({ roomData, currentUserId, startDuel }) {
   if (!roomData || !roomData.currentInteraction) return null
 
   const { type, duelists } = roomData.currentInteraction
-  const duelPlayers = roomData.players.filter(p => duelists.includes(p.id))
+  const duelPlayers = duelists
+    .map((duelistId) => roomData.players.find((player) => player.id === duelistId))
+    .filter(Boolean)
 
   return (
     <DuelVersusIntro 

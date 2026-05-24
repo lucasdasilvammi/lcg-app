@@ -123,7 +123,7 @@ function CtrlZReminderPopup({ quantity, onClose, onOpenBonus, isClosing = false 
         <button
           type="button"
           onClick={onOpenBonus}
-          className="relative z-10 flex min-h-21 w-full items-center gap-3 overflow-hidden bg-light5 pr-3 pl-5 py-3 text-left transition active:scale-[0.99]"
+          className="relative z-10 flex min-h-21 w-full items-center gap-3 overflow-hidden bg-light5 pr-3 pl-5 py-3 text-left transition active:scale-[0.99] active:overflow-visible"
         >
           <img
             src="/menu/bonus-btn-left.svg"

@@ -8,7 +8,7 @@ export default function ButtonWithIcon({ onClick, text, icon, className = "", di
         onClick={disabled ? undefined : onClick}
         disabled={disabled}
         style={style}
-        className={`relative bg-light text-bg flex h-11 items-center justify-center gap-1 overflow-hidden pr-4 pl-2 text-nowrap transition ${disabled ? "opacity-20 cursor-not-allowed" : "active:scale-95"} ${className}`}
+        className={`relative bg-light text-bg flex h-11 items-center justify-center gap-1 overflow-hidden pr-4 pl-2 text-nowrap transition ${disabled ? "opacity-20 cursor-not-allowed" : "active:scale-95 active:overflow-visible"} ${className}`}
       >
         {/* Menu left SVG */}
         <svg
@@ -59,7 +59,7 @@ export default function ButtonWithIcon({ onClick, text, icon, className = "", di
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       style={style}
-      className={`relative bg-light text-bg flex items-center justify-center gap-1 h-13 px-8 overflow-hidden transition ${disabled ? "opacity-20 cursor-not-allowed" : "active:scale-95"} ${className}`}
+      className={`relative bg-light text-bg flex items-center justify-center gap-1 h-13 px-8 overflow-hidden transition ${disabled ? "opacity-20 cursor-not-allowed" : "active:scale-95 active:overflow-visible"} ${className}`}
     >
       {/* Left SVG */}
       <svg

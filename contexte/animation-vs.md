@@ -511,3 +511,55 @@ Pour la suite, la meilleure direction est :
 - Faire attention a la fluidite mobile.
 - Ne pas casser le flow actuel `DUEL_START -> DUEL_RULES`.
 
+## Note temporaire - cube central retire
+
+Le cube central de l'animation VS a ete retire du rendu de test parce que son entree n'apportait pas assez a l'animation.
+
+Si le cube doit etre remis plus tard :
+
+- l'asset est `/anim-vs/cube-center.svg` ;
+- il etait rendu dans `VersusBadge`, avant le conteneur des lettres `V.svg` et `S.svg` ;
+- sa classe etait `absolute inset-0 h-full w-full object-contain` ;
+- l'animation dediee s'appelait `vs-cube-entry` ;
+- le dernier test faisait demarrer le cube en blanc avec `filter: brightness(0) invert(1)` puis revenait a `filter: none` a 100% ;
+- l'animation etait declenchee en phase `entry` avec `[animation:vs-cube-entry_720ms_cubic-bezier(.16,1,.3,1)_520ms_both]`.
+
+Pour le remettre, il suffit de recreer un `cubeAnimation` dans `VersusBadge`, de replacer l'image `/anim-vs/cube-center.svg` dans le badge, puis de restaurer les keyframes `vs-cube-entry`.
+
+## Mode edition animation VS
+
+Le mode edition sert uniquement a tester l'animation VS manuellement.
+Il ne doit pas rester dans le code final.
+
+Etat final actuel en production :
+
+- l'ecran lance automatiquement `entry` au montage ;
+- il attend `ENTRY_DURATION_MS + HOLD_DURATION_MS` avec `HOLD_DURATION_MS` actuellement regle a `1000` ms ;
+- il lance `exit` ;
+- il attend `EXIT_DURATION_MS` ;
+- il appelle `startDuel()` pour passer a l'ecran des regles.
+
+Pour repasser temporairement en mode edition :
+
+1. Initialiser `phase` a `'empty'` et `showLayers` a `false`.
+2. Retirer ou commenter temporairement le `useEffect` qui chaine automatiquement entree, pause, sortie et `startDuel()`.
+3. Ajouter une fonction `playEntry` qui fait :
+   - `setShowLayers(true)` ;
+   - `setPhase('entry')` ;
+   - `setAnimationKey((key) => key + 1)`.
+4. Ajouter une fonction `playExit` qui fait :
+   - ne rien faire si `showLayers` vaut `false` ;
+   - `setPhase('exit')` ;
+   - `setAnimationKey((key) => key + 1)` ;
+   - apres `EXIT_DURATION_MS`, `setShowLayers(false)` et `setPhase('empty')`.
+5. Ajouter deux boutons temporaires en haut de `DuelVersusIntro` :
+   - bouton `Entree` qui appelle `playEntry` ;
+   - bouton `Sortie` qui appelle `playExit`.
+
+Les boutons de test utilises pendant l'iteration etaient places en absolu en haut a droite avec :
+
+- `absolute right-[58px] top-2 z-50 rounded bg-light px-2 py-1 font-funnel text-xs text-bg opacity-70` pour `Entree` ;
+- `absolute right-2 top-2 z-50 rounded bg-light px-2 py-1 font-funnel text-xs text-bg opacity-70` pour `Sortie`.
+
+Quand le test est termine, supprimer ces boutons et remettre le chainage automatique.
+
