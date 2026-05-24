@@ -15,7 +15,7 @@ const IconPlay = () => (
 
 export default function Home({ onCreate, onJoin }) {
   return (
-    <div className="relative min-w-dvw phone:min-w-110  overflow-hidden bg-bg">
+    <div className="relative w-full overflow-hidden bg-bg">
       <div className="pointer-events-none absolute inset-0 z-0" style={{ backgroundImage: 'url(/assets/home-border-verical-home.png)', backgroundSize: 'auto 100%', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }} />
       <div className="pointer-events-none absolute inset-0 z-0" style={{ backgroundImage: 'url(/assets/home-border-horizontal-home.png)', backgroundSize: '100% 100%', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }} />
 

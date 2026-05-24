@@ -527,7 +527,7 @@ io.on('connection', (socket) => {
       id: newRoomId,
       code: gameCode,
       adminId: socket.id,
-      players: [{ id: socket.id, sessionToken, character: null, score: 0, bonuses: { ...TEST_DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false }],
+      players: [{ id: socket.id, sessionToken, character: null, characterLocked: false, score: 0, bonuses: { ...TEST_DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false }],
       status: "LOBBY",
       isPaused: false,
       pausedById: null,
@@ -564,7 +564,7 @@ io.on('connection', (socket) => {
 
     // Add player
     socket.join(room.id);
-    room.players.push({ id: socket.id, sessionToken, character: null, score: 0, bonuses: { ...TEST_DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false });
+    room.players.push({ id: socket.id, sessionToken, character: null, characterLocked: false, score: 0, bonuses: { ...TEST_DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false });
     socket.emit("room_joined", { roomId: room.id, isAdmin: false });
     console.log(`📥 join_room_with_code: player ${socket.id} joined room ${room.id}, now ${room.players.length} players, admin=${room.adminId}`);
     syncRoom(room);
@@ -865,7 +865,12 @@ io.on('connection', (socket) => {
       console.warn('pick_character: cannot find player entry', socket.id);
       return socket.emit('error_pick', 'Erreur interne.');
     }
+    if (player.characterLocked) {
+      console.warn('pick_character: player already locked', socket.id);
+      return socket.emit('error_pick', 'Ton personnage est dÃ©jÃ  verrouillÃ©.');
+    }
     player.character = id;
+    player.characterLocked = false;
     console.log('pick_character: player', socket.id, 'picked', id, 'in room', room.id);
     syncRoom(room);
   });
@@ -874,11 +879,32 @@ io.on('connection', (socket) => {
     if (!room) return;
     const player = room.players.find(p => p.id === socket.id);
     if (!player) return;
+    if (player.characterLocked) return;
     player.character = null;
+    player.characterLocked = false;
     console.log('unpick_character: player', socket.id, 'deselected in room', room.id);
     syncRoom(room);
   });
-  socket.on("confirm_selection", () => { const room = findRoom(); if (room) { room.status = "DEFINE_ORDER"; syncRoom(room); }});
+  socket.on("lock_character", () => {
+    const room = findRoom();
+    if (!room || room.status !== 'SELECT_CHARACTER') return;
+    const player = room.players.find(p => p.id === socket.id);
+    if (!player || !player.character) return;
+    player.characterLocked = true;
+    console.log('lock_character: player', socket.id, 'locked', player.character, 'in room', room.id);
+    if (room.players.length > 0 && room.players.every(p => p.character && p.characterLocked)) {
+      room.status = 'DEFINE_ORDER';
+    }
+    syncRoom(room);
+  });
+  socket.on("confirm_selection", () => {
+    const room = findRoom();
+    if (!room || socket.id !== room.adminId) return;
+    const allPlayersLocked = room.players.length > 0 && room.players.every(p => p.character && p.characterLocked);
+    if (!allPlayersLocked) return socket.emit('error_pick', 'Tous les joueurs doivent verrouiller leur personnage.');
+    room.status = "DEFINE_ORDER";
+    syncRoom(room);
+  });
   socket.on("update_turn_order", (payload, ack) => {
     const room = findRoom();
     if (!room) {

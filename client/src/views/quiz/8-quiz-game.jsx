@@ -61,7 +61,7 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
           </div>
 
           {isMeReader ? (
-            <div className='w-full flex-1 min-h-0 flex flex-col items-center justify-center gap-16 p-8'>
+            <div className='w-full flex-1 flex flex-col items-center justify-center gap-16'>
               <p className="text-2xl font-medium font-family-funnel">"{data.q}"</p>
               <div className="flex flex-col gap-3 w-full">
                 {data.options.map((option, index) => {

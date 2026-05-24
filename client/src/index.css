@@ -63,7 +63,7 @@
   --font-family-funnel: funnel, system-ui, sans-serif;
   --font-family-hakobi: hakobi, system-ui, sans-serif;
 
-  --breakpoint-phone: 440px;
+  --breakpoint-phone: 9999px;
 }
 
 :root {
@@ -72,6 +72,11 @@
   color: #FFF6EF;
   background-color: #101010;
   font-family: funnel, sans-serif;
+  --app-design-width: 390px;
+  --app-visual-width: 390px;
+  --app-scale: 1;
+  --app-viewport-height: 100dvh;
+  --app-height: 100dvh;
 
   --color-alan: #06C0F9;
   --color-donatien: #FF37A5;
@@ -108,8 +113,8 @@ body {
   margin: 0;
   place-items: center;
   width: 100%;
-  max-height: var(--app-height, 100dvh);
-  height: var(--app-height, 100dvh);
+  max-height: var(--app-viewport-height, 100dvh);
+  height: var(--app-viewport-height, 100dvh);
   background: #000;
   overflow: hidden;
   overscroll-behavior: none;
@@ -121,15 +126,52 @@ body {
 html,
 #root {
   width: 100%;
-  height: 100%;
-  min-height: var(--app-height, 100dvh);
+  height: var(--app-viewport-height, 100dvh);
+  min-height: var(--app-viewport-height, 100dvh);
   overflow: hidden;
 }
 
-@media (max-width: 440px) {
-  body {
-    background: #101010;
-  }
+.app-viewport {
+  width: 100%;
+  height: var(--app-viewport-height, 100dvh);
+  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: #000;
+}
+
+.app-stage {
+  width: var(--app-visual-width, 390px);
+  height: var(--app-viewport-height, 100dvh);
+  overflow: hidden;
+  position: relative;
+  background: #101010;
+}
+
+.app-stage-content {
+  width: var(--app-design-width, 390px);
+  height: var(--app-height, 100dvh);
+  overflow: hidden;
+  transform: scale(var(--app-scale, 1));
+  transform-origin: top left;
+}
+
+.h-dvh,
+.h-screen {
+  height: var(--app-height, 100dvh) !important;
+}
+
+.min-h-dvh,
+.min-h-screen {
+  min-height: var(--app-height, 100dvh) !important;
+}
+
+.min-w-dvw,
+.w-dvw,
+.w-screen {
+  width: 100% !important;
+  min-width: 100% !important;
 }
 
 h1 {
@@ -155,5 +197,7 @@ button svg {
   user-select: none !important;
 }
 
-
-
+.character-border > div:not(:last-child),
+.character-border > div:not(:last-child) svg {
+  pointer-events: none !important;
+}

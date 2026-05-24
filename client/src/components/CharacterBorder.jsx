@@ -7,6 +7,7 @@ export default function CharacterBorder({ characterId, children }) {
 
   return (
     <div
+      className="character-border"
       style={{
         position: 'relative',
         width: '100%',

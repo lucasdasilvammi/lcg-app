@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { SocketProvider, useSocket } from './contexts/SocketContext'
 import CodeDisplay from './components/CodeDisplay'
 import Home from './views/1-home'
@@ -57,6 +57,7 @@ const PLAYABLE_CHARACTERS = [
 
 const PLAYER_MENU_ONBOARDING_STORAGE_KEY = 'lcg-player-menu-onboarding-seen-v2'
 const ADMIN_MENU_ONBOARDING_STORAGE_KEY = 'lcg-admin-menu-onboarding-seen-v1'
+const APP_DESIGN_WIDTH = 390
 
 const ACTIVITY_VIEWS = new Set([
   'ACTIVITE_BRIEF',
@@ -193,6 +194,50 @@ function PauseOverlay({ isAdmin, resumeGame }) {
   )
 }
 
+function ResponsiveViewport({ children }) {
+  useLayoutEffect(() => {
+    const updateViewportMetrics = () => {
+      const viewport = window.visualViewport
+      const viewportWidth = viewport?.width || window.innerWidth
+      const viewportHeight = viewport?.height || window.innerHeight
+      const visualWidth = Math.min(viewportWidth, APP_DESIGN_WIDTH)
+      const scale = visualWidth / APP_DESIGN_WIDTH
+      const logicalHeight = viewportHeight / scale
+
+      document.documentElement.style.setProperty('--app-design-width', `${APP_DESIGN_WIDTH}px`)
+      document.documentElement.style.setProperty('--app-visual-width', `${Math.round(visualWidth)}px`)
+      document.documentElement.style.setProperty('--app-scale', `${scale}`)
+      document.documentElement.style.setProperty('--app-viewport-height', `${Math.round(viewportHeight)}px`)
+      document.documentElement.style.setProperty('--app-height', `${Math.round(logicalHeight)}px`)
+    }
+
+    updateViewportMetrics()
+    window.addEventListener('resize', updateViewportMetrics)
+    window.addEventListener('orientationchange', updateViewportMetrics)
+    window.visualViewport?.addEventListener('resize', updateViewportMetrics)
+    window.visualViewport?.addEventListener('scroll', updateViewportMetrics)
+    document.addEventListener('fullscreenchange', updateViewportMetrics)
+
+    return () => {
+      window.removeEventListener('resize', updateViewportMetrics)
+      window.removeEventListener('orientationchange', updateViewportMetrics)
+      window.visualViewport?.removeEventListener('resize', updateViewportMetrics)
+      window.visualViewport?.removeEventListener('scroll', updateViewportMetrics)
+      document.removeEventListener('fullscreenchange', updateViewportMetrics)
+    }
+  }, [])
+
+  return (
+    <div className="app-viewport">
+      <div className="app-stage">
+        <div className="app-stage-content">
+          {children}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function AppContent() {
 
 
@@ -316,27 +361,6 @@ function AppContent() {
     clearLongPressTimer()
     pointerOriginRef.current = null
   }
-
-  // Keep a stable app height synced with the real visual viewport.
-  useEffect(() => {
-    const setAppHeight = () => {
-      const viewportHeight = window.visualViewport?.height || window.innerHeight
-      document.documentElement.style.setProperty('--app-height', `${Math.round(viewportHeight)}px`)
-    }
-
-    setAppHeight()
-    window.addEventListener('resize', setAppHeight)
-    window.addEventListener('orientationchange', setAppHeight)
-    window.visualViewport?.addEventListener('resize', setAppHeight)
-    document.addEventListener('fullscreenchange', setAppHeight)
-
-    return () => {
-      window.removeEventListener('resize', setAppHeight)
-      window.removeEventListener('orientationchange', setAppHeight)
-      window.visualViewport?.removeEventListener('resize', setAppHeight)
-      document.removeEventListener('fullscreenchange', setAppHeight)
-    }
-  }, [])
 
   // Force fullscreen on first interaction (mobile only)
   useEffect(() => {
@@ -599,8 +623,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <SocketProvider>
-      <AppContent />
-    </SocketProvider>
+    <ResponsiveViewport>
+      <SocketProvider>
+        <AppContent />
+      </SocketProvider>
+    </ResponsiveViewport>
   )
 }

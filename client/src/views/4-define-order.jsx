@@ -123,7 +123,7 @@ export default function DefineOrder({ roomData, isAdmin, updateTurnOrder, startG
       />
 
       <div className="relative z-10 h-dvh w-full max-w-110 mx-auto flex flex-col items-center justify-between py-14 px-8 phone:px-16 text-center">
-        <h2 className="text-light font-hakobi text-4xl phone:text-5xl uppercase">Ordre du Tour :</h2>
+        <h2 className="text-light font-hakobi text-5xl uppercase">Ordre du Tour :</h2>
 
         <div ref={orderListRef} className="flex flex-col gap-3 phone:gap-4 w-full">
           {displayedPlayers.map((player, index) => {
@@ -143,10 +143,10 @@ export default function DefineOrder({ roomData, isAdmin, updateTurnOrder, startG
                 <img
                   src={`/game/${player.character}.svg`}
                   alt={player.character}
-                  className="w-14 h-14 phone:w-16 phone:h-16"
+                  className="w-16 h-16"
                 />
                 <div
-                  className="grow text-left pl-1 font-hakobi uppercase text-3xl phone:text-4xl -mb-2"
+                  className="grow text-left pl-1 font-hakobi uppercase text-4xl phone:text-4xl -mb-2"
                   style={{ color: getNameColor(player.character) }}
                 >
                   {player.character}

@@ -8,7 +8,7 @@ export default function ButtonWithIcon({ onClick, text, icon, className = "", di
         onClick={disabled ? undefined : onClick}
         disabled={disabled}
         style={style}
-        className={`relative bg-light text-bg flex h-11 items-center justify-center gap-1 overflow-hidden pr-4 pl-2 text-nowrap transition ${disabled ? "opacity-20 cursor-not-allowed" : "active:scale-95 active:overflow-visible"} ${className}`}
+        className={`relative bg-light text-bg flex h-11 items-center justify-center gap-1 pr-4 pl-2 text-nowrap transition ${disabled ? "opacity-20 cursor-not-allowed" : "active:scale-95"} ${className}`}
       >
         {/* Menu left SVG */}
         <svg
@@ -41,7 +41,7 @@ export default function ButtonWithIcon({ onClick, text, icon, className = "", di
           viewBox="0 0 34 56"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          className="absolute -right-0.75 top-1/2 h-12 -translate-y-1/2"
+          className="absolute -right-1 top-1/2 h-12 -translate-y-1/2"
           style={{ display: 'block' }}
         >
           <path
@@ -59,7 +59,7 @@ export default function ButtonWithIcon({ onClick, text, icon, className = "", di
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       style={style}
-      className={`relative bg-light text-bg flex items-center justify-center gap-1 h-13 px-8 overflow-hidden transition ${disabled ? "opacity-20 cursor-not-allowed" : "active:scale-95 active:overflow-visible"} ${className}`}
+      className={`relative bg-light text-bg flex items-center justify-center gap-1 h-13 px-8 transition ${disabled ? "opacity-20 cursor-not-allowed" : "active:scale-95"} ${className}`}
     >
       {/* Left SVG */}
       <svg
@@ -68,7 +68,7 @@ export default function ButtonWithIcon({ onClick, text, icon, className = "", di
         viewBox="0 0 44 56"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute left-0 top-1/2 -translate-y-1/2"
+        className="absolute -left-0.5 top-1/2 h-13.5 -translate-y-1/2"
         style={{ display: 'block' }}
       >
         <path
@@ -92,7 +92,7 @@ export default function ButtonWithIcon({ onClick, text, icon, className = "", di
         viewBox="0 0 34 56"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute -right-0.5 top-1/2 -translate-y-1/2"
+        className="absolute -right-0.5 top-1/2 h-13.5 -translate-y-1/2"
         style={{ display: 'block' }}
       >
         <path
