@@ -42,12 +42,12 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     // For production (Render): connect to same server (relative URL)
-    // For development: use localhost on PC, IP address on mobile
-    const isMobile = typeof window !== 'undefined' && (
-      window.innerWidth < 470 || /iPhone|iPad|Android|Mobile/.test(navigator.userAgent)
-    );
+    // For development: use the host currently serving Vite (localhost or LAN IP).
+    const devServerUrl = typeof window !== 'undefined'
+      ? `${window.location.protocol}//${window.location.hostname}:3001`
+      : "http://localhost:3001"
     const SERVER_URL = import.meta.env.VITE_SERVER_URL || 
-                       (import.meta.env.PROD ? window.location.origin : (isMobile ? "http://192.168.31.66:3001" : "http://localhost:3001"));
+                       (import.meta.env.PROD ? window.location.origin : devServerUrl);
     const sessionToken = getOrCreateSessionToken()
     
     const s = io.connect(SERVER_URL, {
@@ -124,6 +124,8 @@ export const SocketProvider = ({ children }) => {
   const acknowledgeChooseQuizBonus = (ack) => socket?.emit('ack_choose_quiz_bonus', {}, ack)
   const selectQuizDifficulty = (difficulty, ack) => socket?.emit('select_quiz_difficulty', { difficulty }, ack)
   const claimCaseBonus = (ack) => socket?.emit('claim_case_bonus', {}, ack)
+  const stealEventBonus = (targetPlayerId, ack) => socket?.emit('event_steal_bonus', { targetPlayerId }, ack)
+  const previewEventStealTarget = (targetPlayerId, ack) => socket?.emit('event_preview_steal_target', { targetPlayerId }, ack)
   
   // Activité: Dessin de Logo
   const acknowledgeReady = () => socket?.emit("activite_acknowledge_ready")
@@ -202,6 +204,8 @@ export const SocketProvider = ({ children }) => {
       acknowledgeChooseQuizBonus,
       selectQuizDifficulty,
       claimCaseBonus,
+      stealEventBonus,
+      previewEventStealTarget,
       acknowledgeReady,
       submitDrawing,
       submitPhoto,

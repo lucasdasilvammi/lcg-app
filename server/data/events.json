@@ -2,12 +2,16 @@
   "events": [
     {
       "type": "event",
+      "id": "boss-approved",
+      "effectType": "grant-random-bonus",
       "title": "Validé par le boss",
       "description": "Wouhou ! Ton travail a tapé dans l'œil du boss. Ton efficacité paie, tu fais gagner au patron du temps et des ressources.\n\nDéplaces ton pion directement jusqu'à la prochaine case Bonus disponible sur le plateau. Une fois dessus, pioches une carte Bonus et tu l'ajoutes à ta main.",
-      "effect": "Tu ne relances pas le dé, ton tour s'arrête après avoir récupéré le bonnus."
+      "effect": "Tu ne relances pas le dé."
     },
     {
       "type": "event",
+      "id": "great-artists-steal",
+      "effectType": "steal-random-bonus",
       "title": "Les bons artistes copient, les grands artistes volent",
       "description": "Tu as louché sur le travail de ton voisin et, franchement, c'était une excellente idée. Hop, c'est à toi maintenant !\n\nTu désignes un joueur de ton choix autour de la table et tu lui voles un bonus.",
       "effect": "Si il en a accumulé plusieurs, le choix sera fait aléatoirement."

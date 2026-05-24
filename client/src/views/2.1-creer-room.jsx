@@ -7,7 +7,42 @@ const IconBack = () => (
   </svg>
 )
 
-export default function Lobby({ roomData, isAdmin, onStart, onBack, characters }) {
+function MenuOnboardingHint() {
+  const carreMask = {
+    WebkitMaskImage: 'url(/menu/on-boarding/carre.svg)',
+    maskImage: 'url(/menu/on-boarding/carre.svg)',
+    WebkitMaskSize: 'contain',
+    maskSize: 'contain',
+    WebkitMaskPosition: 'center',
+    maskPosition: 'center',
+    WebkitMaskRepeat: 'no-repeat',
+    maskRepeat: 'no-repeat'
+  }
+
+  return (
+    <div className="flex flex-col items-center gap-1.5 text-center">
+      <div className="relative flex h-6 w-6 items-center justify-center">
+        <span
+          aria-hidden="true"
+          className="absolute h-6 w-6 animate-ping bg-light opacity-20"
+          style={carreMask}
+        />
+        <span
+          aria-hidden="true"
+          className="relative h-4 w-4 bg-light opacity-50"
+          style={carreMask}
+        />
+      </div>
+      <p className="max-w-48 font-family-funnel text-[12px] leading-tight text-light/70">
+        Maintiens l'ecran pour
+        <br />
+        ouvrir le menu
+      </p>
+    </div>
+  )
+}
+
+export default function Lobby({ roomData, isAdmin, onStart, onBack, characters, showMenuOnboardingHint = false }) {
   if (!roomData) return null
   const canStart = roomData.players.length >= 3
 
@@ -43,6 +78,12 @@ export default function Lobby({ roomData, isAdmin, onStart, onBack, characters }
           <p className="font-family-hakobi text-7xl font-bold phone:text-8xl">{roomData.players.length} / 6</p>
           <p className="font-family-funnel text-light opacity-70">Joueurs</p>
         </div>
+
+        {showMenuOnboardingHint && (
+            <div>
+              <MenuOnboardingHint />
+            </div>
+        )}
 
         {isAdmin ? (
           <div className="flex w-full max-w-55 flex-col items-center gap-4">

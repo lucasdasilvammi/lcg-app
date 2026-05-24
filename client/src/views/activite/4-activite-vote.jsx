@@ -13,6 +13,7 @@ export default function ActiviteVote({ roomData, currentUserId, submitVote }) {
   } = interaction
 
   const currentPhoto = photos[currentPhotoIndex]
+  const currentPhotoData = currentPhoto?.photoData || interaction.currentPhotoData
   const currentVotes = votes[currentPhotoIndex] || { up: 0, neutral: 0, down: 0, byPlayer: {} }
   const eligibleVoters = useMemo(
     () => participants.filter(id => id !== currentPhoto?.playerId),
@@ -73,11 +74,11 @@ export default function ActiviteVote({ roomData, currentUserId, submitVote }) {
           </div>
 
           <div className="flex flex-1 flex-col items-center justify-center gap-4">
-            {currentPhoto ? (
+            {currentPhoto && currentPhotoData ? (
               <>
                 <div className="relative flex w-full justify-center overflow-hidden rounded-2xl border-2 border-light/20 bg-black/40 p-3">
                   <img
-                    src={currentPhoto.photoData}
+                    src={currentPhotoData}
                     alt={`Logo ${currentPhotoIndex + 1}`}
                     className="max-h-64 w-auto max-w-full object-contain"
                   />

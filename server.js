@@ -7,17 +7,25 @@ const app = express();
 const server = http.createServer(app);
 
 // --- CORS Configuration (Dynamic for Production) ---
+const DEV_CLIENT_PORTS = new Set(['3000', '5173', '5174', '5175', '5176', '5177', '5180']);
+
+const isAllowedDevOrigin = (origin) => {
+  if (!origin) return true;
+
+  try {
+    const { protocol, port } = new URL(origin);
+    return ['http:', 'https:'].includes(protocol) && DEV_CLIENT_PORTS.has(port);
+  } catch {
+    return false;
+  }
+};
+
 const allowedOrigins = process.env.NODE_ENV === 'production'
   ? true  // Allow all origins in production for multiplayer game
-  : [
-      'http://localhost:5173',
-      'http://localhost:5174',
-      'http://localhost:5175',
-      'http://localhost:3000',
-      'http://192.168.31.66:5173',
-      'http://192.168.31.66:5174',
-      'http://192.168.31.66:5175'
-    ];
+  : (origin, callback) => {
+      if (isAllowedDevOrigin(origin)) return callback(null, true);
+      return callback(new Error(`CORS Socket.IO refusé pour origin: ${origin}`), false);
+    };
 
 const io = new Server(server, {
   // Les photos (base64) peuvent être lourdes sur mobile → buffer plus grand
@@ -74,6 +82,50 @@ const getRandomDuel = (type = null) => {
   return DUELS_DB[Math.floor(Math.random() * DUELS_DB.length)];
 };
 
+const grantRandomBonusToPlayer = (player) => {
+  if (!player) return null;
+
+  const randomBonusId = BONUS_IDS[Math.floor(Math.random() * BONUS_IDS.length)];
+  player.bonuses = player.bonuses || {};
+  player.bonuses[randomBonusId] = Number(player.bonuses[randomBonusId] || 0) + 1;
+
+  return randomBonusId;
+};
+
+const getPlayerBonusCards = (player) => {
+  const inventory = player?.bonuses || {};
+  return Object.entries(inventory).flatMap(([bonusId, quantity]) => {
+    const count = Math.max(0, Number(quantity || 0));
+    return VALID_BONUS_IDS.has(bonusId) ? Array(count).fill(bonusId) : [];
+  });
+};
+
+const stealRandomBonusFromPlayer = (sourcePlayer, targetPlayer) => {
+  if (!sourcePlayer || !targetPlayer) return null;
+
+  const targetCards = getPlayerBonusCards(targetPlayer);
+  if (targetCards.length === 0) return null;
+
+  const stolenBonusId = targetCards[Math.floor(Math.random() * targetCards.length)];
+  targetPlayer.bonuses = targetPlayer.bonuses || {};
+  sourcePlayer.bonuses = sourcePlayer.bonuses || {};
+
+  targetPlayer.bonuses[stolenBonusId] = Number(targetPlayer.bonuses[stolenBonusId] || 0) - 1;
+  if (targetPlayer.bonuses[stolenBonusId] <= 0) delete targetPlayer.bonuses[stolenBonusId];
+
+  sourcePlayer.bonuses[stolenBonusId] = Number(sourcePlayer.bonuses[stolenBonusId] || 0) + 1;
+
+  return stolenBonusId;
+};
+
+const canTriggerEvent = (room, event, activePlayer) => {
+  if (event?.effectType !== 'steal-random-bonus') return true;
+
+  return room.players.some(player =>
+    player.id !== activePlayer?.id && getPlayerBonusCards(player).length > 0
+  );
+};
+
 const generateRoomId = () => Math.random().toString(36).substr(2, 9);
 const generateGameCode = () => [2, 2, 2, 2, 2]; // TODO: Dynamique pour tests
 
@@ -101,6 +153,7 @@ const DEFAULT_BONUSES = {};
 // Timers (ne doivent JAMAIS être stockés dans l'état room envoyé au client)
 const activiteTimersByRoomId = new Map();
 const activiteVoteTimersByRoomId = new Map();
+const activitePhotoStoresByRoomId = new Map();
 
 const clearPendingDisconnect = (sessionToken) => {
   if (!sessionToken) return;
@@ -112,6 +165,23 @@ const clearPendingDisconnect = (sessionToken) => {
 };
 
 const findRoomByPlayerId = (playerId) => Object.values(rooms).find(r => r.players.some(p => p.id === playerId));
+
+const getActivitePhotoStore = (roomId) => {
+  if (!activitePhotoStoresByRoomId.has(roomId)) {
+    activitePhotoStoresByRoomId.set(roomId, new Map());
+  }
+  return activitePhotoStoresByRoomId.get(roomId);
+};
+
+const cleanupActivitePhotoStore = (roomId) => {
+  if (!roomId) return;
+  activitePhotoStoresByRoomId.delete(roomId);
+};
+
+const createActivitePhotoId = (playerId) => {
+  const suffix = Math.random().toString(36).slice(2, 10);
+  return `${playerId}_${Date.now()}_${suffix}`;
+};
 
 const findPlayerBySessionToken = (sessionToken) => {
   if (!sessionToken) return null;
@@ -345,6 +415,7 @@ io.on('connection', (socket) => {
         activiteVoteTimersByRoomId.delete(room.id);
       }
       clearRoomUndo(room.id);
+      cleanupActivitePhotoStore(room.id);
       delete rooms[room.id];
       console.log(`🗑️ room deleted (${room.id}) after ${reason}`);
       return;
@@ -399,11 +470,24 @@ io.on('connection', (socket) => {
     return participants.filter(id => id !== currentPhoto?.playerId);
   };
 
+  const setActiviteCurrentPhotoData = (room, photoIndex) => {
+    const ci = room?.currentInteraction;
+    const currentPhoto = ci?.photos?.[photoIndex];
+    if (!ci || !currentPhoto?.photoId) {
+      if (ci) delete ci.currentPhotoData;
+      return;
+    }
+
+    const photoStore = getActivitePhotoStore(room.id);
+    ci.currentPhotoData = photoStore.get(currentPhoto.photoId) || null;
+  };
+
   const finalizeActiviteReveal = (room) => {
     const ci = room?.currentInteraction;
     if (!room || !ci || ci.type !== 'logo') return;
 
     clearActiviteVoteTimer(room.id);
+    delete ci.currentPhotoData;
 
     const photos = Array.isArray(ci.photos) ? ci.photos : [];
     const votes = ci.votes || {};
@@ -440,6 +524,7 @@ io.on('connection', (socket) => {
     };
 
     room.status = 'ACTIVITE_REVEAL';
+    cleanupActivitePhotoStore(room.id);
   };
 
   const startActiviteVoteRound = (room, photoIndex = 0, durationMs = 12000) => {
@@ -456,6 +541,7 @@ io.on('connection', (socket) => {
     }
 
     ci.currentPhotoIndex = photoIndex;
+    setActiviteCurrentPhotoData(room, photoIndex);
     ci.voteStartedAt = Date.now();
     ci.voteEndsAt = ci.voteStartedAt + durationMs;
     ci.voteDurationMs = durationMs;
@@ -908,11 +994,18 @@ io.on('connection', (socket) => {
       syncRoom(room);
       if (typeof ack === 'function') ack({ ok: true, status: room.status });
     } else if (actionType === 'EVENT') {
-      const randomEvent = EVENTS_DB[Math.floor(Math.random() * EVENTS_DB.length)];
+      const activePlayer = room.players[room.turnIndex];
+      const availableEvents = EVENTS_DB.filter(event => canTriggerEvent(room, event, activePlayer));
+      const randomEvent = availableEvents[Math.floor(Math.random() * availableEvents.length)];
+      const awardedBonusId = randomEvent?.effectType === 'grant-random-bonus'
+        ? grantRandomBonusToPlayer(activePlayer)
+        : null;
+
       room.currentInteraction = {
         type: 'event',
         data: randomEvent,
-        readerId: socket.id
+        readerId: socket.id,
+        awardedBonusId
       };
       room.status = 'EVENT_GAME';
       syncRoom(room);
@@ -952,6 +1045,7 @@ io.on('connection', (socket) => {
       const randomBrand = brandNames[Math.floor(Math.random() * brandNames.length)];
 
       const participants = room.players.map(p => p.id);
+      cleanupActivitePhotoStore(room.id);
 
       room.currentInteraction = {
         type: 'logo',
@@ -961,7 +1055,7 @@ io.on('connection', (socket) => {
         readyPlayers: [],
         finishedPlayers: [],
         uploadedPhotos: {},
-        photos: [], // Array of {playerId, photoData}
+        photos: [],
         votes: {},
         currentPhotoIndex: 0,
         voteStartedAt: null,
@@ -1016,6 +1110,87 @@ io.on('connection', (socket) => {
         status: room.status
       });
     }
+  });
+
+  socket.on('event_steal_bonus', ({ targetPlayerId } = {}, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    const interaction = room.currentInteraction;
+    const activePlayer = room.players[room.turnIndex];
+    const targetPlayer = room.players.find(player => player.id === targetPlayerId);
+
+    if (room.status !== 'EVENT_GAME' || interaction?.type !== 'event' || interaction.data?.effectType !== 'steal-random-bonus') {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_state' });
+      return;
+    }
+
+    if (!activePlayer || activePlayer.id !== socket.id || interaction.readerId !== socket.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
+    if (!targetPlayer || targetPlayer.id === activePlayer.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
+      return;
+    }
+
+    const stolenBonusId = stealRandomBonusFromPlayer(activePlayer, targetPlayer);
+    if (!stolenBonusId) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'target_has_no_bonus' });
+      return;
+    }
+
+    interaction.awaitingStealTarget = false;
+    interaction.stolenBonusId = stolenBonusId;
+    interaction.stolenFromPlayerId = targetPlayer.id;
+    interaction.stolenToPlayerId = activePlayer.id;
+
+    syncRoom(room);
+
+    if (typeof ack === 'function') {
+      ack({
+        ok: true,
+        bonusId: stolenBonusId,
+        targetPlayerId: targetPlayer.id,
+        quantity: activePlayer.bonuses?.[stolenBonusId] || 0
+      });
+    }
+  });
+
+  socket.on('event_preview_steal_target', ({ targetPlayerId } = {}, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    const interaction = room.currentInteraction;
+    const activePlayer = room.players[room.turnIndex];
+    const targetPlayer = room.players.find(player => player.id === targetPlayerId);
+
+    if (room.status !== 'EVENT_GAME' || interaction?.type !== 'event' || interaction.data?.effectType !== 'steal-random-bonus' || !interaction.awaitingStealTarget) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_state' });
+      return;
+    }
+
+    if (!activePlayer || activePlayer.id !== socket.id || interaction.readerId !== socket.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
+    if (!targetPlayer || targetPlayer.id === activePlayer.id || getPlayerBonusCards(targetPlayer).length === 0) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
+      return;
+    }
+
+    interaction.previewStealTargetId = targetPlayer.id;
+    syncRoom(room);
+
+    if (typeof ack === 'function') ack({ ok: true, targetPlayerId: targetPlayer.id });
   });
 
   // --- ACTIVITÉ: DESSIN DE LOGO ---
@@ -1089,11 +1264,16 @@ io.on('connection', (socket) => {
 
     const photos = room.currentInteraction.photos || [];
     const existingIndex = photos.findIndex(p => p.playerId === socket.id);
+    const photoStore = getActivitePhotoStore(room.id);
+    const photoId = existingIndex >= 0
+      ? photos[existingIndex].photoId
+      : createActivitePhotoId(socket.id);
+    photoStore.set(photoId, photoData);
 
     if (existingIndex >= 0) {
-      photos[existingIndex] = { playerId: socket.id, photoData };
+      photos[existingIndex] = { playerId: socket.id, photoId };
     } else {
-      photos.push({ playerId: socket.id, photoData });
+      photos.push({ playerId: socket.id, photoId });
     }
 
     room.currentInteraction.photos = photos;
@@ -1669,12 +1849,35 @@ io.on('connection', (socket) => {
         room.lastResult.verdictViewerId = socket.id;
       }
       if (room.currentInteraction?.type === 'event') {
-        // For events, directly go to next turn
+        if (room.currentInteraction.data?.effectType === 'steal-random-bonus' && !room.currentInteraction.stolenBonusId && !room.currentInteraction.stealSkippedNoBonus) {
+          const activePlayer = room.players[room.turnIndex];
+          const hasStealableTarget = room.players.some(player =>
+            player.id !== activePlayer?.id && getPlayerBonusCards(player).length > 0
+          );
+
+          if (!hasStealableTarget) {
+            room.currentInteraction.stealSkippedNoBonus = true;
+            syncRoom(room);
+            return;
+          }
+
+          room.currentInteraction.awaitingStealTarget = true;
+          syncRoom(room);
+          return;
+        }
+
+        if (room.currentInteraction.awardedBonusId && !room.currentInteraction.bonusRewardRevealed) {
+          room.currentInteraction.bonusRewardRevealed = true;
+          syncRoom(room);
+          return;
+        }
+
         advanceRoomToNextTurn(room);
       } else {
         room.status = 'FEEDBACK';
       }
       room.currentInteraction = null;
+      cleanupActivitePhotoStore(room.id);
       syncRoom(room);
     }
   });
@@ -1692,7 +1895,13 @@ io.on('connection', (socket) => {
 
   socket.on('start_new_round', () => {
     const room = findRoom();
-    if (room) { room.turnIndex = 0; room.status = 'TURN_START'; delete room.currentTurnBonusUse; syncRoom(room); }
+    if (!room) return;
+    const nextStarter = room.players[0];
+    if (nextStarter?.id !== socket.id) return;
+    room.turnIndex = 0;
+    room.status = 'TURN_START';
+    delete room.currentTurnBonusUse;
+    syncRoom(room);
   });
 
   socket.on('disconnect', () => {

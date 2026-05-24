@@ -35,6 +35,7 @@ import RoundEnd from './views/11-round-end'
 import DebugDuelSelector from './views/debug-duel-selector'
 import Toasts from './components/Toasts'
 import SettingsMenu from './menu/SettingsMenu'
+import MenuOnboarding from './menu/MenuOnboarding'
 
 const CODE_CHARACTERS = [
   { id: 0, name: "Donatien" },
@@ -53,6 +54,9 @@ const PLAYABLE_CHARACTERS = [
   { id: 'virginie', name: "Virginie" },
   { id: 'tanguy', name: "Tanguy" }
 ];
+
+const PLAYER_MENU_ONBOARDING_STORAGE_KEY = 'lcg-player-menu-onboarding-seen-v2'
+const ADMIN_MENU_ONBOARDING_STORAGE_KEY = 'lcg-admin-menu-onboarding-seen-v1'
 
 const ACTIVITY_VIEWS = new Set([
   'ACTIVITE_BRIEF',
@@ -81,6 +85,7 @@ const getQuizQuestionerId = (roomData) => {
 const canOpenSettingsForContext = ({ view, roomData, currentUserId }) => {
   if (!roomData || !currentUserId) return false
   if (roomData.adminId === currentUserId) return true
+  if (view === 'LOBBY') return true
   if (SETUP_VIEWS.has(view)) return false
   if (ACTIVITY_VIEWS.has(view)) return false
 
@@ -126,6 +131,14 @@ const canOpenSettingsForContext = ({ view, roomData, currentUserId }) => {
     case 'DEBUG_DUEL_SELECTOR':
     default:
       return false
+  }
+}
+
+function hasSeenMenuOnboarding(storageKey) {
+  try {
+    return window.localStorage.getItem(storageKey) === 'true'
+  } catch {
+    return false
   }
 }
 
@@ -183,11 +196,15 @@ function PauseOverlay({ isAdmin, resumeGame }) {
 function AppContent() {
 
 
-  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel, acknowledgeChooseQuizBonus, selectQuizDifficulty, claimCaseBonus, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, undoLastAction, pauseGame, resumeGame, useBonus, leaveRoom } = useSocket();
+  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel, acknowledgeChooseQuizBonus, selectQuizDifficulty, claimCaseBonus, stealEventBonus, previewEventStealTarget, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, undoLastAction, pauseGame, resumeGame, useBonus, leaveRoom } = useSocket();
 
   const [view, setView] = useState("HOME");
   const [inputCode, setInputCode] = useState([]);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [playerMenuOnboardingSeen, setPlayerMenuOnboardingSeen] = useState(() => hasSeenMenuOnboarding(PLAYER_MENU_ONBOARDING_STORAGE_KEY))
+  const [adminMenuOnboardingSeen, setAdminMenuOnboardingSeen] = useState(() => hasSeenMenuOnboarding(ADMIN_MENU_ONBOARDING_STORAGE_KEY))
+  const [isMenuOnboardingOpen, setIsMenuOnboardingOpen] = useState(false)
+  const [menuOnboardingVariant, setMenuOnboardingVariant] = useState('player')
   const longPressTimerRef = useRef(null)
   const pointerOriginRef = useRef(null)
   const isLeavingRef = useRef(false)
@@ -214,6 +231,28 @@ function AppContent() {
 
   const closeSettingsMenu = () => {
     setIsSettingsOpen(false)
+  }
+
+  const closeMenuOnboarding = () => {
+    setIsMenuOnboardingOpen(false)
+  }
+
+  const markMenuOnboardingDone = () => {
+    const storageKey = menuOnboardingVariant === 'admin'
+      ? ADMIN_MENU_ONBOARDING_STORAGE_KEY
+      : PLAYER_MENU_ONBOARDING_STORAGE_KEY
+
+    if (menuOnboardingVariant === 'admin') {
+      setAdminMenuOnboardingSeen(true)
+    } else {
+      setPlayerMenuOnboardingSeen(true)
+    }
+
+    try {
+      window.localStorage.setItem(storageKey, 'true')
+    } catch {
+      // Local storage can be unavailable in private or restricted contexts.
+    }
   }
 
   const handleLeaveRoom = () => {
@@ -247,14 +286,19 @@ function AppContent() {
   }
 
   const handleRootPointerDown = (event) => {
-    if (!canOpenSettings || isSettingsOpen) return
+    if (!canOpenSettings || isSettingsOpen || isMenuOnboardingOpen) return
     if (event.button !== 0) return
     if (isInteractiveTarget(event.target)) return
 
     pointerOriginRef.current = { x: event.clientX, y: event.clientY }
     clearLongPressTimer()
     longPressTimerRef.current = window.setTimeout(() => {
-      setIsSettingsOpen(true)
+      if (view === 'LOBBY' && roomData) {
+        setMenuOnboardingVariant(roomData.adminId === socket?.id ? 'admin' : 'player')
+        setIsMenuOnboardingOpen(true)
+      } else {
+        setIsSettingsOpen(true)
+      }
       longPressTimerRef.current = null
     }, LONG_PRESS_MS)
   }
@@ -409,6 +453,10 @@ function AppContent() {
         />
       )}
 
+      {isMenuOnboardingOpen && (
+        <MenuOnboarding variant={menuOnboardingVariant} onClose={closeMenuOnboarding} onDone={markMenuOnboardingDone} />
+      )}
+
       {view === "HOME" && (
         <Home onCreate={createRoom} onJoin={() => { setView("JOIN"); setInputCode([]); setErrorMsg(""); }} />
       )}
@@ -418,7 +466,14 @@ function AppContent() {
       )}
 
       {view === "LOBBY" && roomData && (
-        <Lobby roomData={roomData} isAdmin={isAdmin} onStart={startGame} onBack={handleLeaveRoom} characters={CODE_CHARACTERS} />
+        <Lobby
+          roomData={roomData}
+          isAdmin={isAdmin}
+          onStart={startGame}
+          onBack={handleLeaveRoom}
+          characters={CODE_CHARACTERS}
+          showMenuOnboardingHint
+        />
       )}
 
       {view === "SELECT_CHARACTER" && roomData && (
@@ -449,7 +504,7 @@ function AppContent() {
 
       {/* ÉVÉNEMENTS */}
       {view === "EVENT_GAME" && roomData && roomData.currentInteraction && (
-        <EventGame roomData={roomData} currentUserId={socket?.id} continueToFeedback={continueToFeedback} />
+        <EventGame roomData={roomData} currentUserId={socket?.id} continueToFeedback={continueToFeedback} stealEventBonus={stealEventBonus} previewEventStealTarget={previewEventStealTarget} />
       )}
 
       {/* ACTIVITÉS */}
@@ -532,7 +587,7 @@ function AppContent() {
       )}
 
       {view === "ROUND_END" && roomData && (
-        <RoundEnd roomData={roomData} startNewRound={startNewRound} />
+        <RoundEnd roomData={roomData} startNewRound={startNewRound} currentUserId={socket?.id} />
       )}
 
       {roomData?.isPaused && (

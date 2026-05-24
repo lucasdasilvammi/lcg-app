@@ -12,21 +12,24 @@ app.use(cors({
 }));
 const server = http.createServer(app);
 
-const allowedOrigins = new Set([
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "http://localhost:5175",
-  "http://192.168.31.66:5173",
-  "http://192.168.31.66:5174",
-  "http://192.168.31.66:5175"
-]);
+const DEV_CLIENT_PORTS = new Set(["3000", "5173", "5174", "5175", "5176", "5177", "5180"]);
+
+const isAllowedDevOrigin = (origin) => {
+  if (!origin) return true;
+
+  try {
+    const { protocol, port } = new URL(origin);
+    return ["http:", "https:"].includes(protocol) && DEV_CLIENT_PORTS.has(port);
+  } catch {
+    return false;
+  }
+};
 
 const io = new Server(server, {
   cors: {
     origin: (origin, callback) => {
       // origin peut être undefined (ex: appels same-origin / certains environnements)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.has(origin)) return callback(null, true);
+      if (isAllowedDevOrigin(origin)) return callback(null, true);
       return callback(new Error(`CORS Socket.IO refusé pour origin: ${origin}`), false);
     },
     methods: ["GET", "POST"],
@@ -83,6 +86,7 @@ const undoSnapshotsByRoomId = new Map();
 const TEST_DEFAULT_BONUSES = { 'ctrl-z': 1, 'coffee-boss': 1, 'choose-quiz': 1 };
 const activiteTimersByRoomId = new Map();
 const activiteVoteTimersByRoomId = new Map();
+const activitePhotoStoresByRoomId = new Map();
 
 const clearPendingDisconnect = (sessionToken) => {
   if (!sessionToken) return;
@@ -94,6 +98,23 @@ const clearPendingDisconnect = (sessionToken) => {
 };
 
 const findRoomByPlayerId = (playerId) => Object.values(rooms).find(r => r.players.some(p => p.id === playerId));
+
+const getActivitePhotoStore = (roomId) => {
+  if (!activitePhotoStoresByRoomId.has(roomId)) {
+    activitePhotoStoresByRoomId.set(roomId, new Map());
+  }
+  return activitePhotoStoresByRoomId.get(roomId);
+};
+
+const cleanupActivitePhotoStore = (roomId) => {
+  if (!roomId) return;
+  activitePhotoStoresByRoomId.delete(roomId);
+};
+
+const createActivitePhotoId = (playerId) => {
+  const suffix = Math.random().toString(36).slice(2, 10);
+  return `${playerId}_${Date.now()}_${suffix}`;
+};
 
 const findPlayerBySessionToken = (sessionToken) => {
   if (!sessionToken) return null;
@@ -312,11 +333,24 @@ io.on('connection', (socket) => {
     return participants.filter(id => id !== currentPhoto?.playerId);
   };
 
+  const setActiviteCurrentPhotoData = (room, photoIndex) => {
+    const ci = room?.currentInteraction;
+    const currentPhoto = ci?.photos?.[photoIndex];
+    if (!ci || !currentPhoto?.photoId) {
+      if (ci) delete ci.currentPhotoData;
+      return;
+    }
+
+    const photoStore = getActivitePhotoStore(room.id);
+    ci.currentPhotoData = photoStore.get(currentPhoto.photoId) || null;
+  };
+
   const finalizeActiviteReveal = (room) => {
     const ci = room?.currentInteraction;
     if (!room || !ci || ci.type !== 'logo') return;
 
     clearActiviteVoteTimer(room.id);
+    delete ci.currentPhotoData;
 
     const photos = Array.isArray(ci.photos) ? ci.photos : [];
     const votes = ci.votes || {};
@@ -353,6 +387,7 @@ io.on('connection', (socket) => {
     };
 
     room.status = "ACTIVITE_REVEAL";
+    cleanupActivitePhotoStore(room.id);
   };
 
   const startActiviteVoteRound = (room, photoIndex = 0, durationMs = 12000) => {
@@ -369,6 +404,7 @@ io.on('connection', (socket) => {
     }
 
     ci.currentPhotoIndex = photoIndex;
+    setActiviteCurrentPhotoData(room, photoIndex);
     ci.voteStartedAt = Date.now();
     ci.voteEndsAt = ci.voteStartedAt + durationMs;
     ci.voteDurationMs = durationMs;
@@ -441,6 +477,7 @@ io.on('connection', (socket) => {
         activiteVoteTimersByRoomId.delete(room.id);
       }
       clearRoomUndo(room.id);
+      cleanupActivitePhotoStore(room.id);
       delete rooms[room.id];
       console.log(`🗑️ room deleted (${room.id}) after player removal (${reason}), was ${beforeCount} players`);
       return;
@@ -914,6 +951,7 @@ io.on('connection', (socket) => {
       
       // Tous les joueurs participent
       const participants = room.players.map(p => p.id);
+      cleanupActivitePhotoStore(room.id);
       
       room.currentInteraction = {
         type: 'logo',
@@ -923,7 +961,7 @@ io.on('connection', (socket) => {
         readyPlayers: [],
         finishedPlayers: [],
         uploadedPhotos: {},
-        photos: [], // Array of {playerId, photoData}
+        photos: [],
         votes: {},
         currentPhotoIndex: 0,
         voteStartedAt: null,
@@ -1091,11 +1129,16 @@ io.on('connection', (socket) => {
     // Stocker la photo anonymement
     const photos = room.currentInteraction.photos || [];
     const existingIndex = photos.findIndex(p => p.playerId === socket.id);
+    const photoStore = getActivitePhotoStore(room.id);
+    const photoId = existingIndex >= 0
+      ? photos[existingIndex].photoId
+      : createActivitePhotoId(socket.id);
+    photoStore.set(photoId, photoData);
     
     if (existingIndex >= 0) {
-      photos[existingIndex] = { playerId: socket.id, photoData };
+      photos[existingIndex] = { playerId: socket.id, photoId };
     } else {
-      photos.push({ playerId: socket.id, photoData });
+      photos.push({ playerId: socket.id, photoId });
     }
     
     room.currentInteraction.photos = photos;
@@ -1605,6 +1648,7 @@ io.on('connection', (socket) => {
       room.status = "FEEDBACK";
       // Là on peut nettoyer l'interaction car on a l'info dans lastResult
       room.currentInteraction = null; 
+      cleanupActivitePhotoStore(room.id);
       syncRoom(room);
     }
   });
@@ -1623,7 +1667,13 @@ io.on('connection', (socket) => {
 
   socket.on("start_new_round", () => {
     const room = findRoom();
-    if (room) { room.turnIndex = 0; room.status = "TURN_START"; delete room.currentTurnBonusUse; syncRoom(room); }
+    if (!room) return;
+    const nextStarter = room.players[0];
+    if (nextStarter?.id !== socket.id) return;
+    room.turnIndex = 0;
+    room.status = "TURN_START";
+    delete room.currentTurnBonusUse;
+    syncRoom(room);
   });
 
   socket.on('disconnect', () => {

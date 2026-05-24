@@ -73,7 +73,7 @@ function MenuButton({ text, icon, active, onClick, className = '' }) {
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`relative flex h-12 items-center justify-center gap-1 px-3 overflow-hidden transition active:scale-95 ${
+      className={`relative flex h-12 items-center justify-center gap-1 px-3 overflow-hidden transition active:scale-95 active:overflow-visible ${
         active ? 'bg-light text-bg' : 'bg-light/10 text-light/30 px-5'
       } ${className}`}
     >
@@ -196,7 +196,7 @@ function BonusInventoryCard({ bonus, onClick }) {
     <button
       type="button"
       onClick={onClick}
-      className="relative flex min-h-21 w-full items-center gap-3 overflow-hidden bg-light5 pr-3 pl-5 py-3 text-left transition active:scale-[0.99]"
+      className="relative flex min-h-21 w-full items-center gap-3 overflow-hidden bg-light5 pr-3 pl-5 py-3 text-left transition active:scale-[0.99] active:overflow-visible"
     >
       <img
         src="/menu/bonus-btn-left.svg"
