@@ -595,3 +595,67 @@
   - Full-body : `/public/room/ig/{char}.png` et variantes (-choix, -pris)
   - Icônes : `/public/ordre/{char}.svg`
   - Code de la partie : `/public/perso/{charName}.svg`
+
+---
+
+## Dimanche 24 Mai 2026 - Responsive QA mobile et stabilisation UI
+
+### Checkpoint Git
+- Commit de securite effectue avant les modifications responsive: `48a35d7 Checkpoint before responsive scaling`.
+- Objectif de la session: stabiliser rapidement l'interface mobile sans refaire tous les breakpoints, avec une base visuelle 390px.
+
+### Responsive global
+- Ajout d'un shell responsive dans `App.jsx` avec `app-viewport`, `app-stage` et `app-stage-content`.
+- Largeur design logique fixee a 390px.
+- Sur petits ecrans, le contenu est scale proportionnellement au viewport au lieu de wrapper de maniere imprevisible.
+- Sur desktop/grands ecrans, l'app reste plafonnee visuellement a 390px.
+- Ajout des variables CSS globales: `--app-design-width`, `--app-visual-width`, `--app-scale`, `--app-viewport-height`, `--app-height`.
+- Neutralisation du breakpoint `phone:` sur desktop pour eviter les differences PC/mobile non voulues.
+- Correction du viewport HTML avec `viewport-fit=cover`.
+
+### Checklist QA responsive
+- Creation de `docs/responsive-qa-checklist.md`.
+- Liste numerotee `.1` a `.100` pour guider les tests dans l'ordre reel d'une partie.
+- Ajout des validations visuelles `OK` / `a tester` via icones dans le markdown.
+- Points valides pendant la session:
+  - `.0.1` a `.0.4`: rendu global OK sur Honor Magic 6 Pro Android Brave, desktop Brave et Chrome.
+  - `.1` a `.20`: setup, lobby, menus admin/joueur, confirmations, pause, regles.
+  - `.0.5`: salon supprime quand tous les joueurs quittent.
+  - `.20.1`: liseres actifs corriges sur tabs Lobby/Bonus, Pause, Utiliser/Valider bonus et gros boutons de choix de case.
+- iOS Safari reste a tester sur vrai iPhone.
+
+### Selection personnage
+- Remplacement des descriptions personnages par les textes definitifs.
+- Ajout du comportement prelock/lock:
+  - Preselection: le personnage est reserve temporairement, gris/opacity pour les autres.
+  - Verrouillage: le personnage repasse en opacity 100 et ne peut plus etre change.
+  - Retour avant verrouillage: deselectionne le personnage.
+- Suppression du bouton admin "Valider les equipes".
+- Passage automatique a l'ordre du tour quand tous les joueurs ont verrouille leur personnage.
+- Corrections serveur associees: `characterLocked`, event `lock_character`, blocage des picks apres lock, `unpick_character` ignore les joueurs verrouilles.
+- Avancement auto vers `DEFINE_ORDER` quand tous les joueurs sont locks.
+- Correction d'un scroll parasite dans le popup "Incarne ton stagiaire" en bloquant le scroll au niveau overlay.
+
+### Menu et confirmations
+- Les popups de confirmation du menu ne prennent plus toute la hauteur sur mobile.
+- Suppression de la regle mobile qui forcait les confirmations en full height.
+- Ajout d'animations d'entree/sortie bas -> haut et haut -> bas pour sauvegarde ordre, promote admin, kick, quitter partie et annuler action.
+- Correction du texte de confirmation "Annuler l'action": il cible maintenant le joueur actif du tour, pas l'admin qui ouvre le menu.
+- Correction de la barre decor top coupee sur les confirmations.
+- Ajustement visuel du popup de confirmation du bonus "choose-quiz": tete + nom plus serres, bouton Suivant plus propre.
+
+### Boutons et micro-fixes visuels
+- Retrait/ajustement des overflows qui provoquaient des scrollbars parasites au press.
+- Correction des liseres actifs sur `MenuButton` Lobby/Bonus, `ButtonWithIcon` variant menu et `BigButton` des choix Quiz/Defi/Activite/Bonus/Evenement.
+- Correction du `CharacterBorder`: les SVG decoratifs ne captent plus les clics.
+- Cause du bug `CharacterBorder`: le CSS global forcait `svg { pointer-events: auto !important; }`.
+- Fix: classe `character-border` + regle ciblee `pointer-events: none !important` sur les decors.
+
+### Build et validation technique
+- Build production lance plusieurs fois avec succes: `npm.cmd run build`.
+- Verification syntaxe serveur OK: `node --check server.js` et `node --check server/index.js`.
+
+### A reprendre demain
+- Continuer la checklist a partir de la Session 2 (`.21` et suivants), sauf retours utilisateurs sur les points deja coches.
+- Rechecker rapidement l'ecran "A toi de jouer" apres correction `CharacterBorder`.
+- Prevoir un vrai test iOS Safari des que possible.

@@ -69,7 +69,7 @@ const ADMIN_STEPS = [
     label: 'Menu Lobby',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-01.png',
-    calloutClassName: 'left-0 right-0 -top-58',
+    calloutClassName: 'left-0 right-0 -top-44',
     spotlight: 'lobby'
   },
   {
@@ -79,7 +79,7 @@ const ADMIN_STEPS = [
     label: 'Admin',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-05.png',
-    calloutClassName: 'left-0 right-0 -top-60',
+    calloutClassName: 'left-0 right-0 -top-44',
     spotlight: 'lobby'
   },
   {
@@ -89,7 +89,7 @@ const ADMIN_STEPS = [
     label: "Changement d'ordre",
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-06.png',
-    calloutClassName: 'left-0 right-0 -top-58',
+    calloutClassName: 'left-0 right-0 -top-40',
     spotlight: 'lobby'
   },
   {
@@ -99,7 +99,7 @@ const ADMIN_STEPS = [
     label: 'Etats de connexion',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-07.png',
-    calloutClassName: 'left-0 right-0 -top-64',
+    calloutClassName: 'left-0 right-0 -top-48',
     spotlight: 'lobby'
   },
   {
@@ -109,7 +109,7 @@ const ADMIN_STEPS = [
     label: 'Quitter la partie',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-08.png',
-    calloutClassName: 'left-0 right-0 -top-58',
+    calloutClassName: 'left-0 right-0 -top-44',
     spotlight: 'lobby'
   },
   {
@@ -119,7 +119,7 @@ const ADMIN_STEPS = [
     label: 'Expulser un joueur',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-09.png',
-    calloutClassName: 'left-0 right-0 -top-60',
+    calloutClassName: 'left-0 right-0 -top-44',
     spotlight: 'lobby'
   },
   {
@@ -129,7 +129,7 @@ const ADMIN_STEPS = [
     label: 'Promouvoir admin',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-10.png',
-    calloutClassName: 'left-0 right-0 -top-58',
+    calloutClassName: 'left-0 right-0 -top-40',
     spotlight: 'lobby'
   },
   {
@@ -139,7 +139,7 @@ const ADMIN_STEPS = [
     label: 'Explication generale',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-11.png',
-    calloutClassName: 'left-0 right-0 -top-60',
+    calloutClassName: 'left-0 right-0 -top-48',
     spotlight: 'lobby'
   },
   {
@@ -149,7 +149,7 @@ const ADMIN_STEPS = [
     label: 'Mettre en pause',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-12.png',
-    calloutClassName: 'left-0 right-0 -top-58',
+    calloutClassName: 'left-0 right-0 -top-44',
     spotlight: 'lobby'
   },
   PLAYER_STEPS[4]

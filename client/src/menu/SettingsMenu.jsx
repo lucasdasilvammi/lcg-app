@@ -41,17 +41,6 @@ const popupStyles = `
     animation: settingsSlideDownToBottom 0.25s ease-in forwards;
   }
 
-  @media (max-width: 480px) {
-    .settings-confirm-overlay {
-      align-items: stretch;
-    }
-
-    .settings-confirm-panel {
-      min-height: var(--app-height, 100dvh);
-      max-height: var(--app-height, 100dvh);
-      justify-content: center;
-    }
-  }
 `
 
 function MenuIconButton({ label, icon, onClick }) {
@@ -73,7 +62,7 @@ function MenuButton({ text, icon, active, onClick, className = '' }) {
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`relative flex h-12 items-center justify-center gap-1 px-3 overflow-hidden transition active:scale-95 active:overflow-visible ${
+      className={`relative flex h-12 items-center justify-center gap-1 px-3 transition active:scale-95 active:overflow-visible ${
         active ? 'bg-light text-bg' : 'bg-light/10 text-light/30 px-5'
       } ${className}`}
     >
@@ -83,7 +72,7 @@ function MenuButton({ text, icon, active, onClick, className = '' }) {
         viewBox="0 0 44 56"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="absolute -left-0.75 top-1/2 -translate-y-1/2 h-12.5"
+        className="absolute -left-1 top-1/2 -translate-y-1/2 h-12.5"
         style={{ display: 'block' }}
       >
         <path
@@ -309,14 +298,16 @@ function QuizCaseTag() {
 
 function ChooseQuizConfirmationView({ targetPlayer, onDone }) {
   return (
-    <div className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center gap-8 text-center text-light">
-      <CharacterCard charId={targetPlayer.character} size="head-only-big" />
-      <h2
-        className="font-hakobi text-5xl uppercase leading-none"
-        style={{ color: `var(--color-${targetPlayer.character})` }}
-      >
-        {formatCharacterName(targetPlayer.character)}
-      </h2>
+    <div className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center gap-7 text-center text-light">
+      <div className="flex flex-col items-center gap-2">
+        <CharacterCard charId={targetPlayer.character} size="head-only-big" />
+        <h2
+          className="font-hakobi text-5xl uppercase leading-none"
+          style={{ color: `var(--color-${targetPlayer.character})` }}
+        >
+          {formatCharacterName(targetPlayer.character)}
+        </h2>
+      </div>
       <p className="max-w-86 font-funnel text-base leading-snug text-light/80">
         Dès que{' '}
         <span
@@ -331,7 +322,7 @@ function ChooseQuizConfirmationView({ targetPlayer, onDone }) {
         variant="menu"
         text="Suivant"
         onClick={onDone}
-        className="bg-light text-bg"
+        className="min-w-36 bg-light text-bg !px-8"
       />
     </div>
   )
@@ -654,7 +645,9 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
   const [orderedPlayers, setOrderedPlayers] = useState([])
   const [draggedPlayerId, setDraggedPlayerId] = useState(null)
   const [showOrderConfirm, setShowOrderConfirm] = useState(false)
+  const [isOrderConfirmClosing, setIsOrderConfirmClosing] = useState(false)
   const [pendingAction, setPendingAction] = useState(null)
+  const [isActionConfirmClosing, setIsActionConfirmClosing] = useState(false)
   const [isBonusDetailOpen, setIsBonusDetailOpen] = useState(false)
   const [isBonusDetailClosing, setIsBonusDetailClosing] = useState(false)
   const [selectedBonusId, setSelectedBonusId] = useState(null)
@@ -674,9 +667,16 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
   }, [roomData?.players, roomData?.pendingTurnOrderIds])
   const displayedPlayers = isOrderMode ? orderedPlayers : menuPlayers
   const currentUserPlayer = menuPlayers.find((player) => player.id === currentUserId) || null
+  const activeTurnPlayer = menuPlayers.find((player) => player.id === roomData?.players?.[roomData?.turnIndex]?.id) || null
   const pendingActionTarget = pendingAction?.targetPlayerId
     ? menuPlayers.find((player) => player.id === pendingAction.targetPlayerId) || null
     : null
+  const pendingUndoTarget = pendingAction?.type === 'undo'
+    ? (pendingActionTarget || activeTurnPlayer || currentUserPlayer)
+    : null
+  const pendingActionDisplayPlayer = pendingAction?.type === 'undo'
+    ? pendingUndoTarget
+    : (pendingActionTarget || currentUserPlayer)
   const settingsPanelAnimationClass = isClosing
     ? 'settings-popup-exit'
     : isBonusDetailClosing
@@ -775,7 +775,18 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
   }
 
   const openOrderConfirm = () => {
+    setIsOrderConfirmClosing(false)
     setShowOrderConfirm(true)
+  }
+
+  const closeOrderConfirm = (afterClose) => {
+    if (isOrderConfirmClosing) return
+    setIsOrderConfirmClosing(true)
+    window.setTimeout(() => {
+      setShowOrderConfirm(false)
+      setIsOrderConfirmClosing(false)
+      if (typeof afterClose === 'function') afterClose()
+    }, 250)
   }
 
   const confirmOrderChange = () => {
@@ -783,16 +794,22 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
       players: orderedPlayers,
       applyAfterCurrentTurn: true
     })
-    setShowOrderConfirm(false)
-    setIsOrderMode(false)
+    closeOrderConfirm(() => setIsOrderMode(false))
   }
 
   const openActionConfirm = (type, targetPlayerId = null) => {
+    setIsActionConfirmClosing(false)
     setPendingAction({ type, targetPlayerId })
   }
 
-  const closeActionConfirm = () => {
-    setPendingAction(null)
+  const closeActionConfirm = (afterClose) => {
+    if (isActionConfirmClosing) return
+    setIsActionConfirmClosing(true)
+    window.setTimeout(() => {
+      setPendingAction(null)
+      setIsActionConfirmClosing(false)
+      if (typeof afterClose === 'function') afterClose()
+    }, 250)
   }
 
   const confirmPendingAction = () => {
@@ -808,7 +825,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
       undoLastAction?.()
     }
 
-    setPendingAction(null)
+    closeActionConfirm()
   }
 
   const openLobbyMenu = () => {
@@ -1017,7 +1034,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
                 variant="menu"
                 text="Annuler l'action"
                 icon={<MenuColorIcon src="/menu/icon/enter.svg" />}
-                onClick={() => openActionConfirm('undo', currentUserId)}
+                onClick={() => openActionConfirm('undo', activeTurnPlayer?.id || currentUserId)}
                 disabled={!canUndo}
                 className="bg-red-secondary text-red-primary"
               />
@@ -1036,11 +1053,11 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
       {showOrderConfirm && (
         <div
           className="settings-confirm-overlay fixed inset-0 z-[60] flex items-end justify-center bg-black/60 backdrop-blur-xs"
-          onClick={() => setShowOrderConfirm(false)}
+          onClick={() => closeOrderConfirm()}
           data-no-longpress
         >
           <div
-            className="settings-confirm-panel relative flex w-full max-w-110 flex-col items-center gap-10 bg-bg px-8 pb-12 pt-12 text-center"
+            className={`settings-confirm-panel relative flex w-full max-w-110 max-h-[calc(var(--app-height,100dvh)-16px)] flex-col items-center gap-10 overflow-visible bg-bg px-8 pb-12 pt-12 text-center ${isOrderConfirmClosing ? 'settings-popup-exit' : 'settings-popup-enter'}`}
             onClick={(event) => event.stopPropagation()}
           >
             <div
@@ -1071,11 +1088,11 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
       {pendingAction && (
         <div
           className="settings-confirm-overlay fixed inset-0 z-[60] flex items-end justify-center bg-black/60 backdrop-blur-xs"
-          onClick={closeActionConfirm}
+          onClick={() => closeActionConfirm()}
           data-no-longpress
         >
           <div
-            className="settings-confirm-panel relative flex w-full max-w-110 flex-col items-center gap-8 bg-bg px-8 py-12 text-center"
+            className={`settings-confirm-panel relative flex w-full max-w-110 max-h-[calc(var(--app-height,100dvh)-16px)] flex-col items-center gap-8 overflow-visible bg-bg px-8 py-12 text-center ${isActionConfirmClosing ? 'settings-popup-exit' : 'settings-popup-enter'}`}
             onClick={(event) => event.stopPropagation()}
           >
             <div
@@ -1103,8 +1120,8 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
               {pendingAction.type === 'leave' && currentUserPlayer && (
                 <>Veux-tu vraiment quitter la partie ? L'administration sera transférée automatiquement.</>
               )}
-              {pendingAction.type === 'undo' && currentUserPlayer && (
-                <>En annulant l'action, <span style={{ color: `var(--color-${currentUserPlayer.character})` }}>{formatCharacterName(currentUserPlayer.character)}</span> reviendra au choix du type de case sur lequel il est tombé.</>
+              {pendingAction.type === 'undo' && pendingUndoTarget && (
+                <>En annulant l'action, <span style={{ color: `var(--color-${pendingUndoTarget.character})` }}>{formatCharacterName(pendingUndoTarget.character)}</span> reviendra au choix du type de case sur lequel il est tombé.</>
               )}
             </p>
 
@@ -1139,17 +1156,17 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
               </div>
             )}
 
-            {pendingAction.type !== 'promote' && (pendingActionTarget || currentUserPlayer) && (
+            {pendingAction.type !== 'promote' && pendingActionDisplayPlayer && (
               <div className="flex flex-col items-center gap-1">
                 <CharacterCard
-                  charId={(pendingActionTarget || currentUserPlayer).character}
+                  charId={pendingActionDisplayPlayer.character}
                   size="head-only-big"
                 />
                 <p
                   className="font-hakobi text-5xl uppercase leading-none"
-                  style={{ color: `var(--color-${(pendingActionTarget || currentUserPlayer).character})` }}
+                  style={{ color: `var(--color-${pendingActionDisplayPlayer.character})` }}
                 >
-                  {(pendingActionTarget || currentUserPlayer).character}
+                  {pendingActionDisplayPlayer.character}
                 </p>
               </div>
             )}
@@ -1159,7 +1176,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
                 variant="menu"
                 text="Non"
                 icon={<MenuColorIcon src="/menu/icon/disconnected.svg" />}
-                onClick={closeActionConfirm}
+                onClick={() => closeActionConfirm()}
                 className="bg-red-secondary text-red-primary"
               />
               <ButtonWithIcon
