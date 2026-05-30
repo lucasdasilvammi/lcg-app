@@ -7,8 +7,8 @@ const PLAYER_STEPS = [
   {
     id: 'rules',
     index: '01/05',
-    title: 'Présentation detaillée des règles du jeu',
-    label: 'Regles',
+    title: 'Présentation détaillée des règles du jeu',
+    label: 'Règles',
     arrow: '/menu/on-boarding/arrow-01.svg',
     calloutClassName: 'left-0 right-0 -top-42',
     arrowClassName: '-bottom-22 right-48',
@@ -17,7 +17,7 @@ const PLAYER_STEPS = [
   {
     id: 'fullscreen',
     index: '02/05',
-    title: 'Mode plein ecran',
+    title: 'Mode plein écran',
     label: 'Fullscreen',
     arrow: '/menu/on-boarding/arrow-02.svg',
     calloutClassName: 'left-0 right-0 -top-32',
@@ -38,7 +38,7 @@ const PLAYER_STEPS = [
     id: 'lobby',
     index: '04/05',
     title: 'Le menu lobby',
-    text: "C'est dans cette partie que tu retrouves la liste des joueurs et leur etat dans la partie. Tu peux egalement voir qui est l'administrateur de la partie car c'est un menu qui lui est plus utile qu'aux autres joueurs.",
+    text: "C'est dans cette partie que tu retrouves la liste des joueurs et leur état dans la partie. Tu peux également voir qui est l'administrateur de la partie car c'est un menu qui lui est plus utile qu'aux autres joueurs.",
     label: 'Menu Lobby',
     arrow: '/menu/on-boarding/arrow-01.svg',
     calloutClassName: 'left-0 right-0 -top-58',
@@ -75,7 +75,7 @@ const ADMIN_STEPS = [
   {
     id: 'admin',
     title: "Tu es l'admin de la partie",
-    text: "Vu que c'est toi qui as cree la partie, tu es admin du lobby. Concretement ca veut dire que tu es le seul a pouvoir faire les choses suivantes.",
+    text: "Vu que c'est toi qui as créé la partie, tu es admin du lobby. Concrètement ça veut dire que tu es le seul à pouvoir faire les choses suivantes.",
     label: 'Admin',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-05.png',
@@ -85,7 +85,7 @@ const ADMIN_STEPS = [
   {
     id: 'turn-order',
     title: "Le changement d'ordre",
-    text: "Si en pleine partie tu dois te deplacer, tu pourras changer l'ordre des joueurs ici.",
+    text: "Si en pleine partie tu dois te déplacer, tu pourras changer l'ordre des joueurs ici.",
     label: "Changement d'ordre",
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-06.png',
@@ -94,9 +94,9 @@ const ADMIN_STEPS = [
   },
   {
     id: 'connection-state',
-    title: 'Les etats de connexion',
-    text: "C'est ici que tu peux voir si les joueurs sont bien connectes, qu'ils ont crash ou qu'ils sont deconnectes. Peu importe la situation, ils pourront toujours revenir dans la partie.",
-    label: 'Etats de connexion',
+    title: 'Les états de connexion',
+    text: "C'est ici que tu peux voir si les joueurs sont bien connectés, qu'ils ont crash ou qu'ils sont déconnectés. Peu importe la situation, ils pourront toujours revenir dans la partie.",
+    label: 'États de connexion',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-07.png',
     calloutClassName: 'left-0 right-0 -top-48',
@@ -105,7 +105,7 @@ const ADMIN_STEPS = [
   {
     id: 'leave-player',
     title: 'Quitter la partie',
-    text: "Si tu dois quitter la partie mais que les joueurs veulent la terminer, tu peux quitter et un autre admin sera designe automatiquement.",
+    text: "Si tu dois quitter la partie mais que les joueurs veulent la terminer, tu peux quitter et un autre admin sera désigné automatiquement.",
     label: 'Quitter la partie',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-08.png',
@@ -115,7 +115,7 @@ const ADMIN_STEPS = [
   {
     id: 'kick-player',
     title: 'Expulser un joueur',
-    text: "Si un joueur a un probleme technique, qu'il reste connecte alors qu'il ne peut plus acceder a son personnage, tu peux le kick pour le re-inviter.",
+    text: "Si un joueur a un problème technique, qu'il reste connecté alors qu'il ne peut plus accéder à son personnage, tu peux le kick pour le réinviter.",
     label: 'Expulser un joueur',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-09.png',
@@ -125,7 +125,7 @@ const ADMIN_STEPS = [
   {
     id: 'promote-admin',
     title: 'Promouvoir admin',
-    text: "Si tu ne veux plus etre admin de la room, c'est avec ce bouton que tu pourras ceder tes pouvoirs.",
+    text: "Si tu ne veux plus être admin de la room, c'est avec ce bouton que tu pourras céder tes pouvoirs.",
     label: 'Promouvoir admin',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-10.png',
@@ -135,8 +135,8 @@ const ADMIN_STEPS = [
   {
     id: 'undo-action',
     title: "Annuler l'action",
-    text: "Si par malheur un joueur se trompe de case en l'indiquant a l'application, tu peux annuler l'action et le joueur sera de retour sur l'ecran de choix de la case.",
-    label: 'Explication generale',
+    text: "Si par malheur un joueur se trompe de case en l'indiquant à l'application, tu peux annuler l'action et le joueur sera de retour sur l'écran de choix de la case.",
+    label: 'Explication générale',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-11.png',
     calloutClassName: 'left-0 right-0 -top-48',
@@ -145,7 +145,7 @@ const ADMIN_STEPS = [
   {
     id: 'pause',
     title: 'Mettre en pause',
-    text: "Si quelqu'un doit s'absenter et que tu veux etre sur que personne ne fera rien, tu peux mettre la partie en pause.",
+    text: "Si quelqu'un doit s'absenter et que tu veux être sûr que personne ne fera rien, tu peux mettre la partie en pause.",
     label: 'Mettre en pause',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-12.png',
@@ -363,7 +363,7 @@ function BottomNavigation({ step, stepIndex, stepsLength, onPrevious, onNext }) 
     <div className="absolute inset-x-0 bottom-0 z-30 flex h-13 items-center justify-between bg-red-primary px-8 text-light">
       <button
         type="button"
-        aria-label="Etape precedente"
+        aria-label="Étape précédente"
         onClick={onPrevious}
         disabled={stepIndex === 0}
         className={`flex h-full items-center transition active:scale-95 ${stepIndex === 0 ? 'opacity-30' : ''}`}
@@ -384,7 +384,7 @@ function BottomNavigation({ step, stepIndex, stepsLength, onPrevious, onNext }) 
 
       <button
         type="button"
-        aria-label={isLastStep ? "Terminer l'onboarding" : 'Etape suivante'}
+        aria-label={isLastStep ? "Terminer l'onboarding" : 'Étape suivante'}
         onClick={onNext}
         className="flex h-full items-center transition active:scale-95"
       >
@@ -473,7 +473,7 @@ export default function MenuOnboarding({ variant = 'player', onClose, onDone }) 
         data-no-longpress
       >
         <div
-          className="relative w-full max-w-110 transition-[height] duration-300 ease-out"
+          className="relative w-full max-w-full transition-[height] duration-300 ease-out"
           style={panelHeight ? { height: `${panelHeight}px` } : undefined}
         >
           <div
@@ -483,7 +483,7 @@ export default function MenuOnboarding({ variant = 'player', onClose, onDone }) 
             style={panelHeight ? { height: `${panelHeight}px` } : undefined}
           >
             <div
-              className="pointer-events-none absolute -top-2 -left-2 phone:left-0 h-full w-110"
+ className="pointer-events-none absolute -top-2 left-0 h-full w-full"
               style={{
                 WebkitMaskImage: 'url(/menu/menu-border-top.svg)',
                 maskImage: 'url(/menu/menu-border-top.svg)',
@@ -498,8 +498,8 @@ export default function MenuOnboarding({ variant = 'player', onClose, onDone }) 
             />
 
             <div className="absolute right-6 -top-5 z-10 flex items-center gap-2">
-              <FakeIconButton type="rules" label="Regles" active={step.spotlight === 'rules'} />
-              <FakeIconButton type="fullscreen" label="Plein ecran" active={step.spotlight === 'fullscreen'} />
+              <FakeIconButton type="rules" label="Règles" active={step.spotlight === 'rules'} />
+              <FakeIconButton type="fullscreen" label="Plein écran" active={step.spotlight === 'fullscreen'} />
               <FakeIconButton type="close" label="Fermer le menu" active={step.spotlight === 'close'} />
             </div>
 

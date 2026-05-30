@@ -13,7 +13,7 @@ export default function CodeDisplay({ code, characters }) {
           return (
             <div 
               key={i} 
-              className="relative flex h-20 w-20 items-center justify-center phone:h-24 phone:w-24"
+ className="relative flex items-center justify-center h-24 w-24"
               style={{
                 backgroundImage: bgImage,
                 backgroundSize: 'contain',
@@ -21,7 +21,7 @@ export default function CodeDisplay({ code, characters }) {
                 backgroundRepeat: 'no-repeat'
               }}
             >
-              <img src={`/perso/${char?.name.toLowerCase()}.svg`} alt={char?.name} className="relative z-10 h-11 w-11 phone:h-12 phone:w-12" />
+ <img src={`/perso/${char?.name.toLowerCase()}.svg`} alt={char?.name} className="relative z-10 h-12 w-12" />
             </div>
           )
         })}
@@ -35,7 +35,7 @@ export default function CodeDisplay({ code, characters }) {
           return (
             <div 
               key={i} 
-              className="relative flex h-20 w-20 items-center justify-center phone:h-24 phone:w-24"
+ className="relative flex items-center justify-center h-24 w-24"
               style={{
                 backgroundImage: bgImage,
                 backgroundSize: 'contain',
@@ -43,7 +43,7 @@ export default function CodeDisplay({ code, characters }) {
                 backgroundRepeat: 'no-repeat'
               }}
             >
-              <img src={`/perso/${char?.name.toLowerCase()}.svg`} alt={char?.name} className="relative z-10 h-11 w-11 phone:h-12 phone:w-12" />
+ <img src={`/perso/${char?.name.toLowerCase()}.svg`} alt={char?.name} className="relative z-10 h-12 w-12" />
             </div>
           )
         })}

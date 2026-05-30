@@ -15,13 +15,13 @@ const IconBack = () => (
 
 export default function Join({ inputCode, onKeypadClick, onRemoveLast, errorMsg, onBack, characters }) {
   return (
-    <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
+ <div className="relative w-full overflow-hidden bg-bg">
       <div className="pointer-events-none absolute inset-0 z-0" style={{ backgroundImage: 'url(/assets/home-border-verical.png)', backgroundSize: 'auto 100%', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }} />
-      <div className="pointer-events-none absolute inset-0 z-0" style={{ backgroundImage: 'url(/assets/home-border-horizontal.png)', backgroundSize: '100% auto', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }} />
+      <div className="pointer-events-none absolute inset-0 z-0" style={{ backgroundImage: 'url(/assets/home-border-horizontal.png)', backgroundSize: '100% 100%', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }} />
 
-      <div className="relative z-10 flex h-dvh w-full max-w-110 flex-col items-center justify-between py-14 px-16 text-center">
+ <div className="relative z-10 flex h-dvh app-screen-y w-full max-w-full flex-col items-center justify-between px-16 text-center">
         <div className="flex flex-col gap-3">
-          <h2 className="text-4xl font-family-hakobi uppercase phone:text-[42px]">code de la partie</h2>
+ <h2 className="font-family-hakobi uppercase text-[42px]">code de la partie</h2>
 
           {errorMsg && <p className="text-sm text-red-300">{errorMsg}</p>}
 
@@ -41,7 +41,7 @@ export default function Join({ inputCode, onKeypadClick, onRemoveLast, errorMsg,
                     <div
                       key={slotIndex}
                       onClick={isLast ? onRemoveLast : undefined}
-                      className={`relative flex h-20 w-20 items-center justify-center phone:h-24 phone:w-24 ${isLast ? 'cursor-pointer transition-opacity hover:opacity-70' : ''}`}
+ className={`relative flex items-center justify-center h-24 w-24 ${isLast ? 'cursor-pointer transition-opacity hover:opacity-70' : ''}`}
                       style={{
                         backgroundImage: bgImage,
                         backgroundSize: 'contain',
@@ -53,7 +53,7 @@ export default function Join({ inputCode, onKeypadClick, onRemoveLast, errorMsg,
                         <img
                           src={`/perso/${selectedCharacter.name.toLowerCase()}.svg`}
                           alt={selectedCharacter.name}
-                          className="relative z-10 h-11 w-11 phone:h-12 phone:w-12"
+ className="relative z-10 h-12 w-12"
                         />
                       )}
                     </div>
@@ -84,7 +84,7 @@ export default function Join({ inputCode, onKeypadClick, onRemoveLast, errorMsg,
                     backgroundColor: 'transparent'
                   }}
                 >
-                  <img src={`/perso/${char.name.toLowerCase()}.svg`} alt={char.name} className="relative z-10 h-16 w-16 phone:h-20 phone:w-20" />
+ <img src={`/perso/${char.name.toLowerCase()}.svg`} alt={char.name} className="relative z-10 h-16 w-16" />
                 </button>
               )
             })}

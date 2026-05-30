@@ -55,9 +55,9 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
           : (lastResult.success ? "Elle etait technique celle la, bien joue !" : "Allez c'est pas grave, ce sera pour une prochaine fois."))))
 
   return (
-    <div className="w-full max-w-110 mx-auto">
+    <div className="w-full max-w-full mx-auto">
       <CharacterBorder characterId={borderCharacterId}>
-        <div className="w-full h-dvh py-14 px-8 phone:px-10 flex flex-col justify-between items-center text-center bg-bg">
+ <div className="w-full h-dvh app-screen-y px-10 flex flex-col justify-between items-center text-center bg-bg">
           <div className="flex flex-col gap-0 items-center">
             {borderCharacterId && (
               <CharacterCard
@@ -88,7 +88,7 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
           )}
 
           {isDefi && !lastResult.success && buzzedPlayer && (
-            <CharacterTag charId={buzzedPlayer.character} text="s'est trompe(e)" className="" />
+            <CharacterTag charId={buzzedPlayer.character} text="s'est trompé(e)" className="" />
           )}
 
           {canAdvance ? (

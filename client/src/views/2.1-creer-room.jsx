@@ -34,7 +34,7 @@ function MenuOnboardingHint() {
         />
       </div>
       <p className="max-w-48 font-family-funnel text-[12px] leading-tight text-light/70">
-        Maintiens l'ecran pour
+        Maintiens l'écran pour
         <br />
         ouvrir le menu
       </p>
@@ -47,7 +47,7 @@ export default function Lobby({ roomData, isAdmin, onStart, onBack, characters, 
   const canStart = roomData.players.length >= 3
 
   return (
-    <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
+ <div className="relative w-full overflow-hidden bg-bg">
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
@@ -67,15 +67,15 @@ export default function Lobby({ roomData, isAdmin, onStart, onBack, characters, 
         }}
       />
 
-      <div className="relative z-10 h-dvh w-full max-w-110 flex flex-col items-center justify-between py-14 px-16 text-center">
+ <div className="relative z-10 h-dvh app-screen-y w-full max-w-full flex flex-col items-center justify-between px-16 text-center">
         <div className={`flex flex-col gap-3 ${isAdmin ? '' : 'opacity-20'}`}>
-          <p className="text-4xl font-family-hakobi uppercase phone:text-[42px]">Code de la partie</p>
+ <p className="font-family-hakobi uppercase text-[42px]">Code de la partie</p>
           <CodeDisplay code={roomData.code} characters={characters} />
         </div>
 
         <div>
           <p className="mb-3 text-xl font-family-funnel text-light">En attente de joueurs</p>
-          <p className="font-family-hakobi text-7xl font-bold phone:text-8xl">{roomData.players.length} / 4</p>
+ <p className="font-family-hakobi font-bold text-8xl">{roomData.players.length} / 4</p>
           <p className="font-family-funnel text-light opacity-70">Joueurs</p>
         </div>
 

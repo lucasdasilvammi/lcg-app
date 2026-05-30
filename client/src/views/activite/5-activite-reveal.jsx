@@ -1,96 +1,130 @@
 import React from 'react'
 import ButtonWithIcon from '../../components/ButtonWithIcon'
-import CharacterCard from '../../components/CharacterCard'
+import {
+  ActivityScreen,
+  ActivityHeaderTag,
+  PhotoFrame,
+  VoteIcon
+} from './ActivityShared'
+import { getCharacterColor, getCharacterName, getPlayerCharacter } from './ActivityData'
 
 export default function ActiviteReveal({ roomData, currentUserId, continueToFeedback }) {
   if (!roomData || !roomData.lastResult) return null
-  
-  const { rankings = [], winnerId, brandName, points = 2 } = roomData.lastResult
-  const isWinner = winnerId === currentUserId
-  
-  // Trouver le joueur gagnant
-  const winner = roomData.players.find(p => p.id === winnerId)
-  
+
+  const { rankings = [] } = roomData.lastResult
+  const rankedItems = rankings.map((rank) => {
+    const player = roomData.players.find(p => p.id === rank.playerId)
+    const charId = getPlayerCharacter(player)
+    return {
+      ...rank,
+      player,
+      charId,
+      name: getCharacterName(charId),
+      color: getCharacterColor(charId)
+    }
+  })
+
   return (
-    <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
-      <div className="relative mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-between gap-6 py-14 px-6 text-center">
-        <div className='flex min-h-0 w-full flex-1 flex-col gap-8 phone:gap-12'>
-          {/* Header */}
-          <div className="flex flex-col items-center gap-2">
-            <div className="text-4xl font-hakobi uppercase text-orange-primary">🏆 RESULTATS</div>
-            <p className="font-funnel text-lg text-light opacity-70">
-              Classement des logos
-            </p>
-          </div>
+    <ActivityScreen scroll className="gap-8 pb-8">
+      <div className="top-0 z-20 flex w-full justify-center bg-bg pb-2">
+        <ActivityHeaderTag />
+      </div>
 
-          {/* Brand */}
-          <div className="rounded-xl bg-orange-primary/10 p-4">
-            <p className="font-funnel text-sm text-light/70">Marque dessinee</p>
-            <p className="font-hakobi text-2xl text-orange-primary">{brandName}</p>
-          </div>
+      <div className="flex w-full flex-col items-center gap-7">
+        <h1 className="m-0 max-w-72 font-hakobi text-[39px] uppercase leading-none text-light">
+          Résultats du vote
+        </h1>
 
-          {/* Rankings */}
-          <div className="flex flex-1 flex-col gap-3 overflow-y-auto">
-            {rankings.map((rank, index) => {
-              const player = roomData.players.find(p => p.id === rank.playerId)
-              const isCurrentUser = rank.playerId === currentUserId
-              
-              return (
-                <div 
-                  key={rank.playerId}
-                  className={`flex items-center gap-4 rounded-xl p-4 ${
-                    index === 0 
-                      ? 'bg-yellow-500/20 border border-yellow-500/50' 
-                      : 'bg-black/30 border border-light/10'
-                  }`}
-                >
-                  {/* Rank */}
-                  <div className={`flex h-10 w-10 items-center justify-center rounded-full font-hakobi text-xl ${
-                    index === 0 
-                      ? 'bg-yellow-500 text-bg' 
-                      : 'bg-light/20 text-light'
-                  }`}>
-                    {index + 1}
-                  </div>
-                  
-                  {/* Player info */}
-                  <div className="flex-1 text-left">
-                    <p className={`font-funnel text-lg ${isCurrentUser ? 'text-orange-primary' : 'text-light'}`}>
-                      {player?.name || `Joueur ${index + 1}`}
-                      {isCurrentUser && ' (Vous)'}
-                    </p>
-                    <p className="font-funnel text-sm text-light/50">
-                      {rank.upVotes} up | {rank.neutralVotes} neutral | {rank.downVotes} down
-                    </p>
-                  </div>
-                  
-                  {/* Score */}
-                  <div className="font-hakobi text-xl text-light">
-                    {rank.score}%
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-          
-          {/* Winner announcement */}
-          {winner && (
-            <div className="rounded-xl bg-yellow-500/10 p-4 border border-yellow-500/30">
-              <p className="font-funnel text-sm text-light/70">Vainqueur</p>
-              <p className="font-hakobi text-2xl text-yellow-400">
-                {winner.name} (+{points} jalons)
-              </p>
-            </div>
-          )}
+        <div className="flex w-full flex-col gap-3">
+          {rankedItems.map((rank, index) => (
+            <RankingRow
+              key={rank.playerId}
+              rank={rank}
+              position={index + 1}
+              isCurrentUser={rank.playerId === currentUserId}
+            />
+          ))}
         </div>
 
-        <div className='flex w-full flex-col gap-5 phone:gap-8'>
-          <ButtonWithIcon 
-            onClick={continueToFeedback}
-            text="Continuer"
-            className="w-full"
+        <WorksHeading />
+
+        <div className="flex w-full flex-col items-center gap-8">
+          {rankedItems.map((rank) => (
+            <WorkCard key={rank.playerId} rank={rank} />
+          ))}
+        </div>
+
+        <ButtonWithIcon
+          onClick={continueToFeedback}
+          text="Suivant"
+          className="mb-2 mt-1 w-56"
+        />
+      </div>
+    </ActivityScreen>
+  )
+}
+
+function RankingRow({ rank, position, isCurrentUser }) {
+  return (
+    <div className="grid grid-cols-[2.2rem_3rem_1fr_2rem] items-center gap-2 text-left">
+      <p className="font-funnel text-base font-bold text-light/45">#{position}</p>
+      <div className="relative h-12 w-12">
+        <img src={`/game/${rank.charId}.svg`} alt={rank.name} className="h-full w-full object-contain" />
+        {isCurrentUser && (
+          <img
+            src="/menu/icon/tag-moi.svg"
+            alt="Moi"
+            className="absolute -bottom-2 left-1/2 h-5.5 w-auto -translate-x-1/2 object-contain"
           />
-        </div>
+        )}
+      </div>
+      <p className="min-w-0 truncate font-hakobi text-[31px] uppercase leading-none" style={{ color: rank.color }}>
+        {rank.name}
+      </p>
+      <p className="text-right font-hakobi text-[36px] leading-none text-light">{rank.score}</p>
+    </div>
+  )
+}
+
+function WorksHeading() {
+  return (
+    <div className="flex w-full items-center justify-center gap-4 text-light/60">
+      <img src="/activite/deco-gauche.svg" alt="" aria-hidden="true" className="h-3 w-[6.5rem] object-fill" />
+      <p className="whitespace-nowrap font-funnel text-base font-semibold">Vos oeuvres</p>
+      <img src="/activite/deco-droite.svg" alt="" aria-hidden="true" className="h-3 w-[6.5rem] object-fill" />
+    </div>
+  )
+}
+
+function WorkCard({ rank }) {
+  const voteTypes = [
+    ...Array(rank.upVotes || 0).fill('up'),
+    ...Array(rank.neutralVotes || 0).fill('neutral'),
+    ...Array(rank.downVotes || 0).fill('down')
+  ]
+
+  return (
+    <div className="flex w-full flex-col items-center gap-3">
+      <PhotoFrame src={rank.photoData} alt={`Dessin de ${rank.name}`} className="h-[17rem] w-full max-w-72" />
+      <span
+        className="relative inline-flex h-8 items-center gap-1 px-3 py-1"
+        style={{
+          color: rank.color,
+          backgroundColor: `${rank.color}33`,
+          clipPath: 'polygon(6% 12%, 88% 0, 100% 16%, 96% 86%, 8% 100%, 0 76%)'
+        }}
+      >
+        <img src={`/game/${rank.charId}.svg`} alt="" aria-hidden="true" className="h-5 w-5 object-contain" />
+        <span className="font-funnel text-base font-extrabold">Dessin de {rank.name}</span>
+      </span>
+      <div className="flex min-h-8 items-center justify-center gap-1">
+        {voteTypes.length > 0 ? (
+          voteTypes.map((type, index) => (
+            <VoteIcon key={`${type}-${index}`} type={type} className="h-8 w-8" />
+          ))
+        ) : (
+          <span className="font-funnel text-sm font-semibold text-light/45">Aucun vote</span>
+        )}
       </div>
     </div>
   )

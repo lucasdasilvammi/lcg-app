@@ -31,18 +31,18 @@ export default function BonusGame({ roomData, currentUserId, claimCaseBonus }) {
     : 'Un joueur'
 
   return (
-    <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
-      <div className="relative mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-between gap-6 px-8 py-14 text-center phone:px-12">
+ <div className="relative w-full overflow-hidden bg-bg">
+ <div className="relative mx-auto flex h-dvh app-screen-y w-full max-w-full flex-col items-center justify-between gap-6 text-center px-8">
         <div className="flex w-full flex-1 flex-col items-center gap-8">
           <img
             src="/game/categorie/tag-bonus.png"
             alt="Bonus"
-            className="h-7 w-auto phone:h-8"
+ className="w-auto h-8"
           />
 
           <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-between gap-7">
             <div className="flex flex-col items-center gap-4">
-              <h1 className="font-hakobi text-4xl uppercase leading-none text-light phone:text-5xl">
+ <h1 className="font-hakobi uppercase leading-none text-light text-5xl">
                 {isReader ? 'Tu as gagné un bonus !' : `${readerName} a gagné un bonus !`}
               </h1>
               <InlineBonusTag bonus={bonus} />

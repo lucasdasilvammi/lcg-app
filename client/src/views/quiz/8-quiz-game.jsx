@@ -26,7 +26,7 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
     }
 
     return (
-      <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
+ <div className="relative w-full overflow-hidden bg-bg">
         {!isMeReader && (
           <>
             <div
@@ -42,7 +42,7 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
               className="pointer-events-none absolute inset-0 z-0"
               style={{
                 backgroundImage: 'url(/assets/home-border-horizontal.png)',
-                backgroundSize: '100% auto',
+                backgroundSize: '100% 100%',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat'
               }}
@@ -50,14 +50,14 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
           </>
         )}
 
-        <div className="relative z-10 mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-between gap-5 py-14 px-0 phone:px-8 text-center">
-          <div className="flex w-full items-center justify-center gap-2 flex-wrap">
+ <div className="relative z-10 flex h-dvh app-screen-y w-full max-w-full flex-col items-center justify-between gap-5 px-8 text-center">
+          <div className="-mt-2 flex w-full items-center justify-center gap-2 flex-wrap">
             {activePlayer?.character && (
-              <img src={`/game/${activePlayer.character}.svg`} alt={activePlayer.character} className="w-8 h-8 phone:w-10 phone:h-10 object-contain" />
+ <img src={`/game/${activePlayer.character}.svg`} alt={activePlayer.character} className="w-10 h-10 object-contain" />
             )}
-            <img src="/game/categorie/tag-quizz.png" alt="Quizz" className="h-6 phone:h-7" />
-            <img src={`/game/categorie/${getCategoryId(data.category)}.png`} alt={data.category} className="h-6 phone:h-7" />
-            <img src={`/game/categorie/diff-${data.diff}.png`} alt={`Difficulté ${data.diff}`} className="h-6 phone:h-7" />
+ <img src="/game/categorie/tag-quizz.png" alt="Quizz" className="h-7" />
+ <img src={`/game/categorie/${getCategoryId(data.category)}.png`} alt={data.category} className="h-7" />
+ <img src={`/game/categorie/diff-${data.diff}.png`} alt={`Difficulté ${data.diff}`} className="h-7" />
           </div>
 
           {isMeReader ? (
@@ -78,18 +78,18 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
               </div>
             </div>
           ) : (
-            <div className='flex w-full flex-1 flex-col items-center justify-center gap-6 phone:gap-8 px-4 phone:px-8'>
+ <div className='flex w-full flex-1 flex-col items-center justify-center gap-8 px-8'>
               {isActivePlayer && (
                 <>
-                  <p className="text-4xl phone:text-5xl uppercase font-family-hakobi text-light">a toi de repondre</p>
+ <p className="text-5xl uppercase font-family-hakobi text-light">À toi de répondre</p>
                   <CharacterCard charId={readerPlayer?.character} size="low" />
-                  <p className="text-lg phone:text-xl text-light font-family-funnel -mt-4 phone:-mt-6">te pose une question</p>
+ <p className="text-xl text-light font-family-funnel -mt-6">te pose une question</p>
                 </>
               )}
               {!isActivePlayer && (
                 <>
                   <CharacterCard charId={readerPlayer?.character} size="low" />
-                  <p className="text-lg phone:text-xl text-light font-family-funnel opacity-70">pose une question à</p>
+ <p className="text-xl text-light font-family-funnel opacity-70">pose une question à</p>
                   <CharacterCard charId={activePlayer?.character} size="low" />
                 </>
               )}
@@ -97,7 +97,7 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
           )}
 
           {isMeReader && <ButtonWithIcon onClick={() => {}} text="Suivant" className="opacity-0 pointer-events-none" />}
-          {!isMeReader && <ScoreBar players={roomData.players} currentUserId={currentUserId} />}
+          {!isMeReader && <ScoreBar players={roomData.players} currentUserId={currentUserId} bleed />}
         </div>
       </div>
     )
@@ -113,7 +113,7 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
          {isMeReader && (
            <div>
              <p className="text-xl font-bold mb-4">"{data.q}"</p>
-             <p className="text-red-300 mb-4">Rép: {data.a}</p>
+             <p className="text-red-300 mb-4">Rép. : {data.a}</p>
              {hasSomeoneBuzzed && <div className="flex gap-4 justify-center"><button onClick={() => resolveInteraction(false)} className="bg-slate-600 px-4 py-2 rounded">❌</button><button onClick={() => resolveInteraction(true)} className="bg-green-600 px-4 py-2 rounded">✅</button></div>}
            </div>
          )}

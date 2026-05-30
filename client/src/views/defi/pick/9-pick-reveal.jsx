@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import DuelNavbar from '../shared/DuelNavbar'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import CharacterCard from '../../../components/CharacterCard'
@@ -31,7 +31,7 @@ const distanceToPercent = (distance) => {
 }
 
 const ColorDisplay = ({ color, size = 'small' }) => {
-  const sizeClasses = size === 'large' ? 'h-32 w-32' : 'h-24 w-24'
+  const sizeClasses = size === 'large' ? 'h-32 w-32' : 'h-20 w-20'
   const svgSizes = size === 'large' ? {
     tl: 'w-14 h-17 -left-1.5',
     tr: 'w-16 h-20 -right-1',
@@ -89,11 +89,48 @@ export default function PickReveal({ roomData, continueToFeedback, currentUserId
   const distance2 = colorDistance(player2Color, targetColor)
   const percent1 = distanceToPercent(distance1)
   const percent2 = distanceToPercent(distance2)
+  const [animatedPercent1, setAnimatedPercent1] = useState(0)
+  const [animatedPercent2, setAnimatedPercent2] = useState(0)
+  const [showResultText, setShowResultText] = useState(false)
 
   const formatPercent = (value) => {
     if (value === null || value === undefined) return '--'
     return value.toFixed(1).replace('.', ',')
   }
+
+  useEffect(() => {
+    const target1 = percent1 ?? 0
+    const target2 = percent2 ?? 0
+    const maxTarget = Math.max(target1, target2, 1)
+    const duration = 2500
+    const easeOutCubic = (value) => 1 - Math.pow(1 - value, 3)
+    const startedAt = performance.now()
+    let frameId = null
+
+    setAnimatedPercent1(0)
+    setAnimatedPercent2(0)
+    setShowResultText(false)
+
+    const tick = (now) => {
+      const progress = Math.min(1, (now - startedAt) / duration)
+      const currentValue = maxTarget * easeOutCubic(progress)
+      setAnimatedPercent1(Math.min(target1, currentValue))
+      setAnimatedPercent2(Math.min(target2, currentValue))
+
+      if (progress < 1) {
+        frameId = requestAnimationFrame(tick)
+      } else {
+        setAnimatedPercent1(target1)
+        setAnimatedPercent2(target2)
+        setShowResultText(true)
+      }
+    }
+
+    frameId = requestAnimationFrame(tick)
+    return () => {
+      if (frameId) cancelAnimationFrame(frameId)
+    }
+  }, [percent1, percent2])
 
   let winnerId = null
   if (percent1 !== null && percent2 !== null) {
@@ -111,9 +148,9 @@ export default function PickReveal({ roomData, continueToFeedback, currentUserId
   const canAdvance = isPickChallenge && isNextPlayer
 
   return (
-    <div className="bg-bg relative w-full max-w-110 mx-auto flex flex-col items-center h-dvh py-14 px-6 text-center gap-4">
+ <div className="bg-bg relative w-full max-w-full mx-auto flex flex-col items-center h-dvh app-screen-y defi-screen-y px-6 text-center gap-4">
       <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
-      <div className="flex flex-col items-center h-full w-full justify-between pt-8">
+      <div className="flex flex-col items-center h-full w-full justify-between pt-2">
 
         {/* Couleurs des joueurs */}
         <div className="flex gap-8 w-full items-center justify-center">
@@ -123,7 +160,7 @@ export default function PickReveal({ roomData, continueToFeedback, currentUserId
               <ColorDisplay color={player1Color} />
               <div className="flex flex-col items-center gap-2 pt-2">
                 <p className="font-funnel text-light">Score :</p>
-                <p className="font-family-hakobi text-5xl text-light font-bold">{formatPercent(percent1)}%</p>
+                <p className="font-family-hakobi text-5xl text-light font-bold">{formatPercent(animatedPercent1)}%</p>
               </div>
             </div>
           </div>
@@ -136,7 +173,7 @@ export default function PickReveal({ roomData, continueToFeedback, currentUserId
               <ColorDisplay color={player2Color} />
               <div className="flex flex-col items-center gap-2 pt-2">
                 <p className="font-funnel text-light">Score :</p>
-                <p className="font-family-hakobi text-5xl text-light font-bold">{formatPercent(percent2)}%</p>
+                <p className="font-family-hakobi text-5xl text-light font-bold">{formatPercent(animatedPercent2)}%</p>
               </div>
             </div>
           </div>
@@ -144,21 +181,21 @@ export default function PickReveal({ roomData, continueToFeedback, currentUserId
 
         {/* Résultat */}
         <div className="flex flex-col gap-4 items-center">
-          {winnerId ? (
+          {showResultText && winnerId ? (
             <p className="font-funnel text-lg text-light">
               <span style={{ color: `var(--color-${winnerId === player1Id ? player1?.character : player2?.character})` }} className="capitalize font-bold">
                 {winnerId === player1Id ? player1?.character : player2?.character}
               </span>{' '}
               <span className="opacity-80">se rapproche le plus !</span>
             </p>
-          ) : (
+          ) : showResultText ? (
             <p className="font-funnel text-lg text-light opacity-80">Égalité parfaite !</p>
-          )}
+          ) : <div className="h-7" />}
         </div>
 
         {/* Couleur cible */}
         <div className="flex flex-col items-center gap-3">
-          <p className="font-funnel text-lg text-light opacity-80">Couleur cible</p>
+          {/* <p className="font-funnel text-lg text-light opacity-80">Couleur cible</p> */}
           <ColorDisplay color={targetColor} size="large" />
         </div>
 

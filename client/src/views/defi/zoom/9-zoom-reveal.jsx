@@ -1,39 +1,62 @@
 import React from 'react'
 import DuelNavbar from '../shared/DuelNavbar'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
-import CharacterCard from '../../../components/CharacterCard'
+import QuizAnswerButton from '../../../components/QuizAnswerButton'
 
 export default function ZoomReveal({ roomData, continueToFeedback, currentUserId }) {
   if (!roomData || !roomData.lastResult || roomData.lastResult.type !== 'zoom') return null
 
   const result = roomData.lastResult
   const duelPlayers = roomData.players.filter((p) => (result.duelists || []).includes(p.id))
-  const winner = result.winnerId ? roomData.players.find((p) => p.id === result.winnerId) : null
   const isMeReader = result.readerId === currentUserId
+  const options = Array.isArray(result.options) ? result.options : []
+  const correctIndex = result.correctIndex ?? null
+  const selectedIndex = result.selectedIndex ?? null
 
   return (
-    <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
-      <div className="relative mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-between gap-6 py-14 px-6 text-center">
-        <div className="flex w-full flex-1 min-h-0 flex-col gap-8">
+    <div className="relative w-full overflow-hidden bg-bg">
+      <div className="relative mx-auto flex h-dvh app-screen-y defi-screen-y w-full max-w-full flex-col items-center justify-between gap-6 px-8 text-center">
+        <div className="flex w-full min-h-0 flex-1 flex-col gap-8">
           <DuelNavbar duelPlayers={duelPlayers} type="zoom" diff={2} />
 
-          <div className="flex w-full flex-col items-center gap-5">
-            <p className="font-hakobi text-4xl phone:text-5xl uppercase text-light">revelation</p>
-
-            <div className="w-full max-w-[320px] aspect-square overflow-hidden rounded-2xl border border-light/30 bg-black">
-              <img src={result.image} alt={result.answer || 'Logo'} className="h-full w-full object-cover" />
+          <div className="flex w-full flex-1 flex-col items-center justify-center gap-8">
+            <div className="flex flex-col items-center gap-1 text-light">
+              <p className="font-funnel text-sm uppercase opacity-65">{'R\u00e9ponse attendue :'}</p>
+              <p className="font-hakobi text-4xl uppercase leading-none">{result.answer || 'Logo'}</p>
             </div>
 
-            <p className="font-funnel text-lg phone:text-xl text-light opacity-90">
-              Reponse attendue: {result.answer || 'Logo'}
-            </p>
+            {options.length > 0 && (
+              <div className="flex w-full max-w-85 flex-col gap-3">
+                {options.map((option, index) => {
+                  const isCorrect = index === correctIndex
+                  const isSelected = index === selectedIndex
+                  let className = 'bg-light opacity-15'
+                  let svgIcon = '/game/questions/mauvaise-reponse-light.svg'
 
-            {winner && (
-              <div className="flex flex-col items-center gap-2">
-                <CharacterCard charId={winner.character} size="low" />
-                <p className="font-funnel text-base phone:text-lg text-light opacity-80">
-                  {winner.character} remporte 2 jalons.
-                </p>
+                  if (isCorrect) {
+                    className = 'bg-green-primary'
+                    svgIcon = '/game/questions/bonne-reponse.svg'
+                  } else if (isSelected) {
+                    className = 'bg-red-primary'
+                    svgIcon = '/game/questions/mauvaise-reponse.svg'
+                  }
+
+                  return (
+                    <div key={index} className="relative z-20">
+                      <img
+                        src={svgIcon}
+                        alt=""
+                        className="absolute -right-2.5 -top-2.5 z-30 h-8 w-8 rotate-10 object-contain"
+                      />
+                      <QuizAnswerButton
+                        onClick={() => {}}
+                        label={String.fromCharCode(65 + index)}
+                        text={option}
+                        className={className}
+                      />
+                    </div>
+                  )
+                })}
               </div>
             )}
           </div>
@@ -42,7 +65,7 @@ export default function ZoomReveal({ roomData, continueToFeedback, currentUserId
         {isMeReader ? (
           <ButtonWithIcon onClick={continueToFeedback} text="Suivant" />
         ) : (
-          <ButtonWithIcon onClick={() => {}} text="Voir le verdict" className="opacity-0 pointer-events-none" />
+          <ButtonWithIcon onClick={() => {}} text="Voir le verdict" className="pointer-events-none opacity-0" />
         )}
       </div>
     </div>

@@ -115,10 +115,10 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
 
   if (isChooseQuizActive && isWaitingForChooseQuizAck) {
     return (
-      <div className="w-full max-w-110 mx-auto">
+      <div className="w-full max-w-full mx-auto">
         <CharacterBorder characterId={chooseQuizUser.character}>
           <div className="relative w-full overflow-hidden bg-bg">
-            <div className="relative z-10 h-dvh w-full flex flex-col items-center justify-between gap-7 py-14 px-10 phone:px-16 text-center">
+ <div className="relative z-10 h-dvh app-screen-y w-full flex flex-col items-center justify-between gap-7 px-8 text-center">
               <div className="flex flex-col items-center gap-5 pt-12">
                 <CharacterIdentity character={chooseQuizUser.character} />
                 <p className="font-hakobi text-4xl uppercase leading-none text-light">
@@ -131,7 +131,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
                   >
                     {formatCharacterName(chooseQuizUser.character)}
                   </span>
-                  {' '}a utilisé un <BonusUsedTag /> C'est lui qui va choisir la difficulté de la question de{' '}
+                  {' '}a utilisé un <BonusUsedTag />, c'est lui qui va choisir la difficulté de la question de{' '}
                   <span
                     className="font-semibold"
                     style={{ color: `var(--color-${chooseQuizTarget.character})` }}
@@ -168,23 +168,23 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
 
   if (isQuestioner || (isChooseQuizActive && !isWaitingForChooseQuizAck)) {
     return (
-      <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
-        <div className="relative z-10 mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-between gap-8 py-12 px-12 phone:px-16 text-center">
+ <div className="relative w-full overflow-hidden bg-bg">
+ <div className="relative z-10 mx-auto flex h-dvh app-screen-y w-full max-w-full flex-col items-center justify-between gap-8 px-12 text-center">
           <div className="flex flex-col items-center gap-2">
-            <img src="/game/categorie/tag-quizz.png" alt="Quizz" className="h-8 phone:h-9 mb-2 phone:mb-4"/>
-            <p className="text-light opacity-75 text-base phone:text-lg font-family-funnel">Thème :</p>
+ <img src="/game/categorie/tag-quizz.png" alt="Quizz" className="h-9 mb-4"/>
+ <p className="text-light opacity-75 text-lg font-family-funnel">Thème :</p>
             <div className="flex w-full items-center justify-center gap-2">
               <img
                 src={`/game/categorie/icon-${getCategoryId(roomData.pendingCategory)}.png`}
                 alt={roomData.pendingCategory}
-                className="h-8 phone:h-9 object-contain"
+ className="h-9 object-contain"
               />
-              <p className="text-3xl phone:text-[42px] uppercase font-bold text-light font-family-hakobi -mb-2">{roomData.pendingCategory}</p>
+ <p className="text-[42px] uppercase font-bold text-light font-family-hakobi -mb-2">{roomData.pendingCategory}</p>
             </div>
           </div>
-          <div className="flex w-full flex-col gap-2 font-family-hakobi text-3xl phone:text-xl uppercase">
+ <div className="flex w-full flex-col gap-2 font-family-hakobi text-xl uppercase">
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-1-jalon.png" alt="difficulté 1" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 1 ? 'hidden' : ''}`} />
+ <img src="/game/categorie/tag-1-jalon.png" alt="difficulté 1" className={`absolute -top-1 left-0 h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 1 ? 'hidden' : ''}`} />
               <BigButton
                 onClick={() => handleDifficultySelect(1)}
                 text="Pour les nuls"
@@ -192,7 +192,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
               />
             </div>
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-2-jalon.png" alt="difficulté 2" className={`absolute -top-1 right-0 h-7 phone:h-8 z-10 rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 2 ? 'hidden' : ''}`} />
+ <img src="/game/categorie/tag-2-jalon.png" alt="difficulté 2" className={`absolute -top-1 right-0 h-8 z-10 rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 2 ? 'hidden' : ''}`} />
               <BigButton
                 onClick={() => handleDifficultySelect(2)}
                 text="Facile"
@@ -200,7 +200,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
               />
             </div>
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-3-jalon.png" alt="difficulté 3" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 3 ? 'hidden' : ''}`} />
+ <img src="/game/categorie/tag-3-jalon.png" alt="difficulté 3" className={`absolute -top-1 left-0 h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 3 ? 'hidden' : ''}`} />
               <BigButton
                 onClick={() => handleDifficultySelect(3)}
                 text="Moyen"
@@ -208,7 +208,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
               />
             </div>
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-4-jalon.png" alt="difficulté 4" className={`absolute -top-1 right-0 h-7 phone:h-8 z-10 rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 4 ? 'hidden' : ''}`} />
+ <img src="/game/categorie/tag-4-jalon.png" alt="difficulté 4" className={`absolute -top-1 right-0 h-8 z-10 rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 4 ? 'hidden' : ''}`} />
               <BigButton
                 onClick={() => handleDifficultySelect(4)}
                 text="Difficile"
@@ -216,7 +216,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
               />
             </div>
             <div className="relative pt-2">
-              <img src="/game/categorie/tag-5-jalon.png" alt="difficulté 5" className={`absolute -top-1 left-0 h-7 phone:h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 5 ? 'hidden' : ''}`} />
+ <img src="/game/categorie/tag-5-jalon.png" alt="difficulté 5" className={`absolute -top-1 left-0 h-8 z-10 -rotate-7 ${visibleSelectedDiff !== null && visibleSelectedDiff !== 5 ? 'hidden' : ''}`} />
               <BigButton
                 onClick={() => handleDifficultySelect(5)}
                 text="Expert"
@@ -234,7 +234,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
                 className="max-w-55"
               />
             )}
-            {isChooseQuizActive && (
+            {isChooseQuizActive && !isChooseQuizChooser && (
               <CharacterTag charId={chooseQuizUser.character} text="choisit" />
             )}
           </div>
@@ -245,7 +245,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
 
   if (isChooseQuizActive) {
     return (
-      <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
+ <div className="relative w-full overflow-hidden bg-bg">
         <div
           className="pointer-events-none absolute inset-0 z-0"
           style={{
@@ -259,12 +259,12 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
           className="pointer-events-none absolute inset-0 z-0"
           style={{
             backgroundImage: 'url(/assets/home-border-horizontal.png)',
-            backgroundSize: '100% auto',
+            backgroundSize: '100% 100%',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
           }}
         />
-        <div className="relative z-10 mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-center gap-8 px-8 text-center">
+        <div className="relative z-10 mx-auto flex h-dvh app-screen-y w-full max-w-full flex-col items-center justify-center gap-8 px-8 text-center">
           <CharacterTag charId={chooseQuizUser.character} text="choisit" />
           <p className="max-w-78 font-funnel text-lg leading-snug text-light/70">
             {isChooseQuizChooser
@@ -277,7 +277,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
   }
 
   return (
-    <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
+ <div className="relative w-full overflow-hidden bg-bg">
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
@@ -291,30 +291,30 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           backgroundImage: 'url(/assets/home-border-horizontal.png)',
-          backgroundSize: '100% auto',
+          backgroundSize: '100% 100%',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
       />
 
-      <div className="relative z-10 mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-between py-14 px-8 phone:px-16 text-center">
-        <div className="pt-8 phone:pt-10">
-          <p className="text-light opacity-65 text-lg phone:text-xl mb-5 phone:mb-6 semi font-family-funnel">Tour de</p>
+ <div className="relative z-10 mx-auto flex h-dvh app-screen-y w-full max-w-full flex-col items-center justify-between px-16 text-center">
+ <div className="pt-10">
+ <p className="text-light opacity-65 text-xl mb-6 semi font-family-funnel">Tour de</p>
 
           <div className="mb-8 flex flex-col items-center gap-4">
             <CharacterCard charId={questioner.character} size="default" />
             <div className='flex gap-0 flex-col items-center justify-center'>
-              <p className='font-family-funnel text-light text-base phone:text-lg font-medium'>Thème du quizz :</p>
+ <p className='font-family-funnel text-light text-lg font-medium'>Thème du quizz :</p>
               <img
                 src={`/game/categorie/${getCategoryId(roomData.pendingCategory)}.png`}
                 alt={roomData.pendingCategory}
-                className="h-7 phone:h-8 mt-2 object-contain"
+ className="h-8 mt-2 object-contain"
               />
             </div>
           </div>
         </div>
 
-        <ScoreBar players={roomData.players} currentUserId={currentUserId} />
+        <ScoreBar players={roomData.players} currentUserId={currentUserId} bleed />
       </div>
     </div>
   )

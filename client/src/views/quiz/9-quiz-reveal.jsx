@@ -28,15 +28,15 @@ export default function Reveal({ roomData, continueToFeedback, currentUserId }) 
     const correctIndex = data.correct
     
     return (
-      <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
-        <div className="relative z-10 mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-between py-14 px-0 phone:px-8 text-center">
-          <div className="flex items-center gap-2 w-full flex-wrap justify-center">
+ <div className="relative w-full overflow-hidden bg-bg">
+ <div className="relative z-10 mx-auto flex h-dvh app-screen-y w-full max-w-full flex-col items-center justify-between px-8 text-center">
+          <div className="-mt-2 flex items-center gap-2 w-full flex-wrap justify-center">
             {activePlayer?.character && (
-              <img src={`/game/${activePlayer.character}.svg`} alt={activePlayer.character} className="w-8 h-8 phone:w-10 phone:h-10 object-contain" />
+ <img src={`/game/${activePlayer.character}.svg`} alt={activePlayer.character} className="w-10 h-10 object-contain" />
             )}
-            <img src="/game/categorie/tag-quizz.png" alt="Quizz" className="h-6 phone:h-7" />
-            <img src={`/game/categorie/${getCategoryId(data.category)}.png`} alt={data.category} className="h-6 phone:h-7" />
-            <img src={`/game/categorie/diff-${data.diff}.png`} alt={`Difficulté ${data.diff}`} className="h-6 phone:h-7" />
+ <img src="/game/categorie/tag-quizz.png" alt="Quizz" className="h-7" />
+ <img src={`/game/categorie/${getCategoryId(data.category)}.png`} alt={data.category} className="h-7" />
+ <img src={`/game/categorie/diff-${data.diff}.png`} alt={`Difficulté ${data.diff}`} className="h-7" />
           </div>
 
           <div className='w-full flex-1 flex flex-col items-center justify-center gap-16'>
