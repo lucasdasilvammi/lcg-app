@@ -28,7 +28,7 @@ export default function RuleScreen({ children, onClose, borderColor = 'var(--col
       data-no-longpress
     >
       <section
-        className="relative flex h-[var(--app-height,100dvh)] w-full max-w-110 overflow-hidden bg-bg text-light"
+        className="relative flex h-[var(--app-height,100dvh)] w-full max-w-full overflow-hidden bg-bg text-light"
         onClick={(event) => event.stopPropagation()}
       >
         <div

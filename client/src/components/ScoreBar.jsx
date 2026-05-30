@@ -23,9 +23,11 @@ function ScoreBarMaskIcon({ src, className = 'h-5 w-5' }) {
   )
 }
 
-export default function ScoreBar({ players, currentUserId, showBonusCount = false }) {
+export default function ScoreBar({ players, currentUserId, showBonusCount = false, bleed = false }) {
+  const shouldWrap = players.length > 4
+
   return (
-    <div className="relative z-10 flex gap-x-5 gap-y-2 items-center justify-center w-full flex-wrap">
+    <div className={`relative z-10 flex items-center justify-center gap-x-3 gap-y-2 ${shouldWrap ? 'flex-wrap' : 'flex-nowrap'} ${bleed ? 'w-[calc(var(--app-design-width,390px)-1rem)] max-w-[calc(100vw-0.5rem)]' : 'w-full'}`}>
       {players.map(p => {
         const isMe = p.id === currentUserId
         const bonusCount = getBonusCount(p)

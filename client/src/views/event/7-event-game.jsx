@@ -29,15 +29,15 @@ function EventTextContent({ data }) {
 
   return (
     <div className="flex h-full flex-col items-center gap-5">
-      <h1 className="font-hakobi text-4xl uppercase text-light phone:text-5xl">{data?.title || 'Évènement'}</h1>
+ <h1 className="font-hakobi uppercase text-light text-5xl">{data?.title || 'Évènement'}</h1>
       <div className="flex h-full w-full flex-1 flex-col gap-4 text-center">
         {descriptionParagraphs.map((paragraph, index) => (
-          <p key={index} className="font-funnel text-lg text-light phone:text-lg">{paragraph}</p>
+ <p key={index} className="font-funnel text-light text-lg">{paragraph}</p>
         ))}
         {data?.effect && data.effect !== 'none' && (
           <div className="mt-auto flex items-center justify-center gap-3 text-left opacity-70">
             <EventInfoIcon />
-            <p className="font-funnel text-sm leading-snug text-light opacity-85 phone:text-base">{data.effect}</p>
+ <p className="font-funnel leading-snug text-light opacity-85 text-base">{data.effect}</p>
           </div>
         )}
       </div>
@@ -50,11 +50,10 @@ function EventBonusReward({ bonus }) {
 
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-4 text-light">
-      <div className="flex flex-col items-center mt-auto">
+      <div className="flex flex-col gap-4 w-full items-center mt-auto ">
         <p className="font-funnel text-base uppercase tracking-normal text-light/55">Bonus reçu :</p>
+        <BonusRewardCard bonus={bonus} />
       </div>
-
-      <BonusRewardCard bonus={bonus} />
 
       <div className="pt-8 flex w-full items-center justify-center gap-3 text-left text-light/65">
         <MaskIcon src="/menu/icon/bonus.svg" className="h-7 w-7" />
@@ -69,7 +68,7 @@ function EventBonusReward({ bonus }) {
 function EventRewardContent({ bonus }) {
   return (
     <div className="flex h-full flex-col items-center gap-5">
-      <h1 className="font-hakobi text-4xl uppercase text-light phone:text-5xl">Validé par le boss</h1>
+ <h1 className="font-hakobi uppercase text-light text-5xl">Validé par le boss</h1>
       <EventBonusReward bonus={bonus} />
     </div>
   )
@@ -152,12 +151,15 @@ function StealTargetContent({ players, currentUserId, selectedTargetId, onSelect
   )
 }
 
-function StealConfirmationContent({ sourcePlayer, targetPlayer, stolenBonus }) {
+function StealConfirmationContent({ sourcePlayer, targetPlayer, stolenBonus, currentUserId }) {
   if (!sourcePlayer || !targetPlayer || !stolenBonus) return null
+  const isSource = sourcePlayer.id === currentUserId
+  const isTarget = targetPlayer.id === currentUserId
+  const bonusDelta = isSource ? 1 : isTarget ? -1 : 0
 
   return (
     <div className="flex h-full flex-col items-center justify-center gap-6 text-light">
-      <h1 className="font-hakobi text-4xl uppercase leading-none text-light phone:text-5xl">
+ <h1 className="font-hakobi uppercase leading-none text-light text-5xl">
         Bonus volé
       </h1>
       <div className="flex max-w-82 flex-wrap items-center justify-center gap-2 font-funnel text-base leading-snug text-light">
@@ -167,7 +169,7 @@ function StealConfirmationContent({ sourcePlayer, targetPlayer, stolenBonus }) {
         <span>le bonus</span>
         <InlineBonusTag bonus={stolenBonus} />
       </div>
-      <BonusRewardCard bonus={stolenBonus} />
+      <BonusRewardCard bonus={stolenBonus} delta={bonusDelta} showDelta={bonusDelta !== 0} />
     </div>
   )
 }
@@ -175,7 +177,7 @@ function StealConfirmationContent({ sourcePlayer, targetPlayer, stolenBonus }) {
 function StealSkippedContent() {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-5 text-light">
-      <h1 className="font-hakobi text-4xl uppercase text-light phone:text-5xl">Pas de bonus à voler</h1>
+ <h1 className="font-hakobi uppercase text-light text-5xl">Pas de bonus à voler</h1>
       <p className="max-w-82 font-funnel text-lg leading-snug text-light/85">
         Personne autour de la table n'a de bonus dans son inventaire. Ton tour s'arrête ici.
       </p>
@@ -242,24 +244,24 @@ export default function EventGame({ roomData, currentUserId, continueToFeedback,
     )
   }
   if (isStealConfirmationScreen) {
-    content = <StealConfirmationContent sourcePlayer={stolenToPlayer} targetPlayer={stolenFromPlayer} stolenBonus={stolenBonus} />
+    content = <StealConfirmationContent sourcePlayer={stolenToPlayer} targetPlayer={stolenFromPlayer} stolenBonus={stolenBonus} currentUserId={currentUserId} />
   }
   if (isStealSkippedScreen) {
     content = <StealSkippedContent />
   }
 
   return (
-    <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
-      <div className="relative mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-between gap-6 py-14 px-6 text-center">
-        <div className="flex min-h-0 w-full flex-1 flex-col gap-8 phone:gap-12">
+ <div className="relative w-full overflow-hidden bg-bg">
+ <div className="relative mx-auto flex h-dvh app-screen-y w-full max-w-full flex-col items-center justify-between gap-6 px-6 text-center">
+ <div className="flex min-h-0 w-full flex-1 flex-col gap-12">
           <div className="flex w-full items-center justify-center">
-            <img src="/game/categorie/tag-events.png" alt="Événement" className="h-7 phone:h-8" />
+ <img src="/game/categorie/tag-events.png" alt="Événement" className="h-8" />
           </div>
 
           {content}
         </div>
 
-        <div>
+        <div className="flex flex-col items-center gap-4">
           {!isReader && readerPlayer && (
             <CharacterTag
               charId={readerPlayer.character}

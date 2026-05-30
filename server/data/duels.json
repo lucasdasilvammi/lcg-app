@@ -123,7 +123,7 @@
     },
     {
       "type": "chiffres",
-      "question": "Combien de centimetres ?",
+      "question": "Combien de centimètres ?",
       "correct": 1564,
       "digits": 4,
       "decimalPosition": 2,
@@ -146,7 +146,7 @@
       "answer": "Starbucks",
       "options": ["Starbucks", "Shell", "Sony"],
       "correct": 0,
-      "explanation": "Logo Starbucks pour test du zoom lineaire."
+      "explanation": "Logo Starbucks pour test du zoom linéaire."
     }
   ]
 }

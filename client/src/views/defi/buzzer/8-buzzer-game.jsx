@@ -53,7 +53,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, con
   // Support buzzer et vraioufaux
   if (type === 'buzzer' || type === 'vraioufaux') {
     return (
-      <div className="bg-bg relative max-w-110 flex flex-col justify-between items-center h-dvh py-14 px-6 text-center">
+ <div className="bg-bg relative max-w-full flex flex-col justify-between items-center h-dvh app-screen-y defi-screen-y px-6 text-center">
         {/* Navbar avec participants, tag défi et jalons */}
         <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
 
@@ -160,19 +160,30 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, con
         )}
         
         {/* Barre de score en bas (pas pour le reader ni les duellistes) */}
-        {!isMeReader && !isDuelist && <ScoreBar players={roomData.players} currentUserId={currentUserId} />}
+        {!isMeReader && !isDuelist && <ScoreBar players={roomData.players} currentUserId={currentUserId} bleed />}
         
-        {/* Background SVG - visible uniquement pour les spectateurs */}
+        {/* Background border - visible uniquement pour les spectateurs */}
         {isSpectator && (
-          <div 
-            className="absolute inset-0 -left-4 -top-11 w-115 h-[110vh] pointer-events-none z-0"
-            style={{
-              backgroundImage: 'url(/assets/room-border.svg)',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat'
-            }}
-          />
+          <>
+            <div
+              className="pointer-events-none absolute inset-0 z-0"
+              style={{
+                backgroundImage: 'url(/assets/home-border-verical.png)',
+                backgroundSize: 'auto 100%',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }}
+            />
+            <div
+              className="pointer-events-none absolute inset-0 z-0"
+              style={{
+                backgroundImage: 'url(/assets/home-border-horizontal.png)',
+                backgroundSize: '100% 100%',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }}
+            />
+          </>
         )}
       </div>
     )

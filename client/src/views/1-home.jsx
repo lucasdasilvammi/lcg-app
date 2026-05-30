@@ -19,7 +19,7 @@ export default function Home({ onCreate, onJoin }) {
       <div className="pointer-events-none absolute inset-0 z-0" style={{ backgroundImage: 'url(/assets/home-border-verical-home.png)', backgroundSize: 'auto 100%', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }} />
       <div className="pointer-events-none absolute inset-0 z-0" style={{ backgroundImage: 'url(/assets/home-border-horizontal-home.png)', backgroundSize: '100% 100%', backgroundPosition: 'center', backgroundRepeat: 'no-repeat' }} />
 
-      <div className="relative z-10 flex min-h-dvh w-full flex-col items-center justify-between px-8 pb-14 pt-16">
+ <div className="relative z-10 flex min-h-dvh app-screen-y w-full flex-col items-center justify-between px-8 py-16">
         <img src={logoUrl} alt="Le Cube Graphique" className="w-48" />
 
         <div className="flex w-full max-w-55 flex-col gap-5">

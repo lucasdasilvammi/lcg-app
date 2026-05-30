@@ -120,7 +120,7 @@ export default function SelectCharacter({ roomData, pickCharacter, currentUserId
   return (
     <>
       <style>{popupStyles}</style>
-      <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
+ <div className="relative w-full overflow-hidden bg-bg">
         <div
           className="pointer-events-none absolute inset-0 z-0"
           style={{
@@ -134,13 +134,13 @@ export default function SelectCharacter({ roomData, pickCharacter, currentUserId
           className="pointer-events-none absolute inset-0 z-0"
           style={{
             backgroundImage: 'url(/assets/home-border-horizontal.png)',
-            backgroundSize: '100% auto',
+            backgroundSize: '100% 100%',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
           }}
         />
 
-        <div className="relative z-10 flex h-dvh w-full max-w-110 flex-col items-center justify-between px-8 py-16 text-center">
+ <div className="relative z-10 flex h-dvh app-screen-y w-full max-w-full flex-col items-center justify-between px-8 text-center">
           <h2 className="font-hakobi text-4xl uppercase text-light">Incarne ton stagiaire</h2>
 
           <div className="my-auto grid max-w-4xl grid-cols-2 gap-6">
@@ -160,7 +160,7 @@ export default function SelectCharacter({ roomData, pickCharacter, currentUserId
                   key={char.id}
                   onClick={() => canClick && handleCharacterClick(char.id)}
                   disabled={!canClick}
-                  className={`relative z-10 w-24 transition-all phone:w-28 ${canClick ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed'} ${isAvailableButNotMyChoice ? 'opacity-60' : ''} ${isOtherPending ? 'opacity-35 grayscale' : ''} ${isOtherLocked ? 'opacity-100' : ''}`}
+ className={`relative z-10 transition-all w-28 ${canClick ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed'} ${isAvailableButNotMyChoice ? 'opacity-60' : ''} ${isOtherPending ? 'opacity-35 grayscale' : ''} ${isOtherLocked ? 'opacity-100' : ''}`}
                 >
                   <img
                     src={getCharacterImage(char.id, takenBy, isMe)}
@@ -180,13 +180,12 @@ export default function SelectCharacter({ roomData, pickCharacter, currentUserId
       {selectedCharForPopup && selectedCharData && (
         <div className="fixed inset-0 z-30 flex items-end justify-center overflow-hidden bg-black/50 pointer-events-auto">
           <div
-            className={`relative flex w-full max-w-110 flex-col items-center justify-center border-x-8 bg-bg px-6 py-10 transition-all duration-300 transform phone:border-x-14 phone:px-8 phone:py-12 ${isClosing ? 'popup-exit' : 'popup-enter'}`}
+ className={`relative flex w-full max-w-full flex-col items-center justify-center bg-bg transition-all duration-300 transform border-x-14 px-8 py-12 ${isClosing ? 'popup-exit' : 'popup-enter'}`}
             style={{
               borderColor: `var(--color-${selectedCharForPopup})`,
             }}
           >
-            <div
-              className="pointer-events-none absolute -top-3 -left-2 h-full w-110 phone:-left-3.5"
+            <div className="pointer-events-none absolute -top-3.25 h-full w-[calc(100%+32px)] -left-4"
               style={{
                 WebkitMaskImage: 'url(/room/character-border.svg)',
                 maskImage: 'url(/room/character-border.svg)',
@@ -200,10 +199,10 @@ export default function SelectCharacter({ roomData, pickCharacter, currentUserId
               }}
             />
 
-            <div className="flex h-full w-full flex-col items-center justify-center gap-5 overflow-visible phone:gap-6">
+ <div className="flex h-full w-full flex-col items-center justify-center overflow-visible gap-6">
               <CharacterCard charId={selectedCharForPopup} size="default" />
 
-              <p className="max-w-2xl whitespace-pre-line text-center font-funnel text-base leading-relaxed text-light opacity-80 phone:text-lg">
+ <p className="max-w-2xl whitespace-pre-line text-center font-funnel leading-relaxed text-light opacity-80 text-lg">
                 {selectedCharData.description}
               </p>
 

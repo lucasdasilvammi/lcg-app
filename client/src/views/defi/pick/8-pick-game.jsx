@@ -41,7 +41,7 @@ export default function PickGame({ roomData, currentUserId }) {
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
   const [opponentSubmitted, setOpponentSubmitted] = useState(false)
-  const [countdown, setCountdown] = useState(null)
+  const [countdown, setCountdown] = useState(15)
   const [player1Hue, setPlayer1Hue] = useState(180)
   const [player1Saturation, setPlayer1Saturation] = useState(100)
   const [player1Lightness, setPlayer1Lightness] = useState(50)
@@ -53,13 +53,22 @@ export default function PickGame({ roomData, currentUserId }) {
   const [opponentLightness, setOpponentLightness] = useState(50)
   const [player1Submitted, setPlayer1Submitted] = useState(false)
   const [player2Submitted, setPlayer2Submitted] = useState(false)
-  const [spectatorCountdown, setSpectatorCountdown] = useState(null)
+  const [spectatorCountdown, setSpectatorCountdown] = useState(15)
 
   const squareRef = useRef(null)
   const canvasRef = useRef(null)
-  const timerRef = useRef(null)
+  const deadlineRef = useRef(Date.now() + 15000)
+  const spectatorDeadlineRef = useRef(Date.now() + 15000)
+  const pickedColorRef = useRef(null)
+  const autoSubmitRef = useRef(false)
 
   const pickedColor = hslToHex(hue, saturation, lightness)
+  const timerCharId = countdown !== null && countdown <= 5 ? 'virginie' : 'lucien'
+  const spectatorTimerCharId = spectatorCountdown !== null && spectatorCountdown <= 5 ? 'virginie' : 'lucien'
+
+  useEffect(() => {
+    pickedColorRef.current = pickedColor
+  }, [pickedColor])
 
   // Dessiner le gradient du carré sur canvas
   useEffect(() => {
@@ -98,12 +107,16 @@ export default function PickGame({ roomData, currentUserId }) {
     if (submitted[currentUserId]) {
       setHasSubmitted(true)
     }
+    if (isDuelist) {
+      const opponentId = duelists.find(id => id !== currentUserId)
+      setOpponentSubmitted(opponentId ? submitted[opponentId] !== undefined : false)
+    }
     // Update player submission status for spectators
     if (isSpectator && duelists.length === 2) {
       setPlayer1Submitted(submitted[duelists[0]] !== undefined)
       setPlayer2Submitted(submitted[duelists[1]] !== undefined)
     }
-  }, [roomData.currentInteraction, currentUserId, isSpectator, duelists])
+  }, [roomData.currentInteraction, currentUserId, isDuelist, isSpectator, duelists])
 
   // Countdown pour spectateurs quand un joueur a soumis
   useEffect(() => {
@@ -112,23 +125,24 @@ export default function PickGame({ roomData, currentUserId }) {
     const oneSubmitted = player1Submitted || player2Submitted
     const bothSubmitted = player1Submitted && player2Submitted
 
-    if (oneSubmitted && !bothSubmitted && spectatorCountdown === null) {
-      setSpectatorCountdown(5)
+    if (oneSubmitted && !bothSubmitted) {
+      spectatorDeadlineRef.current = Math.min(spectatorDeadlineRef.current, Date.now() + 5000)
     } else if (bothSubmitted) {
       setSpectatorCountdown(null)
     }
-  }, [player1Submitted, player2Submitted, isSpectator, spectatorCountdown])
+  }, [player1Submitted, player2Submitted, isSpectator])
 
   // Timer pour spectator countdown
   useEffect(() => {
-    if (spectatorCountdown === null || spectatorCountdown <= 0) return
+    if (!isSpectator || spectatorCountdown === null) return
 
-    const timer = setTimeout(() => {
-      setSpectatorCountdown(spectatorCountdown - 1)
-    }, 1000)
+    const interval = setInterval(() => {
+      const remainingSeconds = Math.max(0, Math.ceil((spectatorDeadlineRef.current - Date.now()) / 1000))
+      setSpectatorCountdown(remainingSeconds)
+    }, 100)
 
-    return () => clearTimeout(timer)
-  }, [spectatorCountdown])
+    return () => clearInterval(interval)
+  }, [isSpectator, spectatorCountdown])
 
   const updateColorFromPosition = (clientX, clientY) => {
     if (!squareRef.current || hasSubmitted) return
@@ -234,7 +248,8 @@ export default function PickGame({ roomData, currentUserId }) {
     socket.on('pick_opponent_submitted', (data) => {
       if (isDuelist && data.playerId !== currentUserId) {
         setOpponentSubmitted(true)
-        setCountdown(5)
+        deadlineRef.current = Math.min(deadlineRef.current, Date.now() + 5000)
+        setCountdown(Math.max(0, Math.ceil((deadlineRef.current - Date.now()) / 1000)))
       }
     })
 
@@ -246,25 +261,23 @@ export default function PickGame({ roomData, currentUserId }) {
 
   // Countdown timer pour auto-submit après 5 secondes
   useEffect(() => {
-    if (countdown === null || countdown < 0 || hasSubmitted) return
+    if (!isDuelist || countdown === null || hasSubmitted) return
 
-    if (countdown === 0) {
-      // Auto-submit la couleur actuelle
-      if (socket) {
+    const interval = setInterval(() => {
+      const remainingSeconds = Math.max(0, Math.ceil((deadlineRef.current - Date.now()) / 1000))
+      setCountdown(remainingSeconds)
+
+      if (remainingSeconds <= 0 && socket && !autoSubmitRef.current) {
+        autoSubmitRef.current = true
         socket.emit('pick_color_submit', {
-          color: pickedColor
+          color: pickedColorRef.current
         })
         setHasSubmitted(true)
       }
-      return
-    }
+    }, 100)
 
-    timerRef.current = setTimeout(() => {
-      setCountdown(countdown - 1)
-    }, 1000)
-
-    return () => clearTimeout(timerRef.current)
-  }, [countdown, hasSubmitted, socket])
+    return () => clearInterval(interval)
+  }, [isDuelist, countdown, hasSubmitted, socket])
 
   // Émettre les changements de couleur en temps réel
   useEffect(() => {
@@ -277,18 +290,30 @@ export default function PickGame({ roomData, currentUserId }) {
   }, [hue, saturation, lightness, isDuelist, socket, hasSubmitted])
 
   return (
-    <div className="bg-bg relative w-full max-w-110 mx-auto flex flex-col justify-between items-center h-dvh py-14 px-6 text-center">
+ <div className="bg-bg relative w-full max-w-full mx-auto flex flex-col justify-between items-center h-dvh app-screen-y defi-screen-y px-6 text-center">
       <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
       
       {isSpectator && (
-        <div className="absolute inset-0 -left-4 -top-11 w-115 h-[110vh] pointer-events-none z-0"
-          style={{
-            backgroundImage: 'url(/assets/room-border.svg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat'
-          }}
-        />
+        <>
+          <div
+            className="pointer-events-none absolute inset-0 z-0"
+            style={{
+              backgroundImage: 'url(/assets/home-border-verical.png)',
+              backgroundSize: 'auto 100%',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          />
+          <div
+            className="pointer-events-none absolute inset-0 z-0"
+            style={{
+              backgroundImage: 'url(/assets/home-border-horizontal.png)',
+              backgroundSize: '100% 100%',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }}
+          />
+        </>
       )}
 
       <div className="relative z-10 w-full h-full flex items-end">
@@ -346,16 +371,16 @@ export default function PickGame({ roomData, currentUserId }) {
             </div>
 
             {/* Tag "Temps restant" - en bas quand countdown actif */}
-            {((countdown !== null && opponentSubmitted) || (spectatorCountdown !== null && spectatorCountdown > 0)) && (
+            {spectatorCountdown !== null && spectatorCountdown > 0 && (
               <CharacterTag 
-                charId="virginie" 
-                text={`Temps restant : ${isSpectator ? spectatorCountdown : countdown}s`} 
+                charId={spectatorTimerCharId}
+                text={`Temps restant : ${spectatorCountdown}s`}
                 className="mx-auto"
                 hideName={true}
                 icon={
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M17.4368 1.953L23.1639 11.3203L19.0378 21.1721L9.14795 22.585L3.90344 17.9246L0.799805 9.57605L7.83215 1.46191L17.4368 1.953ZM4.23083 10.1971L6.45483 16.1788L10.1005 19.418L16.9281 18.4427L19.8043 11.5759L15.7028 4.86804L9.14026 4.53259L4.23083 10.1971Z" fill="#F63609"/>
-                    <path d="M17.4873 12.6079L9.73938 15.8203L10.994 5.87292L12.2032 6.02266L13.5517 6.79322L13.5338 9.70767L12.7705 11.8637L14.4132 11.2428L16.056 10.8663L16.7834 11.6312L17.4873 12.6079Z" fill="#F63609"/>
+                    <path d="M17.4368 1.953L23.1639 11.3203L19.0378 21.1721L9.14795 22.585L3.90344 17.9246L0.799805 9.57605L7.83215 1.46191L17.4368 1.953ZM4.23083 10.1971L6.45483 16.1788L10.1005 19.418L16.9281 18.4427L19.8043 11.5759L15.7028 4.86804L9.14026 4.53259L4.23083 10.1971Z" fill="currentColor"/>
+                    <path d="M17.4873 12.6079L9.73938 15.8203L10.994 5.87292L12.2032 6.02266L13.5517 6.79322L13.5338 9.70767L12.7705 11.8637L14.4132 11.2428L16.056 10.8663L16.7834 11.6312L17.4873 12.6079Z" fill="currentColor"/>
                   </svg>
                 }
               />
@@ -364,18 +389,18 @@ export default function PickGame({ roomData, currentUserId }) {
         )}
 
         {isDuelist && (
-        <div className="flex flex-col items-center justify-center gap-8 w-full">
+        <div className="flex flex-col items-center justify-center gap-4 w-full">
 
         {/* Tag "Temps restant" - toujours présent mais invisible par défaut */}
         <CharacterTag 
-          charId="virginie" 
+          charId={timerCharId}
           text={`Temps restant : ${countdown}s`} 
-          className={`mx-auto ${opponentSubmitted && countdown !== null ? 'opacity-100' : 'opacity-0'}`}
+          className={`mx-auto ${!hasSubmitted && countdown !== null ? 'opacity-100' : 'opacity-0'}`}
           hideName={true}
           icon={
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M17.4368 1.953L23.1639 11.3203L19.0378 21.1721L9.14795 22.585L3.90344 17.9246L0.799805 9.57605L7.83215 1.46191L17.4368 1.953ZM4.23083 10.1971L6.45483 16.1788L10.1005 19.418L16.9281 18.4427L19.8043 11.5759L15.7028 4.86804L9.14026 4.53259L4.23083 10.1971Z" fill="#F63609"/>
-              <path d="M17.4873 12.6079L9.73938 15.8203L10.994 5.87292L12.2032 6.02266L13.5517 6.79322L13.5338 9.70767L12.7705 11.8637L14.4132 11.2428L16.056 10.8663L16.7834 11.6312L17.4873 12.6079Z" fill="#F63609"/>
+              <path d="M17.4368 1.953L23.1639 11.3203L19.0378 21.1721L9.14795 22.585L3.90344 17.9246L0.799805 9.57605L7.83215 1.46191L17.4368 1.953ZM4.23083 10.1971L6.45483 16.1788L10.1005 19.418L16.9281 18.4427L19.8043 11.5759L15.7028 4.86804L9.14026 4.53259L4.23083 10.1971Z" fill="currentColor"/>
+              <path d="M17.4873 12.6079L9.73938 15.8203L10.994 5.87292L12.2032 6.02266L13.5517 6.79322L13.5338 9.70767L12.7705 11.8637L14.4132 11.2428L16.056 10.8663L16.7834 11.6312L17.4873 12.6079Z" fill="currentColor"/>
             </svg>
           }
         />
@@ -572,7 +597,7 @@ export default function PickGame({ roomData, currentUserId }) {
       </div>
       
       {/* ScoreBar visible uniquement pour les spectateurs */}
-      {isSpectator && <ScoreBar players={roomData.players} currentUserId={currentUserId} />}
+      {isSpectator && <ScoreBar players={roomData.players} currentUserId={currentUserId} bleed />}
     </div>
   )
 }

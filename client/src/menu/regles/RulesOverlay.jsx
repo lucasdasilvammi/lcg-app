@@ -115,7 +115,7 @@ function RulesActions({ index, onBack, onPrevious, onNext, onFinish }) {
         <div className="flex items-center justify-center gap-3">
           {hasPrevious && (
             <RulesIconButton
-              label="Etape precedente"
+              label="Étape précédente"
               icon="/menu/back.svg"
               onClick={onPrevious}
             />

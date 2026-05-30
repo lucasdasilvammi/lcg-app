@@ -102,7 +102,7 @@ export default function DefineOrder({ roomData, isAdmin, updateTurnOrder, startG
   if (!roomData) return null
 
   return (
-    <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
+ <div className="relative w-full overflow-hidden bg-bg">
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
@@ -116,16 +116,16 @@ export default function DefineOrder({ roomData, isAdmin, updateTurnOrder, startG
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           backgroundImage: 'url(/assets/home-border-horizontal.png)',
-          backgroundSize: '100% auto',
+          backgroundSize: '100% 100%',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
       />
 
-      <div className="relative z-10 h-dvh w-full max-w-110 mx-auto flex flex-col items-center justify-between py-14 px-8 phone:px-16 text-center">
+ <div className="relative z-10 h-dvh app-screen-y w-full max-w-full mx-auto flex flex-col items-center justify-between px-16 text-center">
         <h2 className="text-light font-hakobi text-5xl uppercase">Ordre du Tour :</h2>
 
-        <div ref={orderListRef} className="flex flex-col gap-3 phone:gap-4 w-full">
+ <div ref={orderListRef} className="flex flex-col gap-4 w-full">
           {displayedPlayers.map((player, index) => {
             const isDragging = draggedPlayerId === player.id
             return (
@@ -146,7 +146,7 @@ export default function DefineOrder({ roomData, isAdmin, updateTurnOrder, startG
                   className="w-16 h-16"
                 />
                 <div
-                  className="grow text-left pl-1 font-hakobi uppercase text-4xl phone:text-4xl -mb-2"
+ className="grow text-left pl-1 font-hakobi uppercase text-4xl -mb-2"
                   style={{ color: getNameColor(player.character) }}
                 >
                   {player.character}
@@ -163,7 +163,7 @@ export default function DefineOrder({ roomData, isAdmin, updateTurnOrder, startG
 
         {isAdmin
           ? <ButtonWithIcon onClick={startGameLoop} text="C'est parti !" />
-          : <p className="text-light opacity-60 font-hakobi text-3xl phone:text-4xl uppercase">En attente de l'hôte...</p>
+ : <p className="text-light opacity-60 font-hakobi text-4xl uppercase">En attente de l'hôte...</p>
         }
       </div>
     </div>

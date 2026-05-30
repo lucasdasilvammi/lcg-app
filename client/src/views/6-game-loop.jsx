@@ -97,8 +97,8 @@ function CtrlZReminderPopup({ quantity, onClose, onOpenBonus, isClosing = false 
 
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 backdrop-blur-xs pointer-events-auto" data-no-longpress>
-      <div className={`relative flex w-full max-w-110 flex-col gap-7 bg-bg px-10 pb-11 pt-17 ${isClosing ? 'ctrl-z-reminder-exit' : 'ctrl-z-reminder-enter'}`}>
-        <div className="pointer-events-none absolute -top-2 -left-2 phone:left-0 h-full w-110">
+      <div className={`relative flex w-full max-w-full flex-col gap-7 bg-bg px-10 pb-11 pt-17 ${isClosing ? 'ctrl-z-reminder-exit' : 'ctrl-z-reminder-enter'}`}>
+ <div className="pointer-events-none absolute -top-2 left-0 h-full w-full">
           <div
             className="absolute inset-0 overflow-hidden bg-light5"
             style={TOP_BORDER_MASK_STYLE}
@@ -155,9 +155,9 @@ function CtrlZUsePopup({ quantity, onClose, onUse, isClosing = false }) {
 
   return (
     <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 backdrop-blur-xs pointer-events-auto" data-no-longpress>
-      <div className={`relative flex w-full max-w-110 flex-col items-center gap-8 bg-bg px-10 pb-11 pt-17 text-light ${isClosing ? 'ctrl-z-reminder-exit' : 'ctrl-z-reminder-enter'}`}>
+      <div className={`relative flex w-full max-w-full flex-col items-center gap-8 bg-bg px-10 pb-11 pt-17 text-light ${isClosing ? 'ctrl-z-reminder-exit' : 'ctrl-z-reminder-enter'}`}>
         <div
-          className="pointer-events-none absolute -top-2 -left-2 phone:left-0 h-full w-110 bg-light"
+ className="pointer-events-none absolute -top-2 left-0 h-full w-full bg-light"
           style={TOP_BORDER_MASK_STYLE}
         />
 
@@ -297,9 +297,9 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, curren
 
   if (isMyTurn) {
     return (
-      <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
+ <div className="relative w-full overflow-hidden bg-bg">
         <style>{ctrlZReminderStyles}</style>
-        <div className="relative z-10 h-dvh w-full max-w-110 mx-auto flex flex-col items-center gap-8 py-12 px-12 phone:px-16 text-center">
+ <div className="relative z-10 h-dvh app-screen-y w-full max-w-full mx-auto flex flex-col items-center gap-8 px-12 text-center">
           {showCtrlZIndicator && (
             <div key={ctrlZTurnKey} className="absolute right-8 top-12 z-20">
               <button
@@ -315,40 +315,40 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, curren
 
           <div className="flex flex-col gap-2 items-center">
             <CharacterCard charId={activePlayer.character} size="low" />
-            <p className="text-xl phone:text-2xl text-light font-family-funnel">
+ <p className="text-2xl text-light font-family-funnel">
               {hasUsedCtrlZThisTurn ? <>Maintenant que tu as relancé, sur quelle case<br/>es-tu tombé ?</> : <>Sur quelle case<br/>es-tu tombé ?</>}
             </p>
           </div>
 
-          <div className="flex w-full h-full justify-center flex-col gap-4 font-family-hakobi text-3xl phone:text-xl text-bg uppercase">
+ <div className="flex w-full h-full justify-center flex-col gap-4 font-family-hakobi text-xl text-bg uppercase">
             <BigButton
               onClick={() => triggerAction("QUIZ")}
               text="Quizz"
-              icon={<img src="/game/icons/cases/quizz.svg" alt="jalon" className="w-8 h-8 phone:w-10 phone:h-10" />}
+ icon={<img src="/game/icons/cases/quizz.svg" alt="jalon" className="w-10 h-10" />}
               className="bg-yellow-primary"
             />
             <BigButton
               onClick={() => triggerAction("DEFI")}
-              text="Defi"
-              icon={<img src="/game/icons/cases/defi.svg" alt="jalon" className="w-8 h-8 phone:w-10 phone:h-10" />}
+              text="Défi"
+ icon={<img src="/game/icons/cases/defi.svg" alt="jalon" className="w-10 h-10" />}
               className="bg-blue-primary"
             />
             <BigButton
               onClick={() => triggerAction("ACTIVITE")}
-              text="Activite"
-              icon={<img src="/game/icons/cases/activite.svg" alt="jalon" className="w-8 h-8 phone:w-10 phone:h-10" />}
+              text="Activité"
+ icon={<img src="/game/icons/cases/activite.svg" alt="jalon" className="w-10 h-10" />}
               className="bg-orange-primary"
             />
             <BigButton
               onClick={() => triggerAction("BONUS")}
               text="Bonus"
-              icon={<img src="/game/icons/cases/bonus.svg" alt="jalon" className="w-8 h-8 phone:w-10 phone:h-10" />}
+ icon={<img src="/game/icons/cases/bonus.svg" alt="jalon" className="w-10 h-10" />}
               className="bg-green-primary"
             />
             <BigButton
               onClick={() => triggerAction("EVENT")}
               text="Évènement"
-              icon={<img src="/game/icons/cases/evenement.svg" alt="jalon" className="w-8 h-8 phone:w-10 phone:h-10" />}
+ icon={<img src="/game/icons/cases/evenement.svg" alt="jalon" className="w-10 h-10" />}
               className="bg-pink-primary"
             />
           </div>
@@ -374,7 +374,7 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, curren
   }
 
   return (
-    <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
+ <div className="relative w-full overflow-hidden bg-bg">
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
@@ -388,15 +388,15 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, curren
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           backgroundImage: 'url(/assets/home-border-horizontal.png)',
-          backgroundSize: '100% auto',
+          backgroundSize: '100% 100%',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
       />
 
-      <div className="relative z-10 h-dvh w-full max-w-110 mx-auto flex flex-col items-center justify-between py-14 px-8 phone:px-16 text-center">
-        <div className="pt-8 phone:pt-10">
-          <p className="text-light opacity-65 text-lg phone:text-xl mb-5 semi font-family-funnel">Tour de</p>
+ <div className="relative z-10 h-dvh app-screen-y w-full max-w-full mx-auto flex flex-col items-center justify-between px-16 text-center">
+ <div className="pt-10">
+ <p className="text-light opacity-65 text-xl mb-5 semi font-family-funnel">Tour de</p>
 
           <div className="flex flex-col items-center gap-4">
             <CharacterCard charId={activePlayer.character} size="default" />
@@ -406,7 +406,7 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, curren
           </div>
         </div>
 
-        <ScoreBar players={roomData.players} currentUserId={currentUserId} />
+        <ScoreBar players={roomData.players} currentUserId={currentUserId} bleed />
       </div>
     </div>
   )

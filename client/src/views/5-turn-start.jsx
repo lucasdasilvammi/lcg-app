@@ -19,16 +19,16 @@ export default function TurnStart({ roomData, rollDice, nextTurn, currentUserId 
     : null
 
   return (
-    <div className="w-full max-w-110 mx-auto">
+    <div className="w-full max-w-full mx-auto">
       <CharacterBorder characterId={activePlayer?.character}>
         <div className="relative w-full overflow-hidden bg-bg">
-          <div className="relative z-10 h-dvh w-full flex flex-col items-center justify-between gap-4 py-14 px-8 phone:px-16 text-center">
+ <div className="relative z-10 h-dvh app-screen-y w-full flex flex-col items-center justify-between gap-4 px-16 text-center">
             {skipBonus && (
               <div className="flex flex-col gap-4">
                 <h2 className="text-light font-hakobi text-5xl uppercase">
                   Va faire le café du boss
                 </h2>
-                <p className="font-family-funnel text-base phone:text-lg text-light/80">
+ <p className="font-family-funnel text-lg text-light/80">
                   {skipAuthor?.character ? (
                     <>
                       <span
@@ -48,8 +48,8 @@ export default function TurnStart({ roomData, rollDice, nextTurn, currentUserId 
 
             {!skipBonus && isMyTurn && (
               <div className="flex flex-col gap-2 pt-8">
-                <h2 className="text-light font-hakobi text-5xl phone:text-6xl uppercase">À toi de jouer :</h2>
-                <p className="font-family-funnel text-base phone:text-lg opacity-65">Lance le dé !</p>
+                <h2 className="text-light font-hakobi text-5xl uppercase">À toi de jouer :</h2>
+                <p className="font-family-funnel text-lg opacity-65">Lance le dé !</p>
               </div>
             )}
 
@@ -65,7 +65,7 @@ export default function TurnStart({ roomData, rollDice, nextTurn, currentUserId 
 
             {skipBonus && (
               <div className="flex flex-col items-center gap-6">
-                <p className="max-w-80 font-family-funnel text-base phone:text-lg leading-snug text-light">
+ <p className="max-w-80 font-family-funnel text-lg leading-snug text-light">
                   Le boss prend deux sucres et n'aime pas attendre. On se revoit au tour d'après, si tu ne renverses rien !
                 </p>
                 {isMyTurn ? (

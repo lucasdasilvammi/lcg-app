@@ -18,7 +18,7 @@ export default function DuelReveal({ roomData, continueToFeedback, currentUserId
   const isMeReader = readerId === currentUserId
 
   return (
-    <div className="bg-bg relative max-w-110 flex flex-col justify-between items-center h-dvh py-14 px-6 text-center">
+ <div className="bg-bg relative max-w-full flex flex-col justify-between items-center h-dvh app-screen-y defi-screen-y px-6 text-center">
       {/* Navbar avec participants, tag défi et jalons */}
       <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
 

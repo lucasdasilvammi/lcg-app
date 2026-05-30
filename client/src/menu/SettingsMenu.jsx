@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import CharacterCard from '../components/CharacterCard'
 import ButtonWithIcon from '../components/ButtonWithIcon'
+import CodeDisplay from '../components/CodeDisplay'
 import BonusPopup, { BonusIconBadge } from '../components/BonusPopup'
 import ScoreBar from '../components/ScoreBar'
 import { BONUS_CATALOG, EMPTY_BONUS_SLOTS } from '../data/bonusCatalog'
@@ -41,7 +42,18 @@ const popupStyles = `
     animation: settingsSlideDownToBottom 0.25s ease-in forwards;
   }
 
+  .settings-panel-frame {
+    transition: height 0.24s ease, padding-top 0.24s ease, padding-bottom 0.24s ease;
+  }
+
 `
+
+const CODE_CHARACTERS = [
+  { id: 0, name: 'Donatien' },
+  { id: 1, name: 'Lucien' },
+  { id: 2, name: 'Alan' },
+  { id: 3, name: 'Virginie' }
+]
 
 function MenuIconButton({ label, icon, onClick }) {
   return (
@@ -112,13 +124,19 @@ function MenuPlayerActionButton({ label, icon, disabled = false, onClick }) {
       type="button"
       aria-label={label}
       disabled={disabled}
-      onClick={onClick}
-      className={`relative flex h-10 w-10 shrink-0 items-center justify-center bg-contain bg-center bg-no-repeat transition ${
+      onPointerDown={(event) => {
+        event.stopPropagation()
+      }}
+      onClick={(event) => {
+        event.stopPropagation()
+        if (!disabled) onClick?.()
+      }}
+      className={`relative z-20 flex h-10 w-10 shrink-0 items-center justify-center bg-contain bg-center bg-no-repeat transition ${
         disabled ? 'cursor-not-allowed opacity-20' : 'active:scale-95'
       }`}
       style={{ backgroundImage: 'url(/menu/bg-btn.svg)' }}
     >
-      <img src={icon} alt="" aria-hidden="true" className="h-7 w-7 object-contain" />
+      <img src={icon} alt="" aria-hidden="true" className="pointer-events-none h-7 w-7 object-contain" />
     </button>
   )
 }
@@ -593,7 +611,7 @@ function getPlayerPrimaryAction({ player, status, isAdminPlayer }) {
     }
   }
 
-  if (status === 'disconnected') {
+  if (status === 'disconnected' || status === 'waiting') {
     return {
       icon: '/menu/icon/ajouter.svg',
       label: `Réinviter ${player.character}`,
@@ -637,7 +655,7 @@ function movePlayerInList(players, fromIndex, toIndex) {
   return nextPlayers
 }
 
-export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder, promoteAdmin, kickPlayer, undoLastAction, pauseGame, consumeBonus, leaveRoom, onClose }) {
+export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder, promoteAdmin, kickPlayer, createReconnectInvite, consumedReconnectInvite, addToast, undoLastAction, pauseGame, consumeBonus, leaveRoom, onClose }) {
   const [isClosing, setIsClosing] = useState(false)
   const [activeMenu, setActiveMenu] = useState('lobby')
   const [now, setNow] = useState(() => Date.now())
@@ -648,6 +666,8 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
   const [isOrderConfirmClosing, setIsOrderConfirmClosing] = useState(false)
   const [pendingAction, setPendingAction] = useState(null)
   const [isActionConfirmClosing, setIsActionConfirmClosing] = useState(false)
+  const [reconnectInvite, setReconnectInvite] = useState(null)
+  const [isReconnectInviteClosing, setIsReconnectInviteClosing] = useState(false)
   const [isBonusDetailOpen, setIsBonusDetailOpen] = useState(false)
   const [isBonusDetailClosing, setIsBonusDetailClosing] = useState(false)
   const [selectedBonusId, setSelectedBonusId] = useState(null)
@@ -655,6 +675,8 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
   const [isRulesOpen, setIsRulesOpen] = useState(false)
   const [rulesStep, setRulesStep] = useState('portal')
   const [highestUnlockedRuleStepIndex, setHighestUnlockedRuleStepIndex] = useState(0)
+  const [panelHeight, setPanelHeight] = useState(null)
+  const panelRef = useRef(null)
   const orderListRef = useRef(null)
   const draggedPlayerIdRef = useRef(null)
   const playersCount = roomData?.players?.length || 0
@@ -685,10 +707,58 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
         ? 'bonus-panel-enter'
         : 'settings-popup-enter'
 
+  function closeReconnectInvite(afterClose) {
+    if (isReconnectInviteClosing) return
+    setIsReconnectInviteClosing(true)
+    window.setTimeout(() => {
+      setReconnectInvite(null)
+      setIsReconnectInviteClosing(false)
+      if (typeof afterClose === 'function') afterClose()
+    }, 250)
+  }
+
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
     return () => window.clearInterval(timer)
   }, [])
+
+  useEffect(() => {
+    if (!reconnectInvite || !consumedReconnectInvite) return
+    if (consumedReconnectInvite.character !== reconnectInvite.player.character) return
+    const timer = window.setTimeout(() => closeReconnectInvite(), 0)
+    return () => window.clearTimeout(timer)
+  }, [consumedReconnectInvite?.receivedAt])
+
+  useLayoutEffect(() => {
+    const panel = panelRef.current
+    if (!panel) return undefined
+
+    const measurePanel = () => {
+      const previousHeight = panel.style.height
+      panel.style.height = 'auto'
+      const nextHeight = Math.ceil(panel.scrollHeight)
+      panel.style.height = previousHeight
+      setPanelHeight(currentHeight => currentHeight === nextHeight ? currentHeight : nextHeight)
+    }
+
+    measurePanel()
+
+    if (typeof ResizeObserver === 'undefined') return undefined
+
+    const resizeObserver = new ResizeObserver(measurePanel)
+    resizeObserver.observe(panel)
+
+    return () => resizeObserver.disconnect()
+  }, [
+    activeMenu,
+    isCurrentUserAdmin,
+    isOrderMode,
+    displayedPlayers.length,
+    selectedBonusId,
+    closingBonusId,
+    isBonusDetailOpen,
+    isBonusDetailClosing
+  ])
 
   useEffect(() => {
     if (!draggedPlayerId) return undefined
@@ -802,6 +872,45 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
     setPendingAction({ type, targetPlayerId })
   }
 
+  const openReconnectInvite = (targetPlayerId) => {
+    const targetPlayer = menuPlayers.find(player => player.id === targetPlayerId)
+    console.log('create reconnect invite click', {
+      targetPlayerId,
+      targetStatus: targetPlayer ? getPlayerMenuStatus(targetPlayer) : null,
+      isCurrentUserAdmin,
+      hasCreateReconnectInvite: Boolean(createReconnectInvite)
+    })
+
+    if (!targetPlayer) {
+      addToast?.("Impossible de retrouver ce joueur.", 'error')
+      return
+    }
+
+    if (!createReconnectInvite) {
+      addToast?.("Invitation indisponible pour le moment.", 'error')
+      return
+    }
+
+    createReconnectInvite(targetPlayerId, (response) => {
+      if (!response?.ok) {
+        addToast?.(
+          response?.reason === 'invalid_target'
+            ? "Ce joueur n'est pas disponible pour une invitation."
+            : response?.reason === 'server_no_ack'
+              ? "Le serveur n'a pas répondu à l'invitation."
+            : "Impossible de créer l'invitation.",
+          'error'
+        )
+        return
+      }
+      setIsReconnectInviteClosing(false)
+      setReconnectInvite({
+        code: response.code,
+        player: response.player || targetPlayer
+      })
+    })
+  }
+
   const closeActionConfirm = (afterClose) => {
     if (isActionConfirmClosing) return
     setIsActionConfirmClosing(true)
@@ -870,12 +979,14 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
         data-no-longpress
       >
         <div
+          ref={panelRef}
           key={isBonusDetailOpen ? 'bonus-detail-panel' : 'settings-panel'}
-          className={`relative flex w-full max-w-110 flex-col bg-bg px-6 pb-8 ${isBonusDetailOpen ? 'gap-8 pt-10' : 'gap-12 pt-16'} ${settingsPanelAnimationClass}`}
+          className={`settings-panel-frame relative flex w-full max-w-full flex-col bg-bg px-6 pb-8 ${isBonusDetailOpen ? 'gap-8 pt-10' : 'gap-12 pt-16'} ${settingsPanelAnimationClass}`}
+          style={panelHeight ? { height: `${panelHeight}px` } : undefined}
           onClick={(event) => event.stopPropagation()}
         >
           <div
-            className="pointer-events-none absolute -top-2 -left-2 phone:left-0 h-full w-110"
+ className="pointer-events-none absolute -top-2 left-0 h-full w-full"
             style={{
               WebkitMaskImage: 'url(/menu/menu-border-top.svg)',
               maskImage: 'url(/menu/menu-border-top.svg)',
@@ -959,11 +1070,11 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
                     />
 
                     {isCurrentUserAdmin && (
-                      <div className="relative flex h-10 w-[88px] shrink-0 items-center justify-end">
+                      <div className="relative z-20 flex h-10 w-[88px] shrink-0 items-center justify-end">
                         <button
                           type="button"
                           aria-label={`Deplacer ${player.character}`}
-                          className={`absolute right-0 flex h-10 w-10 shrink-0 items-center justify-center text-light transition-all duration-200 ease-out ${
+                          className={`absolute right-0 z-10 flex h-10 w-10 shrink-0 items-center justify-center text-light transition-all duration-200 ease-out ${
                             isOrderMode ? 'translate-x-0 scale-100 opacity-100' : 'pointer-events-none translate-x-2 scale-90 opacity-0'
                           }`}
                         >
@@ -971,7 +1082,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
                         </button>
 
                         <div
-                          className={`absolute right-0 flex shrink-0 items-center gap-2 transition-all duration-200 ease-out ${
+                          className={`absolute right-0 z-20 flex shrink-0 items-center gap-2 transition-all duration-200 ease-out ${
                             isOrderMode ? 'pointer-events-none -translate-x-2 scale-95 opacity-0' : 'translate-x-0 scale-100 opacity-100'
                           }`}
                         >
@@ -979,7 +1090,13 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
                             label={primaryAction.label}
                             icon={primaryAction.icon}
                             disabled={primaryAction.disabled}
-                            onClick={() => openActionConfirm(isAdminPlayer ? 'leave' : 'kick', player.id)}
+                            onClick={() => {
+                              if ((status === 'disconnected' || status === 'waiting') && !isAdminPlayer) {
+                                openReconnectInvite(player.id)
+                                return
+                              }
+                              openActionConfirm(isAdminPlayer ? 'leave' : 'kick', player.id)
+                            }}
                           />
                           <MenuPlayerActionButton
                             label={`Promouvoir ${player.character} admin`}
@@ -1057,7 +1174,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
           data-no-longpress
         >
           <div
-            className={`settings-confirm-panel relative flex w-full max-w-110 max-h-[calc(var(--app-height,100dvh)-16px)] flex-col items-center gap-10 overflow-visible bg-bg px-8 pb-12 pt-12 text-center ${isOrderConfirmClosing ? 'settings-popup-exit' : 'settings-popup-enter'}`}
+            className={`settings-confirm-panel relative flex w-full max-w-full max-h-[calc(var(--app-height,100dvh)-16px)] flex-col items-center gap-10 overflow-visible bg-bg px-8 pb-12 pt-12 text-center ${isOrderConfirmClosing ? 'settings-popup-exit' : 'settings-popup-enter'}`}
             onClick={(event) => event.stopPropagation()}
           >
             <div
@@ -1085,6 +1202,53 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
           </div>
         </div>
       )}
+      {reconnectInvite && (
+        <div
+          className="settings-confirm-overlay fixed inset-0 z-[60] flex items-end justify-center bg-black/60 backdrop-blur-xs"
+          onClick={() => closeReconnectInvite()}
+          data-no-longpress
+        >
+          <div
+            className={`settings-confirm-panel relative flex w-full max-w-full max-h-[calc(var(--app-height,100dvh)-16px)] flex-col items-center gap-7 overflow-visible bg-bg px-8 pb-12 pt-12 text-center ${isReconnectInviteClosing ? 'settings-popup-exit' : 'settings-popup-enter'}`}
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div
+              className="pointer-events-none absolute -top-2 left-0 h-10 w-full bg-light"
+              style={{
+                WebkitMaskImage: 'url(/menu/menu-border-top.svg)',
+                maskImage: 'url(/menu/menu-border-top.svg)',
+                WebkitMaskSize: '100% auto',
+                maskSize: '100% auto',
+                WebkitMaskPosition: 'top center',
+                maskPosition: 'top center',
+                WebkitMaskRepeat: 'no-repeat',
+                maskRepeat: 'no-repeat'
+              }}
+            />
+
+            <p className="font-funnel text-xl leading-snug text-light/80">
+              Invitation privée<br />pour inviter :
+            </p>
+
+            <div className="flex flex-col items-center gap-2">
+              <CharacterCard charId={reconnectInvite.player.character} size="head-only-big" />
+              <p className="font-hakobi text-5xl uppercase leading-none" style={{ color: `var(--color-${reconnectInvite.player.character})` }}>
+                {reconnectInvite.player.character}
+              </p>
+            </div>
+
+            <CodeDisplay code={reconnectInvite.code} characters={CODE_CHARACTERS} />
+
+            <ButtonWithIcon
+              variant="menu"
+              text="Retour"
+              icon={<MenuColorIcon src="/menu/icon/enter.svg" />}
+              onClick={() => closeReconnectInvite()}
+              className="bg-red-secondary text-red-primary"
+            />
+          </div>
+        </div>
+      )}
       {pendingAction && (
         <div
           className="settings-confirm-overlay fixed inset-0 z-[60] flex items-end justify-center bg-black/60 backdrop-blur-xs"
@@ -1092,7 +1256,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
           data-no-longpress
         >
           <div
-            className={`settings-confirm-panel relative flex w-full max-w-110 max-h-[calc(var(--app-height,100dvh)-16px)] flex-col items-center gap-8 overflow-visible bg-bg px-8 py-12 text-center ${isActionConfirmClosing ? 'settings-popup-exit' : 'settings-popup-enter'}`}
+            className={`settings-confirm-panel relative flex w-full max-w-full max-h-[calc(var(--app-height,100dvh)-16px)] flex-col items-center gap-8 overflow-visible bg-bg px-8 py-12 text-center ${isActionConfirmClosing ? 'settings-popup-exit' : 'settings-popup-enter'}`}
             onClick={(event) => event.stopPropagation()}
           >
             <div

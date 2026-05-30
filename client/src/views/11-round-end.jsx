@@ -43,7 +43,7 @@ function PodiumSlot({ player, rank, featured = false }) {
           style={{ backgroundColor: characterColor }}
           aria-hidden="true"
         />
-        <svg width="44" height="56" viewBox="0 0 44 56" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" className="pointer-events-none absolute left-0 top-0 z-20 h-[105%]" aria-hidden="true">
+        <svg width="44" height="56" viewBox="0 0 44 56" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" className="pointer-events-none absolute -left-0.25 top-0 z-20 h-[105%]" aria-hidden="true">
           <path fillRule="evenodd" clipRule="evenodd" d="M43.4953 0H0V39.8779V55.4838H17.618L3.56385 51.1631L0 39.8779L3.56388 8.77765L43.4953 0Z" fill="#101010"/>
         </svg>
         <svg width="34" height="56" viewBox="0 0 34 56" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" className="pointer-events-none absolute -right-0.5 top-0 z-20 h-[105%]" aria-hidden="true">
@@ -65,11 +65,11 @@ function RankRow({ player, rank }) {
   const characterColor = `var(--color-${player.character})`
 
   return (
-    <li className="relative flex min-h-17 w-full items-center gap-3 overflow-hidden bg-light5 px-4 py-3 text-left text-light">
-      <svg width="44" height="56" viewBox="0 0 44 56" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" className="pointer-events-none absolute -left-1 top-0 h-full" aria-hidden="true">
+    <li className="relative flex min-h-17 w-full items-center gap-3 bg-light5 px-4 py-3 text-left text-light">
+      <svg width="44" height="56" viewBox="0 0 44 56" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" className="pointer-events-none absolute -left-0.5 -top-0.25 h-19.5" aria-hidden="true">
         <path fillRule="evenodd" clipRule="evenodd" d="M43.4953 0H0V39.8779V55.4838H17.618L3.56385 51.1631L0 39.8779L3.56388 8.77765L43.4953 0Z" fill="#101010"/>
       </svg>
-      <svg width="34" height="56" viewBox="0 0 34 56" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" className="pointer-events-none absolute -right-1 top-0 h-full" aria-hidden="true">
+      <svg width="34" height="56" viewBox="0 0 34 56" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" className="pointer-events-none absolute -right-0.5 -top-0.25 h-19.5" aria-hidden="true">
         <path d="M28.8504 44.3695L33.3757 13.412L28.8504 2.45959L0 0H33.3757V13.412V55.4837H6.75606L23.1684 51.2791L28.8504 44.3695Z" fill="#101010"/>
       </svg>
 
@@ -106,7 +106,7 @@ export default function RoundEnd({ roomData, startNewRound, currentUserId }) {
   const canStartNewRound = roomData.players?.[0]?.id === currentUserId
 
   return (
-    <div className="relative min-w-dvw phone:min-w-110 overflow-hidden bg-bg">
+ <div className="relative w-full overflow-hidden bg-bg">
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
@@ -120,13 +120,13 @@ export default function RoundEnd({ roomData, startNewRound, currentUserId }) {
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           backgroundImage: 'url(/assets/home-border-horizontal.png)',
-          backgroundSize: '100% auto',
+          backgroundSize: '100% 100%',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat'
         }}
       />
 
-      <div className="relative z-10 mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-between gap-6 px-6 py-12 text-center phone:px-10">
+ <div className="relative z-10 mx-auto flex h-dvh app-screen-y w-full max-w-full flex-col items-center justify-between gap-6 text-center px-10">
         <header className="flex w-full shrink-0 flex-col items-center gap-2 text-center">
           <p className="font-family-funnel text-base text-light opacity-55">Fin du round</p>
           <h2 className="font-family-hakobi text-[48px] uppercase leading-none text-light -mb-2">

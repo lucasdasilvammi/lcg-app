@@ -1,153 +1,120 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import {
+  ActivityScreen,
+  ActivityHeaderTag,
+  ActivityCubeIcon,
+  ClockIcon,
+  PhotoFrame,
+  StatusTag,
+  VoteIcon,
+  VoteTimerBar
+} from './ActivityShared'
 
 export default function ActiviteVote({ roomData, currentUserId, submitVote }) {
-  const interaction = roomData?.currentInteraction
-  if (!roomData || !interaction) return null
+  const interaction = roomData?.currentInteraction || {}
 
   const {
     photos = [],
     currentPhotoIndex = 0,
-    participants = [],
     votes = {},
-    voteEndsAt = null
+    voteStartedAt = null,
+    voteEndsAt = null,
+    voteDurationMs = 12000
   } = interaction
 
   const currentPhoto = photos[currentPhotoIndex]
   const currentPhotoData = currentPhoto?.photoData || interaction.currentPhotoData
   const currentVotes = votes[currentPhotoIndex] || { up: 0, neutral: 0, down: 0, byPlayer: {} }
-  const eligibleVoters = useMemo(
-    () => participants.filter(id => id !== currentPhoto?.playerId),
-    [participants, currentPhoto?.playerId]
-  )
   const hasVoted = Boolean(currentVotes.byPlayer?.[currentUserId])
   const isOwnPhoto = currentPhoto?.playerId === currentUserId
   const canVote = Boolean(currentPhoto && !isOwnPhoto && !hasVoted)
-  const votedCount = Object.keys(currentVotes.byPlayer || {}).filter(id => eligibleVoters.includes(id)).length
-  const totalVoters = eligibleVoters.length
 
-  const [timeLeft, setTimeLeft] = useState(() => {
-    if (!voteEndsAt) return 12
-    return Math.max(0, Math.ceil((voteEndsAt - Date.now()) / 1000))
-  })
+  const [now, setNow] = useState(() => Date.now())
 
   useEffect(() => {
-    const updateTimeLeft = () => {
-      if (!voteEndsAt) {
-        setTimeLeft(12)
-        return
-      }
-      setTimeLeft(Math.max(0, Math.ceil((voteEndsAt - Date.now()) / 1000)))
-    }
-
-    updateTimeLeft()
-    const timer = window.setInterval(updateTimeLeft, 250)
+    const timer = window.setInterval(() => setNow(Date.now()), 120)
     return () => window.clearInterval(timer)
   }, [voteEndsAt, currentPhotoIndex])
 
-  const voteProgress = totalVoters > 0 ? (votedCount / totalVoters) * 100 : 100
+  const remainingMs = voteEndsAt ? Math.max(0, voteEndsAt - now) : voteDurationMs
+  const timeLeft = Math.ceil(remainingMs / 1000)
+  const duration = voteEndsAt && voteStartedAt ? Math.max(1, voteEndsAt - voteStartedAt) : voteDurationMs
+  const progress = remainingMs / duration
 
   const handleVote = (voteType) => {
     if (!canVote) return
     submitVote(currentPhotoIndex, voteType)
   }
 
+  if (!roomData || !roomData.currentInteraction) return null
+
   return (
-    <div className="relative min-w-dvw overflow-hidden bg-bg phone:min-w-110">
-      <div className="relative mx-auto flex h-dvh w-full max-w-110 flex-col items-center justify-between gap-5 px-6 py-14 text-center">
-        <div className="flex min-h-0 w-full flex-1 flex-col gap-6">
-          <div className="flex flex-col items-center gap-2">
-            <div className="font-hakobi text-4xl uppercase text-orange-primary">VOTE</div>
-            <p className="font-funnel text-lg text-light/70">Vote simultane</p>
-          </div>
+    <ActivityScreen className="justify-between gap-6">
+      <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-6">
+        <ActivityHeaderTag />
 
-          <div className="flex items-center justify-between rounded-xl border border-light/10 bg-black/30 px-4 py-3">
-            <div className="text-left">
-              <p className="font-funnel text-xs uppercase tracking-wide text-light/40">Logo</p>
-              <p className="font-hakobi text-xl text-light">{currentPhotoIndex + 1} / {photos.length}</p>
-            </div>
-            <div className="text-right">
-              <p className="font-funnel text-xs uppercase tracking-wide text-light/40">Temps</p>
-              <p className={`font-hakobi text-3xl ${timeLeft <= 3 ? 'text-red-400' : 'text-orange-primary'}`}>
-                {timeLeft}s
-              </p>
-            </div>
+        <div className="flex flex-col items-center gap-5 w-full px-2">
+          <h1 className="m-0 max-w-64 font-hakobi text-[40px] uppercase leading-none text-light">
+            C'est le moment de voter
+          </h1>
+          <div className="flex w-full items-center justify-between">
+            <StatusTag tone="gray" icon={<ClockIcon />}>{timeLeft}s</StatusTag>
+            <StatusTag tone="gray" icon={<ActivityCubeIcon />}>{currentPhotoIndex + 1}/{photos.length || 1}</StatusTag>
           </div>
-
-          <div className="flex flex-1 flex-col items-center justify-center gap-4">
-            {currentPhoto && currentPhotoData ? (
-              <>
-                <div className="relative flex w-full justify-center overflow-hidden rounded-2xl border-2 border-light/20 bg-black/40 p-3">
-                  <img
-                    src={currentPhotoData}
-                    alt={`Logo ${currentPhotoIndex + 1}`}
-                    className="max-h-64 w-auto max-w-full object-contain"
-                  />
-                </div>
-
-                {isOwnPhoto ? (
-                  <div className="rounded-xl bg-orange-primary/15 px-4 py-3">
-                    <p className="font-funnel text-base text-orange-primary">Les autres votent pour ton logo.</p>
-                    <p className="font-funnel text-sm text-light/50">Tu ne peux pas voter pour toi-meme.</p>
-                  </div>
-                ) : hasVoted ? (
-                  <div className="rounded-xl bg-green-500/20 px-4 py-3">
-                    <p className="font-funnel text-base text-green-300">Vote envoye.</p>
-                    <p className="font-funnel text-sm text-light/50">En attente des autres joueurs...</p>
-                  </div>
-                ) : (
-                  <div className="rounded-xl bg-black/25 px-4 py-3">
-                    <p className="font-funnel text-base text-light">A toi de voter.</p>
-                    <p className="font-funnel text-sm text-light/50">Choisis ton avis avant la fin du timer.</p>
-                  </div>
-                )}
-              </>
-            ) : (
-              <div className="rounded-xl bg-black/30 p-4">
-                <p className="font-funnel text-lg text-light">En attente des photos...</p>
-              </div>
-            )}
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <p className="font-funnel text-sm text-light/50">
-              {votedCount}/{totalVoters} votes recus
-            </p>
-            <div className="h-2 w-full overflow-hidden rounded-full bg-light/20">
-              <div
-                className="h-full bg-orange-primary transition-all duration-300"
-                style={{ width: `${voteProgress}%` }}
-              />
-            </div>
-          </div>
+          <VoteTimerBar progress={progress} className="w-[19.5rem]" />
         </div>
 
-        <div className="grid w-full grid-cols-3 gap-3">
-          <button
-            type="button"
-            onClick={() => handleVote('down')}
-            disabled={!canVote}
-            className="rounded-xl border border-red-400/40 bg-red-500/20 py-4 font-hakobi text-lg text-red-300 transition disabled:opacity-35"
-          >
-            Non
-          </button>
-          <button
-            type="button"
-            onClick={() => handleVote('neutral')}
-            disabled={!canVote}
-            className="rounded-xl border border-light/20 bg-light/15 py-4 font-hakobi text-lg text-light transition disabled:opacity-35"
-          >
-            OK
-          </button>
-          <button
-            type="button"
-            onClick={() => handleVote('up')}
-            disabled={!canVote}
-            className="rounded-xl border border-green-400/40 bg-green-500/20 py-4 font-hakobi text-lg text-green-300 transition disabled:opacity-35"
-          >
-            Top
-          </button>
+        <div className="flex w-full flex-1 flex-col items-center justify-center gap-4">
+          {currentPhoto && currentPhotoData ? (
+            <PhotoFrame src={currentPhotoData} alt={`Logo ${currentPhotoIndex + 1}`} className="h-80 w-full max-w-[19.5rem]" />
+          ) : (
+            <div className="flex h-80 w-full max-w-[19.5rem] items-center justify-center bg-light5 font-funnel text-light/60">
+              En attente des photos...
+            </div>
+          )}
+
+          {isOwnPhoto && (
+            <p className="max-w-72 font-funnel text-base font-semibold text-orange-primary">
+              Les autres votent pour ton logo.
+            </p>
+          )}
+          {hasVoted && !isOwnPhoto && (
+            <p className="max-w-72 font-funnel text-base font-semibold text-green-primary">
+              Vote envoyé. En attente des autres joueurs...
+            </p>
+          )}
         </div>
       </div>
-    </div>
+
+      <div className="grid w-full grid-cols-3 gap-5 pb-1">
+        <VoteButton type="up" disabled={!canVote} onClick={() => handleVote('up')} />
+        <VoteButton type="neutral" disabled={!canVote} onClick={() => handleVote('neutral')} />
+        <VoteButton type="down" disabled={!canVote} onClick={() => handleVote('down')} />
+      </div>
+    </ActivityScreen>
+  )
+}
+
+function VoteButton({ type, disabled, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      aria-label={type === 'up' ? 'Pouce vers le haut' : type === 'down' ? 'Pouce vers le bas' : 'Vote neutre'}
+      className="flex h-24 items-center justify-center bg-light transition active:scale-95 disabled:opacity-25"
+      style={{
+        WebkitMaskImage: 'url(/menu/bg-btn.svg)',
+        maskImage: 'url(/menu/bg-btn.svg)',
+        WebkitMaskSize: 'contain',
+        maskSize: 'contain',
+        WebkitMaskPosition: 'center',
+        maskPosition: 'center',
+        WebkitMaskRepeat: 'no-repeat',
+        maskRepeat: 'no-repeat'
+      }}
+    >
+      <VoteIcon type={type} className="h-14 w-14" />
+    </button>
   )
 }

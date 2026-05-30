@@ -1,6 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { SocketProvider, useSocket } from './contexts/SocketContext'
 import CodeDisplay from './components/CodeDisplay'
+import ButtonWithIcon from './components/ButtonWithIcon'
+import CharacterCard from './components/CharacterCard'
 import Home from './views/1-home'
 import Join from './views/2.2-rejoindre-room'
 import Lobby from './views/2.1-creer-room'
@@ -32,7 +34,6 @@ import PickReveal from './views/defi/pick/9-pick-reveal'
 import ZoomReveal from './views/defi/zoom/9-zoom-reveal'
 import Feedback from './views/10-feedback'
 import RoundEnd from './views/11-round-end'
-import DebugDuelSelector from './views/debug-duel-selector'
 import Toasts from './components/Toasts'
 import SettingsMenu from './menu/SettingsMenu'
 import MenuOnboarding from './menu/MenuOnboarding'
@@ -58,6 +59,10 @@ const PLAYABLE_CHARACTERS = [
 const PLAYER_MENU_ONBOARDING_STORAGE_KEY = 'lcg-player-menu-onboarding-seen-v2'
 const ADMIN_MENU_ONBOARDING_STORAGE_KEY = 'lcg-admin-menu-onboarding-seen-v1'
 const APP_DESIGN_WIDTH = 390
+const FULLSCREEN_SCREEN_PADDING_TOP = '5rem'
+const FULLSCREEN_SCREEN_PADDING_BOTTOM = '3.5rem'
+const WINDOWED_MOBILE_SCREEN_PADDING_TOP = '1rem'
+const WINDOWED_MOBILE_SCREEN_PADDING_BOTTOM = '1.5rem'
 
 const ACTIVITY_VIEWS = new Set([
   'ACTIVITE_BRIEF',
@@ -129,7 +134,6 @@ const canOpenSettingsForContext = ({ view, roomData, currentUserId }) => {
 
     case 'FEEDBACK':
     case 'ROUND_END':
-    case 'DEBUG_DUEL_SELECTOR':
     default:
       return false
   }
@@ -196,6 +200,10 @@ function PauseOverlay({ isAdmin, resumeGame }) {
 
 function ResponsiveViewport({ children }) {
   useLayoutEffect(() => {
+    const isMobileViewport = () => {
+      return window.innerWidth < 470 || /iPhone|iPad|Android|Mobile/.test(navigator.userAgent)
+    }
+
     const updateViewportMetrics = () => {
       const viewport = window.visualViewport
       const viewportWidth = viewport?.width || window.innerWidth
@@ -203,12 +211,21 @@ function ResponsiveViewport({ children }) {
       const visualWidth = Math.min(viewportWidth, APP_DESIGN_WIDTH)
       const scale = visualWidth / APP_DESIGN_WIDTH
       const logicalHeight = viewportHeight / scale
+      const shouldUseCompactPadding = isMobileViewport() && !document.fullscreenElement
 
       document.documentElement.style.setProperty('--app-design-width', `${APP_DESIGN_WIDTH}px`)
       document.documentElement.style.setProperty('--app-visual-width', `${Math.round(visualWidth)}px`)
       document.documentElement.style.setProperty('--app-scale', `${scale}`)
       document.documentElement.style.setProperty('--app-viewport-height', `${Math.round(viewportHeight)}px`)
       document.documentElement.style.setProperty('--app-height', `${Math.round(logicalHeight)}px`)
+      document.documentElement.style.setProperty(
+        '--app-screen-padding-top',
+        shouldUseCompactPadding ? WINDOWED_MOBILE_SCREEN_PADDING_TOP : FULLSCREEN_SCREEN_PADDING_TOP
+      )
+      document.documentElement.style.setProperty(
+        '--app-screen-padding-bottom',
+        shouldUseCompactPadding ? WINDOWED_MOBILE_SCREEN_PADDING_BOTTOM : FULLSCREEN_SCREEN_PADDING_BOTTOM
+      )
     }
 
     updateViewportMetrics()
@@ -238,10 +255,62 @@ function ResponsiveViewport({ children }) {
   )
 }
 
+function ReconnectInviteConfirm({ invite, onConfirm, onCancel }) {
+  if (!invite?.character) return null
+
+  return (
+    <div className="fixed inset-0 z-[80] flex items-end justify-center bg-black/70 backdrop-blur-xs" data-no-longpress>
+      <div className="relative flex w-full max-w-full flex-col items-center gap-7 overflow-visible bg-bg px-8 pb-12 pt-16 text-center">
+        <div
+          className="pointer-events-none absolute -top-2 left-0 h-10 w-full bg-light"
+          style={{
+            WebkitMaskImage: 'url(/menu/menu-border-top.svg)',
+            maskImage: 'url(/menu/menu-border-top.svg)',
+            WebkitMaskSize: '100% auto',
+            maskSize: '100% auto',
+            WebkitMaskPosition: 'top center',
+            maskPosition: 'top center',
+            WebkitMaskRepeat: 'no-repeat',
+            maskRepeat: 'no-repeat'
+          }}
+        />
+
+        <div className="flex flex-col items-center gap-2">
+          <CharacterCard charId={invite.character} size="head-only-big" />
+          <p className="font-hakobi text-5xl uppercase leading-none" style={{ color: `var(--color-${invite.character})` }}>
+            {invite.character}
+          </p>
+        </div>
+
+        <p className="max-w-72 font-funnel text-lg leading-snug text-light/80">
+          Est-ce que tu confirmes qu'il s'agit bien de ton personnage ?
+        </p>
+
+        <div className="flex items-center justify-center gap-3">
+          <ButtonWithIcon
+            variant="menu"
+            text="Non"
+            icon={<img src="/menu/icon/disconnected.svg" alt="" aria-hidden="true" className="h-7 w-7" />}
+            onClick={onCancel}
+            className="bg-red-secondary text-red-primary"
+          />
+          <ButtonWithIcon
+            variant="menu"
+            text="Oui"
+            icon={<img src="/menu/icon/connected.svg" alt="" aria-hidden="true" className="h-7 w-7" />}
+            onClick={onConfirm}
+            className="!bg-green-secondary text-green-primary"
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function AppContent() {
 
 
-  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, debugTriggerDuel, acknowledgeChooseQuizBonus, selectQuizDifficulty, claimCaseBonus, stealEventBonus, previewEventStealTarget, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, undoLastAction, pauseGame, resumeGame, useBonus, leaveRoom } = useSocket();
+  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, addToast, pendingReconnectInvite, consumedReconnectInvite, confirmReconnectInvite, dismissReconnectInvite, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, acknowledgeChooseQuizBonus, selectQuizDifficulty, claimCaseBonus, stealEventBonus, previewEventStealTarget, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, createReconnectInvite, undoLastAction, pauseGame, resumeGame, useBonus, leaveRoom } = useSocket();
 
   const [view, setView] = useState("HOME");
   const [inputCode, setInputCode] = useState([]);
@@ -252,10 +321,13 @@ function AppContent() {
   const [menuOnboardingVariant, setMenuOnboardingVariant] = useState('player')
   const longPressTimerRef = useRef(null)
   const pointerOriginRef = useRef(null)
+  const lastTapRef = useRef({ time: 0, x: 0, y: 0 })
   const isLeavingRef = useRef(false)
 
   const LONG_PRESS_MS = 650
   const MOVE_CANCEL_PX = 12
+  const DOUBLE_TAP_MS = 320
+  const DOUBLE_TAP_DISTANCE_PX = 34
 
   const clearLongPressTimer = () => {
     if (!longPressTimerRef.current) return
@@ -276,6 +348,12 @@ function AppContent() {
 
   const closeSettingsMenu = () => {
     setIsSettingsOpen(false)
+  }
+
+  const requestAppFullscreen = () => {
+    if (typeof document === 'undefined') return
+    if (document.fullscreenElement || !document.documentElement.requestFullscreen) return
+    document.documentElement.requestFullscreen().catch(() => {})
   }
 
   const closeMenuOnboarding = () => {
@@ -357,29 +435,26 @@ function AppContent() {
     }
   }
 
-  const handleRootPointerEnd = () => {
+  const handleRootPointerEnd = (event) => {
     clearLongPressTimer()
+
+    if (event && event.pointerType !== 'mouse' && !isInteractiveTarget(event.target)) {
+      const now = Date.now()
+      const lastTap = lastTapRef.current
+      const dx = event.clientX - lastTap.x
+      const dy = event.clientY - lastTap.y
+      const distance = Math.sqrt(dx * dx + dy * dy)
+
+      if (now - lastTap.time <= DOUBLE_TAP_MS && distance <= DOUBLE_TAP_DISTANCE_PX) {
+        requestAppFullscreen()
+        lastTapRef.current = { time: 0, x: 0, y: 0 }
+      } else {
+        lastTapRef.current = { time: now, x: event.clientX, y: event.clientY }
+      }
+    }
+
     pointerOriginRef.current = null
   }
-
-  // Force fullscreen on first interaction (mobile only)
-  useEffect(() => {
-    const isMobileDevice = () => {
-      return window.innerWidth < 470 || /iPhone|iPad|Android|Mobile/.test(navigator.userAgent);
-    };
-
-    const requestFullscreenOnClick = () => {
-      if (isMobileDevice() && document.documentElement.requestFullscreen && !document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(() => {
-          // Ignore if fullscreen is not supported or user denies
-        });
-      }
-      document.removeEventListener("click", requestFullscreenOnClick);
-    };
-
-    document.addEventListener("click", requestFullscreenOnClick);
-    return () => document.removeEventListener("click", requestFullscreenOnClick);
-  }, []);
 
   useEffect(() => {
     if (isLeavingRef.current) {
@@ -434,6 +509,18 @@ function AppContent() {
     }
   };
 
+  const confirmPendingReconnectInvite = () => {
+    if (!pendingReconnectInvite?.code) return
+    confirmReconnectInvite?.(pendingReconnectInvite.code, (response) => {
+      if (response?.ok) setInputCode([])
+    })
+  }
+
+  const cancelPendingReconnectInvite = () => {
+    dismissReconnectInvite?.()
+    setInputCode([])
+  }
+
   const movePlayer = (index, direction) => {
     if (!roomData) return;
     const newPlayers = [...roomData.players];
@@ -443,12 +530,6 @@ function AppContent() {
     newPlayers[index + direction] = temp;
     updateTurnOrder(newPlayers);
   };
-
-  const goToDebugDuelSelector = () => {
-    setView("DEBUG_DUEL_SELECTOR");
-  };
-
-
 
   return (
     <div
@@ -462,6 +543,14 @@ function AppContent() {
       
       <Toasts />
 
+      {pendingReconnectInvite && (
+        <ReconnectInviteConfirm
+          invite={pendingReconnectInvite}
+          onConfirm={confirmPendingReconnectInvite}
+          onCancel={cancelPendingReconnectInvite}
+        />
+      )}
+
       {isSettingsOpen && roomData && (
         <SettingsMenu
           roomData={roomData}
@@ -469,6 +558,9 @@ function AppContent() {
           updateTurnOrder={updateTurnOrder}
           promoteAdmin={promoteAdmin}
           kickPlayer={kickPlayer}
+          createReconnectInvite={createReconnectInvite}
+          consumedReconnectInvite={consumedReconnectInvite}
+          addToast={addToast}
           undoLastAction={undoLastAction}
           pauseGame={pauseGame}
           consumeBonus={useBonus}
@@ -513,12 +605,7 @@ function AppContent() {
       )}
 
       {view === "GAME_LOOP" && roomData && (
-        <GameLoop roomData={roomData} triggerAction={triggerAction} consumeBonus={useBonus} currentUserId={socket?.id} goToDebugDuelSelector={goToDebugDuelSelector} />
-      )}
-
-      {/* DEBUG SCREEN - Development only */}
-      {view === "DEBUG_DUEL_SELECTOR" && roomData && (
-        <DebugDuelSelector roomData={roomData} currentUserId={socket?.id} selectDefiType={debugTriggerDuel} />
+        <GameLoop roomData={roomData} triggerAction={triggerAction} consumeBonus={useBonus} currentUserId={socket?.id} />
       )}
 
       {/* VUE 8 : CONFIG QUIZ (UX AMELIOREE) */}

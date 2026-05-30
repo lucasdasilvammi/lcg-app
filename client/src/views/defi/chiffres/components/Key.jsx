@@ -18,7 +18,7 @@ export default function Key({ value, onClick, state = 'active', type = 'number' 
     <button
       onClick={isDisabled ? undefined : onClick}
       disabled={isDisabled}
-      className={`relative h-16 w-16 phone:h-18 phone:w-18 flex items-center justify-center ${getStateColor()} ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:scale-105 active:scale-95'} transition-transform`}
+ className={`relative h-18 w-18 flex items-center justify-center ${getStateColor()} ${isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:scale-105 active:scale-95'} transition-transform`}
     >
       {/* Background SVG */}
       <svg 

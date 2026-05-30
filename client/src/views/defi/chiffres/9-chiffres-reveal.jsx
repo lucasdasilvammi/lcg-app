@@ -40,8 +40,9 @@ export default function ChiffresReveal({ roomData, continueToFeedback, currentUs
   const distance1 = Math.abs(player1Decimal - correctDecimal)
   const distance2 = Math.abs(player2Decimal - correctDecimal)
   
-  const winnerPlayer = winnerId === duelists[0] ? player1 : player2
-  const loserPlayer = winnerId === duelists[0] ? player2 : player1
+  const hasWinner = !!winnerId
+  const winnerPlayer = hasWinner ? (winnerId === duelists[0] ? player1 : player2) : null
+  const loserPlayer = hasWinner ? (winnerId === duelists[0] ? player2 : player1) : null
   const winnerDistance = winnerId === duelists[0] ? distance1 : distance2
   const loserDistance = winnerId === duelists[0] ? distance2 : distance1
   
@@ -76,7 +77,7 @@ export default function ChiffresReveal({ roomData, continueToFeedback, currentUs
   const oneHasExact = player1HasExact || player2HasExact
 
   return (
-    <div className="bg-bg relative max-w-110 flex flex-col justify-between items-center h-dvh py-14 px-6 text-center">
+ <div className="bg-bg relative max-w-full flex flex-col justify-between items-center h-dvh app-screen-y defi-screen-y px-6 text-center">
       <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
 
       <div className="flex flex-col items-center gap-10 w-full">
@@ -118,10 +119,10 @@ export default function ChiffresReveal({ roomData, continueToFeedback, currentUs
                   <span style={{ color: `var(--color-${winnerPlayer.character})` }} className="capitalize font-bold">
                     {winnerPlayer.character}
                   </span>
-                  <span className="text-light opacity-80"> en plein dans<br/>le mille, c'est la bonne réponse.</span>
+                  <span className="text-light opacity-80"> en plein dans le mille, c'est la bonne réponse.</span>
                 </div>
               </>
-            ) : (
+            ) : hasWinner ? (
               // Aucun n'a la bonne réponse exacte (cas normal)
               <div className="text-lg font-funnel">
                 <span style={{ color: `var(--color-${winnerPlayer.character})` }} className="capitalize font-bold">
@@ -129,6 +130,12 @@ export default function ChiffresReveal({ roomData, continueToFeedback, currentUs
                 </span>
                 <span className="text-light opacity-80"> est plus proche avec <br/> un écart de </span>
                 <span className="font-bold text-light">{formatDistance(winnerDistance)}</span> !
+              </div>
+            ) : (
+              <div className="text-lg font-funnel text-light">
+                <span className="opacity-80">{'Vous avez donn\u00e9 la m\u00eame mauvaise r\u00e9ponse.'}</span>
+                <br />
+                <span className="font-bold">{"Match nul, aucun jalon n'est attribu\u00e9."}</span>
               </div>
             )}
             
@@ -186,7 +193,7 @@ export default function ChiffresReveal({ roomData, continueToFeedback, currentUs
                 </span>
                 <span className='opacity-80'> ({formatDistance(loserDistance)} d'écart)</span>
               </p>
-            ) : !bothHaveExact ? (
+            ) : hasWinner && !bothHaveExact ? (
               <p className="font-funnel text-light text-lg">
                 <span className="opacity-80">Contre </span>
                 <span className="font-bold">{formatDistance(loserDistance)}</span>

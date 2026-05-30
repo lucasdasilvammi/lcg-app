@@ -234,7 +234,7 @@ export default function DuelVersusIntro({ duelPlayers, type, startDuel }) {
   }, [topPlayer, bottomPlayer])
 
   return (
-    <div className="relative h-[var(--app-height,100dvh)] min-h-[720px] w-full max-w-110 overflow-hidden bg-bg">
+    <div className="relative h-[var(--app-height,100dvh)] min-h-[720px] w-full max-w-full overflow-hidden bg-bg">
       <style>
         {`
           @keyframes vs-panel-top-entry {

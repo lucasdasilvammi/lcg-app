@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import io from 'socket.io-client'
 
 const SocketContext = createContext()
@@ -33,12 +33,61 @@ export const SocketProvider = ({ children }) => {
   const [isAdmin, setIsAdmin] = useState(false)
   const [errorMsg, setErrorMsg] = useState("")
   const [toasts, setToasts] = useState([])
+  const [pendingReconnectInvite, setPendingReconnectInvite] = useState(null)
+  const [consumedReconnectInvite, setConsumedReconnectInvite] = useState(null)
+  const toastQueueRef = useRef([])
+  const activeToastIdRef = useRef(null)
+  const toastTimersRef = useRef([])
+
+  const clearToastTimers = () => {
+    toastTimersRef.current.forEach((timer) => window.clearTimeout(timer))
+    toastTimersRef.current = []
+  }
+
+  const showNextToast = () => {
+    if (activeToastIdRef.current || toastQueueRef.current.length === 0) return
+
+    const payload = toastQueueRef.current.shift()
+    const id = payload.id || Date.now() + Math.random()
+    const exitDuration = 240
+    const toastDuration = payload.duration || 3600
+    const visibleDuration = Math.max(0, toastDuration - exitDuration)
+
+    activeToastIdRef.current = id
+    setToasts([{ ...payload, id, leaving: false }])
+
+    const leaveTimer = window.setTimeout(() => {
+      setToasts((currentToasts) => currentToasts.map((toast) => (
+        toast.id === id ? { ...toast, leaving: true } : toast
+      )))
+    }, visibleDuration)
+
+    const removeTimer = window.setTimeout(() => {
+      setToasts((currentToasts) => currentToasts.filter((toast) => toast.id !== id))
+      activeToastIdRef.current = null
+      showNextToast()
+    }, toastDuration)
+
+    toastTimersRef.current.push(leaveTimer, removeTimer)
+  }
 
   const addToast = (message, type = 'info', duration = 4000) => {
-    const id = Date.now() + Math.random()
-    setToasts((t) => [...t, { id, message, type }])
-    setTimeout(() => setToasts((t) => t.filter(x => x.id !== id)), duration)
+    const payload = typeof message === 'object' && message !== null
+      ? message
+      : { message, type }
+    toastQueueRef.current.push({
+      ...payload,
+      type: payload.type || type,
+      duration: payload.duration || duration
+    })
+    showNextToast()
   }
+
+  useEffect(() => () => {
+    clearToastTimers()
+    toastQueueRef.current = []
+    activeToastIdRef.current = null
+  }, [])
 
   useEffect(() => {
     // For production (Render): connect to same server (relative URL)
@@ -57,7 +106,7 @@ export const SocketProvider = ({ children }) => {
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
-      reconnectionAttempts: 5
+      reconnectionAttempts: Infinity
     })
     setSocket(s)
 
@@ -79,6 +128,18 @@ export const SocketProvider = ({ children }) => {
     s.on("error_join", (msg) => { addToast(msg, 'error'); console.warn('error_join', msg) })
     s.on("error_pick", (msg) => { addToast(msg, 'error'); console.warn('error_pick', msg) })
     s.on("error_zoom", (msg) => { addToast(msg, 'error'); console.warn('error_zoom', msg) })
+    s.on("room_system_message", (payload) => {
+      addToast({ ...payload, type: payload?.type || 'system' }, 'system', 3200)
+    })
+    s.on("reconnect_invite", (invite) => {
+      setPendingReconnectInvite(invite)
+    })
+    s.on("reconnect_invite_consumed", (payload) => {
+      setConsumedReconnectInvite({
+        ...payload,
+        receivedAt: Date.now()
+      })
+    })
     s.on("update_room_state", (room) => {
       setRoomData(room)
       setIsAdmin(room?.adminId === s.id)
@@ -116,11 +177,10 @@ export const SocketProvider = ({ children }) => {
   const acknowledgeRules = () => socket?.emit("acknowledge_rules")
   const playerBuzz = () => socket?.emit("player_buzz")
   const resolveInteraction = (result) => socket?.emit("resolve_interaction", result)
-  const zoomReaderVerdict = (correct, fromTimeoutOptions = false) => socket?.emit('zoom_reader_verdict', { correct, fromTimeoutOptions })
+  const zoomReaderVerdict = (correct, fromTimeoutOptions = false, selectedIndex = null) => socket?.emit('zoom_reader_verdict', { correct, fromTimeoutOptions, selectedIndex })
   const continueToFeedback = () => socket?.emit("continue_to_feedback")
   const nextTurn = () => socket?.emit("next_turn")
   const startNewRound = () => socket?.emit("start_new_round")
-  const debugTriggerDuel = (defiType) => socket?.emit("debug_trigger_duel", defiType)
   const acknowledgeChooseQuizBonus = (ack) => socket?.emit('ack_choose_quiz_bonus', {}, ack)
   const selectQuizDifficulty = (difficulty, ack) => socket?.emit('select_quiz_difficulty', { difficulty }, ack)
   const claimCaseBonus = (ack) => socket?.emit('claim_case_bonus', {}, ack)
@@ -130,10 +190,64 @@ export const SocketProvider = ({ children }) => {
   // Activité: Dessin de Logo
   const acknowledgeReady = () => socket?.emit("activite_acknowledge_ready")
   const submitDrawing = () => socket?.emit("activite_submit_drawing")
-  const submitPhoto = (photoData, ack) => socket?.emit("activite_submit_photo", { photoData }, ack)
+  const submitPhoto = (photoData, ack) => {
+    if (!socket?.connected) {
+      if (typeof ack === 'function') {
+        ack({ ok: false, reason: 'Connexion en cours, réessaie dans une seconde.' })
+      }
+      return
+    }
+
+    let settled = false
+    const timeout = window.setTimeout(() => {
+      if (settled) return
+      settled = true
+      if (typeof ack === 'function') {
+        ack({ ok: false, reason: 'Connexion instable, réessaie.' })
+      }
+    }, 8000)
+
+    socket.emit("activite_submit_photo", { photoData }, (response) => {
+      if (settled) return
+      settled = true
+      window.clearTimeout(timeout)
+      if (typeof ack === 'function') ack(response)
+    })
+  }
   const submitVote = (photoIndex, voteType) => socket?.emit("activite_vote", { photoIndex, voteType })
   const promoteAdmin = (targetPlayerId, ack) => socket?.emit('promote_admin', { targetPlayerId }, ack)
   const kickPlayer = (targetPlayerId, ack) => socket?.emit('kick_player', { targetPlayerId }, ack)
+  const createReconnectInvite = (targetPlayerId, ack) => {
+    if (!socket) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'socket_not_ready' })
+      return
+    }
+
+    let settled = false
+    const timeout = window.setTimeout(() => {
+      if (settled) return
+      settled = true
+      console.warn('create_reconnect_invite: no server ack', { targetPlayerId })
+      if (typeof ack === 'function') ack({ ok: false, reason: 'server_no_ack' })
+    }, 1500)
+
+    socket.emit('create_reconnect_invite', { targetPlayerId }, (response) => {
+      if (settled) return
+      settled = true
+      window.clearTimeout(timeout)
+      console.log('create_reconnect_invite ack', response)
+      if (typeof ack === 'function') ack(response)
+    })
+  }
+  const confirmReconnectInvite = (code, ack) => {
+    socket?.emit('confirm_reconnect_invite', { code }, (response) => {
+      if (response?.ok) setPendingReconnectInvite(null)
+      if (typeof ack === 'function') ack(response)
+    })
+  }
+  const dismissReconnectInvite = () => {
+    setPendingReconnectInvite(null)
+  }
   const undoLastAction = (ack) => socket?.emit('undo_last_action', {}, ack)
   const pauseGame = (ack) => socket?.emit('pause_game', {}, ack)
   const resumeGame = (ack) => socket?.emit('resume_game', {}, ack)
@@ -182,6 +296,10 @@ export const SocketProvider = ({ children }) => {
       setErrorMsg,
       toasts,
       addToast,
+      pendingReconnectInvite,
+      consumedReconnectInvite,
+      confirmReconnectInvite,
+      dismissReconnectInvite,
       createRoom,
       joinRoomWithCode,
       startGame,
@@ -200,7 +318,6 @@ export const SocketProvider = ({ children }) => {
       continueToFeedback,
       nextTurn,
       startNewRound,
-      debugTriggerDuel,
       acknowledgeChooseQuizBonus,
       selectQuizDifficulty,
       claimCaseBonus,
@@ -212,6 +329,7 @@ export const SocketProvider = ({ children }) => {
       submitVote,
       promoteAdmin,
       kickPlayer,
+      createReconnectInvite,
       undoLastAction,
       pauseGame,
       resumeGame,

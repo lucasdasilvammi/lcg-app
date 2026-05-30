@@ -75,7 +75,7 @@ export default function ButtonWithIcon({ onClick, text, icon, className = "", di
           fillRule="evenodd"
           clipRule="evenodd"
           d="M43.4953 0H0V39.8779V55.4838H17.618L3.56385 51.1631L0 39.8779L3.56388 8.77765L43.4953 0Z"
-          fill="currentColor"
+          fill="#101010"
         />
       </svg>
 
@@ -97,7 +97,7 @@ export default function ButtonWithIcon({ onClick, text, icon, className = "", di
       >
         <path
           d="M28.8504 44.3695L33.3757 13.412L28.8504 2.45959L0 0H33.3757V13.412V55.4837H6.75606L23.1684 51.2791L28.8504 44.3695Z"
-          fill="currentColor"
+          fill="#101010"
         />
       </svg>
     </button>

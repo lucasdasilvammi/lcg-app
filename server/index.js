@@ -77,9 +77,49 @@ const getRandomDuel = (type = null) => {
   return DUELS_DB[Math.floor(Math.random() * DUELS_DB.length)];
 };
 
+const getRandomItem = (items) => items[Math.floor(Math.random() * items.length)];
+
+const createRandomDuelInteraction = (room, initiatingPlayerId = null) => {
+  const activePlayer = room.players.find(player => player.id === initiatingPlayerId) || room.players[room.turnIndex];
+  if (!activePlayer) return null;
+
+  const opponentCandidates = room.players.filter(player => player.id !== activePlayer.id);
+  if (opponentCandidates.length === 0) return null;
+
+  const randomDuel = getRandomDuel();
+  const opponent = getRandomItem(opponentCandidates);
+  const readerCandidates = room.players.filter(player => player.id !== activePlayer.id && player.id !== opponent.id);
+  const reader = readerCandidates.length > 0 ? getRandomItem(readerCandidates) : activePlayer;
+  const isZoomDuel = randomDuel.type === 'zoom';
+
+  return {
+    type: randomDuel.type,
+    data: randomDuel,
+    duelists: [activePlayer.id, opponent.id],
+    readerId: reader.id,
+    buzzedPlayerId: null,
+    potentialPoints: isZoomDuel ? 2 : 3,
+    acknowledgedRules: [],
+    ...(isZoomDuel
+      ? {
+          zoomStartAt: null,
+          zoomDurationMs: 30000,
+          zoomScaleStart: 10,
+          zoomScaleEnd: 1,
+          blockedUntil: {},
+          pausedDurationMs: 0,
+          pauseStartedAt: null,
+          zoomResolvedCorrect: false,
+          zoomFastRevealStartAt: null,
+          zoomFastRevealDurationMs: 1200
+        }
+      : {})
+  };
+};
+
 let rooms = {};
-// Sur mobile, l'ouverture de l'appareil photo met souvent l'app en arrière-plan
-// et peut couper temporairement la socket. On laisse une marge confortable.
+// Sur mobile, l'ouverture de l'appareil photo peut couper temporairement la socket.
+// On garde une marge courte, sans bloquer longtemps la réinvitation.
 const DISCONNECT_GRACE_MS = 30000; // 30 secondes
 const pendingDisconnectTimers = new Map();
 const undoSnapshotsByRoomId = new Map();
@@ -287,6 +327,41 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
 const generateRoomId = () => Math.random().toString(36).substr(2, 9);
 // const generateGameCode = () => Array.from({ length: CODE_LENGTH }, () => Math.floor(Math.random() * 4));
 const generateGameCode = () => [2, 2, 2, 2, 2]; // TEMPORAIRE: 5 Alan pour les tests
+const generatePrivateCode = () => Array.from({ length: CODE_LENGTH }, () => Math.floor(Math.random() * 4));
+const codesMatch = (left, right) => JSON.stringify(left) === JSON.stringify(right);
+const getRoomReconnectInvites = (room) => {
+  if (!room.reconnectInvites || typeof room.reconnectInvites !== 'object') {
+    room.reconnectInvites = {};
+  }
+  return room.reconnectInvites;
+};
+const canInvitePlayerToReconnect = (player) => {
+  if (!player) return false;
+  return player.presence === 'disconnected'
+    || player.isDisconnected
+    || player.status === 'disconnected'
+    || player.connected === false;
+};
+const findReconnectInviteByCode = (inputCode) => {
+  for (const room of Object.values(rooms)) {
+    const invites = getRoomReconnectInvites(room);
+    for (const invite of Object.values(invites)) {
+      if (invite && codesMatch(invite.code, inputCode)) {
+        return { room, invite };
+      }
+    }
+  }
+  return null;
+};
+const generateUniqueReconnectCode = (room) => {
+  for (let attempt = 0; attempt < 80; attempt += 1) {
+    const code = generatePrivateCode();
+    const conflictsRoomCode = Object.values(rooms).some(existingRoom => codesMatch(existingRoom.code, code));
+    const conflictsInvite = Boolean(findReconnectInviteByCode(code));
+    if (!conflictsRoomCode && !conflictsInvite && !codesMatch(room.code, code)) return code;
+  }
+  return generatePrivateCode();
+};
 
 io.on('connection', (socket) => {
   const sessionToken = socket.handshake.auth?.sessionToken;
@@ -354,17 +429,19 @@ io.on('connection', (socket) => {
 
     const photos = Array.isArray(ci.photos) ? ci.photos : [];
     const votes = ci.votes || {};
+    const photoStore = getActivitePhotoStore(room.id);
 
     const rankings = photos
       .map((photo, idx) => {
         const photoVotes = votes[idx] || { up: 0, neutral: 0, down: 0, byPlayer: {} };
-        const totalVotes = photoVotes.up + photoVotes.neutral + photoVotes.down;
-        const score = totalVotes > 0 ? Math.round((photoVotes.up / totalVotes) * 100) : 0;
+        const score = (photoVotes.up || 0) * 2 + (photoVotes.neutral || 0);
         return {
           playerId: photo.playerId,
+          photoData: photoStore.get(photo.photoId) || null,
           upVotes: photoVotes.up,
           neutralVotes: photoVotes.neutral,
           downVotes: photoVotes.down,
+          voteTypes: Object.values(photoVotes.byPlayer || {}),
           score
         };
       })
@@ -534,7 +611,8 @@ io.on('connection', (socket) => {
       turnIndex: 0,
       currentInteraction: null,
       lastResult: null,
-      pendingCategory: null
+      pendingCategory: null,
+      reconnectInvites: {}
     };
     socket.join(newRoomId);
     socket.emit("room_created", { roomId: newRoomId, code: gameCode });
@@ -548,7 +626,25 @@ io.on('connection', (socket) => {
       return socket.emit("error_join", "Code invalide.");
     }
 
-    const room = Object.values(rooms).find(r => JSON.stringify(r.code) === JSON.stringify(inputCode));
+    const privateInvite = findReconnectInviteByCode(inputCode);
+    if (privateInvite) {
+      const { room: inviteRoom, invite } = privateInvite;
+      const invitedPlayer = inviteRoom.players.find(player => player.id === invite.playerId);
+      if (!invitedPlayer || !canInvitePlayerToReconnect(invitedPlayer)) {
+        delete getRoomReconnectInvites(inviteRoom)[invite.playerId];
+        return socket.emit("error_join", "Invitation expirée.");
+      }
+
+      socket.emit("reconnect_invite", {
+        code: invite.code,
+        roomId: inviteRoom.id,
+        playerId: invitedPlayer.id,
+        character: invitedPlayer.character
+      });
+      return;
+    }
+
+    const room = Object.values(rooms).find(r => codesMatch(r.code, inputCode));
     if (!room) {
       console.warn('join_room_with_code: room not found for', socket.id, inputCode);
       return socket.emit("error_join", "Salle introuvable.");
@@ -867,12 +963,87 @@ io.on('connection', (socket) => {
     }
     if (player.characterLocked) {
       console.warn('pick_character: player already locked', socket.id);
-      return socket.emit('error_pick', 'Ton personnage est dÃ©jÃ  verrouillÃ©.');
+      return socket.emit('error_pick', 'Ton personnage est déjà verrouillé.');
     }
     player.character = id;
     player.characterLocked = false;
     console.log('pick_character: player', socket.id, 'picked', id, 'in room', room.id);
     syncRoom(room);
+  });
+
+  socket.on('create_reconnect_invite', ({ targetPlayerId } = {}, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+    if (room.adminId !== socket.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
+    const targetPlayer = room.players.find(player => player.id === targetPlayerId);
+    if (!targetPlayer || !canInvitePlayerToReconnect(targetPlayer)) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
+      return;
+    }
+
+    const invites = getRoomReconnectInvites(room);
+    const invite = {
+      code: generateUniqueReconnectCode(room),
+      playerId: targetPlayer.id,
+      createdAt: Date.now(),
+      createdBy: socket.id
+    };
+    invites[targetPlayer.id] = invite;
+
+    if (typeof ack === 'function') {
+      ack({
+        ok: true,
+        code: invite.code,
+        player: {
+          id: targetPlayer.id,
+          character: targetPlayer.character
+        }
+      });
+    }
+  });
+
+  socket.on('confirm_reconnect_invite', ({ code } = {}, ack) => {
+    if (!Array.isArray(code) || code.length !== CODE_LENGTH || code.some(i => typeof i !== 'number' || i < 0 || i > 3)) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_code' });
+      return;
+    }
+
+    const result = findReconnectInviteByCode(code);
+    if (!result) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invite_not_found' });
+      socket.emit("error_join", "Invitation expirée.");
+      return;
+    }
+
+    const { room, invite } = result;
+    const targetPlayer = room.players.find(player => player.id === invite.playerId);
+    if (!targetPlayer || !canInvitePlayerToReconnect(targetPlayer)) {
+      delete getRoomReconnectInvites(room)[invite.playerId];
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
+      socket.emit("error_join", "Invitation expirée.");
+      return;
+    }
+
+    clearPendingDisconnect(targetPlayer.sessionToken);
+    replacePlayerIdInRoom(room, targetPlayer.id, socket.id);
+    const reconnectedPlayer = room.players.find(player => player.id === socket.id);
+    if (reconnectedPlayer) {
+      reconnectedPlayer.sessionToken = sessionToken;
+      markPlayerPresence(reconnectedPlayer, 'connected');
+    }
+    delete getRoomReconnectInvites(room)[invite.playerId];
+
+    socket.join(room.id);
+    socket.emit("room_joined", { roomId: room.id, isAdmin: room.adminId === socket.id });
+    syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true, roomId: room.id });
   });
   socket.on("unpick_character", () => {
     const room = findRoom();
@@ -961,8 +1132,14 @@ io.on('connection', (socket) => {
       if (typeof ack === 'function') ack({ ok: true, status: room.status });
     }
     else if (actionType === "DEFI") {
-      // DEBUG MODE: Go to selector screen instead of starting duel directly
-      room.status = "DEBUG_DUEL_SELECTOR";
+      const duelInteraction = createRandomDuelInteraction(room, socket.id);
+      if (!duelInteraction) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'not_enough_players' });
+        return;
+      }
+
+      room.currentInteraction = duelInteraction;
+      room.status = "DUEL_START";
       syncRoom(room);
       if (typeof ack === 'function') ack({ ok: true, status: room.status });
     }
@@ -1003,43 +1180,6 @@ io.on('connection', (socket) => {
       console.warn('trigger_action: unknown actionType', actionType, 'from', socket.id);
       if (typeof ack === 'function') ack({ ok: false, reason: 'unknown_action' });
     }
-  });
-
-  // DEBUG: Allow selecting specific duel type for testing
-  socket.on("debug_trigger_duel", (defiType) => {
-    const room = findRoom();
-    if (!room) return;
-
-    const randomDuel = getRandomDuel(defiType); // Get random duel of specific type
-    const isZoomDuel = randomDuel.type === 'zoom';
-    const p1Index = room.turnIndex;
-    const p2Index = (room.turnIndex + 1) % room.players.length; 
-    const readerIndex = (room.turnIndex + 2) % room.players.length; 
-    room.currentInteraction = {
-      type: randomDuel.type,
-      data: randomDuel,
-      duelists: [room.players[p1Index].id, room.players[p2Index].id],
-      readerId: room.players[readerIndex].id,
-      buzzedPlayerId: null,
-      potentialPoints: isZoomDuel ? 2 : 3,
-      acknowledgedRules: [],
-      ...(isZoomDuel
-        ? {
-            zoomStartAt: null,
-            zoomDurationMs: 30000,
-            zoomScaleStart: 10,
-            zoomScaleEnd: 1,
-            blockedUntil: {},
-            pausedDurationMs: 0,
-            pauseStartedAt: null,
-            zoomResolvedCorrect: false,
-            zoomFastRevealStartAt: null,
-            zoomFastRevealDurationMs: 1200
-          }
-        : {})
-    };
-    room.status = "DUEL_START";
-    syncRoom(room);
   });
 
   socket.on("start_duel", () => {
@@ -1278,23 +1418,27 @@ io.on('connection', (socket) => {
       
       const distance1 = Math.abs(player1Answer - correctValue);
       const distance2 = Math.abs(player2Answer - correctValue);
+      const sameWrongAnswer = player1Answer === player2Answer && player1Answer !== correctValue;
       
       let winnerId = null;
-      if (distance1 < distance2) {
-        winnerId = player1Id;
-      } else if (distance2 < distance1) {
-        winnerId = player2Id;
-      } else {
-        // En cas d'égalité de distance, le premier à avoir soumis gagne
-        winnerId = room.currentInteraction.submissionOrder[0];
+      let points = 0;
+      if (!sameWrongAnswer) {
+        if (distance1 < distance2) {
+          winnerId = player1Id;
+        } else if (distance2 < distance1) {
+          winnerId = player2Id;
+        } else {
+          winnerId = room.currentInteraction.submissionOrder[0];
+        }
+        points = 3;
       }
       
       // Créer lastResult pour le feedback
       room.lastResult = {
-        success: true,
+        success: !!winnerId,
         type: 'chiffres',
         winnerId: winnerId,
-        points: 3,
+        points,
         player1Answer: player1Answer,
         player2Answer: player2Answer,
         correctAnswer: correctValue,
@@ -1306,7 +1450,7 @@ io.on('connection', (socket) => {
       // Ajouter les points au gagnant
       if (winnerId) {
         const winner = room.players.find(p => p.id === winnerId);
-        if (winner) winner.score += 3;
+        if (winner) winner.score += points;
       }
       
       // Passer en mode DUEL_REVEAL
@@ -1553,7 +1697,7 @@ io.on('connection', (socket) => {
   });
 
   // --- ZOOM DUEL ---
-  socket.on('zoom_reader_verdict', ({ correct }) => {
+  socket.on('zoom_reader_verdict', ({ correct, fromTimeoutOptions = false, selectedIndex = null }) => {
     const room = findRoom();
     if (!room || !room.currentInteraction) return;
     if (room.currentInteraction.type !== 'zoom') return;
@@ -1561,6 +1705,44 @@ io.on('connection', (socket) => {
 
     const buzzedPlayerId = room.currentInteraction.buzzedPlayerId;
     if (!buzzedPlayerId) return;
+
+    if (fromTimeoutOptions) {
+      const duelists = room.currentInteraction.duelists || [];
+      const winnerId = correct === true
+        ? buzzedPlayerId
+        : (duelists.find(id => id !== buzzedPlayerId) || null);
+      const points = room.currentInteraction.potentialPoints || 2;
+
+      if (winnerId) {
+        const winner = room.players.find(p => p.id === winnerId);
+        if (winner) winner.score += points;
+      }
+
+      const options = Array.isArray(room.currentInteraction.data?.options)
+        ? room.currentInteraction.data.options
+        : [];
+
+      room.lastResult = {
+        success: correct === true,
+        type: 'zoom',
+        winnerId,
+        points,
+        duelists,
+        readerId: room.currentInteraction.readerId,
+        questionerId: room.currentInteraction.readerId,
+        buzzedPlayerId,
+        selectedIndex,
+        correctIndex: room.currentInteraction.data?.correct,
+        options,
+        image: room.currentInteraction.data?.image,
+        answer: room.currentInteraction.data?.answer,
+        explanation: room.currentInteraction.data?.explanation
+      };
+
+      room.status = 'DUEL_REVEAL';
+      syncRoom(room);
+      return;
+    }
 
     if (correct === true) {
       const points = room.currentInteraction.potentialPoints || 2;
@@ -1671,7 +1853,11 @@ io.on('connection', (socket) => {
       if (room.lastResult) {
         room.lastResult.verdictViewerId = socket.id;
       }
-      room.status = "FEEDBACK";
+      if (room.lastResult?.type === 'chiffres' && !room.lastResult.winnerId && (room.lastResult.points || 0) === 0) {
+        advanceRoomToNextTurn(room);
+      } else {
+        room.status = "FEEDBACK";
+      }
       // Là on peut nettoyer l'interaction car on a l'info dans lastResult
       room.currentInteraction = null; 
       cleanupActivitePhotoStore(room.id);

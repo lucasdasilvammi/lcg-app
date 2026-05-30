@@ -1,99 +1,99 @@
 # TODO - LCG App
 
-Statut estime au 24 mai 2026 pour la premiere version jouable.
+Statut estimé au 24 mai 2026 pour la première version jouable.
 
 ## Objectif V1 jouable
 
-Une V1 est jouable quand un groupe peut creer une room, rejoindre a 3 ou 4, choisir les personnages, definir l'ordre, jouer plusieurs tours, passer par quiz / defis / bonus / activites / evenements, finir un tour de table, afficher le classement, puis continuer sans bloquer la partie.
+Une V1 est jouable quand un groupe peut créer une room, rejoindre à 3 ou 4, choisir les personnages, définir l'ordre, jouer plusieurs tours, passer par quiz / défis / bonus / activités / évènements, finir un tour de table, afficher le classement, puis continuer sans bloquer la partie.
 
-## Resume d'avancement
+## Résumé d'avancement
 
-- [x] Socle temps reel room / joueurs / admin.
-- [x] Creation et rejoindre une partie par code.
-- [x] Selection de personnages fonctionnelle.
+- [x] Socle temps réel room / joueurs / admin.
+- [x] Création et rejoindre une partie par code.
+- [x] Sélection de personnages fonctionnelle.
 - [x] Ordre de jeu et changement d'ordre admin.
 - [x] Boucle principale de tour.
 - [x] Quiz valide.
-- [x] Defis Buzzer, Vrai ou faux, Chiffres, Pick et Zoom presents.
+- [x] Défis Buzzer, Vrai ou faux, Chiffres, Pick et Zoom présents.
 - [x] Bonus de case et inventaire bonus.
-- [x] Trois bonus principaux implementes : `CTRL + Z`, `Va faire le cafe du boss`, `C'est moi qui choisis !`.
-- [x] Activite commune photo / vote / resultat implementee.
+- [x] Trois bonus principaux implémentés : `CTRL + Z`, `Va faire le café du boss`, `C'est moi qui choisis !`.
+- [x] Activité commune photo / vote / résultat implémentée.
 - [x] Menu settings admin / lobby / bonus.
 - [x] Pause globale.
-- [x] Regles accessibles depuis le menu.
+- [x] Règles accessibles depuis le menu.
 - [x] Classement fonctionnel en fin de round.
-- [ ] Gros passage de test bout en bout a 3 et 4 joueurs.
-- [ ] Stabilisation mobile des popups.
-- [ ] Corrections textes / accents sur les ecrans encore touches par l'ancien encodage.
-- [ ] Reconnexion depuis un autre appareil ou code de secours.
-- [ ] Derniers contenus : evenements, activites, questions.
+- [ ] Gros passage de test bout en bout à 3 et 4 joueurs.
+- [x] Stabilisation mobile des popups.
+- [x] Corrections textes / accents sur les écrans encore touchés par l'ancien encodage.
+- [x] Reconnexion depuis un autre appareil ou code de secours.
+- [x] Derniers contenus : évènements, activités, questions.
 
-## Priorite avant V1 jouable
+## Priorité avant V1 jouable
 
-- [ ] Faire une session test complete a 3 joueurs : creation, lobby, personnages, ordre, 1 round complet, classement, nouveau round.
-- [ ] Faire une session test complete a 4 joueurs.
-- [ ] Tester tous les types de cases depuis la boucle de jeu : Quizz, Defi, Bonus, Activite, Evenement.
-- [ ] Tester tous les defis : Buzzer, Vrai ou faux, Chiffres, Pick, Zoom.
-- [ ] Tester les trois bonus de bout en bout.
-- [ ] Corriger les textes avec accents casses dans l'UI.
-- [ ] Revoir les popups admin et bonus sur mobile.
-- [ ] Ajouter au moins assez de questions / evenements / activites pour eviter les repetitions trop visibles.
-- [ ] Desactiver ou encadrer les outils / bonus de test avant release.
+- [ ] Faire une session test complète à 3 joueurs : création, lobby, personnages, ordre, 1 round complet, classement, nouveau round.
+- [ ] Faire une session test complète à 4 joueurs.
+- [x] Tester tous les types de cases depuis la boucle de jeu : Quizz, Défi, Bonus, Activité, Évènement.
+- [x] Tester tous les défis : Buzzer, Vrai ou faux, Chiffres, Pick, Zoom.
+- [x] Tester les trois bonus de bout en bout.
+- [x] Corriger les textes avec accents cassés dans l'UI.
+- [x] Revoir les popups admin et bonus sur mobile.
+- [x] Ajouter au moins assez de questions / évènements / activités pour éviter les répétitions trop visibles.
+- [ ] Désactiver ou encadrer les outils / bonus de test avant release : code de room forcé, bonus donnés par défaut, helper console `__GIVE_BONUS` / socket `debug_give_bonus`.
 
-## Verification release
+## Vérification release
 
 ### Bonus
 
-- [ ] Retester les trois bonus de bout en bout : `CTRL + Z`, `Va faire le cafe du boss`, `C'est moi qui choisis !`.
+- [x] Retester les trois bonus de bout en bout : `CTRL + Z`, `Va faire le café du boss`, `C'est moi qui choisis !`.
 - [ ] Tester les bonus avec 3 joueurs puis avec 4 joueurs.
-- [ ] Tester les collisions entre bonus : bonus utilises au meme tour, bonus en attente, bonus deja pose sur un joueur, annulation d'action apres bonus.
-- [ ] Tester les collisions entre bonus et changement d'ordre : appliquer un nouvel ordre, poser un bonus, finir le tour de table, puis verifier que la cible et le prochain joueur restent corrects.
-- [ ] Tester les collisions entre bonus et changement de round : bonus pose avant le classement, effet attendu au round suivant.
-- [ ] Tester les collisions entre bonus et annulation d'action : poser un bonus, annuler l'action en cours, puis verifier que le bonus consomme ou attend comme prevu.
-- [ ] Tester les collisions entre bonus et reconnexion : cible ou utilisateur du bonus deconnecte / reconnecte avant que l'effet soit resolu.
-- [ ] Verifier que les bonus consomment bien l'inventaire du joueur qui les utilise, jamais celui de la cible.
+- [ ] Tester les collisions entre bonus : bonus utilisés au même tour, bonus en attente, bonus déjà posé sur un joueur, annulation d'action après bonus.
+- [ ] Tester les collisions entre bonus et changement d'ordre : appliquer un nouvel ordre, poser un bonus, finir le tour de table, puis vérifier que la cible et le prochain joueur restent corrects.
+- [ ] Tester les collisions entre bonus et changement de round : bonus posé avant le classement, effet attendu au round suivant.
+- [ ] Tester les collisions entre bonus et annulation d'action : poser un bonus, annuler l'action en cours, puis vérifier que le bonus consomme ou attend comme prévu.
+- [ ] Tester les collisions entre bonus et reconnexion : cible ou utilisateur du bonus déconnecté / reconnecté avant que l'effet soit résolu.
+- [x] Vérifier que les bonus consomment bien l'inventaire du joueur qui les utilise, jamais celui de la cible.
 
 ### CTRL + Z
 
-- [x] Implementer le rappel, l'indicateur, la popup d'utilisation, la consommation et l'etat spectateur.
-- [ ] Verifier que le rappel de 3 secondes apparait uniquement au joueur actif qui possede le bonus.
-- [ ] Verifier que l'indicateur en haut a droite apparait apres le rappel et reste cliquable.
-- [ ] Verifier que l'utilisation consomme un seul `CTRL + Z`.
-- [ ] Verifier que le texte de l'ecran de choix de case passe bien en mode "Maintenant que tu as relance...".
-- [ ] Verifier que les spectateurs voient bien le tag indiquant que le bonus a ete utilise.
+- [x] Implémenter le rappel, l'indicateur, la popup d'utilisation, la consommation et l'état spectateur.
+- [x] Vérifier que le rappel de 3 secondes apparaît uniquement au joueur actif qui possède le bonus.
+- [x] Vérifier que l'indicateur en haut à droite apparaît après le rappel et reste cliquable.
+- [x] Vérifier que l'utilisation consomme un seul `CTRL + Z`.
+- [x] Vérifier que le texte de l'écran de choix de case passe bien en mode "Maintenant que tu as relancé...".
+- [x] Vérifier que les spectateurs voient bien le tag indiquant que le bonus a été utilisé.
 
-### Va faire le cafe du boss
+### Va faire le café du boss
 
-- [x] Implementer la selection cible, la consommation, l'ecran de confirmation et le tour saute.
-- [ ] Tester quand la cible est le joueur actif au moment de l'utilisation : le skip doit attendre son prochain tour, meme si un classement et un nouveau round passent entre temps.
-- [ ] Tester quand la cible joue plus tard dans le meme tour de table.
+- [x] Implémenter la sélection cible, la consommation, l'écran de confirmation et le tour sauté.
+- [ ] Tester quand la cible est le joueur actif au moment de l'utilisation : le skip doit attendre son prochain tour, même si un classement et un nouveau round passent entre temps.
+- [ ] Tester quand la cible joue plus tard dans le même tour de table.
 - [ ] Tester avec annulation d'action et changement de round.
-- [ ] Tester les reconnects avant le tour saute : la cible doit garder son statut de tour a passer.
-- [ ] Verifier que le joueur cible ne peut pas lancer le de quand son tour doit etre saute.
+- [ ] Tester les reconnects avant le tour sauté : la cible doit garder son statut de tour à passer.
+- [ ] Vérifier que le joueur cible ne peut pas lancer le dé quand son tour doit être sauté.
 
 ### C'est moi qui choisis !
 
-- [x] Implementer la selection cible, l'attente du Quizz cible, le choix de difficulte par le joueur qui a pose le bonus et la vue spectateurs.
-- [ ] Verifier que le bonus ne s'active que quand la cible exacte tombe sur une case Quizz.
-- [ ] Verifier que le bonus n'interfere pas avec les tours Quizz des autres joueurs.
-- [ ] Verifier qu'un joueur ne peut pas recevoir ce bonus deux fois tant que le premier sabotage est en attente.
-- [ ] Verifier qu'on ne peut pas ecraser un sabotage Quizz deja en attente avec un autre.
-- [ ] Verifier que la cible voit d'abord l'ecran explicatif et doit cliquer sur `Suivant`.
-- [ ] Verifier que le joueur qui a pose le bonus est le seul a pouvoir choisir la difficulte.
-- [ ] Verifier que les spectateurs voient le theme, les cinq difficultes, la difficulte choisie en live, et le tag "X choisit".
-- [ ] Verifier que le theme du quiz reste aleatoire comme dans un quiz normal.
-- [ ] Verifier que la question finale utilise bien la difficulte choisie par le joueur qui a pose le bonus.
+- [x] Implémenter la sélection cible, l'attente du Quizz cible, le choix de difficulté par le joueur qui a posé le bonus et la vue spectateurs.
+- [x] Vérifier que le bonus ne s'active que quand la cible exacte tombe sur une case Quizz.
+- [x] Vérifier que le bonus n'interfère pas avec les tours Quizz des autres joueurs.
+- [ ] Vérifier qu'un joueur ne peut pas recevoir ce bonus deux fois tant que le premier sabotage est en attente.
+- [ ] Vérifier qu'on ne peut pas écraser un sabotage Quizz déjà en attente avec un autre.
+- [ ] Vérifier que la cible voit d'abord l'écran explicatif et doit cliquer sur `Suivant`.
+- [ ] Vérifier que le joueur qui a posé le bonus est le seul à pouvoir choisir la difficulté.
+- [ ] Vérifier que les spectateurs voient le thème, les cinq difficultés, la difficulté choisie en live, et le tag "X choisit".
+- [ ] Vérifier que le thème du quiz reste aléatoire comme dans un quiz normal.
+- [ ] Vérifier que la question finale utilise bien la difficulté choisie par le joueur qui a posé le bonus.
 
 ### Menu / popups / mobile
 
-- [x] Ajouter l'acces aux regles dans le menu via le bouton regles prevu dans la barre haute.
-- [x] Rendre les textes UI non selectionnables, hors zones de saisie.
+- [x] Ajouter l'accès aux règles dans le menu via le bouton règles prévu dans la barre haute.
+- [x] Rendre les textes UI non sélectionnables, hors zones de saisie.
 - [x] Ajouter un onboarding / indice de premier usage pour l'appui long menu dans le lobby.
-- [ ] Revoir le design des popups bonus 2 et 3 : espacements, hierarchie, boutons, etats de selection.
-- [ ] Revoir tous les popups de confirmation admin : promote, kick, leave, annuler l'action, changement d'ordre.
-- [ ] Tester les popups admin sur telephone, notamment le bug constate sur mobile.
-- [ ] Verifier que les popups gardent une animation d'entree / sortie coherente et ne cassent pas la hauteur mobile.
-- [ ] Repasser les textes des bonus et menus pour corriger les accents et libelles manquants : de, difficulte, designe, connecte, deconnecte, en attente, etc.
+- [x] Revoir le design des popups bonus 2 et 3 : espacements, hiérarchie, boutons, états de sélection.
+- [x] Revoir tous les popups de confirmation admin : promote, kick, leave, annuler l'action, changement d'ordre.
+- [x] Tester les popups admin sur téléphone, notamment le bug constaté sur mobile.
+- [x] Vérifier que les popups gardent une animation d'entrée / sortie cohérente et ne cassent pas la hauteur mobile.
+- [x] Repasser les textes des bonus et menus pour corriger les accents et libellés manquants : dé, difficulté, désigné, connecté, déconnecté, en attente, etc.
 
 ## Quizz
 
@@ -101,142 +101,142 @@ Une V1 est jouable quand un groupe peut creer une room, rejoindre a 3 ou 4, choi
 
 ## Character Select
 
-- [ ] Corriger la logique de verrouillage du personnage lors de la navigation entre cartes.
+- [x] Corriger la logique de verrouillage du personnage lors de la navigation entre cartes.
 
 Prompt implementation :
 
-> Sur l'ecran de selection de personnage, le personnage verrouille doit toujours representer le dernier choix explicitement confirme par l'utilisateur (pre-lock/lock), meme si l'utilisateur ouvre ensuite la description d'autres personnages. Consignes: (1) un clic sur une autre carte ne doit pas deverrouiller le personnage deja locke tant qu'aucune nouvelle action de confirmation n'est faite, (2) le bouton Retour doit deverrouiller uniquement le personnage actuellement locke, (3) si l'utilisateur confirme un nouveau personnage, l'ancien lock est libere et seul le nouveau personnage est locke, (4) l'utilisateur peut consulter librement les descriptions sans effet de bord sur le lock courant. Ajouter/adapter les etats pour distinguer personnage consulte vs personnage locke et verifier le flux multi-clic + retour.
+> Sur l'écran de sélection de personnage, le personnage verrouillé doit toujours représenter le dernier choix explicitement confirmé par l'utilisateur (pre-lock/lock), même si l'utilisateur ouvre ensuite la description d'autres personnages. Consignes: (1) un clic sur une autre carte ne doit pas déverrouiller le personnage déjà locké tant qu'aucune nouvelle action de confirmation n'est faite, (2) le bouton Retour doit déverrouiller uniquement le personnage actuellement locké, (3) si l'utilisateur confirme un nouveau personnage, l'ancien lock est libéré et seul le nouveau personnage est locké, (4) l'utilisateur peut consulter librement les descriptions sans effet de bord sur le lock courant. Ajouter/adapter les états pour distinguer personnage consulté vs personnage locké et vérifier le flux multi-clic + retour.
 
-## Parametres / Menu Settings
+## Paramètres / Menu Settings
 
-- [x] Reassignation auto de l'admin si l'admin quitte la room.
+- [x] Réassignation auto de l'admin si l'admin quitte la room.
 - [x] Ajouter un menu modal avec action "Quitter la partie".
-- [x] Ajouter une popup parametres accessible via appui long sur l'ecran.
-- [x] Centraliser les regles d'ouverture du menu selon la vue, le joueur actif, le reader, les spectateurs et l'admin.
-- [x] Autoriser l'admin a ouvrir le menu sur tous les ecrans de partie.
-- [x] Prevoir deux onglets de menu : Lobby/Admin et Bonus.
-- [x] Afficher les joueurs dans le Lobby avec etat connecte / en attente / deconnecte.
-- [x] Ajouter le timer d'attente avant passage en deconnecte.
-- [x] Conserver les joueurs dans la room apres deconnexion pour permettre la reconnexion.
+- [x] Ajouter une popup paramètres accessible via appui long sur l'écran.
+- [x] Centraliser les règles d'ouverture du menu selon la vue, le joueur actif, le reader, les spectateurs et l'admin.
+- [x] Autoriser l'admin à ouvrir le menu sur tous les écrans de partie.
+- [x] Prévoir deux onglets de menu : Lobby/Admin et Bonus.
+- [x] Afficher les joueurs dans le Lobby avec état connecté / en attente / déconnecté.
+- [x] Ajouter le timer d'attente avant passage en déconnecté.
+- [x] Conserver les joueurs dans la room après déconnexion pour permettre la reconnexion.
 - [x] Afficher la couronne admin et le tag "moi" dans la liste joueurs.
 - [x] Ajouter les boutons admin kick / leave / promote / ajouter en UI.
 - [x] Brancher promote admin avec popup de confirmation.
 - [x] Brancher kick joueur avec popup de confirmation.
 - [x] Brancher leave admin avec reassignation automatique.
 - [x] Ajouter le changement d'ordre avec drag sur toute la ligne joueur.
-- [x] Appliquer le changement d'ordre a la fin du tour de table, pas a la fin du tour du joueur actif.
+- [x] Appliquer le changement d'ordre à la fin du tour de table, pas à la fin du tour du joueur actif.
 - [x] Ajouter l'annulation d'action admin avec popup de confirmation.
 - [x] Ajouter pause / play global avec overlay blur.
 - [x] Exclure certaines zones de l'appui long menu via `data-no-longpress`.
-- [x] Rendre les textes UI non selectionnables, sauf zones de saisie.
-- [x] Ajouter un popup / parcours pedagogique au premier usage du menu.
-- [x] Brancher le bouton regles dans la barre haute du menu.
-- [ ] Generer ou afficher un code de secours pour faire revenir un joueur qui a crash ou perdu sa session.
-- [ ] Revoir le comportement mobile des popups admin.
+- [x] Rendre les textes UI non sélectionnables, sauf zones de saisie.
+- [x] Ajouter un popup / parcours pédagogique au premier usage du menu.
+- [x] Brancher le bouton règles dans la barre haute du menu.
+- [x] Générer ou afficher un code de secours pour faire revenir un joueur qui a crash ou perdu sa session.
+- [x] Revoir le comportement mobile des popups admin.
 
 ## Bonus
 
-- [x] Creer un catalogue de bonus centralise.
+- [x] Créer un catalogue de bonus centralisé.
 - [x] Stocker les bonus dans `player.bonuses`.
-- [x] Creer la vue Bonus du Settings Menu.
-- [x] Afficher les bonus disponibles avec quantite.
+- [x] Créer la vue Bonus du Settings Menu.
+- [x] Afficher les bonus disponibles avec quantité.
 - [x] Afficher les placeholders quand le joueur n'a pas tous les bonus.
-- [x] Ajouter les popups details des bonus via un composant commun `BonusPopup`.
-- [x] Implementer `CTRL + Z` : rappel, indicateur, popup d'utilisation, consommation, etat spectateur.
-- [x] Implementer `Va faire le cafe du boss` : selection cible, consommation, ecran de confirmation, tour saute.
-- [x] Implementer `C'est moi qui choisis !` : selection cible, attente du Quizz cible, choix de difficulte par le joueur qui a pose le bonus, vue spectateurs.
-- [ ] Revoir le design final des popups bonus 2 et 3.
-- [ ] Corriger les accents et textes des bonus.
-- [ ] Desactiver les bonus de test par defaut avant release si besoin.
+- [x] Ajouter les popups détails des bonus via un composant commun `BonusPopup`.
+- [x] Implémenter `CTRL + Z` : rappel, indicateur, popup d'utilisation, consommation, état spectateur.
+- [x] Implémenter `Va faire le café du boss` : sélection cible, consommation, écran de confirmation, tour sauté.
+- [x] Implémenter `C'est moi qui choisis !` : sélection cible, attente du Quizz cible, choix de difficulté par le joueur qui a posé le bonus, vue spectateurs.
+- [x] Revoir le design final des popups bonus 2 et 3.
+- [x] Corriger les accents et textes des bonus.
+- [ ] Désactiver les bonus de test par défaut avant release si besoin.
 
-## Presence / Messages room
+## Présence / Messages room
 
-- [x] Distinguer joueurs reserves dans la partie vs joueurs actuellement connectes dans le menu settings.
-- [ ] Ajouter des messages de statut room pour tous les cas de figure leave / crash / reco.
-- [ ] Etendre cette distinction au lobby et a la character select si besoin.
-- [ ] Harmoniser le design des messages d'erreur avec les messages systeme de room.
+- [x] Distinguer joueurs réservés dans la partie vs joueurs actuellement connectés dans le menu settings.
+- [x] Ajouter des messages de statut room pour tous les cas de figure leave / crash / reco.
+- [ ] Étendre cette distinction au lobby et à la character select si besoin.
+- [x] Harmoniser le design des messages d'erreur avec les messages système de room.
 
 Prompt implementation :
 
-> Afficher des messages systeme harmonises dans la room pour les evenements reseau importants: "L'admin a quitte la room", "Un joueur a quitte la room", "L'admin a ete deconnecte et a X secondes pour se reconnecter", "Un joueur a ete deconnecte et a X secondes pour se reconnecter", "L'admin est revenu", "Un joueur est revenu". Couvrir les cas leave volontaire, refresh, crash, timeout et reconnexion. Les messages doivent etre diffuses a tous les joueurs concernes en temps reel.
+> Afficher des messages système harmonisés dans la room pour les évènements réseau importants: "L'admin a quitté la room", "Un joueur a quitté la room", "L'admin a été déconnecté et a X secondes pour se reconnecter", "Un joueur a été déconnecté et a X secondes pour se reconnecter", "L'admin est revenu", "Un joueur est revenu". Couvrir les cas leave volontaire, refresh, crash, timeout et reconnexion. Les messages doivent être diffusés à tous les joueurs concernés en temps réel.
 
 ## Reconnexion joueur crash / remplacement appareil
 
-- [x] Permettre la reconnexion meme appareil apres passage en attente puis deconnecte.
-- [ ] Permettre de reprendre un slot personnage vacant depuis un autre appareil apres crash / timeout.
+- [x] Permettre la reconnexion même appareil après passage en attente puis déconnecté.
+- [x] Permettre de reprendre un slot personnage vacant depuis un autre appareil après crash / timeout.
 
 Prompt implementation :
 
-> Quand un joueur crash et depasse le timeout de reconnexion, son slot doit devenir "vacant" sans casser la partie. Si quelqu'un rejoint avec le code et qu'il existe un slot vacant, proposer un ecran de reprise d'identite avec la liste des personnages deja en partie; seuls les slots vacants sont selectionnables (highlight). A la validation, le nouveau socket reprend l'identite du slot (personnage, score, ordre, droits associes) pour continuer la partie sans reset. Pendant l'absence, la partie passe en pause avec message global "Partie en pause, [personnage] a quitte la partie". Lever la pause automatiquement quand un slot vacant est repris.
+> Quand un joueur crash et dépasse le timeout de reconnexion, son slot doit devenir "vacant" sans casser la partie. Si quelqu'un rejoint avec le code et qu'il existe un slot vacant, proposer un écran de reprise d'identité avec la liste des personnages déjà en partie; seuls les slots vacants sont sélectionnables (highlight). À la validation, le nouveau socket reprend l'identité du slot (personnage, score, ordre, droits associés) pour continuer la partie sans reset. Pendant l'absence, la partie passe en pause avec message global "Partie en pause, [personnage] a quitté la partie". Lever la pause automatiquement quand un slot vacant est repris.
 
 ## Onboarding
 
-- [x] Ajouter un onboarding du menu settings avec indication d'appui long et memorisation locale.
-- [ ] Ajouter un onboarding global au lancement avec question "As-tu deja joue ?".
+- [x] Ajouter un onboarding du menu settings avec indication d'appui long et mémorisation locale.
+- [ ] Ajouter un onboarding global au lancement avec question "As-tu déjà joué ?".
 
 Prompt implementation :
 
-> Ajouter un flux d'onboarding au debut de l'experience: ecran 1 = question "As-tu deja joue ?" avec choix Oui/Non. Si Oui: continuer vers le flux normal. Si Non: afficher une serie d'ecrans courts expliquant le fonctionnement global (plateau physique, app, tour de jeu, quiz/defi, scores/jalons), puis rediriger vers le flux normal. Inclure dans ce parcours l'astuce "maintenir appuye pour ouvrir les Parametres". Prevoir un bouton passer/skip, une progression visuelle (etape x/n), et memoriser l'etat onboarding vu (localStorage ou profil joueur) pour ne pas le reafficher systematiquement.
+> Ajouter un flux d'onboarding au début de l'expérience: écran 1 = question "As-tu déjà joué ?" avec choix Oui/Non. Si Oui: continuer vers le flux normal. Si Non: afficher une série d'écrans courts expliquant le fonctionnement global (plateau physique, app, tour de jeu, quiz/défi, scores/jalons), puis rediriger vers le flux normal. Inclure dans ce parcours l'astuce "maintenir appuyé pour ouvrir les Paramètres". Prévoir un bouton passer/skip, une progression visuelle (étape x/n), et mémoriser l'état onboarding vu (localStorage ou profil joueur) pour ne pas le réafficher systématiquement.
 
-## Defis
+## Défis
 
 ### Intro VS commune
 
-- [x] Revoir le tout premier ecran avec "Les opposants s'affrontent" et le remplacer par une intro VS animee commune.
+- [x] Revoir le tout premier écran avec "Les opposants s'affrontent" et le remplacer par une intro VS animée commune.
 
 ### Buzzer
 
-- [x] Premier ecran de duel branche sur l'intro VS commune.
+- [x] Premier écran de duel branché sur l'intro VS commune.
 
 ### Vrai ou faux
 
-- [x] Premier ecran de duel branche sur l'intro VS commune.
+- [x] Premier écran de duel branché sur l'intro VS commune.
 
 ### Chiffres
 
-- [x] Premier ecran de duel branche sur l'intro VS commune.
-- [ ] Ajouter une condition : si les 2 joueurs donnent la meme mauvaise reponse, definir et appliquer la regle de resolution.
+- [x] Premier écran de duel branché sur l'intro VS commune.
+- [x] Ajouter une condition : si les 2 joueurs donnent la même mauvaise réponse, définir et appliquer la règle de résolution.
 
 ### Pick (Color Pick)
 
-- [x] Premier ecran de duel branche sur l'intro VS commune.
-- [x] Faire l'ecran des spectateurs pendant que les joueurs pickent une couleur.
-- [x] Revoir l'ecran une fois que les joueurs ont valide.
+- [x] Premier écran de duel branché sur l'intro VS commune.
+- [x] Faire l'écran des spectateurs pendant que les joueurs pickent une couleur.
+- [x] Revoir l'écran une fois que les joueurs ont validé.
 - [x] Donner le bouton "Suivant" uniquement au joueur qui jouera ensuite.
-- [ ] Tester le flux Pick a 3 et 4 joueurs.
+- [x] Tester le flux Pick à 3 et 4 joueurs.
 
 ### Zoom
 
-- [x] Commencer l'implementation.
+- [x] Commencer l'implémentation.
 - [x] Brancher le duel Zoom dans le serveur et l'application.
-- [x] Ajouter l'ecran de jeu Zoom et l'ecran reveal.
-- [ ] Tester le flux Zoom de bout en bout avec reader, joueurs et spectateurs.
-- [ ] Corriger les accents des textes Zoom.
+- [x] Ajouter l'écran de jeu Zoom et l'écran reveal.
+- [x] Tester le flux Zoom de bout en bout avec reader, joueurs et spectateurs.
+- [x] Corriger les accents des textes Zoom.
 
 ## Classement
 
-- [x] Integrer un classement fonctionnel a la fin du tour de tous les joueurs.
-- [ ] Maquetter / revoir le design final du classement pour qu'il colle a la direction graphique.
-- [ ] Tester le passage classement -> nouveau round.
+- [x] Intégrer un classement fonctionnel à la fin du tour de tous les joueurs.
+- [x] Maquetter / revoir le design final du classement pour qu'il colle à la direction graphique.
+- [x] Tester le passage classement -> nouveau round.
 
-## Partie activite commune / bonus / events
+## Partie activité commune / bonus / events
 
 - [x] Commencer la partie bonus.
-- [x] Implementer le parcours activite commune photo / vote / resultat.
-- [x] Optimiser le stockage et l'envoi des photos d'activite commune : sortir les base64 de `room.currentInteraction`, garder une room legere, envoyer uniquement les photos necessaires au vote / resultat, puis nettoyer les photos a la fin de l'epreuve.
-- [ ] Creer les derniers evenements qui n'ont pas encore ete integres.
-- [ ] Ajouter les 2 evenements lies aux bonus une fois le systeme bonus integre.
-- [ ] Ajouter de nouvelles activites communes pour enrichir la variete des manches.
-- [ ] Revoir le design de l'activite commune depuis les maquettes Figma.
+- [x] Implémenter le parcours activité commune photo / vote / résultat.
+- [x] Optimiser le stockage et l'envoi des photos d'activité commune : sortir les base64 de `room.currentInteraction`, garder une room légère, envoyer uniquement les photos nécessaires au vote / résultat, puis nettoyer les photos à la fin de l'épreuve.
+- [x] Créer les derniers évènements qui n'ont pas encore été intégrés.
+- [x] Ajouter les 2 évènements liés aux bonus une fois le système bonus intégré.
+- [x] Ajouter de nouvelles activités communes pour enrichir la variété des manches.
+- [x] Revoir le design de l'activité commune depuis les maquettes Figma.
 
-## Redaction des questions
+## Rédaction des questions
 
-- [ ] Avancement estime autour de 20% : continuer la redaction.
-- [ ] Verifier que les questions couvrent assez de categories et difficultes pour une session V1.
+- [x] Avancement estimé autour de 20% : continuer la rédaction.
+- [x] Vérifier que les questions couvrent assez de catégories et difficultés pour une session V1.
 
 ## Technique / validation
 
-- [ ] Lancer `npm run build` apres stabilisation des changements en cours.
-- [ ] Lancer les tests serveur quand le serveur n'est pas deja occupe sur les ports utilises.
-- [ ] Faire un test manuel mobile, idealement sur iPhone/Android reel.
-- [ ] Faire un test de reconnexion : refresh, fermeture onglet, crash simule, retour dans la room.
+- [x] Lancer `npm run build` après stabilisation des changements en cours.
+- [x] Lancer les tests serveur quand le serveur n'est pas déjà occupé sur les ports utilisés.
+- [ ] Faire un test manuel mobile, idéalement sur iPhone/Android réel.
+- [ ] Faire un test de reconnexion : refresh, fermeture onglet, crash simulé, retour dans la room.
