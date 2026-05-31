@@ -3,12 +3,15 @@ import ButtonWithIcon from '../../components/ButtonWithIcon'
 import {
   ActivityScreen,
   ActivityHeaderTag,
+  CutPanel,
   MaskAssetIcon,
   PhotoFrame,
   StatusTag
 } from './ActivityShared'
 
 const SESSION_TOKEN_KEY = 'lcg_session_token'
+const CAMERA_IMAGE_SIZE = 1280
+const CAMERA_IMAGE_QUALITY = 0.75
 
 const getPhotoDraftKey = (roomId, brandName) => {
   if (typeof window === 'undefined' || !roomId) return null
@@ -41,6 +44,29 @@ const writePhotoDraft = (key, value) => {
   }
 }
 
+const canUseIntegratedCamera = () => (
+  typeof window !== 'undefined'
+  && window.isSecureContext
+  && typeof navigator !== 'undefined'
+  && Boolean(navigator.mediaDevices?.getUserMedia)
+)
+
+const stopStream = (stream) => {
+  stream?.getTracks?.().forEach((track) => track.stop())
+}
+
+const isMobileViewport = () => {
+  if (typeof window === 'undefined') return false
+  return window.innerWidth < 470 || /iPhone|iPad|Android|Mobile/.test(navigator.userAgent)
+}
+
+const requestMobileFullscreen = () => {
+  if (!isMobileViewport()) return
+  if (typeof document === 'undefined') return
+  if (document.fullscreenElement || !document.documentElement.requestFullscreen) return
+  document.documentElement.requestFullscreen().catch(() => {})
+}
+
 export default function ActiviteUpload({ roomData, currentUserId, submitPhoto }) {
   const interaction = roomData?.currentInteraction || {}
   const { uploadedPhotos = {}, participants = [], brandName = '' } = interaction
@@ -48,11 +74,27 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
   const [photoPreview, setPhotoPreview] = useState(() => readPhotoDraft(draftKey))
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
+  const [cameraMode, setCameraMode] = useState('idle')
+  const [cameraFacingMode, setCameraFacingMode] = useState('environment')
+  const [isVideoReady, setIsVideoReady] = useState(false)
   const fileInputRef = useRef(null)
+  const videoRef = useRef(null)
+  const cameraStreamRef = useRef(null)
   const loadedDraftKeysRef = useRef(new Set())
+  const shouldRestoreFullscreenRef = useRef(false)
   const hasUploaded = Boolean(uploadedPhotos[currentUserId])
   const uploadedCount = Object.keys(uploadedPhotos).filter(id => participants.includes(id)).length
   const totalCount = participants.length
+  const isCameraOpen = cameraMode === 'opening' || cameraMode === 'ready'
+
+  const closeIntegratedCamera = ({ clearError = true } = {}) => {
+    stopStream(cameraStreamRef.current)
+    cameraStreamRef.current = null
+    if (videoRef.current) videoRef.current.srcObject = null
+    setIsVideoReady(false)
+    setCameraMode('idle')
+    if (clearError) setUploadError(null)
+  }
 
   useEffect(() => {
     if (!draftKey || loadedDraftKeysRef.current.has(draftKey)) return
@@ -69,6 +111,32 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
       writePhotoDraft(draftKey, null)
     }
   }, [draftKey, hasUploaded])
+
+  useEffect(() => () => {
+    stopStream(cameraStreamRef.current)
+    cameraStreamRef.current = null
+  }, [])
+
+  useEffect(() => {
+    const restoreFullscreenAfterPicker = () => {
+      if (!shouldRestoreFullscreenRef.current) return
+      shouldRestoreFullscreenRef.current = false
+      window.setTimeout(requestMobileFullscreen, 120)
+    }
+
+    window.addEventListener('focus', restoreFullscreenAfterPicker)
+    document.addEventListener('visibilitychange', restoreFullscreenAfterPicker)
+    return () => {
+      window.removeEventListener('focus', restoreFullscreenAfterPicker)
+      document.removeEventListener('visibilitychange', restoreFullscreenAfterPicker)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (photoPreview || hasUploaded) {
+      closeIntegratedCamera({ clearError: false })
+    }
+  }, [photoPreview, hasUploaded])
 
   const fileToResizedDataUrl = (file, { maxSize = 1280, quality = 0.75 } = {}) => {
     return new Promise((resolve, reject) => {
@@ -103,9 +171,34 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
     })
   }
 
+  const videoFrameToDataUrl = (video, { maxSize = CAMERA_IMAGE_SIZE, quality = CAMERA_IMAGE_QUALITY } = {}) => {
+    const videoWidth = video.videoWidth
+    const videoHeight = video.videoHeight
+    if (!videoWidth || !videoHeight) throw new Error('Caméra pas encore prête.')
+
+    const sourceSize = Math.min(videoWidth, videoHeight)
+    const sourceX = Math.max(0, Math.floor((videoWidth - sourceSize) / 2))
+    const sourceY = Math.max(0, Math.floor((videoHeight - sourceSize) / 2))
+    const canvas = document.createElement('canvas')
+    canvas.width = maxSize
+    canvas.height = maxSize
+
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('Canvas indisponible.')
+
+    if (cameraFacingMode === 'user') {
+      ctx.translate(maxSize, 0)
+      ctx.scale(-1, 1)
+    }
+
+    ctx.drawImage(video, sourceX, sourceY, sourceSize, sourceSize, 0, 0, maxSize, maxSize)
+    return canvas.toDataURL('image/jpeg', quality)
+  }
+
   const handleFileChange = async (event) => {
     const file = event.target.files?.[0]
     event.target.value = ''
+    requestMobileFullscreen()
     if (!file) return
 
     setUploadError(null)
@@ -123,27 +216,106 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
     }
   }
 
-  const handleOpenCamera = async () => {
+  const handleOpenFilePicker = async () => {
     setUploadError(null)
-    if (typeof document !== 'undefined' && document.fullscreenElement) {
+    const shouldRestoreFullscreen = isMobileViewport()
+    shouldRestoreFullscreenRef.current = shouldRestoreFullscreen
+    if (shouldRestoreFullscreen && typeof document !== 'undefined' && document.fullscreenElement) {
       await document.exitFullscreen?.().catch(() => {})
     }
     window.setTimeout(() => fileInputRef.current?.click(), 50)
+  }
+
+  const openIntegratedCamera = async (nextFacingMode = cameraFacingMode) => {
+    if (!canUseIntegratedCamera()) {
+      closeIntegratedCamera({ clearError: false })
+      handleOpenFilePicker()
+      return
+    }
+
+    setUploadError(null)
+    setIsVideoReady(false)
+    setCameraMode('opening')
+    stopStream(cameraStreamRef.current)
+    cameraStreamRef.current = null
+    if (videoRef.current) videoRef.current.srcObject = null
+
+    await new Promise((resolve) => window.setTimeout(resolve, 0))
+
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: { ideal: nextFacingMode },
+          width: { ideal: CAMERA_IMAGE_SIZE },
+          height: { ideal: CAMERA_IMAGE_SIZE },
+          aspectRatio: { ideal: 1 }
+        },
+        audio: false
+      })
+
+      cameraStreamRef.current = stream
+      setCameraFacingMode(nextFacingMode)
+
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream
+        await videoRef.current.play().catch(() => {})
+      }
+
+      setCameraMode('ready')
+    } catch (error) {
+      console.error(error)
+      stopStream(cameraStreamRef.current)
+      cameraStreamRef.current = null
+      setCameraMode('idle')
+      setIsVideoReady(false)
+      handleOpenFilePicker()
+    }
+  }
+
+  const handleOpenCamera = () => {
+    if (!canUseIntegratedCamera()) {
+      handleOpenFilePicker()
+      return
+    }
+    openIntegratedCamera('environment')
+  }
+
+  const handleSwitchCamera = () => {
+    const nextFacingMode = cameraFacingMode === 'environment' ? 'user' : 'environment'
+    openIntegratedCamera(nextFacingMode)
+  }
+
+  const handleCapturePhoto = () => {
+    if (!videoRef.current || cameraMode !== 'ready' || !isVideoReady) {
+      setUploadError('La caméra se prépare encore.')
+      return
+    }
+
+    try {
+      const captured = videoFrameToDataUrl(videoRef.current)
+      writePhotoDraft(draftKey, captured)
+      setPhotoPreview(captured)
+      closeIntegratedCamera({ clearError: true })
+    } catch (error) {
+      console.error(error)
+      setUploadError(error?.message || 'Impossible de capturer la photo.')
+    }
   }
 
   const handleDeletePhoto = () => {
     setUploadError(null)
     setPhotoPreview(null)
     setIsUploading(false)
+    closeIntegratedCamera({ clearError: false })
     writePhotoDraft(draftKey, null)
     if (fileInputRef.current) fileInputRef.current.value = ''
   }
 
-  const handleSubmit = () => {
-    if (!photoPreview || hasUploaded) return
+  const uploadPhoto = (photoData) => {
+    if (!photoData || hasUploaded) return
     setIsUploading(true)
     setUploadError(null)
-    submitPhoto(photoPreview, (response) => {
+    submitPhoto(photoData, (response) => {
       setIsUploading(false)
       if (response?.ok) {
         writePhotoDraft(draftKey, null)
@@ -153,7 +325,11 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
     })
   }
 
-  const title = photoPreview ? 'Votre photo' : 'Prenez en photo votre dessin'
+  const handleSubmit = () => {
+    uploadPhoto(photoPreview)
+  }
+
+  const title = photoPreview ? 'Votre photo' : isCameraOpen ? 'Cadrez votre dessin' : 'Prenez en photo votre dessin'
 
   if (!roomData || !roomData.currentInteraction) return null
 
@@ -185,6 +361,36 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
             <div className="relative w-full max-w-72">
               <PhotoFrame src={photoPreview} alt="Aperçu du dessin" className="aspect-square w-full" imageClassName="object-cover" />
             </div>
+          ) : isCameraOpen ? (
+            <div className="flex w-full flex-col items-center gap-3">
+              <CutPanel className="relative aspect-square w-full max-w-72 overflow-hidden bg-light5">
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  muted
+                  playsInline
+                  onLoadedMetadata={() => setIsVideoReady(true)}
+                  className={`h-full w-full object-cover ${cameraFacingMode === 'user' ? '-scale-x-100' : ''}`}
+                />
+                {(cameraMode === 'opening' || !isVideoReady) && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-bg/70 px-8 text-center font-funnel text-base font-medium text-light">
+                    Ouverture de la caméra...
+                  </div>
+                )}
+              </CutPanel>
+
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <CameraActionButton onClick={handleSwitchCamera} disabled={cameraMode === 'opening'}>
+                  Changer
+                </CameraActionButton>
+                <CameraActionButton onClick={() => closeIntegratedCamera()}>
+                  Fermer
+                </CameraActionButton>
+                <CameraActionButton onClick={handleOpenFilePicker}>
+                  Importer
+                </CameraActionButton>
+              </div>
+            </div>
           ) : (
             <button
               type="button"
@@ -203,7 +409,18 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
           )}
 
           {uploadError && (
-            <p className="max-w-72 font-funnel text-sm font-semibold text-red-primary">{uploadError}</p>
+            <div className="flex max-w-72 flex-col items-center gap-2">
+              <p className="font-funnel text-sm font-semibold text-red-primary">{uploadError}</p>
+              {!isCameraOpen && (
+                <button
+                  type="button"
+                  onClick={handleOpenFilePicker}
+                  className="font-funnel text-sm font-semibold text-light underline decoration-light/50 underline-offset-4"
+                >
+                  Importer une photo
+                </button>
+              )}
+            </div>
           )}
         </div>
 
@@ -237,12 +454,33 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
 
       <div className="flex w-full justify-center pb-1">
         <ButtonWithIcon
-          onClick={photoPreview ? handleSubmit : handleOpenCamera}
-          text={hasUploaded ? 'En attente' : photoPreview ? 'Valider la photo' : 'Ouvrir la caméra'}
-          disabled={isUploading || hasUploaded}
+          onClick={photoPreview ? handleSubmit : isCameraOpen ? handleCapturePhoto : handleOpenCamera}
+          text={hasUploaded ? 'En attente' : photoPreview ? 'Valider la photo' : isCameraOpen ? 'Prendre la photo' : 'Ouvrir la caméra'}
+          disabled={isUploading || hasUploaded || (isCameraOpen && (cameraMode === 'opening' || !isVideoReady))}
           className="w-fit whitespace-nowrap"
         />
       </div>
     </ActivityScreen>
+  )
+}
+
+function CameraActionButton({ children, onClick, disabled = false }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="relative inline-flex h-8 items-center justify-center bg-light5 px-3 py-1 text-light transition active:scale-95 disabled:opacity-40"
+    >
+      <svg width="35" height="44" viewBox="0 0 35 44" fill="none" className="absolute -left-1 -top-0.25 h-8.5" aria-hidden="true">
+        <path fillRule="evenodd" clipRule="evenodd" d="M34.4928 0H0V31.6242V44H13.9715L2.82622 40.5735L0 31.6242L2.82624 6.96089L34.4928 0Z" fill="#101010" />
+      </svg>
+      <span className="relative z-10 whitespace-nowrap font-funnel text-sm font-medium leading-none">
+        {children}
+      </span>
+      <svg width="27" height="44" viewBox="0 0 27 44" fill="none" className="absolute -right-1 -top-0.25 h-8.5" aria-hidden="true">
+        <path d="M22.8791 35.1861L26.4677 10.636L22.8791 1.95051L0 0H26.4677V10.636V44H5.35772L18.3731 40.6657L22.8791 35.1861Z" fill="#101010" />
+      </svg>
+    </button>
   )
 }

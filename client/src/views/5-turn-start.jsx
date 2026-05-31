@@ -2,11 +2,7 @@ import React from 'react'
 import ButtonWithIcon from '../components/ButtonWithIcon'
 import CharacterBorder from '../components/CharacterBorder'
 import CharacterCard from '../components/CharacterCard'
-
-function formatCharacterName(name) {
-  if (!name) return ''
-  return `${name.charAt(0).toUpperCase()}${name.slice(1)}`
-}
+import { formatCharacterName } from '../utils/frenchGrammar'
 
 export default function TurnStart({ roomData, rollDice, nextTurn, currentUserId }) {
   if (!roomData) return null
@@ -55,7 +51,7 @@ export default function TurnStart({ roomData, rollDice, nextTurn, currentUserId 
 
             {!skipBonus && !isMyTurn && (
               <h2 className="text-light font-hakobi text-5xl uppercase pt-8">
-                C'est à {activePlayer.character}<br />de jouer !
+                C'est à {formatCharacterName(activePlayer.character)}<br />de jouer !
               </h2>
             )}
 

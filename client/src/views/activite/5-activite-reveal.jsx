@@ -1,5 +1,5 @@
 import React from 'react'
-import ButtonWithIcon from '../../components/ButtonWithIcon'
+import CharacterTag from '../../components/CharacterTag'
 import {
   ActivityScreen,
   ActivityHeaderTag,
@@ -7,11 +7,15 @@ import {
   VoteIcon
 } from './ActivityShared'
 import { getCharacterColor, getCharacterName, getPlayerCharacter } from './ActivityData'
+import { deCharacter } from '../../utils/frenchGrammar'
 
 export default function ActiviteReveal({ roomData, currentUserId, continueToFeedback }) {
   if (!roomData || !roomData.lastResult) return null
 
   const { rankings = [] } = roomData.lastResult
+  const nextPlayerIndex = (roomData.turnIndex + 1) % roomData.players.length
+  const nextPlayer = roomData.players[nextPlayerIndex]
+  const canAdvance = nextPlayer?.id === currentUserId
   const rankedItems = rankings.map((rank) => {
     const player = roomData.players.find(p => p.id === rank.playerId)
     const charId = getPlayerCharacter(player)
@@ -25,12 +29,12 @@ export default function ActiviteReveal({ roomData, currentUserId, continueToFeed
   })
 
   return (
-    <ActivityScreen scroll className="gap-8 pb-8">
+    <ActivityScreen scroll className="gap-8">
       <div className="top-0 z-20 flex w-full justify-center bg-bg pb-2">
         <ActivityHeaderTag />
       </div>
 
-      <div className="flex w-full flex-col items-center gap-7">
+      <div className="flex w-full flex-col items-center gap-7 pb-16">
         <h1 className="m-0 max-w-72 font-hakobi text-[39px] uppercase leading-none text-light">
           Résultats du vote
         </h1>
@@ -54,13 +58,32 @@ export default function ActiviteReveal({ roomData, currentUserId, continueToFeed
           ))}
         </div>
 
-        <ButtonWithIcon
-          onClick={continueToFeedback}
-          text="Suivant"
-          className="mb-2 mt-1 w-56"
-        />
+      </div>
+
+      <div
+        className="pointer-events-none fixed inset-x-0 bottom-0 z-30"
+        style={{
+          height: 'calc(var(--app-height, 100dvh) * 0.25)',
+          background: 'linear-gradient(to top, rgba(16, 16, 16, 1) 0%, rgba(16, 16, 16, 0) 100%)'
+        }}
+      />
+      <div className="pointer-events-none fixed inset-x-0 bottom-8 z-40 flex justify-center">
+        {canAdvance && <RevealNextButton onClick={continueToFeedback} />}
       </div>
     </ActivityScreen>
+  )
+}
+
+function RevealNextButton({ onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="pointer-events-auto flex h-14 w-[247px] items-center justify-center bg-contain bg-center bg-no-repeat text-bg transition active:scale-95"
+      style={{ backgroundImage: 'url(/activite/button-bg.svg)' }}
+    >
+      <span className="-mb-2 font-hakobi text-4xl uppercase leading-none">Suivant</span>
+    </button>
   )
 }
 
@@ -88,10 +111,10 @@ function RankingRow({ rank, position, isCurrentUser }) {
 
 function WorksHeading() {
   return (
-    <div className="flex w-full items-center justify-center gap-4 text-light/60">
-      <img src="/activite/deco-gauche.svg" alt="" aria-hidden="true" className="h-3 w-[6.5rem] object-fill" />
+    <div className="flex w-full items-center justify-center gap-4 text-light  opacity-50">
+      <img src="/activite/deco-gauche.svg" alt="" aria-hidden="true" className="h-2.5 w-24 object-fill" />
       <p className="whitespace-nowrap font-funnel text-base font-semibold">Vos oeuvres</p>
-      <img src="/activite/deco-droite.svg" alt="" aria-hidden="true" className="h-3 w-[6.5rem] object-fill" />
+      <img src="/activite/deco-droite.svg" alt="" aria-hidden="true" className="h-2.5 w-24 object-fill" />
     </div>
   )
 }
@@ -105,18 +128,8 @@ function WorkCard({ rank }) {
 
   return (
     <div className="flex w-full flex-col items-center gap-3">
-      <PhotoFrame src={rank.photoData} alt={`Dessin de ${rank.name}`} className="h-[17rem] w-full max-w-72" />
-      <span
-        className="relative inline-flex h-8 items-center gap-1 px-3 py-1"
-        style={{
-          color: rank.color,
-          backgroundColor: `${rank.color}33`,
-          clipPath: 'polygon(6% 12%, 88% 0, 100% 16%, 96% 86%, 8% 100%, 0 76%)'
-        }}
-      >
-        <img src={`/game/${rank.charId}.svg`} alt="" aria-hidden="true" className="h-5 w-5 object-contain" />
-        <span className="font-funnel text-base font-extrabold">Dessin de {rank.name}</span>
-      </span>
+      <PhotoFrame src={rank.photoData} alt={`Dessin ${deCharacter(rank.charId || rank.name)}`} className="h-[17rem] w-full max-w-72" />
+      <CharacterTag charId={rank.charId} text="Dessin de" reversed variant="mini" />
       <div className="flex min-h-8 items-center justify-center gap-1">
         {voteTypes.length > 0 ? (
           voteTypes.map((type, index) => (

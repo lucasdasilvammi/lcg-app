@@ -4,6 +4,9 @@ import io from 'socket.io-client'
 const SocketContext = createContext()
 
 const SESSION_TOKEN_KEY = 'lcg_session_token'
+const ROOM_SNAPSHOT_KEY = 'lcg_room_snapshot'
+const ROOM_SNAPSHOT_MAX_AGE_MS = 10 * 60 * 1000
+const DEBUG_TOOLS_ENABLED = import.meta.env.VITE_ENABLE_DEBUG_TOOLS === 'true'
 
 const createSessionToken = () => {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
@@ -27,9 +30,51 @@ const resetSessionToken = () => {
   return getOrCreateSessionToken()
 }
 
+const readRoomSnapshot = () => {
+  if (typeof window === 'undefined') return null
+  try {
+    const sessionToken = window.localStorage.getItem(SESSION_TOKEN_KEY)
+    if (!sessionToken) return null
+
+    const rawSnapshot = window.localStorage.getItem(ROOM_SNAPSHOT_KEY)
+    if (!rawSnapshot) return null
+
+    const snapshot = JSON.parse(rawSnapshot)
+    if (snapshot?.sessionToken !== sessionToken) return null
+    if (!snapshot?.room || Date.now() - Number(snapshot.savedAt || 0) > ROOM_SNAPSHOT_MAX_AGE_MS) return null
+    return snapshot.room
+  } catch {
+    return null
+  }
+}
+
+const writeRoomSnapshot = (room) => {
+  if (typeof window === 'undefined') return
+  try {
+    const sessionToken = window.localStorage.getItem(SESSION_TOKEN_KEY)
+    if (!sessionToken || !room) return
+    window.localStorage.setItem(ROOM_SNAPSHOT_KEY, JSON.stringify({
+      sessionToken,
+      savedAt: Date.now(),
+      room
+    }))
+  } catch {
+    // If localStorage is full, live socket state still remains the source of truth.
+  }
+}
+
+const clearRoomSnapshot = () => {
+  if (typeof window === 'undefined') return
+  try {
+    window.localStorage.removeItem(ROOM_SNAPSHOT_KEY)
+  } catch {
+    // Ignore restricted storage contexts.
+  }
+}
+
 export const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null)
-  const [roomData, setRoomData] = useState(null)
+  const [roomData, setRoomData] = useState(() => readRoomSnapshot())
   const [isAdmin, setIsAdmin] = useState(false)
   const [errorMsg, setErrorMsg] = useState("")
   const [toasts, setToasts] = useState([])
@@ -38,6 +83,9 @@ export const SocketProvider = ({ children }) => {
   const toastQueueRef = useRef([])
   const activeToastIdRef = useRef(null)
   const toastTimersRef = useRef([])
+  const restoredRoomIdRef = useRef(roomData?.id || null)
+  const roomStateConfirmedRef = useRef(false)
+  const orphanSnapshotTimerRef = useRef(null)
 
   const clearToastTimers = () => {
     toastTimersRef.current.forEach((timer) => window.clearTimeout(timer))
@@ -87,6 +135,10 @@ export const SocketProvider = ({ children }) => {
     clearToastTimers()
     toastQueueRef.current = []
     activeToastIdRef.current = null
+    if (orphanSnapshotTimerRef.current) {
+      window.clearTimeout(orphanSnapshotTimerRef.current)
+      orphanSnapshotTimerRef.current = null
+    }
   }, [])
 
   useEffect(() => {
@@ -113,15 +165,34 @@ export const SocketProvider = ({ children }) => {
     s.on('connect', () => {
       console.log('⚡ socket connected', s.id)
       window.__socket = s
+      if (restoredRoomIdRef.current && !roomStateConfirmedRef.current) {
+        if (orphanSnapshotTimerRef.current) window.clearTimeout(orphanSnapshotTimerRef.current)
+        orphanSnapshotTimerRef.current = window.setTimeout(() => {
+          if (roomStateConfirmedRef.current) return
+          console.warn('Clearing orphan room snapshot after server reconnect:', restoredRoomIdRef.current)
+          restoredRoomIdRef.current = null
+          clearRoomSnapshot()
+          setRoomData(null)
+          setIsAdmin(false)
+          setErrorMsg("")
+        }, 1800)
+      }
     })
     s.on('connect_error', (err) => { console.error('⚡ socket connect_error', err.message) })
 
     s.on("room_created", (data) => { setIsAdmin(true); console.log('room_created', data) })
     s.on("room_joined", (data) => { setIsAdmin(data.isAdmin); console.log('room_joined', data) })
     s.on("left_room", () => {
+      roomStateConfirmedRef.current = false
+      restoredRoomIdRef.current = null
+      if (orphanSnapshotTimerRef.current) {
+        window.clearTimeout(orphanSnapshotTimerRef.current)
+        orphanSnapshotTimerRef.current = null
+      }
       setRoomData(null)
       setIsAdmin(false)
       setErrorMsg("")
+      clearRoomSnapshot()
       resetSessionToken()
       console.log('left_room ack')
     })
@@ -141,7 +212,14 @@ export const SocketProvider = ({ children }) => {
       })
     })
     s.on("update_room_state", (room) => {
+      roomStateConfirmedRef.current = true
+      restoredRoomIdRef.current = null
+      if (orphanSnapshotTimerRef.current) {
+        window.clearTimeout(orphanSnapshotTimerRef.current)
+        orphanSnapshotTimerRef.current = null
+      }
       setRoomData(room)
+      writeRoomSnapshot(room)
       setIsAdmin(room?.adminId === s.id)
       setErrorMsg("")
       window.__ROOM = room
@@ -283,8 +361,13 @@ export const SocketProvider = ({ children }) => {
     window.__ADD_TOAST = (msg, type='info') => addToast(msg, type)
     window.__JOIN = (code) => joinRoomWithCode(code)
     window.__LOG_SOCKET = () => console.log('socket id', socket?.id, 'connected', socket?.connected)
-    window.__GIVE_BONUS = debugGiveBonus
-    window.__BONUS_IDS = ['ctrl-z', 'coffee-boss', 'choose-quiz']
+    if (DEBUG_TOOLS_ENABLED) {
+      window.__GIVE_BONUS = debugGiveBonus
+      window.__BONUS_IDS = ['ctrl-z', 'coffee-boss', 'choose-quiz']
+    } else {
+      delete window.__GIVE_BONUS
+      delete window.__BONUS_IDS
+    }
   }
 
   return (

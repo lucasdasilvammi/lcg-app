@@ -12,14 +12,15 @@ app.use(cors({
 }));
 const server = http.createServer(app);
 
-const DEV_CLIENT_PORTS = new Set(["3000", "5173", "5174", "5175", "5176", "5177", "5180"]);
+const DEV_CLIENT_PORTS = new Set(["3000", "3001", "5173", "5174", "5175", "5176", "5177", "5180"]);
 
 const isAllowedDevOrigin = (origin) => {
   if (!origin) return true;
 
   try {
     const { protocol, port } = new URL(origin);
-    return ["http:", "https:"].includes(protocol) && DEV_CLIENT_PORTS.has(port);
+    if (!["http:", "https:"].includes(protocol)) return false;
+    return DEV_CLIENT_PORTS.has(port);
   } catch {
     return false;
   }
@@ -41,6 +42,9 @@ const io = new Server(server, {
 const CODE_LENGTH = 5;
 const MAX_PLAYERS = 6;
 const VALID_BONUS_IDS = new Set(['ctrl-z', 'coffee-boss', 'choose-quiz']);
+const DEBUG_TOOLS_ENABLED = process.env.LCG_ENABLE_DEBUG_TOOLS === 'true';
+const DEBUG_ROOM_CODE = [2, 2, 2, 2, 2];
+const TEST_DEFAULT_BONUSES = { 'ctrl-z': 1, 'coffee-boss': 1, 'choose-quiz': 1 };
 const quizData = require('./data/quiz.json');
 const duelsData = require('./data/duels.json');
 
@@ -123,7 +127,7 @@ let rooms = {};
 const DISCONNECT_GRACE_MS = 30000; // 30 secondes
 const pendingDisconnectTimers = new Map();
 const undoSnapshotsByRoomId = new Map();
-const TEST_DEFAULT_BONUSES = { 'ctrl-z': 1, 'coffee-boss': 1, 'choose-quiz': 1 };
+const DEFAULT_BONUSES = DEBUG_TOOLS_ENABLED ? TEST_DEFAULT_BONUSES : {};
 const activiteTimersByRoomId = new Map();
 const activiteVoteTimersByRoomId = new Map();
 const activitePhotoStoresByRoomId = new Map();
@@ -325,8 +329,9 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
 };
 
 const generateRoomId = () => Math.random().toString(36).substr(2, 9);
-// const generateGameCode = () => Array.from({ length: CODE_LENGTH }, () => Math.floor(Math.random() * 4));
-const generateGameCode = () => [2, 2, 2, 2, 2]; // TEMPORAIRE: 5 Alan pour les tests
+const generateGameCode = () => DEBUG_TOOLS_ENABLED
+  ? [...DEBUG_ROOM_CODE]
+  : Array.from({ length: CODE_LENGTH }, () => Math.floor(Math.random() * 4));
 const generatePrivateCode = () => Array.from({ length: CODE_LENGTH }, () => Math.floor(Math.random() * 4));
 const codesMatch = (left, right) => JSON.stringify(left) === JSON.stringify(right);
 const getRoomReconnectInvites = (room) => {
@@ -604,7 +609,7 @@ io.on('connection', (socket) => {
       id: newRoomId,
       code: gameCode,
       adminId: socket.id,
-      players: [{ id: socket.id, sessionToken, character: null, characterLocked: false, score: 0, bonuses: { ...TEST_DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false }],
+      players: [{ id: socket.id, sessionToken, character: null, characterLocked: false, score: 0, bonuses: { ...DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false }],
       status: "LOBBY",
       isPaused: false,
       pausedById: null,
@@ -660,7 +665,7 @@ io.on('connection', (socket) => {
 
     // Add player
     socket.join(room.id);
-    room.players.push({ id: socket.id, sessionToken, character: null, characterLocked: false, score: 0, bonuses: { ...TEST_DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false });
+    room.players.push({ id: socket.id, sessionToken, character: null, characterLocked: false, score: 0, bonuses: { ...DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false });
     socket.emit("room_joined", { roomId: room.id, isAdmin: false });
     console.log(`📥 join_room_with_code: player ${socket.id} joined room ${room.id}, now ${room.players.length} players, admin=${room.adminId}`);
     syncRoom(room);
@@ -758,6 +763,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('debug_give_bonus', ({ bonusId = 'ctrl-z', quantity = 1, playerId = socket.id } = {}, ack) => {
+    if (!DEBUG_TOOLS_ENABLED) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'debug_tools_disabled' });
+      return;
+    }
+
     const room = findRoom();
     if (!room) {
       if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });

@@ -1,3 +1,5 @@
+import { formatCharacterName } from '../../utils/frenchGrammar'
+
 export const CHAR_COLORS = {
   alan: '#06C0F9',
   donatien: '#FF37A5',
@@ -11,5 +13,5 @@ export const CHAR_COLORS = {
 
 export const getPlayerCharacter = (player) => player?.character || player?.charId || 'alan'
 export const getCharacterColor = (charId) => CHAR_COLORS[charId] || '#FFF6EF'
-export const getCharacterName = (charId) => charId ? charId.charAt(0).toUpperCase() + charId.slice(1) : 'Joueur'
+export const getCharacterName = (charId) => formatCharacterName(charId) || 'Joueur'
 export const getBrandMask = (brandName) => '*'.repeat(Array.from(String(brandName || '')).length)

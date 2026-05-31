@@ -3,6 +3,43 @@ import CharacterBorder from '../components/CharacterBorder'
 import ButtonWithIcon from '../components/ButtonWithIcon'
 import CharacterCard from '../components/CharacterCard'
 import CharacterTag from '../components/CharacterTag'
+import { agree, formatCharacterName } from '../utils/frenchGrammar'
+
+const SUCCESS_FEEDBACK_TEXTS = [
+  'Bonne réponse. Comme quoi, lire le brief avant de paniquer, ça peut servir.',
+  "C'est exact. On va faire semblant de ne pas être impressionnés.",
+  'Très bien répondu. Tu as le droit de souffler un peu.',
+  "C'est propre, c'est net, presque trop professionnel pour un stagiaire.",
+  "T'as triché pour l'avoir, celle-là ? Attention, on te surveille.",
+  'Bonne réponse ! Même le boss est choqué par ta réponse.',
+  'Bien joué, le stagiaire !',
+  "Réponse validée. Le brief ne l'avait pas vu venir.",
+  "Le boss hoche la tête. C'est rare, profite.",
+  "On sent quelqu'un qui a lu au moins la moitié du brief."
+]
+
+const FAILURE_FEEDBACK_TEXTS = [
+  "Dommage, mauvaise réponse, mais l'erreur est audacieuse.",
+  "Tu avais l'air tellement sûr de toi qu'on aurait pu y croire, mais c'est raté !",
+  "Mauvaise réponse. On sent l'idée, mais elle est partie faire une pause café sans prévenir.",
+  "Ce n'était pas la bonne réponse, mais il y avait une vraie intention.",
+  "Raté. Le brief demandait A, tu as livré quelque chose de très personnel.",
+  "Mauvaise piste. On range les calques et on reprend au prochain tour.",
+  "Dommage. Le boss fronce les sourcils, mais il a vu pire.",
+  "Pas validé. C'était presque convaincant, ce qui est déjà dangereux."
+]
+
+const pickFeedbackText = (texts, seedParts) => {
+  const seed = seedParts.filter(part => part !== undefined && part !== null).join('|')
+  let hash = 0
+
+  for (let index = 0; index < seed.length; index += 1) {
+    hash = ((hash << 5) - hash) + seed.charCodeAt(index)
+    hash |= 0
+  }
+
+  return texts[Math.abs(hash) % texts.length]
+}
 
 export default function Feedback({ roomData, nextTurn, currentUserId }) {
   if (!roomData || !roomData.lastResult) return null
@@ -25,11 +62,9 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
   const nextPlayerIndex = (roomData.turnIndex + 1) % roomData.players.length
   const nextPlayer = roomData.players[nextPlayerIndex]
   const isNextPlayer = nextPlayer && nextPlayer.id === currentUserId
-  const canAdvance = isLogoActivity ? true : ((isPickChallenge && isNextPlayer) || isQuestioner)
+  const canAdvance = isLogoActivity ? isNextPlayer : ((isPickChallenge && isNextPlayer) || isQuestioner)
 
   const getCharacterColor = (charId) => `var(--color-${charId})`
-  const capitalizeFirst = (str) => str ? str.charAt(0).toUpperCase() + str.slice(1) : ''
-
   const borderCharacterId = isLogoActivity
     ? winner?.character
     : (lastResult.type === 'pick'
@@ -44,15 +79,34 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
         ? 'Felicitation'
         : (lastResult.success ? 'Felicitation' : 'DOMMAGE...')))
 
+  const successFeedbackText = pickFeedbackText(SUCCESS_FEEDBACK_TEXTS, [
+    roomData.turnIndex,
+    lastResult.type,
+    lastResult.interactionType,
+    lastResult.winnerId,
+    lastResult.selectedIndex,
+    lastResult.correctAnswer,
+    lastResult.points
+  ])
+  const failureFeedbackText = pickFeedbackText(FAILURE_FEEDBACK_TEXTS, [
+    roomData.turnIndex,
+    lastResult.type,
+    lastResult.interactionType,
+    lastResult.buzzedPlayerCharacter,
+    lastResult.selectedIndex,
+    lastResult.correctAnswer,
+    currentUserId
+  ])
+
   const subtitleText = isLogoActivity
-    ? `${capitalizeFirst(winner?.character || '')} remporte le brief logo !`
+    ? `${formatCharacterName(winner?.character || '')} remporte le brief logo ! ${successFeedbackText}`
     : (lastResult.type === 'pick'
-      ? `${capitalizeFirst(winner?.character || '')} avait l'oeil le plus aiguise !`
+      ? `${formatCharacterName(winner?.character || '')} avait l'oeil le plus aiguise ! ${successFeedbackText}`
       : (isDefi && !lastResult.success
-        ? `Dommage ${buzzedPlayer ? capitalizeFirst(buzzedPlayer.character) : ''}, il vaut parfois mieux garder sa langue dans sa poche !`
+        ? `${buzzedPlayer ? `Dommage ${formatCharacterName(buzzedPlayer.character)}. ` : ''}${failureFeedbackText}`
         : (isDefi && lastResult.success
-          ? 'Excellente reponse !'
-          : (lastResult.success ? "Elle etait technique celle la, bien joue !" : "Allez c'est pas grave, ce sera pour une prochaine fois."))))
+          ? successFeedbackText
+          : (lastResult.success ? successFeedbackText : failureFeedbackText))))
 
   return (
     <div className="w-full max-w-full mx-auto">
@@ -88,7 +142,7 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
           )}
 
           {isDefi && !lastResult.success && buzzedPlayer && (
-            <CharacterTag charId={buzzedPlayer.character} text="s'est trompé(e)" className="" />
+            <CharacterTag charId={buzzedPlayer.character} text={agree(buzzedPlayer.character, "s'est trompé", "s'est trompée")} className="" />
           )}
 
           {canAdvance ? (

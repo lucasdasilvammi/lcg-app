@@ -4,6 +4,7 @@ import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import CharacterTag from '../../../components/CharacterTag'
 import QuizAnswerButton from '../../../components/QuizAnswerButton'
 import ZoomImageFrame from './ZoomImageFrame'
+import { agree, formatCharacterName } from '../../../utils/frenchGrammar'
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value))
 
@@ -122,15 +123,15 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
       return 'Attends un buzz puis valide oralement la r\u00e9ponse.'
     }
     if (isSpectator) {
-      if (buzzedPlayer) return `${buzzedPlayer.character} r\u00e9pond, en attente du verdict.`
+      if (buzzedPlayer) return `${formatCharacterName(buzzedPlayer.character)} répond, en attente du verdict.`
       return 'Observe le duel entre les deux joueurs.'
     }
-    if (isBlocked) return `Tu es bloqu\u00e9 ${blockSeconds}s avant de pouvoir rebuzzer.`
+    if (isBlocked) return `Tu es ${agree(myCharacter, 'bloqué', 'bloquée')} ${blockSeconds}s avant de pouvoir rebuzzer.`
     if (timedOutNoBuzz) return 'Le zoom est termin\u00e9. Le reader a 3 propositions, buzz d\u00e8s que tu penses avoir la bonne r\u00e9ponse.'
     if (buzzedPlayer && buzzedPlayer.id === currentUserId) return 'Tu as buzz\u00e9, donne ta r\u00e9ponse oralement maintenant.'
-    if (buzzedPlayer) return `${buzzedPlayer.character} a buzz\u00e9, attends le verdict.`
+    if (buzzedPlayer) return `${formatCharacterName(buzzedPlayer.character)} a buzzé, attends le verdict.`
     return 'Observe le logo puis buzz d\u00e8s que tu penses avoir la bonne r\u00e9ponse.'
-  }, [hasStarted, zoomResolvedCorrect, isMeReader, buzzedPlayer, isSpectator, isBlocked, blockSeconds, timedOutNoBuzz, options.length, currentUserId])
+  }, [hasStarted, zoomResolvedCorrect, isMeReader, buzzedPlayer, isSpectator, isBlocked, blockSeconds, timedOutNoBuzz, options.length, currentUserId, myCharacter])
 
   const zoomImage = (
     <div className="flex w-full items-center justify-center">
@@ -171,8 +172,8 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
 
   const blockedTag = isBlocked && (
     <CharacterTag
-      charId="virginie"
-      text={`Tu es bloqu\u00e9 ${blockSeconds}s`}
+      charId={myCharacter}
+      text={`Tu es ${agree(myCharacter, 'bloqué', 'bloquée')} ${blockSeconds}s`}
       hideName
       showAvatar={false}
       className="self-center"

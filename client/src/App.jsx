@@ -64,6 +64,11 @@ const FULLSCREEN_SCREEN_PADDING_BOTTOM = '3.5rem'
 const WINDOWED_MOBILE_SCREEN_PADDING_TOP = '1rem'
 const WINDOWED_MOBILE_SCREEN_PADDING_BOTTOM = '1.5rem'
 
+const isMobileViewport = () => {
+  if (typeof window === 'undefined') return false
+  return window.innerWidth < 470 || /iPhone|iPad|Android|Mobile/.test(navigator.userAgent)
+}
+
 const ACTIVITY_VIEWS = new Set([
   'ACTIVITE_BRIEF',
   'ACTIVITE_CREATION',
@@ -200,10 +205,6 @@ function PauseOverlay({ isAdmin, resumeGame }) {
 
 function ResponsiveViewport({ children }) {
   useLayoutEffect(() => {
-    const isMobileViewport = () => {
-      return window.innerWidth < 470 || /iPhone|iPad|Android|Mobile/.test(navigator.userAgent)
-    }
-
     const updateViewportMetrics = () => {
       const viewport = window.visualViewport
       const viewportWidth = viewport?.width || window.innerWidth
@@ -356,6 +357,11 @@ function AppContent() {
     document.documentElement.requestFullscreen().catch(() => {})
   }
 
+  const requestMobileFullscreen = () => {
+    if (!isMobileViewport()) return
+    requestAppFullscreen()
+  }
+
   const closeMenuOnboarding = () => {
     setIsMenuOnboardingOpen(false)
   }
@@ -385,6 +391,18 @@ function AppContent() {
     leaveRoom()
     setInputCode([])
     setView('HOME')
+  }
+
+  const handleHomeCreate = () => {
+    requestMobileFullscreen()
+    createRoom()
+  }
+
+  const handleHomeJoin = () => {
+    requestMobileFullscreen()
+    setView("JOIN")
+    setInputCode([])
+    setErrorMsg("")
   }
 
   useEffect(() => {
@@ -437,6 +455,10 @@ function AppContent() {
 
   const handleRootPointerEnd = (event) => {
     clearLongPressTimer()
+
+    if (event && event.pointerType !== 'mouse') {
+      requestMobileFullscreen()
+    }
 
     if (event && event.pointerType !== 'mouse' && !isInteractiveTarget(event.target)) {
       const now = Date.now()
@@ -574,7 +596,7 @@ function AppContent() {
       )}
 
       {view === "HOME" && (
-        <Home onCreate={createRoom} onJoin={() => { setView("JOIN"); setInputCode([]); setErrorMsg(""); }} />
+        <Home onCreate={handleHomeCreate} onJoin={handleHomeJoin} />
       )}
 
       {view === "JOIN" && (

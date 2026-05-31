@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import DuelNavbar from './DuelNavbar'
+import { formatCharacterName } from '../../../utils/frenchGrammar'
 
 const SECONDARY_COLORS = {
   alan: 'var(--color-blue-secondary)',
@@ -48,11 +49,6 @@ const PANELS = {
     playerClass: 'top-[132px]',
     headClass: 'h-[132px] w-[132px]'
   }
-}
-
-const formatCharacterName = (character) => {
-  if (!character) return ''
-  return character.charAt(0).toUpperCase() + character.slice(1)
 }
 
 const getPanelMotionClass = (position, phase) => {

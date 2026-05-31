@@ -7,14 +7,15 @@ const app = express();
 const server = http.createServer(app);
 
 // --- CORS Configuration (Dynamic for Production) ---
-const DEV_CLIENT_PORTS = new Set(['3000', '5173', '5174', '5175', '5176', '5177', '5180']);
+const DEV_CLIENT_PORTS = new Set(['3000', '3001', '5173', '5174', '5175', '5176', '5177', '5180']);
 
 const isAllowedDevOrigin = (origin) => {
   if (!origin) return true;
 
   try {
     const { protocol, port } = new URL(origin);
-    return ['http:', 'https:'].includes(protocol) && DEV_CLIENT_PORTS.has(port);
+    if (!['http:', 'https:'].includes(protocol)) return false;
+    return DEV_CLIENT_PORTS.has(port);
   } catch {
     return false;
   }
@@ -41,6 +42,9 @@ const io = new Server(server, {
 const CODE_LENGTH = 5;
 const MAX_PLAYERS = 4;
 const VALID_BONUS_IDS = new Set(['ctrl-z', 'coffee-boss', 'choose-quiz']);
+const DEBUG_TOOLS_ENABLED = process.env.LCG_ENABLE_DEBUG_TOOLS === 'true';
+const DEBUG_ROOM_CODE = [2, 2, 2, 2, 2];
+const TEST_DEFAULT_BONUSES = { 'ctrl-z': 1, 'coffee-boss': 1, 'choose-quiz': 1 };
 const quizData = require('./server/data/quiz.json');
 const duelsData = require('./server/data/duels.json');
 const eventsData = require('./server/data/events.json');
@@ -167,7 +171,9 @@ const canTriggerEvent = (room, event, activePlayer) => {
 };
 
 const generateRoomId = () => Math.random().toString(36).substr(2, 9);
-const generateGameCode = () => [2, 2, 2, 2, 2]; // TODO: Dynamique pour tests
+const generateGameCode = () => DEBUG_TOOLS_ENABLED
+  ? [...DEBUG_ROOM_CODE]
+  : Array.from({ length: CODE_LENGTH }, () => Math.floor(Math.random() * 4));
 const generatePrivateCode = () => Array.from({ length: CODE_LENGTH }, () => Math.floor(Math.random() * 4));
 const codesMatch = (left, right) => JSON.stringify(left) === JSON.stringify(right);
 const getRoomReconnectInvites = (room) => {
@@ -225,21 +231,34 @@ const DISCONNECT_GRACE_MS = 30000; // 30 secondes
 const pendingDisconnectTimers = new Map();
 const pendingDisconnectRoles = new Map();
 const undoSnapshotsByRoomId = new Map();
-const DEFAULT_BONUSES = {};
+const DEFAULT_BONUSES = DEBUG_TOOLS_ENABLED ? TEST_DEFAULT_BONUSES : {};
 // Timers (ne doivent JAMAIS être stockés dans l'état room envoyé au client)
 const activiteTimersByRoomId = new Map();
 const activiteVoteTimersByRoomId = new Map();
 const activitePhotoStoresByRoomId = new Map();
 
 // Libellés des toasts système de room. À raccourcir / retoucher ici.
-const formatToastCharacterName = (character) => character
-  ? character.charAt(0).toUpperCase() + character.slice(1)
-  : '';
+const CHARACTER_GENDERS = {
+  donatien: 'm',
+  tanguy: 'm',
+  alan: 'm',
+  lucien: 'm',
+  virginie: 'f',
+  lucie: 'f',
+  barbara: 'f',
+  alex: 'f'
+};
+const formatToastCharacterName = (character) => {
+  const name = String(character || '').trim();
+  return name ? `${name.charAt(0).toUpperCase()}${name.slice(1)}` : '';
+};
+const isFeminineCharacter = (character) => CHARACTER_GENDERS[String(character || '').trim().toLowerCase()] === 'f';
+const agreeCharacter = (character, masculine, feminine) => isFeminineCharacter(character) ? feminine : masculine;
 const ROOM_SYSTEM_MESSAGES = {
   playerLeft: (player) => player?.character ? `${formatToastCharacterName(player.character)} a quitté la partie.` : "Un joueur a quitté la partie.",
   playerDisconnected: (player) => player?.character ? `${formatToastCharacterName(player.character)} a quitté la partie.` : "Un joueur a quitté la partie.",
   playerTimeout: (player) => player?.character ? `${formatToastCharacterName(player.character)} est hors ligne.` : "Un joueur est hors ligne.",
-  playerReturned: (player) => player?.character ? `${formatToastCharacterName(player.character)} est reconnecté.` : "Un joueur est reconnecté.",
+  playerReturned: (player) => player?.character ? `${formatToastCharacterName(player.character)} est ${agreeCharacter(player.character, 'reconnecté', 'reconnectée')}.` : "Un joueur est reconnecté.",
   adminReassigned: (player) => player?.character ? `${formatToastCharacterName(player.character)} devient admin.` : "Nouvel admin.",
   adminFallback: () => "Nouvel admin."
 };
@@ -427,9 +446,10 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
   }
 
   const lr = room.lastResult;
-  if (lr) {
-    if (lr.winnerId === oldId) lr.winnerId = newId;
-    if (lr.buzzedPlayerId === oldId) lr.buzzedPlayerId = newId;
+    if (lr) {
+      if (lr.winnerId === oldId) lr.winnerId = newId;
+      if (Array.isArray(lr.winnerIds)) lr.winnerIds = lr.winnerIds.map(id => id === oldId ? newId : id);
+      if (lr.buzzedPlayerId === oldId) lr.buzzedPlayerId = newId;
     if (lr.questionerId === oldId) lr.questionerId = newId;
     if (lr.readerId === oldId) lr.readerId = newId;
     if (lr.verdictViewerId === oldId) lr.verdictViewerId = newId;
@@ -650,19 +670,25 @@ io.on('connection', (socket) => {
       })
       .sort((a, b) => b.score - a.score);
 
-    const winnerId = rankings[0]?.playerId;
-    const winner = room.players.find(p => p.id === winnerId);
-    if (winner) {
-      winner.score += 2; // 2 jalons pour le gagnant
-    }
+    const topScore = rankings[0]?.score ?? 0;
+    const winnerIds = rankings
+      .filter(rank => rank.score === topScore)
+      .map(rank => rank.playerId);
+
+    winnerIds.forEach((winnerId) => {
+      const winner = room.players.find(p => p.id === winnerId);
+      if (winner) winner.score += 2; // 2 jalons pour chaque meilleure réalisation
+    });
 
     room.lastResult = {
       type: 'logo',
       brandName: ci.brandName,
       rankings,
-      winnerId,
+      winnerId: winnerIds[0] || null,
+      winnerIds,
+      feedbackWinnerIndex: 0,
       points: 2,
-      success: true,
+      success: winnerIds.length > 0,
       questionerId: ci.questionerId || room.players[room.turnIndex]?.id
     };
 
@@ -965,6 +991,11 @@ io.on('connection', (socket) => {
   });
 
   socket.on('debug_give_bonus', ({ bonusId = 'ctrl-z', quantity = 1, playerId = socket.id } = {}, ack) => {
+    if (!DEBUG_TOOLS_ENABLED) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'debug_tools_disabled' });
+      return;
+    }
+
     const room = findRoom();
     if (!room) {
       if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
@@ -2107,6 +2138,11 @@ io.on('connection', (socket) => {
   socket.on('continue_to_feedback', () => {
     const room = findRoom();
     if (room) {
+      if (room.status === 'ACTIVITE_REVEAL' && room.lastResult?.type === 'logo') {
+        const nextPlayer = room.players[(room.turnIndex + 1) % room.players.length];
+        if (nextPlayer?.id !== socket.id) return;
+      }
+
       if (room.lastResult) {
         room.lastResult.verdictViewerId = socket.id;
       }
@@ -2149,6 +2185,22 @@ io.on('connection', (socket) => {
   socket.on('next_turn', () => {
     const room = findRoom();
     if (!room) return;
+    if (room.status === 'FEEDBACK' && room.lastResult?.type === 'logo') {
+      const nextPlayer = room.players[(room.turnIndex + 1) % room.players.length];
+      if (nextPlayer?.id !== socket.id) return;
+    }
+
+    if (room.status === 'FEEDBACK' && room.lastResult?.type === 'logo' && Array.isArray(room.lastResult.winnerIds)) {
+      const currentIndex = room.lastResult.feedbackWinnerIndex || 0;
+      const nextWinnerId = room.lastResult.winnerIds[currentIndex + 1];
+      if (nextWinnerId) {
+        room.lastResult.feedbackWinnerIndex = currentIndex + 1;
+        room.lastResult.winnerId = nextWinnerId;
+        syncRoom(room);
+        return;
+      }
+    }
+
     const activePlayer = room.players[room.turnIndex];
     if (room.status === 'TURN_START' && activePlayer?.skipNextTurn) {
       delete activePlayer.skipNextTurn;
