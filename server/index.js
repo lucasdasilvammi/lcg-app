@@ -58,9 +58,26 @@ const CATEGORIES = Object.keys(quizData).filter(key => key !== '_comment');
 const DUELS_DB = Object.keys(duelsData)
   .filter(key => !key.startsWith('_'))
   .flatMap(type => duelsData[type]);
+const HARD_QUIZ_DB = QUIZ_DB.filter(question =>
+  question.diff === 4 && !question.q?.startsWith('[À REMPLACER]')
+);
 
 // Helpers pour filtrer les défis par type
 const getDuelsByType = (type) => DUELS_DB.filter(d => d.type === type);
+const createBuzzerDuelFromQuiz = () => {
+  const quizQuestion = getRandomItem(HARD_QUIZ_DB);
+  if (!quizQuestion) return null;
+
+  return {
+    type: 'buzzer',
+    question: quizQuestion.q,
+    options: quizQuestion.options,
+    correct: quizQuestion.correct,
+    category: quizQuestion.category,
+    diff: quizQuestion.diff,
+    explanation: `Question difficile issue de la catégorie ${quizQuestion.category}.`
+  };
+};
 const getRandomHexColor = () => {
   const value = Math.floor(Math.random() * 0xFFFFFF);
   return `#${value.toString(16).padStart(6, '0')}`.toUpperCase();
@@ -74,11 +91,15 @@ const getRandomDuel = (type = null) => {
       explanation: 'Trouve la couleur la plus proche possible.'
     };
   }
+  if (type === 'buzzer') {
+    return createBuzzerDuelFromQuiz() || getRandomItem(getDuelsByType(type));
+  }
   if (type) {
     const filtered = getDuelsByType(type);
     return filtered.length > 0 ? filtered[Math.floor(Math.random() * filtered.length)] : DUELS_DB[Math.floor(Math.random() * DUELS_DB.length)];
   }
-  return DUELS_DB[Math.floor(Math.random() * DUELS_DB.length)];
+  const randomDuel = DUELS_DB[Math.floor(Math.random() * DUELS_DB.length)];
+  return randomDuel?.type === 'buzzer' ? (createBuzzerDuelFromQuiz() || randomDuel) : randomDuel;
 };
 
 const getRandomItem = (items) => items[Math.floor(Math.random() * items.length)];
@@ -1156,9 +1177,8 @@ io.on('connection', (socket) => {
     else if (actionType === "ACTIVITE") {
       // Activity: Dessin de Logo
       const brandNames = [
-        "Apple", "Nike", "McDo", "Starbucks", "Coca", "Pepsi", 
-        "Tesla", "Amazon", "Google", "Facebook", "Microsoft",
-        "Adidas", "Puma", "Lego", "IKEA", "Zara", "H&M"
+        "BMW", "Adobe", "Figma", "Apple", "Nike", "Carrefour",
+        "Renault", "Instagram"
       ];
       const randomBrand = brandNames[Math.floor(Math.random() * brandNames.length)];
       

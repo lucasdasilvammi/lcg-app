@@ -1,51 +1,1423 @@
 {
-  "_comment": "Questions de test - 5 difficultés x 6 catégories",
-  
+  "_comment": "Questions importées depuis Export questions lcg.xlsx le 2026-05-31. Facile -> diff 2, Difficile -> diff 4. Diff 1/3/5 = placeholders à remplacer.",
   "Culture graphique": [
-    {"q": "Qu’est-ce que le gris typographique, dans une composition ?", "options": ["L’équilibre d’opacité entre noir et gris pour hiérarchiser les informations", "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition", "La répartition du texte et des images pour créer un contraste visuel"], "correct": 1, "diff": 1, "category": "Culture graphique"},
-    {"q": "[Culture graphique - Diff 2] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 2, "category": "Culture graphique"},
-    {"q": "[Culture graphique - Diff 3] (C)", "options": ["Option A", "Option B", "Option C"], "correct": 2, "diff": 3, "category": "Culture graphique"},
-    {"q": "[Culture graphique - Diff 4] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 4, "category": "Culture graphique"},
-    {"q": "[Culture graphique - Diff 5] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 5, "category": "Culture graphique"}
+    {
+      "q": "Quelle est la traduction anglaise de l’acronyme français « CMJN » utilisé en impression ?",
+      "options": [
+        "CMYK",
+        "RGBK",
+        "CYMK"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "En typographie, à quoi correspond le terme anglais « leading » ?",
+      "options": [
+        "L’interlignage",
+        "L'interlettrage",
+        "L’approche"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Comment traduit-on « traits de coupe » en anglais dans le vocabulaire d’impression ?",
+      "options": [
+        "Trimming guides",
+        "Cut points",
+        "crop marks"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Comment traduit-on le mot « échelle » (dans le sens de redimensionnement) en anglais dans les logiciels de design ?",
+      "options": [
+        "Resize",
+        "Scale",
+        "Stretch"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Comment traduit-on le terme « dégradé » en anglais dans le domaine du design graphique ?",
+      "options": [
+        "Blend",
+        "Overlay",
+        "Gradient"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "En typographie, que signifie le terme anglais « serif » ?",
+      "options": [
+        "Une variation de graisse",
+        "Un empattement",
+        "Une ligature décorative"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Comment traduit-on le mot « interlettrage » en anglais, dans un logiciel de design ?",
+      "options": [
+        "Letter Spacing",
+        "Kerning",
+        "Tracking"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel mot anglais correspond à la notion de « teinte » en théorie des couleurs ?",
+      "options": [
+        "Hue",
+        "Saturation",
+        "Tint"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel est le terme anglais pour désigner un masque utilisé pour limiter la visibilité d’un calque à la forme d’un autre ?",
+      "options": [
+        "Layer mask",
+        "Clipping mask",
+        "Crop mask"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel terme anglais désigne le système standardisé de couleurs utilisé dans l’impression ?",
+      "options": [
+        "Pantone",
+        "RGB swatch",
+        "CMYK palette"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel est le terme anglais correspondant à la propriété qui définit la transparence d’un calque ou d’un objet ?",
+      "options": [
+        "Fill",
+        "Opacity",
+        "Transparency"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Comment s’appelle l’espace entre deux colonnes de texte au sein d’une mise en page ?",
+      "options": [
+        "Intercolonne",
+        "Gouttière",
+        "Marges"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Comment appelle-t-on la première lettre d’un paragraphe qui a une forme particulière et s’étend sur au moins deux lignes ?",
+      "options": [
+        "Capitale",
+        "Lettrine",
+        "Cesure"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel mot désigne l’organisation visuelle des éléments dans une mise en page pour guider le lecteur sur l’importance de chaque partie ?",
+      "options": [
+        "Contraste",
+        "Composition",
+        "Hiérarchie"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel mouvement artistique et pédagogique s’étend de 1919 à 1933 ?",
+      "options": [
+        "Bauhaus",
+        "Le Stijl",
+        "Arts & Crafts"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "À quel mouvement appartient Andy Warhol ?",
+      "options": [
+        "Minimalisme",
+        "Pop art",
+        "Surréalisme"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Piet Mondrian appartient à quel mouvement artistique ?",
+      "options": [
+        "Cubisme",
+        "Constructivisme",
+        "Le Stijl"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel mouvement est célèbre pour ses formes organiques, ses courbes inspirées de la nature et son esthétique décorative autour de 1900 ?",
+      "options": [
+        "Art nouveau",
+        "Constructivisme",
+        "Bauhaus"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel mouvement graphique est notamment caractérisé par l’usage de grilles strictes, de typographies sans serif et d’une mise en page objective ?",
+      "options": [
+        "Postmodernisme",
+        "Style international",
+        "Dadaïsme"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "En quelle année débute officiellement le mouvement du Bauhaus ?",
+      "options": [
+        "1930",
+        "1914",
+        "1919"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel mouvement artistique et architectural précède l’émergence du Bauhaus ?",
+      "options": [
+        "Art déco",
+        "Modernisme",
+        "Style international"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel mouvement graphique domine entre les années 1950 et 1970 ?",
+      "options": [
+        "Pop Art",
+        "Style international / Suisse",
+        "Futurisme"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quelles caractéristiques définissent le style graphique du Bauhaus ?",
+      "options": [
+        "Motifs floraux, couleurs pastel, inspiration artisanale",
+        "Illustrations baroques, textures chargées, ombres complexes",
+        "Typographies sans serif, Compositions géométriques, Grilles"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Dans quel contexte est né le mouvement Pop Art ?",
+      "options": [
+        "Explosion de la culture pop, consommation, médias de masse",
+        "Crise économique et rejet de la culture populaire",
+        "Volonté de revenir à des représentations religieuses classiques"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quelle est la période du mouvement Arts & Crafts ?",
+      "options": [
+        "1880-1910",
+        "1850-1880",
+        "1910-1930"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel mouvement succède historiquement à Arts & Crafts ?",
+      "options": [
+        "Psychédélisme",
+        "Postmodernisme",
+        "Art nouveau"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Dans quel ordre ces mouvements sont-ils apparus ?",
+      "options": [
+        "Art nouveau → Modernisme → Bauhaus",
+        "Bauhaus → Modernisme → Art nouveau",
+        "Art nouveau → Bauhaus → Modernisme"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Avec quel mouvement Max Bill est-il associé ?",
+      "options": [
+        "Futurisme",
+        "Bauhaus",
+        "Style international"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Qu’est-ce que le « graphisme d’auteur » ?",
+      "options": [
+        "Un style de graphisme spécialisé dans le cinéma",
+        "Un style de graphisme personnel et identifiable",
+        "Un style de graphisme destiné aux écrivains"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "En quelle année Adobe crée-t-il le langage PostScript ?",
+      "options": [
+        "2005",
+        "1982",
+        "2010"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quelle pop star Andy Warhol a-t-il représentée dans sa célèbre sérigraphie de 1962 ?",
+      "options": [
+        "Audrey Hepburn",
+        "Marilyn Monroe",
+        "Elvis Presley"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel designer est à l’origine de la célèbre typographie Helvetica ?",
+      "options": [
+        "Jan Tschichold",
+        "Max Miedinger",
+        "Adrian Frutiger"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel designer est célèbre pour avoir créé le logo IBM et celui d’ABC ?",
+      "options": [
+        "Max Bill",
+        "Paul Rand",
+        "Massimo Vignelli"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel affichiste américain est célèbre pour le logo « I ❤️ NY » ?",
+      "options": [
+        "David Carson",
+        "Michel Bouvet",
+        "Milton Glaser"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel designer est connu pour son travail sur le métro de New York et le style minimaliste des identités visuelles ?",
+      "options": [
+        "Massimo Vignelli",
+        "Philippe Apeloig",
+        "Max Bill"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Pourquoi Paula Scher est-elle particulièrement reconnue dans l’histoire du graphisme ?",
+      "options": [
+        "Pour ses affiches politiques illustrées",
+        "Pour ses affiches typographiques emblématiques",
+        "Pour son travail sur les logos animés"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel affichiste français est célèbre pour ses affiches publicitaires Art Déco comme celles pour les trains PLM ?",
+      "options": [
+        "Cassandre",
+        "Roman Cieslewicz",
+        "Charles Loupot"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Qui est ce graphiste français emblématique du 20ᵉ siècle connu pour ses affiches pour Citroën et Parfums Bourjois ?",
+      "options": [
+        "Charles Loupot",
+        "Michel Bouvet",
+        "Alain Le Quernec"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel typographe allemand a théorisé la « nouvelle typographie » et modernisé la mise en page dans les années 1920–1930 ?",
+      "options": [
+        "Stanley Morison",
+        "Roger Excoffon",
+        "Jan Tschichold"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "Quel artiste américain est connu pour son affiche « Hope » de Barack Obama et son travail street-art ?",
+      "options": [
+        "Shepard Fairey",
+        "David Carson",
+        "Max Bill"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Pour les nuls - Culture graphique",
+      "options": [
+        "Pour les nuls - réponse temporaire B",
+        "Pour les nuls - réponse temporaire C",
+        "Pour les nuls - réponse temporaire A"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Moyen - Culture graphique",
+      "options": [
+        "Moyen - réponse temporaire B",
+        "Moyen - réponse temporaire C",
+        "Moyen - réponse temporaire A"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Culture graphique"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Expert - Culture graphique",
+      "options": [
+        "Expert - réponse temporaire C",
+        "Expert - réponse temporaire A",
+        "Expert - réponse temporaire B"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Culture graphique"
+    }
   ],
-  
-  "Signe et couleur": [
-    {"q": "Qu’est-ce que le gris typographique, dans une composition ?", "options": ["L’équilibre d’opacité entre noir et gris pour hiérarchiser les informations", "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition", "La répartition du texte et des images pour créer un contraste visuel"], "correct": 1, "diff": 1, "category": "Signe et couleur"},
-    {"q": "[Signe et couleur - Diff 2] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 2, "category": "Signe et couleur"},
-    {"q": "[Signe et couleur - Diff 3] (C)", "options": ["Option A", "Option B", "Option C"], "correct": 2, "diff": 3, "category": "Signe et couleur"},
-    {"q": "[Signe et couleur - Diff 4] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 4, "category": "Signe et couleur"},
-    {"q": "[Signe et couleur - Diff 5] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 5, "category": "Signe et couleur"}
-  ],
-
   "Typographie": [
-    {"q": "[Typographie - Diff 1] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 1, "category": "Typographie"},
-    {"q": "[Typographie - Diff 2] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 2, "category": "Typographie"},
-    {"q": "[Typographie - Diff 3] (C)", "options": ["Option A", "Option B", "Option C"], "correct": 2, "diff": 3, "category": "Typographie"},
-    {"q": "[Typographie - Diff 4] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 4, "category": "Typographie"},
-    {"q": "Qu’est-ce que le gris typographique, dans une composition ?", "options": ["L’équilibre d’opacité entre noir et gris pour hiérarchiser les informations", "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition", "La répartition du texte et des images pour créer un contraste visuel"], "correct": 1, "diff": 5, "category": "Typographie"}
+    {
+      "q": "Comment s’appelle la coupure d’un mot en fin de ligne avec un tiret ?",
+      "options": [
+        "Lettrine",
+        "Interligne",
+        "Césure"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Typographie"
+    },
+    {
+      "q": "Quel terme désigne l’espace entre les lettres dans un texte ?",
+      "options": [
+        "Chasse",
+        "Crénage",
+        "Interlettrage"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Typographie"
+    },
+    {
+      "q": "Comment appelle-t-on l’ajustement de l’espace entre les lettres pour créer un rythme visuel ?",
+      "options": [
+        "Crénage",
+        "Interlettrage",
+        "Approche"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "Quel terme désigne la taille d’un caractère en typographie ?",
+      "options": [
+        "Point",
+        "Chasse",
+        "Corps"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Typographie"
+    },
+    {
+      "q": "Quel terme désigne la longueur d’un caractère, incluant l’espace avant et après la lettre ?",
+      "options": [
+        "Crénage",
+        "Approche",
+        "Chasse"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "Quel terme désigne l’espace entre deux lettres spécifique dans un mot pour améliorer la lisibilité ?",
+      "options": [
+        "Approche",
+        "Crénage",
+        "Interlignage"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "Quel terme désigne la fusion de deux lettres pour former un seul glyphe ?",
+      "options": [
+        "Crénage",
+        "Lettrine",
+        "Ligature"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "Comment s’appelle la représentation graphique d’un caractère ou symbole dans une police de caractères ?",
+      "options": [
+        "Emoji",
+        "Glyphe",
+        "Caractère"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Typographie"
+    },
+    {
+      "q": "Comment appelle-t-on une lettre majuscule en typographie ?",
+      "options": [
+        "Grande casse",
+        "Grande lettre",
+        "Capitale"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Typographie"
+    },
+    {
+      "q": "Quel terme désigne le trait principal d’une lettre ?",
+      "options": [
+        "Haste",
+        "Chasse",
+        "Traverse"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "Quel terme désigne l’épaisseur du trait d’une lettre ?",
+      "options": [
+        "Délié",
+        "Chasse",
+        "Graisse"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Typographie"
+    },
+    {
+      "q": "Quel mot désigne la largeur d’un caractère, incluant l’espace avant et après ?",
+      "options": [
+        "Corps",
+        "Approche",
+        "Chasse"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "Quel terme désigne le trait fin d’un caractère ?",
+      "options": [
+        "Empattement",
+        "Graisse",
+        "Délié"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "Quel terme désigne le trait horizontal d’une lettre, comme dans le “A” ou le “H” ?",
+      "options": [
+        "Haste",
+        "Traverse",
+        "Bâton"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "Comment appelle-t-on l’espace intérieur fermé d’une lettre, comme dans le “O” ou le “P” ?",
+      "options": [
+        "Contre-poinçon",
+        "Chasse",
+        "Haste"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Typographie"
+    },
+    {
+      "q": "Quel terme désigne la hauteur apparente d’une police ?",
+      "options": [
+        "Hauteur d’œil",
+        "Hauteur de ligne",
+        "Hauteur de trait"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Typographie"
+    },
+    {
+      "q": "Comment s’appelle la ligne sur laquelle reposent les lettres dans une mise en page typographique ?",
+      "options": [
+        "Ligne de pied",
+        "Ligne de fond",
+        "Ligne de base"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Typographie"
+    },
+    {
+      "q": "Quel terme désigne la courbe centrale d’un “S” dans une police de caractères ?",
+      "options": [
+        "Spine",
+        "Spline",
+        "Sine"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "Comment appelle-t-on l’espace entre deux caractères pour ajuster le rythme visuel d’un mot ?",
+      "options": [
+        "Chasse",
+        "Approche",
+        "Crénage"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Typographie"
+    },
+    {
+      "q": "Qu’est-ce qu’une typographie scriptes ?",
+      "options": [
+        "Écriture manuscrite, lettres connectées",
+        "Empattements rectangulaires",
+        "Lettres géométriques et rigides"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Typographie"
+    },
+    {
+      "q": "Qu’est-ce qu’une typographie décorative ?",
+      "options": [
+        "Créative, pas de catégorie fixe",
+        "Sans empattements",
+        "Lettres reliées comme une écriture manuscrite"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Typographie"
+    },
+    {
+      "q": "Qu’est-ce qu’une typographie mécane ?",
+      "options": [
+        "Lettres très fines",
+        "Sans empattements",
+        "Empattements rectangulaires"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "Qu’est-ce qu’une typographie serif ?",
+      "options": [
+        "Sans empattements",
+        "Avec empattements",
+        "Lettres manuscrites"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Typographie"
+    },
+    {
+      "q": "Qu’est-ce qu’une typographie sans-serif ?",
+      "options": [
+        "Sans les caractères spéciaux",
+        "Sans empattements",
+        "Sans chiffres"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Typographie"
+    },
+    {
+      "q": "Que suggère une typographie scriptes ?",
+      "options": [
+        "Modernité et minimalisme",
+        "Solidité et confiance",
+        "Authenticité, humanité"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "Que suggère une typographie décorative ?",
+      "options": [
+        "Créativité, excentricité",
+        "Authenticité, humanité",
+        "Élégance, héritage"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "Que suggère une typographie mécane ?",
+      "options": [
+        "Solidité, confiance",
+        "Créativité, excentricité",
+        "Modernité, minimalisme"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "Que suggère une typographie serif ?",
+      "options": [
+        "Modernité, minimalisme",
+        "Authenticité, humanité",
+        "Élégance, héritage"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "Que suggère une typographie sans-serif ?",
+      "options": [
+        "Élégance, héritage",
+        "Modernité, minimalisme",
+        "Créativité, excentricité"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Typographie"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Pour les nuls - Typographie",
+      "options": [
+        "Pour les nuls - réponse temporaire B",
+        "Pour les nuls - réponse temporaire C",
+        "Pour les nuls - réponse temporaire A"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Typographie"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Moyen - Typographie",
+      "options": [
+        "Moyen - réponse temporaire B",
+        "Moyen - réponse temporaire C",
+        "Moyen - réponse temporaire A"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Typographie"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Expert - Typographie",
+      "options": [
+        "Expert - réponse temporaire C",
+        "Expert - réponse temporaire B",
+        "Expert - réponse temporaire A"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Typographie"
+    }
   ],
-
+  "Signe et couleur": [
+    {
+      "q": "Parmi les propositions suivantes, quelle liste ne représente PAS une symbolique du rouge ?",
+      "options": [
+        "Joie, positivité, maitrise",
+        "Force, puissance, agressivité",
+        "Interdiction, danger, action"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Signe et couleur"
+    },
+    {
+      "q": "Parmi les propositions suivantes, quelle liste ne représente PAS une symbolique du bleu?",
+      "options": [
+        "Fraîcheur, eau, ciel",
+        "Questionnement, protection, adaptation",
+        "Rêve, fidélité, loyauté"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Signe et couleur"
+    },
+    {
+      "q": "Parmi les propositions suivantes, quelle liste ne représente PAS une symbolique du vert?",
+      "options": [
+        "Croissance, jeunesse, repos",
+        "Nature, écologie, renouveau",
+        "Maitrise, contrôle, amitié"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Signe et couleur"
+    },
+    {
+      "q": "Parmi les propositions suivantes, quelle liste ne représente PAS une symbolique du orange ?",
+      "options": [
+        "Peur, rivalité, domination",
+        "Optimisme, énergie, dynamisme",
+        "Joie, créativité, communication"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Signe et couleur"
+    },
+    {
+      "q": "Sur le cercle chromatique, comment appelle-t-on deux couleurs placées diamétralement opposées ?",
+      "options": [
+        "Couleurs analogues",
+        "Couleurs complémentaire",
+        "Couleurs tertiaires"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Signe et couleur"
+    },
+    {
+      "q": "Sur le cercle chromatique, que désigne une harmonie de couleurs analogues ?",
+      "options": [
+        "Des couleurs réparties en triangle parfait",
+        "Des teintes opposées créant une tension visuelle",
+        "Des couleurs adjacentes sur le cercle chromatique"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Signe et couleur"
+    },
+    {
+      "q": "Dans le système Pantone, quelle est la particularité principale qui le distingue d’un système comme le CMYK ?",
+      "options": [
+        "Il utilise des encres prédéfinies permettant une reproduction exacte et standardisée",
+        "Il est réservé exclusivement à l’impression",
+        "Il repose uniquement sur les trois primaires soustractives"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Signe et couleur"
+    },
+    {
+      "q": "Quel est le signifiant (c'est quoi ?) du contraste de couleurs complémentaires ? (Théorie des 7 contrastes de couleurs d'Itten)",
+      "options": [
+        "Associations opposées dans le cercle chromatique",
+        "Trois couleurs équidistantes sur le cercle",
+        "Deux teintes issues du même pigment"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Signe et couleur"
+    },
+    {
+      "q": "Quel est le signifié (ça évoque quoi ?) du contraste de quantité selon Itten ? (Théorie des 7 contrastes de couleurs d'Itten)",
+      "options": [
+        "Une association de couleurs exclusivement basée sur la saturation",
+        "Un rapport dominant/dominé qui permet de mettre en lumière ou d'isoler",
+        "Une parfaite égalité visuelle entre les teintes"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Signe et couleur"
+    },
+    {
+      "q": "Quel est le signifiant (c'est quoi ?) du contraste de couleurs “en soi” ? (Théorie des 7 contrastes de couleurs d'Itten)",
+      "options": [
+        "Les couleurs primaires offrent le contraste le plus fort",
+        "Les couleurs vives sont plus facilement perceptibles de loin",
+        "Les couleurs chaudes sont en opposition avec les couleurs froides"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Signe et couleur"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Pour les nuls - Signe et couleur",
+      "options": [
+        "Pour les nuls - réponse temporaire A",
+        "Pour les nuls - réponse temporaire B",
+        "Pour les nuls - réponse temporaire C"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "category": "Signe et couleur"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Moyen - Signe et couleur",
+      "options": [
+        "Moyen - réponse temporaire A",
+        "Moyen - réponse temporaire C",
+        "Moyen - réponse temporaire B"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Signe et couleur"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Expert - Signe et couleur",
+      "options": [
+        "Expert - réponse temporaire B",
+        "Expert - réponse temporaire A",
+        "Expert - réponse temporaire C"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Signe et couleur"
+    }
+  ],
   "Logo": [
-    {"q": "[Logo - Diff 1] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 1, "category": "Logo"},
-    {"q": "[Logo - Diff 2] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 2, "category": "Logo"},
-    {"q": "[Logo - Diff 3] (C)", "options": ["Option A", "Option B", "Option C"], "correct": 2, "diff": 3, "category": "Logo"},
-    {"q": "[Logo - Diff 4] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 4, "category": "Logo"},
-    {"q": "Qu’est-ce que le gris typographique, dans une composition ?", "options": ["L’équilibre d’opacité entre noir et gris pour hiérarchiser les informations", "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition", "La répartition du texte et des images pour créer un contraste visuel"], "correct": 1, "diff": 5, "category": "Logo"}
+    {
+      "q": "Qui a designé le logo d’IBM en 1956 ?",
+      "options": [
+        "Pierre Faucheux",
+        "Max Bill",
+        "Paul Rand"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Logo"
+    },
+    {
+      "q": "Qui a designé le logo d’UPS en 1961 ?",
+      "options": [
+        "Massimo Vignelli",
+        "Paul rand",
+        "Wim Crouwel"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Logo"
+    },
+    {
+      "q": "Quel est le principe de création graphique le plus associé à Saul Bass ?",
+      "options": [
+        "Les illustrations hyper-détaillées",
+        "La réduction à l’essentiel",
+        "Les superpositions colorées complexes"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Logo"
+    },
+    {
+      "q": "Qui est le designer du logo Apple créé en 1977 ?",
+      "options": [
+        "Milton Glaser",
+        "Adrian Frutiger",
+        "Rob Janoff"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Logo"
+    },
+    {
+      "q": "Qu’a apporté Wally Olins au brand design ?",
+      "options": [
+        "Une audace souvent radicale dans la construction d’identité de marque",
+        "L’introduction des couleurs fluorescentes dans le branding",
+        "La standardisation des typographies serif dans les logos"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Logo"
+    },
+    {
+      "q": "Qu’est-ce qu’un logo monogramme ?",
+      "options": [
+        "Un logo qui possède une illustration",
+        "Un logo qui ne peut pas avoir plusieurs éléments",
+        "Un logo constitué uniquement de lettres"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Logo"
+    },
+    {
+      "q": "Qu’est-ce qu’un logo abstrait ?",
+      "options": [
+        "Un élément graphique qui mélange forme et typographie",
+        "Un élément graphique basé sur une photographie",
+        "Un élément graphique qui ne représente rien de connu"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Logo"
+    },
+    {
+      "q": "Qu’est-ce qu’un logo pictogramme ?",
+      "options": [
+        "Un élément visuel minimaliste",
+        "Une icône abstraite conçue pour évoquer une idée générale",
+        "Un élément visuel représentant une forme reconnaissable"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Logo"
+    },
+    {
+      "q": "Que signifie la notion de “pérennité” dans la conception d’un logo ?",
+      "options": [
+        "Le fait que le logo puisse être animé facilement",
+        "Le fait qu'il reste pertinent visuellement sur plusieurs décennies",
+        "Le fait de souvent actualiser son logo pour réster à la page"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Logo"
+    },
+    {
+      "q": "De quand date le dernier logo de la SNCF ?",
+      "options": [
+        "2011",
+        "2001",
+        "2005"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Logo"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Pour les nuls - Logo",
+      "options": [
+        "Pour les nuls - réponse temporaire B",
+        "Pour les nuls - réponse temporaire C",
+        "Pour les nuls - réponse temporaire A"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Logo"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Moyen - Logo",
+      "options": [
+        "Moyen - réponse temporaire A",
+        "Moyen - réponse temporaire C",
+        "Moyen - réponse temporaire B"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Logo"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Expert - Logo",
+      "options": [
+        "Expert - réponse temporaire B",
+        "Expert - réponse temporaire A",
+        "Expert - réponse temporaire C"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Logo"
+    }
   ],
-
-  "Composition": [
-    {"q": "[Composition - Diff 1] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 1, "category": "Composition"},
-    {"q": "[Composition - Diff 2] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 2, "category": "Composition"},
-    {"q": "[Composition - Diff 3] (C)", "options": ["Option A", "Option B", "Option C"], "correct": 2, "diff": 3, "category": "Composition"},
-    {"q": "[Composition - Diff 4] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 4, "category": "Composition"},
-    {"q": "Qu’est-ce que le gris typographique, dans une composition ?", "options": ["L’équilibre d’opacité entre noir et gris pour hiérarchiser les informations", "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition", "La répartition du texte et des images pour créer un contraste visuel"], "correct": 1, "diff": 5, "category": "Composition"}
-  ],
-
   "Production": [
-    {"q": "[Production - Diff 1] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 1, "category": "Production"},
-    {"q": "[Production - Diff 2] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 2, "category": "Production"},
-    {"q": "[Production - Diff 3] (C)", "options": ["Option A", "Option B", "Option C"], "correct": 2, "diff": 3, "category": "Production"},
-    {"q": "[Production - Diff 4] (A)", "options": ["Option A", "Option B", "Option C"], "correct": 0, "diff": 4, "category": "Production"},
-    {"q": "[Production - Diff 5] (B)", "options": ["Option A", "Option B", "Option C"], "correct": 1, "diff": 5, "category": "Production"}
+    {
+      "q": "Quel est le format d’une feuille A4 ?",
+      "options": [
+        "297 x 420 mm",
+        "148 x 210 mm",
+        "210 x 297 mm"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Production"
+    },
+    {
+      "q": "C’est quoi la sérigraphie ?",
+      "options": [
+        "Une technique d’imprimerie qui utilise des pochoirs interposés entre l’encre et le support",
+        "Une technique qui consiste à imprimer directement sur le tissu avec une presse rotative",
+        "Une méthode d’impression en relief sur tissu"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Production"
+    },
+    {
+      "q": "Lequel de ces types d’impression n’existe pas ?",
+      "options": [
+        "La lithographie",
+        "La lamographie",
+        "La risographie"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Production"
+    },
+    {
+      "q": "Quel type d’impression utilise des plaques métalliques pour transférer l’encre sur un rouleau en caoutchouc, puis sur le support ?",
+      "options": [
+        "Impression jet d'encre",
+        "Impression offset",
+        "Impression laser"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Production"
+    },
+    {
+      "q": "Quel profil de couleur doit-on appliquer à son fichier pour l’impression ?",
+      "options": [
+        "CMJN",
+        "Hexadécimal",
+        "RGB"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Production"
+    },
+    {
+      "q": "Quelle est la résolution minimum des images avant l’impression ?",
+      "options": [
+        "150 DPI",
+        "72 DPI",
+        "300 DPI"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Production"
+    },
+    {
+      "q": "Quel est le format d’une feuille A2 ?",
+      "options": [
+        "148 x 210 mm",
+        "420 x 594 mm",
+        "594 x 841 mm"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Production"
+    },
+    {
+      "q": "Quelle est la norme internationale qui définit la plupart des formats de papier depuis 1975 ?",
+      "options": [
+        "ISO 9001",
+        "ISO 269",
+        "ISO 216"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Production"
+    },
+    {
+      "q": "Quelle lettre précède un numéro de format d’enveloppes ?",
+      "options": [
+        "B",
+        "D",
+        "C"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Production"
+    },
+    {
+      "q": "Que signifie PNG ?",
+      "options": [
+        "Portable Network Graphic",
+        "Pixel Network Graphic",
+        "Pixel Native Graphic"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Production"
+    },
+    {
+      "q": "Qu’est-ce qu’un signet dans un livre ?",
+      "options": [
+        "Un morceau de papier ou de tissu qui permet de marquer une page d’un livre",
+        "Un rabat collé à la fin du livre pour protéger les pages",
+        "La signature de l’auteur en 4ème de couverture"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Production"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Pour les nuls - Production",
+      "options": [
+        "Pour les nuls - réponse temporaire C",
+        "Pour les nuls - réponse temporaire B",
+        "Pour les nuls - réponse temporaire A"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Production"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Moyen - Production",
+      "options": [
+        "Moyen - réponse temporaire C",
+        "Moyen - réponse temporaire A",
+        "Moyen - réponse temporaire B"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Production"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Expert - Production",
+      "options": [
+        "Expert - réponse temporaire A",
+        "Expert - réponse temporaire C",
+        "Expert - réponse temporaire B"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Production"
+    }
+  ],
+  "Composition": [
+    {
+      "q": "Quelle lettre est associée à un type de lecture en composition ?",
+      "options": [
+        "Y",
+        "S",
+        "Z"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Composition"
+    },
+    {
+      "q": "Laquelle de ces affirmations décrit correctement la loi de Gestalt “figure / fond” ?",
+      "options": [
+        "Notre perception distingue un objet principal (figure) de son arrière-plan (fond)",
+        "Des éléments identiques sont automatiquement regroupés en un ensemble",
+        "Les formes fermées sont perçues comme des unités complètes"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Composition"
+    },
+    {
+      "q": "Combien vaut le nombre d’or ?",
+      "options": [
+        "1.618",
+        "1.816",
+        "1.168"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Composition"
+    },
+    {
+      "q": "Comment s’appelle la zone de débordement qui sera découpée après impression ?",
+      "options": [
+        "Marge extérieure",
+        "Bordure extérieur",
+        "Fond perdu"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Composition"
+    },
+    {
+      "q": "Comment s’appelle l’espace entre les colonnes dans une grille ?",
+      "options": [
+        "Intercol",
+        "Gouttière",
+        "Gap"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Composition"
+    },
+    {
+      "q": "Qu’est-ce que le gris typographique, dans une composition ?",
+      "options": [
+        "La répartition du texte et des images pour créer un contraste visuel",
+        "L’équilibre d’opacité entre noir et gris pour hiérarchiser les informations",
+        "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Composition"
+    },
+    {
+      "q": "Quelle est la loi de Gestalt qui fait que des éléments proches sont perçus comme un groupe ?",
+      "options": [
+        "Proximité",
+        "Similarité",
+        "Similitude"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Composition"
+    },
+    {
+      "q": "Quel type de grille se divise dans sa largeur en colonnes (de 2 à 6 pour les plus simples) ?",
+      "options": [
+        "Grille à colonnes",
+        "Grille modulaire",
+        "Grille multicolonne"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Composition"
+    },
+    {
+      "q": "Qu’est-ce qu’une grille modulaire ?",
+      "options": [
+        "Une grille composée de colonnes verticales et horizontales",
+        "Une grille asymétrique",
+        "Une grille qui propose plusieurs variantes pour des doubles pages"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Composition"
+    },
+    {
+      "q": "Comment s’appelle la marge intérieure d’une double page ?",
+      "options": [
+        "Le fond de tête",
+        "Le fond interne",
+        "Le petit fond"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Composition"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Pour les nuls - Composition",
+      "options": [
+        "Pour les nuls - réponse temporaire A",
+        "Pour les nuls - réponse temporaire B",
+        "Pour les nuls - réponse temporaire C"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "category": "Composition"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Moyen - Composition",
+      "options": [
+        "Moyen - réponse temporaire B",
+        "Moyen - réponse temporaire A",
+        "Moyen - réponse temporaire C"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Composition"
+    },
+    {
+      "q": "[À REMPLACER] Question de substitution - Expert - Composition",
+      "options": [
+        "Expert - réponse temporaire A",
+        "Expert - réponse temporaire C",
+        "Expert - réponse temporaire B"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Composition"
+    }
   ]
 }
