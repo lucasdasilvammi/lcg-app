@@ -62,7 +62,7 @@
   "vraioufaux": [
     {
       "type": "vraioufaux",
-      "question": "Le RGB est un modèle de couleur additif",
+      "question": "Le RGB est un modèle de couleur additif utilisé principalement pour les écrans.",
       "options": [
         "Vrai",
         "Faux"
@@ -72,43 +72,93 @@
     },
     {
       "type": "vraioufaux",
-      "question": "Une typographie sans serif s'appelle une serif font",
+      "question": "Le CMJN est un mode colorimétrique généralement destiné à l’impression.",
       "options": [
         "Vrai",
         "Faux"
       ],
-      "correct": 1,
-      "explanation": "Faux : une typographie sans serif s'appelle une 'sans-serif' ou 'linéale'."
+      "correct": 0,
+      "explanation": "Le CMJN correspond aux encres cyan, magenta, jaune et noir utilisées en impression."
     },
     {
       "type": "vraioufaux",
-      "question": "Le blanc d'un logo doit toujours être opaque",
+      "question": "Une typographie sans serif possède des empattements.",
       "options": [
         "Vrai",
         "Faux"
       ],
       "correct": 1,
-      "explanation": "Faux : le blanc peut être transparent ou opaque selon le contexte d'utilisation du logo."
+      "explanation": "Une typographie sans serif est justement une typographie sans empattements."
     },
     {
       "type": "vraioufaux",
-      "question": "La composition centrée crée toujours un effet formel et sérieux",
+      "question": "Le fond perdu sert à éviter un liseré blanc après la coupe d’un document imprimé.",
       "options": [
         "Vrai",
         "Faux"
       ],
-      "correct": 1,
-      "explanation": "Faux : une composition centrée peut être moderne ou ludique selon les autres éléments."
+      "correct": 0,
+      "explanation": "Le fond perdu prolonge les éléments graphiques au-delà du format final pour sécuriser la découpe."
     },
     {
       "type": "vraioufaux",
-      "question": "L'utilisation de 4 couleurs différentes dans un design est toujours trop",
+      "question": "Une image destinée à l’impression est souvent préparée autour de 300 DPI.",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 0,
+      "explanation": "300 DPI est une résolution de référence courante pour une impression de qualité."
+    },
+    {
+      "type": "vraioufaux",
+      "question": "Le crénage désigne l’ajustement de l’espace entre deux lettres précises.",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 0,
+      "explanation": "Le crénage agit sur des paires de lettres, contrairement à l’interlettrage qui concerne un ensemble plus large."
+    },
+    {
+      "type": "vraioufaux",
+      "question": "La loi de proximité en Gestalt indique que des éléments proches sont perçus comme liés.",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 0,
+      "explanation": "La proximité fait partie des principes de Gestalt qui organisent notre perception visuelle."
+    },
+    {
+      "type": "vraioufaux",
+      "question": "Un logo pérenne est un logo qui suit toujours la dernière tendance graphique.",
       "options": [
         "Vrai",
         "Faux"
       ],
       "correct": 1,
-      "explanation": "Faux : on peut utiliser 4 couleurs ou plus si elles sont bien harmonisées et justifiées."
+      "explanation": "La pérennité vise au contraire une identité capable de durer au-delà des modes passagères."
+    },
+    {
+      "type": "vraioufaux",
+      "question": "Deux couleurs complémentaires sont placées côte à côte sur le cercle chromatique.",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 1,
+      "explanation": "Deux couleurs complémentaires sont placées à l’opposé l’une de l’autre sur le cercle chromatique."
+    },
+    {
+      "type": "vraioufaux",
+      "question": "Le format A3 est plus grand que le format A4.",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 0,
+      "explanation": "Dans la série A, plus le chiffre est petit, plus le format est grand : A3 est donc plus grand qu’A4."
     }
   ],
 
