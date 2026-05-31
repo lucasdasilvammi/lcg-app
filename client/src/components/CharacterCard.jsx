@@ -1,4 +1,5 @@
 import React from 'react'
+import { agree } from '../utils/frenchGrammar'
 
 const SIZE_CONFIG = {
   default: {
@@ -73,6 +74,13 @@ export default function CharacterCard({
   const config = SIZE_CONFIG[size] || SIZE_CONFIG.default
   const getCharacterColor = (id) => `var(--color-${id})`
   const statusConfig = STATUS_CONFIG[status] || STATUS_CONFIG.connected
+  const resolvedStatusLabel = statusLabel || (
+    status === 'connected'
+      ? agree(charId, 'Connecté', 'Connectée')
+      : status === 'disconnected'
+        ? agree(charId, 'Déconnecté', 'Déconnectée')
+        : statusConfig.label
+  )
 
   if (size === 'head-only' || size === 'head-only-big') {
     return (
@@ -144,7 +152,7 @@ export default function CharacterCard({
             }`}
           >
             <img src={statusConfig.icon} alt="" aria-hidden="true" className="h-4.5 w-4.5" />
-            <span>{statusLabel || statusConfig.label}</span>
+            <span>{resolvedStatusLabel}</span>
           </div>
         </div>
       </div>

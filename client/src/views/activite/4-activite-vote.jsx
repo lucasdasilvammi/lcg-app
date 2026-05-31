@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import {
   ActivityScreen,
   ActivityHeaderTag,
-  ActivityCubeIcon,
-  ClockIcon,
+  MaskAssetIcon,
   PhotoFrame,
   StatusTag,
   VoteIcon,
@@ -25,7 +24,8 @@ export default function ActiviteVote({ roomData, currentUserId, submitVote }) {
   const currentPhoto = photos[currentPhotoIndex]
   const currentPhotoData = currentPhoto?.photoData || interaction.currentPhotoData
   const currentVotes = votes[currentPhotoIndex] || { up: 0, neutral: 0, down: 0, byPlayer: {} }
-  const hasVoted = Boolean(currentVotes.byPlayer?.[currentUserId])
+  const selectedVote = currentVotes.byPlayer?.[currentUserId] || null
+  const hasVoted = Boolean(selectedVote)
   const isOwnPhoto = currentPhoto?.playerId === currentUserId
   const canVote = Boolean(currentPhoto && !isOwnPhoto && !hasVoted)
 
@@ -53,56 +53,50 @@ export default function ActiviteVote({ roomData, currentUserId, submitVote }) {
       <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-6">
         <ActivityHeaderTag />
 
-        <div className="flex flex-col items-center gap-5 w-full px-2">
+        <div className="flex w-full flex-col items-center gap-5 px-2">
           <h1 className="m-0 max-w-64 font-hakobi text-[40px] uppercase leading-none text-light">
-            C'est le moment de voter
+            à vos votes !
           </h1>
           <div className="flex w-full items-center justify-between">
-            <StatusTag tone="gray" icon={<ClockIcon />}>{timeLeft}s</StatusTag>
-            <StatusTag tone="gray" icon={<ActivityCubeIcon />}>{currentPhotoIndex + 1}/{photos.length || 1}</StatusTag>
+            <StatusTag tone="gray" icon={<MaskAssetIcon src="/activite/clock.svg" />}>{timeLeft}s</StatusTag>
+            <StatusTag tone="gray" icon={<MaskAssetIcon src="/activite/cube.svg" />}>{currentPhotoIndex + 1}/{photos.length || 1}</StatusTag>
           </div>
           <VoteTimerBar progress={progress} className="w-[19.5rem]" />
         </div>
 
         <div className="flex w-full flex-1 flex-col items-center justify-center gap-4">
           {currentPhoto && currentPhotoData ? (
-            <PhotoFrame src={currentPhotoData} alt={`Logo ${currentPhotoIndex + 1}`} className="h-80 w-full max-w-[19.5rem]" />
+            <PhotoFrame src={currentPhotoData} alt={`Logo ${currentPhotoIndex + 1}`} className="h-80 w-full" />
           ) : (
             <div className="flex h-80 w-full max-w-[19.5rem] items-center justify-center bg-light5 font-funnel text-light/60">
               En attente des photos...
             </div>
           )}
-
-          {isOwnPhoto && (
-            <p className="max-w-72 font-funnel text-base font-semibold text-orange-primary">
-              Les autres votent pour ton logo.
-            </p>
-          )}
-          {hasVoted && !isOwnPhoto && (
-            <p className="max-w-72 font-funnel text-base font-semibold text-green-primary">
-              Vote envoyé. En attente des autres joueurs...
-            </p>
-          )}
+          {isOwnPhoto ? (
+            <StatusTag tone="orange" textClassName="font-medium">
+              Les autres votent pour ton logo
+            </StatusTag>
+          ) : null}
         </div>
       </div>
 
-      <div className="grid w-full grid-cols-3 gap-5 pb-1">
-        <VoteButton type="up" disabled={!canVote} onClick={() => handleVote('up')} />
-        <VoteButton type="neutral" disabled={!canVote} onClick={() => handleVote('neutral')} />
-        <VoteButton type="down" disabled={!canVote} onClick={() => handleVote('down')} />
+      <div className="grid w-full grid-cols-3 gap-4">
+        <VoteButton type="up" selected={selectedVote === 'up'} disabled={!canVote} onClick={() => handleVote('up')} />
+        <VoteButton type="neutral" selected={selectedVote === 'neutral'} disabled={!canVote} onClick={() => handleVote('neutral')} />
+        <VoteButton type="down" selected={selectedVote === 'down'} disabled={!canVote} onClick={() => handleVote('down')} />
       </div>
     </ActivityScreen>
   )
 }
 
-function VoteButton({ type, disabled, onClick }) {
+function VoteButton({ type, selected = false, disabled, onClick }) {
   return (
     <button
       type="button"
       onClick={disabled ? undefined : onClick}
       disabled={disabled}
       aria-label={type === 'up' ? 'Pouce vers le haut' : type === 'down' ? 'Pouce vers le bas' : 'Vote neutre'}
-      className="flex h-24 items-center justify-center bg-light transition active:scale-95 disabled:opacity-25"
+      className={`flex h-24 items-center justify-center bg-light5 transition active:scale-95 ${disabled && !selected ? 'opacity-25' : ''}`}
       style={{
         WebkitMaskImage: 'url(/menu/bg-btn.svg)',
         maskImage: 'url(/menu/bg-btn.svg)',

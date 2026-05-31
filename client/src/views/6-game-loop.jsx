@@ -6,6 +6,7 @@ import CharacterCard from '../components/CharacterCard'
 import CharacterTag from '../components/CharacterTag'
 import ScoreBar from '../components/ScoreBar'
 import { BONUS_CATALOG } from '../data/bonusCatalog'
+import { pronoun } from '../utils/frenchGrammar'
 
 const CTRL_Z_BONUS = BONUS_CATALOG.find((bonus) => bonus.id === 'ctrl-z')
 const CTRL_Z_REMINDER_DURATION = 3000
@@ -212,7 +213,7 @@ function SpectatorCtrlZNotice({ activePlayer }) {
       <CharacterTag charId={activePlayer?.character} text="a utilisé un bonus !" />
       <CtrlZUsedBonusTag />
       <p className="max-w-74 font-funnel text-base leading-snug text-light">
-        Il relance le dé. Le second résultat compte quoi qu'il arrive.
+        {pronoun(activePlayer?.character, { capitalize: true })} relance le dé. Le second résultat compte quoi qu'il arrive.
       </p>
     </div>
   )

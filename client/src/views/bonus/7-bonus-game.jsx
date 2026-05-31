@@ -5,6 +5,7 @@ import BonusRewardCard from '../../components/BonusRewardCard'
 import InlineBonusTag from '../../components/InlineBonusTag'
 import CharacterTag from '../../components/CharacterTag'
 import { BONUS_CATALOG } from '../../data/bonusCatalog'
+import { formatCharacterName } from '../../utils/frenchGrammar'
 
 function BonusInventoryAdvice() {
   return (
@@ -26,9 +27,7 @@ export default function BonusGame({ roomData, currentUserId, claimCaseBonus }) {
 
   const isReader = interaction.readerId === currentUserId
   const readerPlayer = roomData.players.find((player) => player.id === interaction.readerId)
-  const readerName = readerPlayer?.character
-    ? `${readerPlayer.character.charAt(0).toUpperCase()}${readerPlayer.character.slice(1)}`
-    : 'Un joueur'
+  const readerName = readerPlayer?.character ? formatCharacterName(readerPlayer.character) : 'Un joueur'
 
   return (
  <div className="relative w-full overflow-hidden bg-bg">

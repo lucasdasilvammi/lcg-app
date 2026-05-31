@@ -38,7 +38,7 @@ Une V1 est jouable quand un groupe peut créer une room, rejoindre à 3 ou 4, ch
 - [x] Corriger les textes avec accents cassés dans l'UI.
 - [x] Revoir les popups admin et bonus sur mobile.
 - [x] Ajouter au moins assez de questions / évènements / activités pour éviter les répétitions trop visibles.
-- [ ] Désactiver ou encadrer les outils / bonus de test avant release : code de room forcé, bonus donnés par défaut, helper console `__GIVE_BONUS` / socket `debug_give_bonus`.
+- [x] Désactiver ou encadrer les outils / bonus de test avant release : code de room forcé, bonus donnés par défaut, helper console `__GIVE_BONUS` / socket `debug_give_bonus`.
 
 ## Vérification release
 
@@ -147,7 +147,7 @@ Prompt implementation :
 - [x] Implémenter `C'est moi qui choisis !` : sélection cible, attente du Quizz cible, choix de difficulté par le joueur qui a posé le bonus, vue spectateurs.
 - [x] Revoir le design final des popups bonus 2 et 3.
 - [x] Corriger les accents et textes des bonus.
-- [ ] Désactiver les bonus de test par défaut avant release si besoin.
+- [x] Désactiver les bonus de test par défaut avant release si besoin.
 
 ## Présence / Messages room
 
@@ -172,7 +172,7 @@ Prompt implementation :
 ## Onboarding
 
 - [x] Ajouter un onboarding du menu settings avec indication d'appui long et mémorisation locale.
-- [ ] Ajouter un onboarding global au lancement avec question "As-tu déjà joué ?".
+- [ ] V2 - Ajouter un onboarding global au lancement avec question "As-tu déjà joué ?" (hors périmètre V1).
 
 Prompt implementation :
 
@@ -239,4 +239,5 @@ Prompt implementation :
 - [x] Lancer `npm run build` après stabilisation des changements en cours.
 - [x] Lancer les tests serveur quand le serveur n'est pas déjà occupé sur les ports utilisés.
 - [ ] Faire un test manuel mobile, idéalement sur iPhone/Android réel.
+- [ ] Tester l'activité commune, surtout l'import / prise de photo, sur Chrome mobile.
 - [ ] Faire un test de reconnexion : refresh, fermeture onglet, crash simulé, retour dans la room.

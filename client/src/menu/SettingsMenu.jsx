@@ -6,6 +6,7 @@ import BonusPopup, { BonusIconBadge } from '../components/BonusPopup'
 import ScoreBar from '../components/ScoreBar'
 import { BONUS_CATALOG, EMPTY_BONUS_SLOTS } from '../data/bonusCatalog'
 import RulesOverlay from './regles/RulesOverlay'
+import { agree, formatCharacterName, queCharacter } from '../utils/frenchGrammar'
 
 const popupStyles = `
   @keyframes settingsSlideUpFromBottom {
@@ -158,11 +159,6 @@ function MenuColorIcon({ src, className = 'h-7 w-7' }) {
       }}
     />
   )
-}
-
-function formatCharacterName(name) {
-  if (!name) return ''
-  return `${name.charAt(0).toUpperCase()}${name.slice(1)}`
 }
 
 function getPlayerBonusEntries(player) {
@@ -327,12 +323,12 @@ function ChooseQuizConfirmationView({ targetPlayer, onDone }) {
         </h2>
       </div>
       <p className="max-w-86 font-funnel text-base leading-snug text-light/80">
-        Dès que{' '}
+        Dès{' '}
         <span
           className="font-semibold"
           style={{ color: `var(--color-${targetPlayer.character})` }}
         >
-          {formatCharacterName(targetPlayer.character)}
+          {queCharacter(targetPlayer.character)}
         </span>
         {' '}tombera sur une case <QuizCaseTag />, l'application te donnera la main : c'est toi qui choisiras la difficulté de sa question parmi les 5 niveaux.
       </p>
@@ -1285,7 +1281,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
                 <>Veux-tu vraiment quitter la partie ? L'administration sera transférée automatiquement.</>
               )}
               {pendingAction.type === 'undo' && pendingUndoTarget && (
-                <>En annulant l'action, <span style={{ color: `var(--color-${pendingUndoTarget.character})` }}>{formatCharacterName(pendingUndoTarget.character)}</span> reviendra au choix du type de case sur lequel il est tombé.</>
+                <>En annulant l'action, <span style={{ color: `var(--color-${pendingUndoTarget.character})` }}>{formatCharacterName(pendingUndoTarget.character)}</span> reviendra au choix du type de case sur lequel {agree(pendingUndoTarget.character, 'il est tombé', 'elle est tombée')}.</>
               )}
             </p>
 

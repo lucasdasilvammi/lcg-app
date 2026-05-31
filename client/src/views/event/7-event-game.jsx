@@ -6,11 +6,7 @@ import { MaskIcon } from '../../components/BonusPopup'
 import BonusRewardCard from '../../components/BonusRewardCard'
 import InlineBonusTag from '../../components/InlineBonusTag'
 import { BONUS_CATALOG } from '../../data/bonusCatalog'
-
-function formatCharacterName(name) {
-  if (!name) return ''
-  return `${name.charAt(0).toUpperCase()}${name.slice(1)}`
-}
+import { agree } from '../../utils/frenchGrammar'
 
 function getPlayerBonusCount(player) {
   return Object.values(player?.bonuses || {}).reduce((total, count) => total + Number(count || 0), 0)
@@ -201,6 +197,7 @@ export default function EventGame({ roomData, currentUserId, continueToFeedback,
   const stolenFromPlayer = roomData.players.find((player) => player.id === interaction.stolenFromPlayerId)
   const stolenToPlayer = roomData.players.find((player) => player.id === interaction.stolenToPlayerId)
   const previewStealTarget = roomData.players.find((player) => player.id === interaction.previewStealTargetId)
+  const selectedTarget = roomData.players.find((player) => player.id === selectedTargetId)
   const isRewardScreen = Boolean(interaction.bonusRewardRevealed && awardedBonus)
   const isStealTargetScreen = Boolean(interaction.awaitingStealTarget && !interaction.stolenBonusId)
   const isStealConfirmationScreen = Boolean(interaction.stolenBonusId && stolenFromPlayer)
@@ -215,7 +212,7 @@ export default function EventGame({ roomData, currentUserId, continueToFeedback,
 
       setActionError(
         response?.reason === 'target_has_no_bonus'
-          ? "Ce joueur n'a plus de bonus à voler."
+          ? `${agree(selectedTarget?.character, "Ce joueur n'a", "Cette joueuse n'a")} plus de bonus à voler.`
           : "Impossible de voler ce bonus pour le moment."
       )
     })

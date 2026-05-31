@@ -7,13 +7,9 @@ import CharacterCard from '../../components/CharacterCard'
 import CharacterTag from '../../components/CharacterTag'
 import ScoreBar from '../../components/ScoreBar'
 import { BONUS_CATALOG } from '../../data/bonusCatalog'
+import { deCharacter, formatCharacterName, tonicPronoun } from '../../utils/frenchGrammar'
 
 const CHOOSE_QUIZ_BONUS = BONUS_CATALOG.find((bonus) => bonus.id === 'choose-quiz')
-
-function formatCharacterName(name) {
-  if (!name) return ''
-  return `${name.charAt(0).toUpperCase()}${name.slice(1)}`
-}
 
 function BonusUsedTag() {
   return (
@@ -131,12 +127,12 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
                   >
                     {formatCharacterName(chooseQuizUser.character)}
                   </span>
-                  {' '}a utilisé un <BonusUsedTag />, c'est lui qui va choisir la difficulté de la question de{' '}
+                  {' '}a utilisé un <BonusUsedTag />, c'est {tonicPronoun(chooseQuizUser.character)} qui va choisir la difficulté de la question{' '}
                   <span
                     className="font-semibold"
                     style={{ color: `var(--color-${chooseQuizTarget.character})` }}
                   >
-                    {formatCharacterName(chooseQuizTarget.character)}
+                    {deCharacter(chooseQuizTarget.character)}
                   </span>
                   .
                 </p>
@@ -154,7 +150,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
                 ) : (
                   <div className="text-center">
                     <p className="font-family-funnel text-lg opacity-65">
-                      En attente de {formatCharacterName(chooseQuizTarget.character)}...
+                      En attente {deCharacter(chooseQuizTarget.character)}...
                     </p>
                   </div>
                 )}
@@ -269,7 +265,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
           <p className="max-w-78 font-funnel text-lg leading-snug text-light/70">
             {isChooseQuizChooser
               ? 'À toi de choisir la difficulté.'
-              : `C'est ${formatCharacterName(chooseQuizUser.character)} qui choisit la difficulté de ${formatCharacterName(chooseQuizTarget.character)}.`}
+              : `C'est ${formatCharacterName(chooseQuizUser.character)} qui choisit la difficulté ${deCharacter(chooseQuizTarget.character)}.`}
           </p>
         </div>
       </div>

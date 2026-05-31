@@ -1,4 +1,5 @@
 import React from 'react'
+import { formatCharacterName, labelBeforeCharacter } from '../utils/frenchGrammar'
 
 const CHAR_COLORS = {
   alan: '#06C0F9',
@@ -13,18 +14,18 @@ const CHAR_COLORS = {
 
 const getColorHex = (charId) => CHAR_COLORS[charId] || '#FFF6EF'
 
-const capitalizeFirst = (str) => str ? str.charAt(0).toUpperCase() + str.slice(1) : ''
-
 export default function CharacterTag({ charId, text, className = '', hideName = false, showAvatar = !hideName, icon = null, reversed = false, nameOnly = false, variant = 'default' }) {
   if (!charId) return null
 
   const baseColor = getColorHex(charId)
   const backgroundColor = `${baseColor}33` // ~20% opacity
-  const charName = capitalizeFirst(charId)
+  const charName = formatCharacterName(charId)
   const displayText = text || `${charName} pose la question`
   const isMini = variant === 'mini'
   
-  const tagText = nameOnly ? charName : (hideName ? text : (text ? (reversed ? `${text} ${charName}` : `${charName} ${text}`) : displayText))
+  const tagText = nameOnly
+    ? charName
+    : (hideName ? text : (text ? (reversed ? labelBeforeCharacter(text, charId) : `${charName} ${text}`) : displayText))
 
   return (
     <div
