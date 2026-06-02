@@ -1,10 +1,10 @@
 # TODO - LCG App
 
-Statut estimé au 24 mai 2026 pour la première version jouable.
+Statut estimé au 31 mai 2026 pour la première version jouable.
 
 ## Objectif V1 jouable
 
-Une V1 est jouable quand un groupe peut créer une room, rejoindre à 3 ou 4, choisir les personnages, définir l'ordre, jouer plusieurs tours, passer par quiz / défis / bonus / activités / évènements, finir un tour de table, afficher le classement, puis continuer sans bloquer la partie.
+Une V1 est jouable quand un groupe peut créer une room, rejoindre à 3 ou 4, choisir les personnages, définir l'ordre, jouer plusieurs tours, passer par quiz / défis / bonus / activités / évènements, finir un tour de table, afficher le classement, puis terminer naturellement la partie sans bloquer l'expérience.
 
 ## Résumé d'avancement
 
@@ -22,6 +22,8 @@ Une V1 est jouable quand un groupe peut créer une room, rejoindre à 3 ou 4, ch
 - [x] Pause globale.
 - [x] Règles accessibles depuis le menu.
 - [x] Classement fonctionnel en fin de round.
+- [x] Fin de partie naturelle via logique de plateau, estimation de position et classement final.
+- [x] Documenter les impacts à vérifier avant d'ajouter un bonus, un event, un personnage, une case, un défi ou une activité.
 - [ ] Gros passage de test bout en bout à 3 et 4 joueurs.
 - [x] Stabilisation mobile des popups.
 - [x] Corrections textes / accents sur les écrans encore touchés par l'ancien encodage.
@@ -39,6 +41,32 @@ Une V1 est jouable quand un groupe peut créer une room, rejoindre à 3 ou 4, ch
 - [x] Revoir les popups admin et bonus sur mobile.
 - [x] Ajouter au moins assez de questions / évènements / activités pour éviter les répétitions trop visibles.
 - [x] Désactiver ou encadrer les outils / bonus de test avant release : code de room forcé, bonus donnés par défaut, helper console `__GIVE_BONUS` / socket `debug_give_bonus`.
+
+## Retours test Render - avant V1 test
+
+Contexte : retours issus d'un test en mode hébergé sur Render, pas en local.
+
+- [ ] Importer les 8 nouveaux logos préparés pour le défi Zoom.
+- [x] Revoir la répartition des défis tirés automatiquement : répartition ajoutée par type de défi.
+- [x] Ajouter ou ajuster la pondération des défis pour faire sortir plus souvent `chiffres` si c'est le comportement voulu.
+- [x] Vérifier que `pick` peut tomber naturellement dans le tirage automatique des défis.
+- [x] Clarification Zoom / Vrai-Faux / Pick / activité logo : pas d'action V1, note de compréhension retirée du périmètre.
+- [x] Ajouter la nuance du nombre de cases et intégrer une vraie condition de fin de partie dans l'application.
+- [x] Intégrer la structure définitive du plateau dans l'app : ordre exact des cases 0 -> 20, types de cases 1 -> 19 et position du bureau du boss.
+- [x] Estimer pour chaque joueur un ensemble de positions possibles à partir de l'historique réel des types de cases joués, plutôt qu'une position unique.
+- [x] Utiliser ce recalcul cumulatif pour resserrer les positions possibles quand une nouvelle case jouée élimine des chemins incompatibles.
+- [x] Détecter automatiquement quand le bureau du boss devient atteignable avec un lancer entre 1 et 6, puis proposer `Terminer` sans bouton admin manuel.
+- [x] Afficher la proposition `Terminer` sous forme de popup / reminder sur l'écran de choix du type de case, dans l'esprit du rappel de relance du dé.
+- [x] Quand un joueur termine, laisser finir la rotation en cours puis arrêter définitivement la partie au moment où son tour devrait revenir.
+- [x] Modéliser les événements de déplacement actuellement présents pour qu'ils recalculent aussi les positions estimées.
+- [x] Pour l'événement d'échange de place, demander explicitement avec quel joueur l'échange a été fait afin de conserver une estimation fiable des deux positions.
+- [ ] Étendre le moteur si de nouveaux événements de déplacement sont ajoutés plus tard.
+- [x] Corriger l'affichage `/6` dans la room select : il doit afficher `/4` et la room doit refuser au-delà de 4 joueurs.
+- [ ] Plus tard - Au premier bonus obtenu, expliquer où retrouver ses bonus pour les joueurs qui n'ont pas vu l'onboarding menu.
+- [ ] Vérifier et corriger le fullscreen double tap : il ne fonctionne pas toujours, notamment depuis le menu, sauf après fermeture / retour dans la fenêtre.
+- [x] Enlever les guillemets au début et à la fin des questions et libellés de questions.
+- [x] Autoriser l'ouverture du menu bonus tout le temps, sauf sur les écrans où cela gêne réellement le déroulé.
+- [ ] Imprimer un nouveau livret de règles.
 
 ## Vérification release
 
@@ -241,3 +269,4 @@ Prompt implementation :
 - [ ] Faire un test manuel mobile, idéalement sur iPhone/Android réel.
 - [ ] Tester l'activité commune, surtout l'import / prise de photo, sur Chrome mobile.
 - [ ] Faire un test de reconnexion : refresh, fermeture onglet, crash simulé, retour dans la room.
+

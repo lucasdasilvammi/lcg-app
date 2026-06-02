@@ -25,7 +25,7 @@ export default function DuelReveal({ roomData, continueToFeedback, currentUserId
       {/* Contenu principal */}
       <div className="relative flex flex-col items-center gap-10 w-full max-w-3xl">
         {/* Question */}
-        <p className="text-2xl font-medium font-family-funnel text-light">"{data?.question}"</p>
+        <p className="text-2xl font-medium font-family-funnel text-light">{data?.question}</p>
 
         {/* Options avec indicateurs */}
         <div className="flex flex-col gap-3 w-full">

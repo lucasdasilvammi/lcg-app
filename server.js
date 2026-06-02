@@ -40,7 +40,7 @@ const io = new Server(server, {
 
 // --- DATA LOADING ---
 const CODE_LENGTH = 5;
-const MAX_PLAYERS = 6;
+const MAX_PLAYERS = 4;
 const VALID_BONUS_IDS = new Set(['ctrl-z', 'coffee-boss', 'choose-quiz']);
 const DEBUG_TOOLS_ENABLED = process.env.LCG_ENABLE_DEBUG_TOOLS === 'true';
 const DEBUG_ROOM_CODE = [2, 2, 2, 2, 2];
@@ -48,6 +48,18 @@ const TEST_DEFAULT_BONUSES = { 'ctrl-z': 1, 'coffee-boss': 1, 'choose-quiz': 1 }
 const quizData = require('./server/data/quiz.json');
 const duelsData = require('./server/data/duels.json');
 const eventsData = require('./server/data/events.json');
+const {
+  ACTION_TILE_TYPE_MAP,
+  BOARD_CONFIG,
+  TILE_TYPES,
+  advanceByTileType,
+  createInitialBoardProgress,
+  markFinished,
+  moveToNextTileType,
+  moveToPreviousTileType,
+  summarizeProgress,
+  swapProgress
+} = require('./server/boardProgress');
 
 // Flatten quiz database
 const QUIZ_DB = Object.keys(quizData)
@@ -66,6 +78,7 @@ const HARD_QUIZ_DB = QUIZ_DB.filter(question =>
 // Flatten events database
 const EVENTS_DB = eventsData.events || [];
 const BONUS_IDS = Array.from(VALID_BONUS_IDS);
+const DUEL_TYPES = ['buzzer', 'vraioufaux', 'chiffres', 'zoom', 'pick'];
 
 // --- UTILITIES ---
 const getDuelsByType = (type) => DUELS_DB.filter(d => d.type === type);
@@ -87,24 +100,62 @@ const getRandomHexColor = () => {
   const value = Math.floor(Math.random() * 0xFFFFFF);
   return `#${value.toString(16).padStart(6, '0')}`.toUpperCase();
 };
+const getAvailableDuelTypes = () => DUEL_TYPES.filter(type => {
+  if (type === 'pick') return true;
+  if (type === 'buzzer' && HARD_QUIZ_DB.length > 0) return true;
+  return getDuelsByType(type).length > 0;
+});
+
+const createPickDuel = () => ({
+  type: 'pick',
+  question: 'Pick la couleur cible',
+  targetColor: getRandomHexColor(),
+  explanation: 'Trouve la couleur la plus proche possible.'
+});
+
+const getRoomDuelTypeBag = (room) => {
+  if (!room) return [];
+  if (!Object.prototype.hasOwnProperty.call(room, '_duelTypeBag')) {
+    Object.defineProperty(room, '_duelTypeBag', {
+      value: [],
+      writable: true,
+      enumerable: false
+    });
+  }
+  return room._duelTypeBag;
+};
+
+const getNextDuelTypeForRoom = (room) => {
+  const availableTypes = getAvailableDuelTypes();
+  if (availableTypes.length === 0) return null;
+
+  const bag = getRoomDuelTypeBag(room);
+  const remainingAvailableTypes = bag.filter(type => availableTypes.includes(type));
+
+  if (remainingAvailableTypes.length === 0) {
+    room._duelTypeBag = [...availableTypes];
+  } else {
+    room._duelTypeBag = remainingAvailableTypes;
+  }
+
+  const nextIndex = Math.floor(Math.random() * room._duelTypeBag.length);
+  const [nextType] = room._duelTypeBag.splice(nextIndex, 1);
+  return nextType;
+};
+
 const getRandomDuel = (type = null) => {
-  if (type === 'pick') {
-    return {
-      type: 'pick',
-      question: 'Pick la couleur cible',
-      targetColor: getRandomHexColor(),
-      explanation: 'Trouve la couleur la plus proche possible.'
-    };
+  const selectedType = type || getRandomItem(getAvailableDuelTypes());
+  if (!selectedType) return getRandomItem(DUELS_DB);
+
+  if (selectedType === 'pick') return createPickDuel();
+  if (selectedType === 'buzzer') {
+    return createBuzzerDuelFromQuiz() || getRandomItem(getDuelsByType(selectedType));
   }
-  if (type === 'buzzer') {
-    return createBuzzerDuelFromQuiz() || getRandomItem(getDuelsByType(type));
-  }
-  if (type) {
-    const filtered = getDuelsByType(type);
-    return filtered.length > 0 ? filtered[Math.floor(Math.random() * filtered.length)] : DUELS_DB[Math.floor(Math.random() * DUELS_DB.length)];
-  }
-  const randomDuel = DUELS_DB[Math.floor(Math.random() * DUELS_DB.length)];
-  return randomDuel?.type === 'buzzer' ? (createBuzzerDuelFromQuiz() || randomDuel) : randomDuel;
+
+  const filtered = getDuelsByType(selectedType);
+  if (filtered.length > 0) return getRandomItem(filtered);
+
+  return type ? getRandomDuel() : null;
 };
 
 const getRandomItem = (items) => items[Math.floor(Math.random() * items.length)];
@@ -116,7 +167,8 @@ const createRandomDuelInteraction = (room, initiatingPlayerId = null) => {
   const opponentCandidates = room.players.filter(player => player.id !== activePlayer.id);
   if (opponentCandidates.length === 0) return null;
 
-  const randomDuel = getRandomDuel();
+  const randomDuel = getRandomDuel(getNextDuelTypeForRoom(room));
+  if (!randomDuel) return null;
   const opponent = getRandomItem(opponentCandidates);
   const readerCandidates = room.players.filter(player => player.id !== activePlayer.id && player.id !== opponent.id);
   const reader = readerCandidates.length > 0 ? getRandomItem(readerCandidates) : activePlayer;
@@ -391,19 +443,137 @@ const advanceRoomToNextTurn = (room) => {
     }
     room.status = 'ROUND_END';
   } else {
+    const nextPlayer = room.players[nextIndex];
+    if (room.pendingGameEnd?.playerId && nextPlayer?.id === room.pendingGameEnd.playerId) {
+      room.turnIndex = nextIndex;
+      room.status = 'GAME_END';
+      return;
+    }
     room.turnIndex = nextIndex;
     room.status = 'TURN_START';
+  }
+};
+
+const createTrackedPlayer = (playerId, sessionToken = null) => ({
+  id: playerId,
+  sessionToken,
+  character: null,
+  characterLocked: false,
+  score: 0,
+  bonuses: { ...DEFAULT_BONUSES },
+  presence: 'connected',
+  connected: true,
+  isWaiting: false,
+  isDisconnected: false,
+  boardProgress: createInitialBoardProgress()
+});
+
+const ensurePlayerBoardProgress = (player) => {
+  if (!player) return null;
+  player.boardProgress = summarizeProgress(player.boardProgress || createInitialBoardProgress());
+  return player.boardProgress;
+};
+
+const ensureRoomBoardState = (room) => {
+  if (!room) return;
+  room.boardConfig = room.boardConfig || BOARD_CONFIG;
+  room.finishedPlayerIds = Array.isArray(room.finishedPlayerIds) ? room.finishedPlayerIds : [];
+  room.players = Array.isArray(room.players) ? room.players : [];
+  room.players.forEach((player) => ensurePlayerBoardProgress(player));
+
+  if (room.pendingGameEnd?.playerId && !room.players.some((player) => player.id === room.pendingGameEnd.playerId)) {
+    delete room.pendingGameEnd;
+  }
+
+  room.finishedPlayerIds = room.finishedPlayerIds.filter((playerId, index, array) =>
+    array.indexOf(playerId) === index && room.players.some((player) => player.id === playerId)
+  );
+};
+
+const getActivePlayer = (room) => room?.players?.[room.turnIndex] || null;
+
+const applyTileSelectionToPlayer = (player, actionType) => {
+  const tileType = ACTION_TILE_TYPE_MAP[actionType];
+  if (!player || !tileType || tileType === TILE_TYPES.END) return;
+  player.boardProgress = advanceByTileType(player.boardProgress, tileType);
+};
+
+const markPlayerAsFinished = (room, playerId) => {
+  if (!room || !playerId) return;
+  ensureRoomBoardState(room);
+  const player = room.players.find((entry) => entry.id === playerId);
+  if (!player) return;
+
+  player.boardProgress = markFinished(player.boardProgress);
+
+  if (!room.finishedPlayerIds.includes(playerId)) {
+    room.finishedPlayerIds.push(playerId);
+  }
+
+  if (!room.pendingGameEnd) {
+    room.pendingGameEnd = {
+      playerId,
+      triggeredAt: Date.now()
+    };
+  }
+};
+
+const applyEventBoardEffect = (room) => {
+  ensureRoomBoardState(room);
+
+  const interaction = room?.currentInteraction;
+  if (!room || !interaction || interaction.type !== 'event' || interaction.boardEffectResolved) return;
+
+  const activePlayer = getActivePlayer(room);
+  if (!activePlayer) return;
+
+  const boardEffectType = interaction.data?.boardEffectType || null;
+  if (!boardEffectType) {
+    interaction.boardEffectResolved = true;
+    return;
+  }
+
+  if (boardEffectType === 'move-self-to-next-bonus') {
+    activePlayer.boardProgress = moveToNextTileType(activePlayer.boardProgress, TILE_TYPES.BONUS);
+    interaction.boardEffectResolved = true;
+    return;
+  }
+
+  if (boardEffectType === 'piston') {
+    activePlayer.boardProgress = moveToNextTileType(activePlayer.boardProgress, TILE_TYPES.QUIZ);
+    room.players.forEach((player) => {
+      if (player.id === activePlayer.id) return;
+      player.boardProgress = moveToPreviousTileType(player.boardProgress, TILE_TYPES.QUIZ);
+    });
+    interaction.boardEffectResolved = true;
+    return;
+  }
+
+  if (boardEffectType === 'swap-with-player' && interaction.swapTargetPlayerId) {
+    const targetPlayer = room.players.find((player) => player.id === interaction.swapTargetPlayerId);
+    if (!targetPlayer) return;
+
+    const [nextActiveProgress, nextTargetProgress] = swapProgress(activePlayer.boardProgress, targetPlayer.boardProgress);
+    activePlayer.boardProgress = nextActiveProgress;
+    targetPlayer.boardProgress = nextTargetProgress;
+    interaction.boardEffectResolved = true;
   }
 };
 
 const replacePlayerIdInRoom = (room, oldId, newId) => {
   if (!room || !oldId || !newId || oldId === newId) return;
 
+  ensureRoomBoardState(room);
+
   if (room.adminId === oldId) room.adminId = newId;
   if (room.pendingQuestionerId === oldId) room.pendingQuestionerId = newId;
   if (room.currentTurnBonusUse?.playerId === oldId) room.currentTurnBonusUse.playerId = newId;
   if (room.pendingChooseQuizBonus?.byPlayerId === oldId) room.pendingChooseQuizBonus.byPlayerId = newId;
   if (room.pendingChooseQuizBonus?.targetPlayerId === oldId) room.pendingChooseQuizBonus.targetPlayerId = newId;
+  if (room.pendingGameEnd?.playerId === oldId) room.pendingGameEnd.playerId = newId;
+  if (Array.isArray(room.finishedPlayerIds)) {
+    room.finishedPlayerIds = room.finishedPlayerIds.map((id) => (id === oldId ? newId : id));
+  }
   for (const player of room.players) {
     if (player.skipNextTurn?.byPlayerId === oldId) player.skipNextTurn.byPlayerId = newId;
   }
@@ -423,6 +593,8 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
     if (ci.readerId === oldId) ci.readerId = newId;
     if (ci.questionerId === oldId) ci.questionerId = newId;
     if (ci.buzzedPlayerId === oldId) ci.buzzedPlayerId = newId;
+    if (ci.swapTargetPlayerId === oldId) ci.swapTargetPlayerId = newId;
+    if (ci.previewSwapTargetId === oldId) ci.previewSwapTargetId = newId;
     if (Array.isArray(ci.duelists)) ci.duelists = ci.duelists.map(id => id === oldId ? newId : id);
     if (Array.isArray(ci.acknowledgedRules)) ci.acknowledgedRules = ci.acknowledgedRules.map(id => id === oldId ? newId : id);
     if (Array.isArray(ci.participants)) ci.participants = ci.participants.map(id => id === oldId ? newId : id);
@@ -492,10 +664,13 @@ io.on('connection', (socket) => {
   console.log('🔌 socket connected:', socket.id);
   
   const findRoom = () => findRoomByPlayerId(socket.id);
-  const syncRoom = (room) => io.to(room.id).emit('update_room_state', {
-    ...room,
-    canUndo: undoSnapshotsByRoomId.has(room.id)
-  });
+  const syncRoom = (room) => {
+    ensureRoomBoardState(room);
+    io.to(room.id).emit('update_room_state', {
+      ...room,
+      canUndo: undoSnapshotsByRoomId.has(room.id)
+    });
+  };
   const getPublicPlayer = (player) => player
     ? {
         id: player.id,
@@ -552,6 +727,7 @@ io.on('connection', (socket) => {
   };
   const removePlayerFromRoom = ({ room, playerId = null, playerSessionToken = null, reason = 'unknown' }) => {
     if (!room) return;
+    ensureRoomBoardState(room);
 
     const removedPlayers = room.players.filter((p) => {
       if (playerId && p.id === playerId) return true;
@@ -594,6 +770,18 @@ io.on('connection', (socket) => {
 
     if (room.turnIndex >= room.players.length) {
       room.turnIndex = 0;
+    }
+
+    if (Array.isArray(room.finishedPlayerIds)) {
+      room.finishedPlayerIds = room.finishedPlayerIds.filter((id) => room.players.some((player) => player.id === id));
+    }
+
+    if (room.pendingGameEnd?.playerId && !room.players.some((player) => player.id === room.pendingGameEnd.playerId)) {
+      if (room.finishedPlayerIds.length > 0) {
+        room.pendingGameEnd.playerId = room.finishedPlayerIds[0];
+      } else {
+        delete room.pendingGameEnd;
+      }
     }
 
     syncRoom(room);
@@ -775,7 +963,7 @@ io.on('connection', (socket) => {
       id: newRoomId,
       code: gameCode,
       adminId: socket.id,
-      players: [{ id: socket.id, sessionToken, character: null, characterLocked: false, score: 0, bonuses: { ...DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false }],
+      players: [createTrackedPlayer(socket.id, sessionToken)],
       status: 'LOBBY',
       isPaused: false,
       pausedById: null,
@@ -783,7 +971,9 @@ io.on('connection', (socket) => {
       currentInteraction: null,
       lastResult: null,
       pendingCategory: null,
-      reconnectInvites: {}
+      reconnectInvites: {},
+      boardConfig: BOARD_CONFIG,
+      finishedPlayerIds: []
     };
     socket.join(newRoomId);
     socket.emit('room_created', { roomId: newRoomId, code: gameCode });
@@ -829,7 +1019,7 @@ io.on('connection', (socket) => {
     }
 
     socket.join(room.id);
-  room.players.push({ id: socket.id, sessionToken, character: null, characterLocked: false, score: 0, bonuses: { ...DEFAULT_BONUSES }, presence: 'connected', connected: true, isWaiting: false, isDisconnected: false });
+  room.players.push(createTrackedPlayer(socket.id, sessionToken));
     socket.emit('room_joined', { roomId: room.id, isAdmin: false });
     console.log('join_room_with_code: player joined', socket.id, '->', room.id);
     syncRoom(room);
@@ -1304,7 +1494,15 @@ io.on('connection', (socket) => {
       return;
     }
 
+    ensureRoomBoardState(room);
+    const currentPlayer = getActivePlayer(room);
+    if (!currentPlayer || currentPlayer.id !== socket.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
     captureUndoSnapshot(room);
+    applyTileSelectionToPlayer(currentPlayer, actionType);
 
     if (actionType === 'QUIZ') {
       const randomCat = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
@@ -1405,6 +1603,40 @@ io.on('connection', (socket) => {
       console.warn('trigger_action: unknown actionType', actionType, 'from', socket.id);
       if (typeof ack === 'function') ack({ ok: false, reason: 'unknown_action' });
     }
+  });
+
+  socket.on('declare_finish', (_payload, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    ensureRoomBoardState(room);
+    const activePlayer = getActivePlayer(room);
+    if (!activePlayer || activePlayer.id !== socket.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
+    const boardProgress = ensurePlayerBoardProgress(activePlayer);
+    if (!boardProgress.canReachBoss) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'finish_not_reachable' });
+      return;
+    }
+
+    captureUndoSnapshot(room);
+    markPlayerAsFinished(room, activePlayer.id);
+
+    emitRoomSystemMessage(room, {
+      event: 'player_finished',
+      player: getPublicPlayer(activePlayer),
+      message: `${formatToastCharacterName(activePlayer.character)} a atteint le bureau du boss. La partie s'arrêtera quand son tour reviendra.`
+    });
+
+    advanceRoomToNextTurn(room);
+    syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true, status: room.status, playerId: activePlayer.id });
   });
 
   socket.on('claim_case_bonus', (_payload, ack) => {
@@ -1523,6 +1755,46 @@ io.on('connection', (socket) => {
     }
 
     interaction.previewStealTargetId = targetPlayer.id;
+    syncRoom(room);
+
+    if (typeof ack === 'function') ack({ ok: true, targetPlayerId: targetPlayer.id });
+  });
+
+  socket.on('event_swap_positions', ({ targetPlayerId } = {}, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    ensureRoomBoardState(room);
+    const interaction = room.currentInteraction;
+    const activePlayer = getActivePlayer(room);
+    const targetPlayer = room.players.find((player) => player.id === targetPlayerId);
+
+    if (
+      room.status !== 'EVENT_GAME' ||
+      interaction?.type !== 'event' ||
+      interaction?.data?.boardEffectType !== 'swap-with-player' ||
+      !interaction.awaitingSwapTarget
+    ) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_state' });
+      return;
+    }
+
+    if (!activePlayer || activePlayer.id !== socket.id || interaction.readerId !== socket.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
+    if (!targetPlayer || targetPlayer.id === activePlayer.id) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
+      return;
+    }
+
+    interaction.swapTargetPlayerId = targetPlayer.id;
+    delete interaction.awaitingSwapTarget;
+    applyEventBoardEffect(room);
     syncRoom(room);
 
     if (typeof ack === 'function') ack({ ok: true, targetPlayerId: targetPlayer.id });
@@ -2158,6 +2430,7 @@ io.on('connection', (socket) => {
   socket.on('continue_to_feedback', () => {
     const room = findRoom();
     if (room) {
+      ensureRoomBoardState(room);
       if (room.status === 'ACTIVITE_REVEAL' && room.lastResult?.type === 'logo') {
         const nextPlayer = room.players[(room.turnIndex + 1) % room.players.length];
         if (nextPlayer?.id !== socket.id) return;
@@ -2190,6 +2463,14 @@ io.on('connection', (socket) => {
           return;
         }
 
+        if (room.currentInteraction.data?.boardEffectType === 'swap-with-player' && !room.currentInteraction.boardEffectResolved) {
+          room.currentInteraction.awaitingSwapTarget = true;
+          syncRoom(room);
+          return;
+        }
+
+        applyEventBoardEffect(room);
+
         advanceRoomToNextTurn(room);
       } else if (room.lastResult?.type === 'chiffres' && !room.lastResult.winnerId && (room.lastResult.points || 0) === 0) {
         advanceRoomToNextTurn(room);
@@ -2205,6 +2486,7 @@ io.on('connection', (socket) => {
   socket.on('next_turn', () => {
     const room = findRoom();
     if (!room) return;
+    ensureRoomBoardState(room);
     if (room.status === 'FEEDBACK' && room.lastResult?.type === 'logo') {
       const nextPlayer = room.players[(room.turnIndex + 1) % room.players.length];
       if (nextPlayer?.id !== socket.id) return;
@@ -2232,8 +2514,17 @@ io.on('connection', (socket) => {
   socket.on('start_new_round', () => {
     const room = findRoom();
     if (!room) return;
+    ensureRoomBoardState(room);
     const nextStarter = room.players[0];
     if (nextStarter?.id !== socket.id) return;
+
+    if (room.pendingGameEnd?.playerId && nextStarter?.id === room.pendingGameEnd.playerId) {
+      room.turnIndex = 0;
+      room.status = 'GAME_END';
+      syncRoom(room);
+      return;
+    }
+
     room.turnIndex = 0;
     room.status = 'TURN_START';
     delete room.currentTurnBonusUse;

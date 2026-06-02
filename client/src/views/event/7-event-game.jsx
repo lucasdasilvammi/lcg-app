@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import ButtonWithIcon from '../../components/ButtonWithIcon'
-import CharacterCard from '../../components/CharacterCard'
 import CharacterTag from '../../components/CharacterTag'
 import { MaskIcon } from '../../components/BonusPopup'
 import BonusRewardCard from '../../components/BonusRewardCard'
@@ -21,19 +20,19 @@ function EventInfoIcon() {
 }
 
 function EventTextContent({ data }) {
-  const descriptionParagraphs = data?.description?.split('\n\n') || ['Un évènement spécial vient de se produire !']
+  const descriptionParagraphs = data?.description?.split('\n\n') || ['Un événement spécial vient de se produire !']
 
   return (
     <div className="flex h-full flex-col items-center gap-5">
- <h1 className="font-hakobi uppercase text-light text-5xl">{data?.title || 'Évènement'}</h1>
+      <h1 className="font-hakobi uppercase text-light text-5xl">{data?.title || 'Événement'}</h1>
       <div className="flex h-full w-full flex-1 flex-col gap-4 text-center">
         {descriptionParagraphs.map((paragraph, index) => (
- <p key={index} className="font-funnel text-light text-lg">{paragraph}</p>
+          <p key={index} className="font-funnel text-light text-lg">{paragraph}</p>
         ))}
         {data?.effect && data.effect !== 'none' && (
           <div className="mt-auto flex items-center justify-center gap-3 text-left opacity-70">
             <EventInfoIcon />
- <p className="font-funnel leading-snug text-light opacity-85 text-base">{data.effect}</p>
+            <p className="font-funnel leading-snug text-light opacity-85 text-base">{data.effect}</p>
           </div>
         )}
       </div>
@@ -46,7 +45,7 @@ function EventBonusReward({ bonus }) {
 
   return (
     <div className="flex w-full flex-1 flex-col items-center justify-center gap-4 text-light">
-      <div className="flex flex-col gap-4 w-full items-center mt-auto ">
+      <div className="flex w-full flex-col items-center gap-4 mt-auto">
         <p className="font-funnel text-base uppercase tracking-normal text-light/55">Bonus reçu :</p>
         <BonusRewardCard bonus={bonus} />
       </div>
@@ -64,13 +63,13 @@ function EventBonusReward({ bonus }) {
 function EventRewardContent({ bonus }) {
   return (
     <div className="flex h-full flex-col items-center gap-5">
- <h1 className="font-hakobi uppercase text-light text-5xl">Validé par le boss</h1>
+      <h1 className="font-hakobi uppercase text-light text-5xl">Validé par le boss</h1>
       <EventBonusReward bonus={bonus} />
     </div>
   )
 }
 
-function StealTargetButton({ player, selected, faded, disabled, onClick }) {
+function TargetPlayerButton({ player, selected, faded, disabled, onClick }) {
   return (
     <button
       type="button"
@@ -101,41 +100,42 @@ function StealTargetButton({ player, selected, faded, disabled, onClick }) {
   )
 }
 
-function StealTargetContent({ players, currentUserId, selectedTargetId, onSelectTarget, isReader, error, chooserPlayer, previewTarget }) {
-  const targetPlayers = (players || []).filter((player) =>
-    player.id !== chooserPlayer?.id &&
-    player.character &&
-    getPlayerBonusCount(player) > 0
-  )
+function PlayerTargetContent({ players, selectedTargetId, onSelectTarget, isReader, error, chooserPlayer, previewTarget, mode = 'steal' }) {
+  const targetPlayers = (players || []).filter((player) => {
+    if (player.id === chooserPlayer?.id || !player.character) return false
+    return mode === 'steal' ? getPlayerBonusCount(player) > 0 : true
+  })
   const visibleSelectedTargetId = isReader ? selectedTargetId : previewTarget?.id
 
   return (
     <div className="flex h-full flex-col items-center justify-center gap-7">
-      <h1 className="sr-only">Les bons artistes copient, les grands artistes volent</h1>
-      <p className="max-w-74 font-funnel text-lg leading-snug text-light">
+      <h1 className="sr-only">{mode === 'swap' ? 'Changement de Brief' : 'Les bons artistes copient, les grands artistes volent'}</h1>
+      <div className="max-w-74 font-funnel text-lg leading-snug text-light">
         {isReader ? (
-          'Désigne le joueur à qui tu vas voler un bonus :'
+          mode === 'swap'
+            ? 'Désigne le joueur avec qui tu échanges ta place :'
+            : 'Désigne le joueur à qui tu vas voler un bonus :'
         ) : (
           <span className="inline-flex flex-wrap items-center justify-center gap-2">
             <CharacterTag charId={chooserPlayer?.character} nameOnly variant="mini" />
-            est en train de choisir à qui voler un bonus.
+            {mode === 'swap'
+              ? ' est en train de choisir avec qui échanger sa place.'
+              : ' est en train de choisir à qui voler un bonus.'}
           </span>
         )}
-      </p>
+      </div>
 
       <div className="flex w-full max-w-72 flex-col gap-4">
-        {targetPlayers.map((player) => {
-          return (
-            <StealTargetButton
-              key={player.id}
-              player={player}
-              selected={visibleSelectedTargetId === player.id}
-              faded={Boolean(visibleSelectedTargetId) && visibleSelectedTargetId !== player.id}
-              disabled={!isReader}
-              onClick={() => onSelectTarget(player.id)}
-            />
-          )
-        })}
+        {targetPlayers.map((player) => (
+          <TargetPlayerButton
+            key={player.id}
+            player={player}
+            selected={visibleSelectedTargetId === player.id}
+            faded={Boolean(visibleSelectedTargetId) && visibleSelectedTargetId !== player.id}
+            disabled={!isReader}
+            onClick={() => onSelectTarget(player.id)}
+          />
+        ))}
       </div>
 
       {error && (
@@ -155,7 +155,7 @@ function StealConfirmationContent({ sourcePlayer, targetPlayer, stolenBonus, cur
 
   return (
     <div className="flex h-full flex-col items-center justify-center gap-6 text-light">
- <h1 className="font-hakobi uppercase leading-none text-light text-5xl">
+      <h1 className="font-hakobi uppercase leading-none text-light text-5xl">
         Bonus volé
       </h1>
       <div className="flex max-w-82 flex-wrap items-center justify-center gap-2 font-funnel text-base leading-snug text-light">
@@ -173,7 +173,7 @@ function StealConfirmationContent({ sourcePlayer, targetPlayer, stolenBonus, cur
 function StealSkippedContent() {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-5 text-light">
- <h1 className="font-hakobi uppercase text-light text-5xl">Pas de bonus à voler</h1>
+      <h1 className="font-hakobi uppercase text-light text-5xl">Pas de bonus à voler</h1>
       <p className="max-w-82 font-funnel text-lg leading-snug text-light/85">
         Personne autour de la table n'a de bonus dans son inventaire. Ton tour s'arrête ici.
       </p>
@@ -181,7 +181,24 @@ function StealSkippedContent() {
   )
 }
 
-export default function EventGame({ roomData, currentUserId, continueToFeedback, stealEventBonus, previewEventStealTarget }) {
+function SwapConfirmationContent({ sourcePlayer, targetPlayer }) {
+  if (!sourcePlayer || !targetPlayer) return null
+
+  return (
+    <div className="flex h-full flex-col items-center justify-center gap-6 text-light">
+      <h1 className="font-hakobi uppercase leading-none text-light text-5xl">
+        Places échangées
+      </h1>
+      <div className="flex max-w-82 flex-wrap items-center justify-center gap-2 font-funnel text-base leading-snug text-light">
+        <CharacterTag charId={sourcePlayer.character} nameOnly variant="mini" />
+        <span>a échangé sa place avec</span>
+        <CharacterTag charId={targetPlayer.character} nameOnly variant="mini" />
+      </div>
+    </div>
+  )
+}
+
+export default function EventGame({ roomData, currentUserId, continueToFeedback, stealEventBonus, previewEventStealTarget, swapEventPositions }) {
   const [selectedTargetId, setSelectedTargetId] = useState(null)
   const [actionError, setActionError] = useState('')
 
@@ -190,7 +207,7 @@ export default function EventGame({ roomData, currentUserId, continueToFeedback,
   const interaction = roomData.currentInteraction
   const { data, readerId } = interaction
   const isReader = readerId === currentUserId
-  const readerPlayer = roomData.players.find(p => p.id === readerId)
+  const readerPlayer = roomData.players.find((player) => player.id === readerId)
   const activePlayer = roomData.players[roomData.turnIndex]
   const awardedBonus = BONUS_CATALOG.find((bonus) => bonus.id === interaction.awardedBonusId)
   const stolenBonus = BONUS_CATALOG.find((bonus) => bonus.id === interaction.stolenBonusId)
@@ -198,11 +215,16 @@ export default function EventGame({ roomData, currentUserId, continueToFeedback,
   const stolenToPlayer = roomData.players.find((player) => player.id === interaction.stolenToPlayerId)
   const previewStealTarget = roomData.players.find((player) => player.id === interaction.previewStealTargetId)
   const selectedTarget = roomData.players.find((player) => player.id === selectedTargetId)
+  const swapTargetPlayer = roomData.players.find((player) => player.id === interaction.swapTargetPlayerId)
+
   const isRewardScreen = Boolean(interaction.bonusRewardRevealed && awardedBonus)
   const isStealTargetScreen = Boolean(interaction.awaitingStealTarget && !interaction.stolenBonusId)
   const isStealConfirmationScreen = Boolean(interaction.stolenBonusId && stolenFromPlayer)
   const isStealSkippedScreen = Boolean(interaction.stealSkippedNoBonus)
+  const isSwapTargetScreen = Boolean(interaction.awaitingSwapTarget && data?.boardEffectType === 'swap-with-player' && !interaction.swapTargetPlayerId)
+  const isSwapConfirmationScreen = Boolean(data?.boardEffectType === 'swap-with-player' && swapTargetPlayer)
   const canValidateSteal = isReader && selectedTargetId
+  const canValidateSwap = isReader && selectedTargetId
 
   const validateStealTarget = () => {
     if (!canValidateSteal) return
@@ -213,8 +235,17 @@ export default function EventGame({ roomData, currentUserId, continueToFeedback,
       setActionError(
         response?.reason === 'target_has_no_bonus'
           ? `${agree(selectedTarget?.character, "Ce joueur n'a", "Cette joueuse n'a")} plus de bonus à voler.`
-          : "Impossible de voler ce bonus pour le moment."
+          : 'Impossible de voler ce bonus pour le moment.'
       )
+    })
+  }
+
+  const validateSwapTarget = () => {
+    if (!canValidateSwap) return
+    setActionError('')
+    swapEventPositions?.(selectedTargetId, (response) => {
+      if (response?.ok) return
+      setActionError("Impossible d'échanger cette place pour le moment.")
     })
   }
 
@@ -224,35 +255,64 @@ export default function EventGame({ roomData, currentUserId, continueToFeedback,
     previewEventStealTarget?.(targetPlayerId)
   }
 
+  const selectSwapTarget = (targetPlayerId) => {
+    setSelectedTargetId(targetPlayerId)
+    setActionError('')
+  }
+
   let content = <EventTextContent data={data} />
   if (isRewardScreen) content = <EventRewardContent bonus={awardedBonus} />
   if (isStealTargetScreen) {
     content = (
-      <StealTargetContent
+      <PlayerTargetContent
         players={roomData.players}
-        currentUserId={currentUserId}
         selectedTargetId={selectedTargetId}
         onSelectTarget={selectStealTarget}
         isReader={isReader}
         error={actionError}
         chooserPlayer={activePlayer}
         previewTarget={previewStealTarget}
+        mode="steal"
       />
     )
   }
   if (isStealConfirmationScreen) {
-    content = <StealConfirmationContent sourcePlayer={stolenToPlayer} targetPlayer={stolenFromPlayer} stolenBonus={stolenBonus} currentUserId={currentUserId} />
+    content = (
+      <StealConfirmationContent
+        sourcePlayer={stolenToPlayer}
+        targetPlayer={stolenFromPlayer}
+        stolenBonus={stolenBonus}
+        currentUserId={currentUserId}
+      />
+    )
   }
   if (isStealSkippedScreen) {
     content = <StealSkippedContent />
   }
+  if (isSwapTargetScreen) {
+    content = (
+      <PlayerTargetContent
+        players={roomData.players}
+        selectedTargetId={selectedTargetId}
+        onSelectTarget={selectSwapTarget}
+        isReader={isReader}
+        error={actionError}
+        chooserPlayer={activePlayer}
+        previewTarget={selectedTarget}
+        mode="swap"
+      />
+    )
+  }
+  if (isSwapConfirmationScreen) {
+    content = <SwapConfirmationContent sourcePlayer={activePlayer} targetPlayer={swapTargetPlayer} />
+  }
 
   return (
- <div className="relative w-full overflow-hidden bg-bg">
- <div className="relative mx-auto flex h-dvh app-screen-y w-full max-w-full flex-col items-center justify-between gap-6 px-6 text-center">
- <div className="flex min-h-0 w-full flex-1 flex-col gap-12">
+    <div className="relative w-full overflow-hidden bg-bg">
+      <div className="relative mx-auto flex h-dvh app-screen-y w-full max-w-full flex-col items-center justify-between gap-6 px-6 text-center">
+        <div className="flex min-h-0 w-full flex-1 flex-col gap-12">
           <div className="flex w-full items-center justify-center">
- <img src="/game/categorie/tag-events.png" alt="Événement" className="h-8" />
+            <img src="/game/categorie/tag-events.png" alt="Événement" className="h-8" />
           </div>
 
           {content}
@@ -262,7 +322,7 @@ export default function EventGame({ roomData, currentUserId, continueToFeedback,
           {!isReader && readerPlayer && (
             <CharacterTag
               charId={readerPlayer.character}
-              text="Évènement de"
+              text="Événement de"
               reversed
               className="self-center"
             />
@@ -271,6 +331,8 @@ export default function EventGame({ roomData, currentUserId, continueToFeedback,
           <div className="flex w-full flex-col items-center gap-3">
             {isReader && isStealTargetScreen ? (
               <ButtonWithIcon onClick={validateStealTarget} text="Valider" disabled={!canValidateSteal} />
+            ) : isReader && isSwapTargetScreen ? (
+              <ButtonWithIcon onClick={validateSwapTarget} text="Valider" disabled={!canValidateSwap} />
             ) : isReader ? (
               <ButtonWithIcon onClick={continueToFeedback} text="Suivant" />
             ) : (

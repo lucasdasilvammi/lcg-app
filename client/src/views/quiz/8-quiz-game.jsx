@@ -62,7 +62,7 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
 
           {isMeReader ? (
             <div className='w-full flex-1 flex flex-col items-center justify-center gap-16'>
-              <p className="text-2xl font-medium font-family-funnel">"{data.q}"</p>
+              <p className="text-2xl font-medium font-family-funnel">{data.q}</p>
               <div className="flex flex-col gap-3 w-full">
                 {data.options.map((option, index) => {
                   return (
@@ -112,7 +112,7 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
          <h2 className="text-red-500 font-bold text-3xl mb-4">⚡ DUEL</h2>
          {isMeReader && (
            <div>
-             <p className="text-xl font-bold mb-4">"{data.q}"</p>
+             <p className="text-xl font-bold mb-4">{data.q}</p>
              <p className="text-red-300 mb-4">Rép. : {data.a}</p>
              {hasSomeoneBuzzed && <div className="flex gap-4 justify-center"><button onClick={() => resolveInteraction(false)} className="bg-slate-600 px-4 py-2 rounded">❌</button><button onClick={() => resolveInteraction(true)} className="bg-green-600 px-4 py-2 rounded">✅</button></div>}
            </div>

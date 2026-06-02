@@ -5,6 +5,7 @@
 - **`ARCHITECTURE.md`** - Architecture de l'application
 - **`DESIGN-SYSTEM.md`** - Système de design et composants
 - **`TODO.md`** - Tâches et roadmap
+- **`maintenance-impact-guide.md`** - Checklists d'impact avant d'ajouter bonus, events, personnages, plateau, défis ou activités
 
 ## 📂 deployment/
 

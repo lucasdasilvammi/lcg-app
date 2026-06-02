@@ -80,7 +80,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, con
           </div>
         ) : isMeReader ? (
           <div className="relative flex flex-col items-center gap-10 w-full max-w-3xl">
-            <p className="text-2xl font-medium font-family-funnel text-light">"{data.question}"</p>
+            <p className="text-2xl font-medium font-family-funnel text-light">{data.question}</p>
             <div className="flex flex-col gap-3 w-full">
               {(data.options || []).map((option, index) => (
                 <QuizAnswerButton
@@ -99,7 +99,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, con
           </div>
         ) : (
           <div className="flex flex-col justify-center items-center gap-8 w-full h-full max-w-3xl">
-            {!isDuelist && <h2 className="text-3xl font-bold font-hakobi text-light">"{data.question}"</h2>}
+            {!isDuelist && <h2 className="text-3xl font-bold font-hakobi text-light">{data.question}</h2>}
             
             {/* Statut buzzer */}
             {hasSomeoneBuzzed ? (

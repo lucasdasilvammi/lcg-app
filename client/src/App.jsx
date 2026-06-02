@@ -34,9 +34,11 @@ import PickReveal from './views/defi/pick/9-pick-reveal'
 import ZoomReveal from './views/defi/zoom/9-zoom-reveal'
 import Feedback from './views/10-feedback'
 import RoundEnd from './views/11-round-end'
+import GameEnd from './views/12-game-end'
 import Toasts from './components/Toasts'
 import SettingsMenu from './menu/SettingsMenu'
 import MenuOnboarding from './menu/MenuOnboarding'
+import { requestAppFullscreen } from './utils/fullscreen'
 
 const CODE_CHARACTERS = [
   { id: 0, name: "Donatien" },
@@ -69,12 +71,10 @@ const isMobileViewport = () => {
   return window.innerWidth < 470 || /iPhone|iPad|Android|Mobile/.test(navigator.userAgent)
 }
 
-const ACTIVITY_VIEWS = new Set([
-  'ACTIVITE_BRIEF',
+const ACTIVITY_MENU_BLOCKED_VIEWS = new Set([
   'ACTIVITE_CREATION',
   'ACTIVITE_UPLOAD',
-  'ACTIVITE_VOTE',
-  'ACTIVITE_REVEAL'
+  'ACTIVITE_VOTE'
 ])
 
 const SETUP_VIEWS = new Set([
@@ -98,7 +98,7 @@ const canOpenSettingsForContext = ({ view, roomData, currentUserId }) => {
   if (roomData.adminId === currentUserId) return true
   if (view === 'LOBBY') return true
   if (SETUP_VIEWS.has(view)) return false
-  if (ACTIVITY_VIEWS.has(view)) return false
+  if (ACTIVITY_MENU_BLOCKED_VIEWS.has(view)) return false
 
   const interaction = roomData.currentInteraction
 
@@ -137,8 +137,13 @@ const canOpenSettingsForContext = ({ view, roomData, currentUserId }) => {
       return readerId !== currentUserId
     }
 
+    case 'ACTIVITE_BRIEF':
+    case 'ACTIVITE_REVEAL':
     case 'FEEDBACK':
     case 'ROUND_END':
+    case 'GAME_END':
+      return true
+
     default:
       return false
   }
@@ -311,7 +316,7 @@ function ReconnectInviteConfirm({ invite, onConfirm, onCancel }) {
 function AppContent() {
 
 
-  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, addToast, pendingReconnectInvite, consumedReconnectInvite, confirmReconnectInvite, dismissReconnectInvite, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, acknowledgeChooseQuizBonus, selectQuizDifficulty, claimCaseBonus, stealEventBonus, previewEventStealTarget, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, createReconnectInvite, undoLastAction, pauseGame, resumeGame, useBonus, leaveRoom } = useSocket();
+  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, addToast, pendingReconnectInvite, consumedReconnectInvite, confirmReconnectInvite, dismissReconnectInvite, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, acknowledgeChooseQuizBonus, selectQuizDifficulty, claimCaseBonus, stealEventBonus, previewEventStealTarget, swapEventPositions, declareFinish, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, createReconnectInvite, undoLastAction, pauseGame, resumeGame, useBonus, leaveRoom } = useSocket();
 
   const [view, setView] = useState("HOME");
   const [inputCode, setInputCode] = useState([]);
@@ -351,15 +356,9 @@ function AppContent() {
     setIsSettingsOpen(false)
   }
 
-  const requestAppFullscreen = () => {
-    if (typeof document === 'undefined') return
-    if (document.fullscreenElement || !document.documentElement.requestFullscreen) return
-    document.documentElement.requestFullscreen().catch(() => {})
-  }
-
-  const requestMobileFullscreen = () => {
+  const requestMobileFullscreen = (source = 'mobile') => {
     if (!isMobileViewport()) return
-    requestAppFullscreen()
+    requestAppFullscreen({ source })
   }
 
   const closeMenuOnboarding = () => {
@@ -393,13 +392,17 @@ function AppContent() {
     setView('HOME')
   }
 
+  const handleGoHomeFromGameEnd = () => {
+    handleLeaveRoom()
+  }
+
   const handleHomeCreate = () => {
-    requestMobileFullscreen()
+    requestMobileFullscreen('home-create')
     createRoom()
   }
 
   const handleHomeJoin = () => {
-    requestMobileFullscreen()
+    requestMobileFullscreen('home-join')
     setView("JOIN")
     setInputCode([])
     setErrorMsg("")
@@ -457,7 +460,7 @@ function AppContent() {
     clearLongPressTimer()
 
     if (event && event.pointerType !== 'mouse') {
-      requestMobileFullscreen()
+      requestMobileFullscreen('root-pointerup')
     }
 
     if (event && event.pointerType !== 'mouse' && !isInteractiveTarget(event.target)) {
@@ -468,7 +471,7 @@ function AppContent() {
       const distance = Math.sqrt(dx * dx + dy * dy)
 
       if (now - lastTap.time <= DOUBLE_TAP_MS && distance <= DOUBLE_TAP_DISTANCE_PX) {
-        requestAppFullscreen()
+        requestAppFullscreen({ source: 'root-double-tap' })
         lastTapRef.current = { time: 0, x: 0, y: 0 }
       } else {
         lastTapRef.current = { time: now, x: event.clientX, y: event.clientY }
@@ -627,7 +630,7 @@ function AppContent() {
       )}
 
       {view === "GAME_LOOP" && roomData && (
-        <GameLoop roomData={roomData} triggerAction={triggerAction} consumeBonus={useBonus} currentUserId={socket?.id} />
+        <GameLoop roomData={roomData} triggerAction={triggerAction} consumeBonus={useBonus} declareFinish={declareFinish} currentUserId={socket?.id} />
       )}
 
       {/* VUE 8 : CONFIG QUIZ (UX AMELIOREE) */}
@@ -637,7 +640,7 @@ function AppContent() {
 
       {/* ÉVÉNEMENTS */}
       {view === "EVENT_GAME" && roomData && roomData.currentInteraction && (
-        <EventGame roomData={roomData} currentUserId={socket?.id} continueToFeedback={continueToFeedback} stealEventBonus={stealEventBonus} previewEventStealTarget={previewEventStealTarget} />
+        <EventGame roomData={roomData} currentUserId={socket?.id} continueToFeedback={continueToFeedback} stealEventBonus={stealEventBonus} previewEventStealTarget={previewEventStealTarget} swapEventPositions={swapEventPositions} />
       )}
 
       {/* ACTIVITÉS */}
@@ -721,6 +724,14 @@ function AppContent() {
 
       {view === "ROUND_END" && roomData && (
         <RoundEnd roomData={roomData} startNewRound={startNewRound} currentUserId={socket?.id} />
+      )}
+
+      {view === "GAME_END" && roomData && (
+        <GameEnd
+          roomData={roomData}
+          currentUserId={socket?.id}
+          onGoHome={handleGoHomeFromGameEnd}
+        />
       )}
 
       {roomData?.isPaused && (

@@ -10,6 +10,7 @@ import { pronoun } from '../utils/frenchGrammar'
 
 const CTRL_Z_BONUS = BONUS_CATALOG.find((bonus) => bonus.id === 'ctrl-z')
 const CTRL_Z_REMINDER_DURATION = 3000
+const FINISH_REMINDER_DURATION = 7000
 const TOP_BORDER_MASK_STYLE = {
   WebkitMaskImage: 'url(/menu/menu-border-top.svg)',
   maskImage: 'url(/menu/menu-border-top.svg)',
@@ -207,6 +208,58 @@ function CtrlZUsedBonusTag() {
   )
 }
 
+function FinishReminderPopup({ onClose, onFinish, isClosing = false }) {
+  return (
+    <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/50 backdrop-blur-xs pointer-events-auto" data-no-longpress>
+      <div className={`relative flex w-full max-w-full flex-col gap-7 bg-bg px-10 pb-11 pt-17 ${isClosing ? 'ctrl-z-reminder-exit' : 'ctrl-z-reminder-enter'}`}>
+        <div className="pointer-events-none absolute -top-2 left-0 h-full w-full">
+          <div
+            className="absolute inset-0 overflow-hidden bg-light5"
+            style={TOP_BORDER_MASK_STYLE}
+          >
+            <div className="ctrl-z-reminder-top-progress absolute inset-0 bg-light" />
+          </div>
+        </div>
+
+        <button
+          type="button"
+          aria-label="Fermer le rappel de fin"
+          onClick={onClose}
+          className="absolute right-6 -top-5 z-10 flex h-12 w-12 items-center justify-center transition active:scale-95"
+        >
+          <img src="/menu/close.svg" alt="" aria-hidden="true" className="h-full w-full object-contain" />
+        </button>
+
+        <div className="relative z-10 flex flex-col gap-3 text-left text-light">
+          <h2 className="font-hakobi text-5xl uppercase leading-none">
+            Le boss est à portée
+          </h2>
+          <p className="font-funnel text-lg leading-snug text-light/85">
+            Si ton lancer t'a amené jusqu'au bureau du boss, tu peux terminer la partie maintenant.
+          </p>
+        </div>
+
+        <div className="relative z-10 flex w-full items-center justify-center gap-3">
+          <ButtonWithIcon
+            variant="menu"
+            text="Continuer"
+            icon={<MaskIcon src="/menu/icon/enter.svg" />}
+            onClick={onClose}
+            className="bg-light5 text-light"
+          />
+          <ButtonWithIcon
+            variant="menu"
+            text="Terminer"
+            icon={<MaskIcon src="/menu/icon/crown.svg" />}
+            onClick={onFinish}
+            className="bg-light text-bg"
+          />
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function SpectatorCtrlZNotice({ activePlayer }) {
   return (
     <div className="flex flex-col items-center gap-4 pt-2 text-center">
@@ -219,15 +272,18 @@ function SpectatorCtrlZNotice({ activePlayer }) {
   )
 }
 
-export default function GameLoop({ roomData, triggerAction, consumeBonus, currentUserId }) {
+export default function GameLoop({ roomData, triggerAction, consumeBonus, declareFinish, currentUserId }) {
   const [dismissedCtrlZReminderKey, setDismissedCtrlZReminderKey] = useState(null)
   const [readyCtrlZIndicatorKey, setReadyCtrlZIndicatorKey] = useState(null)
   const [closingCtrlZReminderKey, setClosingCtrlZReminderKey] = useState(null)
   const [isCtrlZUseOpen, setIsCtrlZUseOpen] = useState(false)
   const [isCtrlZUseClosing, setIsCtrlZUseClosing] = useState(false)
+  const [dismissedFinishReminderKey, setDismissedFinishReminderKey] = useState(null)
+  const [closingFinishReminderKey, setClosingFinishReminderKey] = useState(null)
 
   const activePlayer = roomData?.players?.[roomData?.turnIndex]
   const isMyTurn = activePlayer?.id === currentUserId
+  const boardProgress = activePlayer?.boardProgress
   const currentTurnBonusUse = roomData?.currentTurnBonusUse
   const hasUsedCtrlZThisTurn = Boolean(
     currentTurnBonusUse?.bonusId === 'ctrl-z' &&
@@ -241,6 +297,17 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, curren
   const showCtrlZReminder = Boolean(ctrlZTurnKey && dismissedCtrlZReminderKey !== ctrlZTurnKey && readyCtrlZIndicatorKey !== ctrlZTurnKey && !isCtrlZReminderClosing)
   const renderCtrlZReminder = showCtrlZReminder || isCtrlZReminderClosing
   const showCtrlZIndicator = Boolean(ctrlZTurnKey && !renderCtrlZReminder && readyCtrlZIndicatorKey === ctrlZTurnKey && ctrlZQuantity > 0)
+  const canDeclareFinish = Boolean(isMyTurn && boardProgress?.canReachBoss && !boardProgress?.hasFinished)
+  const finishTurnKey = canDeclareFinish ? `${activePlayer?.id}-${roomData?.turnIndex}-finish` : null
+  const isFinishReminderClosing = Boolean(finishTurnKey && closingFinishReminderKey === finishTurnKey)
+  const showFinishReminder = Boolean(
+    finishTurnKey &&
+    dismissedFinishReminderKey !== finishTurnKey &&
+    !isFinishReminderClosing &&
+    !showCtrlZReminder &&
+    !isCtrlZUseOpen
+  )
+  const renderFinishReminder = showFinishReminder || isFinishReminderClosing
 
   useEffect(() => {
     if (!ctrlZTurnKey || !showCtrlZReminder) return undefined
@@ -256,6 +323,20 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, curren
 
     return () => window.clearTimeout(timer)
   }, [ctrlZTurnKey, showCtrlZReminder])
+
+  useEffect(() => {
+    if (!finishTurnKey || !showFinishReminder) return undefined
+
+    const timer = window.setTimeout(() => {
+      setClosingFinishReminderKey(finishTurnKey)
+      window.setTimeout(() => {
+        setDismissedFinishReminderKey(finishTurnKey)
+        setClosingFinishReminderKey(null)
+      }, 250)
+    }, FINISH_REMINDER_DURATION)
+
+    return () => window.clearTimeout(timer)
+  }, [finishTurnKey, showFinishReminder])
 
   const closeCtrlZReminder = () => {
     if (!ctrlZTurnKey) return
@@ -294,13 +375,31 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, curren
     })
   }
 
+  const closeFinishReminder = () => {
+    if (!finishTurnKey) return
+    setClosingFinishReminderKey(finishTurnKey)
+    window.setTimeout(() => {
+      setDismissedFinishReminderKey(finishTurnKey)
+      setClosingFinishReminderKey(null)
+    }, 250)
+  }
+
+  const handleDeclareFinish = () => {
+    if (!canDeclareFinish) return
+    declareFinish?.((response) => {
+      if (!response?.ok) return
+      if (finishTurnKey) setDismissedFinishReminderKey(finishTurnKey)
+      setClosingFinishReminderKey(null)
+    })
+  }
+
   if (!roomData) return null
 
   if (isMyTurn) {
     return (
  <div className="relative w-full overflow-hidden bg-bg">
         <style>{ctrlZReminderStyles}</style>
- <div className="relative z-10 h-dvh app-screen-y w-full max-w-full mx-auto flex flex-col items-center gap-8 px-12 text-center">
+ <div className="relative z-10 h-dvh app-screen-y w-full max-w-full mx-auto flex flex-col items-center gap-6 px-12 text-center">
           {showCtrlZIndicator && (
             <div key={ctrlZTurnKey} className="absolute right-8 top-12 z-20">
               <button
@@ -321,7 +420,16 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, curren
             </p>
           </div>
 
- <div className="flex w-full h-full justify-center flex-col gap-4 font-family-hakobi text-xl text-bg uppercase">
+ <div className="flex w-full min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto pb-4 font-family-hakobi text-xl text-bg uppercase">
+            <div className="flex w-full flex-col gap-4">
+            {canDeclareFinish && (
+              <BigButton
+                onClick={handleDeclareFinish}
+                text="Terminer"
+                icon={<img src="/menu/icon/crown.svg" alt="arrivée" className="w-10 h-10" />}
+                className="bg-light text-bg"
+              />
+            )}
             <BigButton
               onClick={() => triggerAction("QUIZ")}
               text="Quizz"
@@ -352,6 +460,7 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, curren
  icon={<img src="/game/icons/cases/evenement.svg" alt="jalon" className="w-10 h-10" />}
               className="bg-pink-primary"
             />
+            </div>
           </div>
         </div>
         {renderCtrlZReminder && (
@@ -368,6 +477,13 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, curren
             onClose={closeCtrlZUsePopup}
             onUse={useCtrlZBonus}
             isClosing={isCtrlZUseClosing}
+          />
+        )}
+        {renderFinishReminder && (
+          <FinishReminderPopup
+            onClose={closeFinishReminder}
+            onFinish={handleDeclareFinish}
+            isClosing={isFinishReminderClosing}
           />
         )}
       </div>

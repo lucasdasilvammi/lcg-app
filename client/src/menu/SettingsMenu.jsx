@@ -7,6 +7,7 @@ import ScoreBar from '../components/ScoreBar'
 import { BONUS_CATALOG, EMPTY_BONUS_SLOTS } from '../data/bonusCatalog'
 import RulesOverlay from './regles/RulesOverlay'
 import { agree, formatCharacterName, queCharacter } from '../utils/frenchGrammar'
+import { requestAppFullscreen } from '../utils/fullscreen'
 
 const popupStyles = `
   @keyframes settingsSlideUpFromBottom {
@@ -56,12 +57,19 @@ const CODE_CHARACTERS = [
   { id: 3, name: 'Virginie' }
 ]
 
-function MenuIconButton({ label, icon, onClick }) {
+function MenuIconButton({ label, icon, onClick, onPointerDown }) {
   return (
     <button
       type="button"
       aria-label={label}
-      onClick={onClick}
+      onPointerDown={(event) => {
+        event.stopPropagation()
+        onPointerDown?.(event)
+      }}
+      onClick={(event) => {
+        event.stopPropagation()
+        onClick?.(event)
+      }}
       className="flex h-12 w-12 items-center justify-center text-bg transition active:scale-95"
     >
       <img src={icon} alt="" aria-hidden="true" className="h-full w-full object-contain" />
@@ -804,8 +812,9 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
     window.setTimeout(onClose, 250)
   }
 
-  const requestFullscreen = () => {
-    document.documentElement.requestFullscreen?.().catch(() => {})
+  const requestFullscreen = (event) => {
+    event?.preventDefault?.()
+    requestAppFullscreen({ source: 'settings-menu-button' })
   }
 
   const openRules = () => {
@@ -998,7 +1007,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
 
           <div className={`absolute right-6 -top-5 z-10 items-center gap-2 ${isBonusDetailOpen ? 'hidden' : 'flex'}`}>
             <MenuIconButton label="Règles" icon="/menu/rules.svg" onClick={openRules} />
-            <MenuIconButton label="Plein écran" icon="/menu/fullscreen.svg" onClick={requestFullscreen} />
+            <MenuIconButton label="Plein écran" icon="/menu/fullscreen.svg" onPointerDown={requestFullscreen} onClick={requestFullscreen} />
             <MenuIconButton label="Fermer le menu" icon="/menu/close.svg" onClick={closeWithAnimation} />
           </div>
 

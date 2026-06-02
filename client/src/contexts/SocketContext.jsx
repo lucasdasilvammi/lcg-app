@@ -264,6 +264,8 @@ export const SocketProvider = ({ children }) => {
   const claimCaseBonus = (ack) => socket?.emit('claim_case_bonus', {}, ack)
   const stealEventBonus = (targetPlayerId, ack) => socket?.emit('event_steal_bonus', { targetPlayerId }, ack)
   const previewEventStealTarget = (targetPlayerId, ack) => socket?.emit('event_preview_steal_target', { targetPlayerId }, ack)
+  const swapEventPositions = (targetPlayerId, ack) => socket?.emit('event_swap_positions', { targetPlayerId }, ack)
+  const declareFinish = (ack) => socket?.emit('declare_finish', {}, ack)
   
   // Activité: Dessin de Logo
   const acknowledgeReady = () => socket?.emit("activite_acknowledge_ready")
@@ -406,6 +408,8 @@ export const SocketProvider = ({ children }) => {
       claimCaseBonus,
       stealEventBonus,
       previewEventStealTarget,
+      swapEventPositions,
+      declareFinish,
       acknowledgeReady,
       submitDrawing,
       submitPhoto,

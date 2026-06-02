@@ -1,6 +1,13 @@
 import React from 'react'
 import ButtonWithIcon from '../components/ButtonWithIcon'
 
+function formatCharacterName(name = '') {
+  const normalized = String(name || '').trim()
+  if (!normalized) return ''
+  const lowerName = normalized.toLocaleLowerCase('fr-FR')
+  return `${lowerName.charAt(0).toLocaleUpperCase('fr-FR')}${lowerName.slice(1)}`
+}
+
 function JalonIcon({ className = 'h-6 w-6' }) {
   return (
     <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
@@ -104,6 +111,10 @@ export default function RoundEnd({ roomData, startNewRound, currentUserId }) {
   const topPlayers = players.slice(0, 3)
   const remainingPlayers = players.slice(3)
   const canStartNewRound = roomData.players?.[0]?.id === currentUserId
+  const pendingEndPlayer = roomData.pendingGameEnd?.playerId
+    ? roomData.players.find((player) => player.id === roomData.pendingGameEnd.playerId)
+    : null
+  const nextActionLabel = pendingEndPlayer?.id === roomData.players?.[0]?.id ? 'Voir le classement final' : 'Round suivant'
 
   return (
  <div className="relative w-full overflow-hidden bg-bg">
@@ -132,6 +143,11 @@ export default function RoundEnd({ roomData, startNewRound, currentUserId }) {
           <h2 className="font-family-hakobi text-[48px] uppercase leading-none text-light -mb-2">
             Classement
           </h2>
+          {pendingEndPlayer && (
+            <p className="max-w-72 font-family-funnel text-sm leading-snug text-light/70">
+              La partie s'arrêtera quand le tour reviendra à <span style={{ color: `var(--color-${pendingEndPlayer.character})` }}>{formatCharacterName(pendingEndPlayer.character)}</span>.
+            </p>
+          )}
         </header>
 
         <section className="flex w-full shrink-0 items-end gap-2 ">
@@ -154,7 +170,7 @@ export default function RoundEnd({ roomData, startNewRound, currentUserId }) {
           <div className="flex w-full shrink-0 justify-center">
             <ButtonWithIcon
               onClick={startNewRound}
-              text="Round suivant"
+              text={nextActionLabel}
               className="bg-light text-bg"
             />
           </div>

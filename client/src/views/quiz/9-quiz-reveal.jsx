@@ -40,7 +40,7 @@ export default function Reveal({ roomData, continueToFeedback, currentUserId }) 
           </div>
 
           <div className='w-full flex-1 flex flex-col items-center justify-center gap-16'>
-            <p className="text-2xl font-medium font-family-funnel">"{data.q}"</p>
+            <p className="text-2xl font-medium font-family-funnel">{data.q}</p>
             <div className="flex flex-col gap-3 w-full">
               {data.options.map((option, index) => {
                 const isCorrect = index === correctIndex

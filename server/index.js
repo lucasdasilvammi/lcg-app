@@ -40,8 +40,9 @@ const io = new Server(server, {
 
 // --- DATA ---
 const CODE_LENGTH = 5;
-const MAX_PLAYERS = 6;
+const MAX_PLAYERS = 4;
 const VALID_BONUS_IDS = new Set(['ctrl-z', 'coffee-boss', 'choose-quiz']);
+const DUEL_TYPES = ['buzzer', 'vraioufaux', 'chiffres', 'zoom', 'pick'];
 const DEBUG_TOOLS_ENABLED = process.env.LCG_ENABLE_DEBUG_TOOLS === 'true';
 const DEBUG_ROOM_CODE = [2, 2, 2, 2, 2];
 const TEST_DEFAULT_BONUSES = { 'ctrl-z': 1, 'coffee-boss': 1, 'choose-quiz': 1 };
@@ -82,24 +83,62 @@ const getRandomHexColor = () => {
   const value = Math.floor(Math.random() * 0xFFFFFF);
   return `#${value.toString(16).padStart(6, '0')}`.toUpperCase();
 };
+const getAvailableDuelTypes = () => DUEL_TYPES.filter(type => {
+  if (type === 'pick') return true;
+  if (type === 'buzzer' && HARD_QUIZ_DB.length > 0) return true;
+  return getDuelsByType(type).length > 0;
+});
+
+const createPickDuel = () => ({
+  type: 'pick',
+  question: 'Pick la couleur cible',
+  targetColor: getRandomHexColor(),
+  explanation: 'Trouve la couleur la plus proche possible.'
+});
+
+const getRoomDuelTypeBag = (room) => {
+  if (!room) return [];
+  if (!Object.prototype.hasOwnProperty.call(room, '_duelTypeBag')) {
+    Object.defineProperty(room, '_duelTypeBag', {
+      value: [],
+      writable: true,
+      enumerable: false
+    });
+  }
+  return room._duelTypeBag;
+};
+
+const getNextDuelTypeForRoom = (room) => {
+  const availableTypes = getAvailableDuelTypes();
+  if (availableTypes.length === 0) return null;
+
+  const bag = getRoomDuelTypeBag(room);
+  const remainingAvailableTypes = bag.filter(type => availableTypes.includes(type));
+
+  if (remainingAvailableTypes.length === 0) {
+    room._duelTypeBag = [...availableTypes];
+  } else {
+    room._duelTypeBag = remainingAvailableTypes;
+  }
+
+  const nextIndex = Math.floor(Math.random() * room._duelTypeBag.length);
+  const [nextType] = room._duelTypeBag.splice(nextIndex, 1);
+  return nextType;
+};
+
 const getRandomDuel = (type = null) => {
-  if (type === 'pick') {
-    return {
-      type: 'pick',
-      question: 'Pick la couleur cible',
-      targetColor: getRandomHexColor(),
-      explanation: 'Trouve la couleur la plus proche possible.'
-    };
+  const selectedType = type || getRandomItem(getAvailableDuelTypes());
+  if (!selectedType) return getRandomItem(DUELS_DB);
+
+  if (selectedType === 'pick') return createPickDuel();
+  if (selectedType === 'buzzer') {
+    return createBuzzerDuelFromQuiz() || getRandomItem(getDuelsByType(selectedType));
   }
-  if (type === 'buzzer') {
-    return createBuzzerDuelFromQuiz() || getRandomItem(getDuelsByType(type));
-  }
-  if (type) {
-    const filtered = getDuelsByType(type);
-    return filtered.length > 0 ? filtered[Math.floor(Math.random() * filtered.length)] : DUELS_DB[Math.floor(Math.random() * DUELS_DB.length)];
-  }
-  const randomDuel = DUELS_DB[Math.floor(Math.random() * DUELS_DB.length)];
-  return randomDuel?.type === 'buzzer' ? (createBuzzerDuelFromQuiz() || randomDuel) : randomDuel;
+
+  const filtered = getDuelsByType(selectedType);
+  if (filtered.length > 0) return getRandomItem(filtered);
+
+  return type ? getRandomDuel() : null;
 };
 
 const getRandomItem = (items) => items[Math.floor(Math.random() * items.length)];
@@ -111,7 +150,8 @@ const createRandomDuelInteraction = (room, initiatingPlayerId = null) => {
   const opponentCandidates = room.players.filter(player => player.id !== activePlayer.id);
   if (opponentCandidates.length === 0) return null;
 
-  const randomDuel = getRandomDuel();
+  const randomDuel = getRandomDuel(getNextDuelTypeForRoom(room));
+  if (!randomDuel) return null;
   const opponent = getRandomItem(opponentCandidates);
   const readerCandidates = room.players.filter(player => player.id !== activePlayer.id && player.id !== opponent.id);
   const reader = readerCandidates.length > 0 ? getRandomItem(readerCandidates) : activePlayer;
