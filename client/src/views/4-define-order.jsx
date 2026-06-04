@@ -39,9 +39,10 @@ export default function DefineOrder({ roomData, isAdmin, updateTurnOrder, startG
   const displayedPlayers = isAdmin ? orderedPlayers : roomPlayers
 
   useEffect(() => {
-    if (draggedPlayerIdRef.current) return
-    setOrderedPlayers(roomPlayers)
+    if (draggedPlayerIdRef.current) return undefined
     orderedPlayersRef.current = roomPlayers
+    const timer = window.setTimeout(() => setOrderedPlayers(roomPlayers), 0)
+    return () => window.clearTimeout(timer)
   }, [roomPlayers])
 
   useEffect(() => {

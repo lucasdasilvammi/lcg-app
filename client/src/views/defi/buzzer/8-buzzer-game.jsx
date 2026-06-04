@@ -6,7 +6,7 @@ import DuelNavbar from '../shared/DuelNavbar'
 import QuizAnswerButton from '../../../components/QuizAnswerButton'
 import ScoreBar from '../../../components/ScoreBar'
 
-export default function DuelGame({ roomData, playerBuzz, resolveInteraction, continueToFeedback, currentUserId }) {
+export default function DuelGame({ roomData, playerBuzz, resolveInteraction, currentUserId }) {
   if (!roomData || !roomData.currentInteraction) return null
   
   const { type, data, readerId, duelists, buzzedPlayerId } = roomData.currentInteraction
@@ -20,8 +20,6 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, con
   
   const readerPlayer = roomData.players.find(p => p.id === readerId)
   const buzzedPlayer = buzzedPlayerId ? roomData.players.find(p => p.id === buzzedPlayerId) : null
-  const capitalizeFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1)
-  
   const getCharacterColor = (charId) => {
     const colors = {
       alan: '#06C0F9',

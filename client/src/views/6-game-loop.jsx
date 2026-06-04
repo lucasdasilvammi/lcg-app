@@ -83,6 +83,15 @@ const ctrlZReminderStyles = `
   }
 `
 
+const DEBUG_DUEL_OPTIONS = [
+  { label: 'Aléatoire', type: null, icon: '/game/categorie/icon-logo.svg' },
+  { label: 'Buzzer', type: 'buzzer', icon: '/game/defi-tag/buzzer.png' },
+  { label: 'Vrai/Faux', type: 'vraioufaux', icon: '/game/defi-tag/vraioufaux.png' },
+  { label: 'Chiffres', type: 'chiffres', icon: '/game/defi-tag/chiffres.png' },
+  { label: 'Zoom', type: 'zoom', icon: '/game/defi-tag/zoom.png' },
+  { label: 'Pick', type: 'pick', icon: '/game/defi-tag/pick.png' }
+]
+
 function CtrlZBonusIcon({ quantity, className = 'h-15 w-15', quantityVariant = 'light', animated = false }) {
   return (
     <BonusIconBadge
@@ -91,6 +100,55 @@ function CtrlZBonusIcon({ quantity, className = 'h-15 w-15', quantityVariant = '
       quantityVariant={quantityVariant}
       animated={animated}
     />
+  )
+}
+
+function DebugDuelSelector({ onSelect, onClose }) {
+  return (
+    <div className="fixed inset-0 z-40 flex items-end justify-center bg-black/60 backdrop-blur-xs pointer-events-auto" data-no-longpress>
+      <div className="relative flex w-full max-w-full flex-col gap-6 bg-bg px-8 pb-10 pt-14 text-light">
+        <div className="pointer-events-none absolute -top-2 left-0 h-full w-full">
+          <div
+            className="absolute inset-0 overflow-hidden bg-light"
+            style={TOP_BORDER_MASK_STYLE}
+          />
+        </div>
+
+        <button
+          type="button"
+          aria-label="Fermer le choix du défi"
+          onClick={onClose}
+          className="absolute right-6 -top-5 z-10 flex h-12 w-12 items-center justify-center transition active:scale-95"
+        >
+          <img src="/menu/close.svg" alt="" aria-hidden="true" className="h-full w-full object-contain" />
+        </button>
+
+        <div className="relative z-10 flex flex-col gap-1 text-left">
+          <p className="font-funnel text-sm uppercase text-light/60">Debug défi</p>
+          <h2 className="font-hakobi text-5xl uppercase leading-none text-light">Choisir le défi</h2>
+        </div>
+
+        <div className="relative z-10 grid grid-cols-2 gap-3">
+          {DEBUG_DUEL_OPTIONS.map((option) => (
+            <button
+              key={option.label}
+              type="button"
+              onClick={() => onSelect(option.type)}
+              className="relative flex h-18 items-center justify-center gap-2 overflow-hidden bg-light px-4 text-bg transition active:scale-95"
+            >
+              <svg width="44" height="56" viewBox="0 0 44 56" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -left-0.25 top-1/2 h-19 -translate-y-1/2 text-light" aria-hidden="true">
+                <path fillRule="evenodd" clipRule="evenodd" d="M43.4953 0H0V39.8779V55.4838H17.618L3.56385 51.1631L0 39.8779L3.56388 8.77765L43.4953 0Z" fill="currentColor" />
+              </svg>
+              <img src={option.icon} alt="" aria-hidden="true" className="relative z-10 h-8 w-8 object-contain" />
+              <span className="relative z-10 whitespace-nowrap font-hakobi text-2xl uppercase leading-none">{option.label}</span>
+              <svg width="34" height="56" viewBox="0 0 34 56" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -right-0.25 top-1/2 h-19 -translate-y-1/2 text-light" aria-hidden="true">
+                <path d="M28.8504 44.3695L33.3757 13.412L28.8504 2.45959L0 0H33.3757V13.412V55.4837H6.75606L23.1684 51.2791L28.8504 44.3695Z" fill="currentColor" />
+              </svg>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -280,6 +338,7 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
   const [isCtrlZUseClosing, setIsCtrlZUseClosing] = useState(false)
   const [dismissedFinishReminderKey, setDismissedFinishReminderKey] = useState(null)
   const [closingFinishReminderKey, setClosingFinishReminderKey] = useState(null)
+  const [isDebugDuelSelectorOpen, setIsDebugDuelSelectorOpen] = useState(false)
 
   const activePlayer = roomData?.players?.[roomData?.turnIndex]
   const isMyTurn = activePlayer?.id === currentUserId
@@ -393,13 +452,22 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
     })
   }
 
+  const handleDefiClick = () => {
+    setIsDebugDuelSelectorOpen(true)
+  }
+
+  const handleDebugDuelSelect = (duelType) => {
+    setIsDebugDuelSelectorOpen(false)
+    triggerAction(duelType ? { type: 'DEFI', duelType } : 'DEFI')
+  }
+
   if (!roomData) return null
 
   if (isMyTurn) {
     return (
  <div className="relative w-full overflow-hidden bg-bg">
         <style>{ctrlZReminderStyles}</style>
- <div className="relative z-10 h-dvh app-screen-y w-full max-w-full mx-auto flex flex-col items-center gap-6 px-12 text-center">
+ <div className="relative z-10 h-dvh w-full max-w-full mx-auto flex flex-col items-center gap-5 px-12 py-12 text-center">
           {showCtrlZIndicator && (
             <div key={ctrlZTurnKey} className="absolute right-8 top-12 z-20">
               <button
@@ -420,7 +488,7 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
             </p>
           </div>
 
- <div className="flex w-full min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto pb-4 font-family-hakobi text-xl text-bg uppercase">
+ <div className={`flex w-full min-h-0 flex-1 flex-col font-family-hakobi text-xl text-bg uppercase ${canDeclareFinish ? 'overflow-x-hidden overflow-y-auto' : 'justify-center overflow-hidden'}`}>
             <div className="flex w-full flex-col gap-4">
             {canDeclareFinish && (
               <BigButton
@@ -437,7 +505,7 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
               className="bg-yellow-primary"
             />
             <BigButton
-              onClick={() => triggerAction("DEFI")}
+              onClick={handleDefiClick}
               text="Défi"
  icon={<img src="/game/icons/cases/defi.svg" alt="jalon" className="w-10 h-10" />}
               className="bg-blue-primary"
@@ -484,6 +552,12 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
             onClose={closeFinishReminder}
             onFinish={handleDeclareFinish}
             isClosing={isFinishReminderClosing}
+          />
+        )}
+        {isDebugDuelSelectorOpen && (
+          <DebugDuelSelector
+            onSelect={handleDebugDuelSelect}
+            onClose={() => setIsDebugDuelSelectorOpen(false)}
           />
         )}
       </div>

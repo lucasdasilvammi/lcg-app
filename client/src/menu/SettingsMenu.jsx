@@ -711,7 +711,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
         ? 'bonus-panel-enter'
         : 'settings-popup-enter'
 
-  function closeReconnectInvite(afterClose) {
+  const closeReconnectInvite = useCallback((afterClose) => {
     if (isReconnectInviteClosing) return
     setIsReconnectInviteClosing(true)
     window.setTimeout(() => {
@@ -719,7 +719,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
       setIsReconnectInviteClosing(false)
       if (typeof afterClose === 'function') afterClose()
     }, 250)
-  }
+  }, [isReconnectInviteClosing])
 
   useEffect(() => {
     const timer = window.setInterval(() => setNow(Date.now()), 1000)
@@ -731,7 +731,7 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
     if (consumedReconnectInvite.character !== reconnectInvite.player.character) return
     const timer = window.setTimeout(() => closeReconnectInvite(), 0)
     return () => window.clearTimeout(timer)
-  }, [consumedReconnectInvite?.receivedAt])
+  }, [closeReconnectInvite, consumedReconnectInvite, reconnectInvite])
 
   useLayoutEffect(() => {
     const panel = panelRef.current

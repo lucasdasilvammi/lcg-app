@@ -1,0 +1,13 @@
+{
+  "players": [
+    { "label": "host", "character": "donatien", "isHost": true },
+    { "label": "player-2", "character": "barbara" },
+    { "label": "player-3", "character": "alan" },
+    { "label": "player-4", "character": "lucien" }
+  ],
+  "turnOrder": ["host", "player-2", "player-3", "player-4"],
+  "postSetup": [
+    { "type": "roll_dice", "actor": "active" },
+    { "type": "trigger_action", "actor": "active", "payload": "QUIZ" }
+  ]
+}

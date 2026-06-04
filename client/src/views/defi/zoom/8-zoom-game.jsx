@@ -36,10 +36,14 @@ const getCharacterSecondaryColor = (charId) => {
   return secondaryColors[charId] || '#101010'
 }
 
-export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomReaderVerdict, continueToFeedback }) {
-  if (!roomData || !roomData.currentInteraction || roomData.currentInteraction.type !== 'zoom') return null
+const LockIcon = () => (
+  <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full">
+    <path fillRule="evenodd" clipRule="evenodd" d="M20.0757 29.2773L15.7012 30.3154L13.4026 43.2164V52.9293L14.3662 55.8951L20.6685 57.8229H42.5412L47.5089 56.7107L51.7352 54.1157V33.0586L50.9196 30.3154L45.4329 29.2773V17.8589L42.5412 11.7049L40.0945 8.14574L31.2712 7.18228L24.0029 9.56427L20.0757 17.2659V29.2773ZM38.6857 28.3134L25.8587 29.2773V17.8589L30.7522 13.9218L35.0526 13.6328L39.2047 19.3419L38.6857 28.3134ZM29.121 41.7336L31.359 38.6574L34.0811 38.8822L35.7199 42.6234L33.5003 44.726L34.0811 48.2972L32.6576 50.0453L30.7522 48.6468L31.1455 44.726L29.121 41.7336Z" fill="currentColor" />
+  </svg>
+)
 
-  const interaction = roomData.currentInteraction
+export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomReaderVerdict, continueToFeedback }) {
+  const interaction = roomData?.currentInteraction || {}
   const {
     type,
     data,
@@ -58,17 +62,21 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
     zoomFastRevealDurationMs = 1200
   } = interaction
 
-  const duelPlayers = roomData.players.filter((p) => duelists.includes(p.id))
+  const roomPlayers = roomData?.players || []
+  const duelPlayers = roomPlayers.filter((p) => duelists.includes(p.id))
   const isDuelist = duelists.includes(currentUserId)
   const isMeReader = readerId === currentUserId
   const isSpectator = !isDuelist && !isMeReader
   const iMeBuzzed = buzzedPlayerId === currentUserId
 
-  const [now, setNow] = useState(Date.now())
+  const [now, setNow] = useState(() => Date.now())
   const [stableStartAt, setStableStartAt] = useState(() => (typeof zoomStartAt === 'number' ? zoomStartAt : Date.now() + 3000))
 
   useEffect(() => {
-    setStableStartAt(typeof zoomStartAt === 'number' ? zoomStartAt : Date.now() + 3000)
+    const timer = window.setTimeout(() => {
+      setStableStartAt(typeof zoomStartAt === 'number' ? zoomStartAt : Date.now() + 3000)
+    }, 0)
+    return () => window.clearTimeout(timer)
   }, [zoomStartAt, readerId, data?.image])
 
   useEffect(() => {
@@ -76,8 +84,8 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
     return () => clearInterval(interval)
   }, [])
 
-  const buzzedPlayer = buzzedPlayerId ? roomData.players.find((p) => p.id === buzzedPlayerId) : null
-  const myPlayer = roomData.players.find((p) => p.id === currentUserId)
+  const buzzedPlayer = buzzedPlayerId ? roomPlayers.find((p) => p.id === buzzedPlayerId) : null
+  const myPlayer = roomPlayers.find((p) => p.id === currentUserId)
   const myCharacter = myPlayer?.character
 
   const startAt = stableStartAt
@@ -119,7 +127,7 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
     if (!hasStarted) return 'Pr\u00e9parez-vous, le zoom commence bient\u00f4t.'
     if (zoomResolvedCorrect) return 'Bonne r\u00e9ponse valid\u00e9e. Fin du duel Zoom.'
     if (isMeReader) {
-      if (timedOutNoBuzz && options.length > 0) return 'Personne n\u2019a buzz\u00e9. Utilise les 3 propositions pour relancer le duel oralement.'
+      if (timedOutNoBuzz && options.length > 0) return 'Personne n\u2019a buzz\u00e9. Utilise les propositions affich\u00e9es pour relancer le duel oralement.'
       return 'Attends un buzz puis valide oralement la r\u00e9ponse.'
     }
     if (isSpectator) {
@@ -127,11 +135,13 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
       return 'Observe le duel entre les deux joueurs.'
     }
     if (isBlocked) return `Tu es ${agree(myCharacter, 'bloqué', 'bloquée')} ${blockSeconds}s avant de pouvoir rebuzzer.`
-    if (timedOutNoBuzz) return 'Le zoom est termin\u00e9. Le reader a 3 propositions, buzz d\u00e8s que tu penses avoir la bonne r\u00e9ponse.'
+    if (timedOutNoBuzz) return 'Le zoom est termin\u00e9. Le reader a des propositions, buzz d\u00e8s que tu penses avoir la bonne r\u00e9ponse.'
     if (buzzedPlayer && buzzedPlayer.id === currentUserId) return 'Tu as buzz\u00e9, donne ta r\u00e9ponse oralement maintenant.'
     if (buzzedPlayer) return `${formatCharacterName(buzzedPlayer.character)} a buzzé, attends le verdict.`
     return 'Observe le logo puis buzz d\u00e8s que tu penses avoir la bonne r\u00e9ponse.'
   }, [hasStarted, zoomResolvedCorrect, isMeReader, buzzedPlayer, isSpectator, isBlocked, blockSeconds, timedOutNoBuzz, options.length, currentUserId, myCharacter])
+
+  if (!roomData || !roomData.currentInteraction || roomData.currentInteraction.type !== 'zoom') return null
 
   const zoomImage = (
     <div className="flex w-full items-center justify-center">
@@ -177,7 +187,7 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
       hideName
       showAvatar={false}
       className="self-center"
-      icon={<img src="/game/defi-logo/lock.svg" alt="" className="h-full w-full object-contain" />}
+      icon={<LockIcon />}
     />
   )
 
@@ -187,9 +197,6 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
         <ButtonWithIcon onClick={continueToFeedback} text="Suivant" />
       ) : isReaderOptionsVisible ? (
         <div className="flex w-full max-w-85 flex-col gap-3">
-          <p className="font-funnel text-base text-light opacity-80">
-            Propositions déverrouillées quand l'un des deux joueurs aura buzzé
-          </p>
           {options.map((option, index) => (
             <QuizAnswerButton
               key={index}
@@ -255,7 +262,7 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
             </div>
           ) : (
             <>
-              {!isReaderOptionsVisible && zoomImage}
+              {zoomImage}
 
               {isMeReader && data?.answer && (
                 <div className="flex flex-col items-center gap-1 text-light">

@@ -1,0 +1,11 @@
+{
+  "players": [
+    { "label": "host", "character": "donatien", "isHost": true },
+    { "label": "player-2", "character": "barbara" },
+    { "label": "player-3", "character": "alan" }
+  ],
+  "turnOrder": ["host", "player-2", "player-3"],
+  "postSetup": [
+    { "type": "roll_dice", "actor": "active" }
+  ]
+}

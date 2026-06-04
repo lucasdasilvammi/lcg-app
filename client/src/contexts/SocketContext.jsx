@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import io from 'socket.io-client'
 
@@ -81,6 +82,7 @@ export const SocketProvider = ({ children }) => {
   const [pendingReconnectInvite, setPendingReconnectInvite] = useState(null)
   const [consumedReconnectInvite, setConsumedReconnectInvite] = useState(null)
   const toastQueueRef = useRef([])
+  const addToastRef = useRef(null)
   const activeToastIdRef = useRef(null)
   const toastTimersRef = useRef([])
   const restoredRoomIdRef = useRef(roomData?.id || null)
@@ -130,6 +132,7 @@ export const SocketProvider = ({ children }) => {
     })
     showNextToast()
   }
+  addToastRef.current = addToast
 
   useEffect(() => () => {
     clearToastTimers()
@@ -196,11 +199,11 @@ export const SocketProvider = ({ children }) => {
       resetSessionToken()
       console.log('left_room ack')
     })
-    s.on("error_join", (msg) => { addToast(msg, 'error'); console.warn('error_join', msg) })
-    s.on("error_pick", (msg) => { addToast(msg, 'error'); console.warn('error_pick', msg) })
-    s.on("error_zoom", (msg) => { addToast(msg, 'error'); console.warn('error_zoom', msg) })
+    s.on("error_join", (msg) => { addToastRef.current?.(msg, 'error'); console.warn('error_join', msg) })
+    s.on("error_pick", (msg) => { addToastRef.current?.(msg, 'error'); console.warn('error_pick', msg) })
+    s.on("error_zoom", (msg) => { addToastRef.current?.(msg, 'error'); console.warn('error_zoom', msg) })
     s.on("room_system_message", (payload) => {
-      addToast({ ...payload, type: payload?.type || 'system' }, 'system', 3200)
+      addToastRef.current?.({ ...payload, type: payload?.type || 'system' }, 'system', 3200)
     })
     s.on("reconnect_invite", (invite) => {
       setPendingReconnectInvite(invite)

@@ -40,6 +40,7 @@ const io = new Server(server, {
 
 // --- DATA ---
 const CODE_LENGTH = 5;
+const CODE_CHARACTER_COUNT = 4;
 const MAX_PLAYERS = 4;
 const VALID_BONUS_IDS = new Set(['ctrl-z', 'coffee-boss', 'choose-quiz']);
 const DUEL_TYPES = ['buzzer', 'vraioufaux', 'chiffres', 'zoom', 'pick'];
@@ -389,11 +390,75 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
   }
 };
 
+const buildEasyPublicRoomCodes = () => {
+  const codes = [];
+  const seen = new Set();
+  const addCode = (code) => {
+    const key = JSON.stringify(code);
+    if (seen.has(key)) return;
+    seen.add(key);
+    codes.push(code);
+  };
+
+  // Prioritize very easy patterns such as AAAAB and AAABB.
+  for (let offset = 1; offset < CODE_CHARACTER_COUNT; offset += 1) {
+    for (let repeated = 0; repeated < CODE_CHARACTER_COUNT; repeated += 1) {
+      const trailing = (repeated + offset) % CODE_CHARACTER_COUNT;
+      addCode([repeated, repeated, repeated, repeated, trailing]);
+    }
+  }
+
+  for (let offset = 1; offset < CODE_CHARACTER_COUNT; offset += 1) {
+    for (let repeated = 0; repeated < CODE_CHARACTER_COUNT; repeated += 1) {
+      const trailing = (repeated + offset) % CODE_CHARACTER_COUNT;
+      addCode([repeated, repeated, repeated, trailing, trailing]);
+    }
+  }
+
+  for (let firstOffset = 1; firstOffset < CODE_CHARACTER_COUNT; firstOffset += 1) {
+    for (let secondOffset = 1; secondOffset < CODE_CHARACTER_COUNT; secondOffset += 1) {
+      if (firstOffset === secondOffset) continue;
+
+      for (let repeated = 0; repeated < CODE_CHARACTER_COUNT; repeated += 1) {
+        const fourth = (repeated + firstOffset) % CODE_CHARACTER_COUNT;
+        const fifth = (repeated + secondOffset) % CODE_CHARACTER_COUNT;
+        addCode([repeated, repeated, repeated, fourth, fifth]);
+      }
+    }
+  }
+
+  return codes;
+};
+const EASY_PUBLIC_ROOM_CODES = buildEasyPublicRoomCodes();
+const createRandomCode = () => Array.from(
+  { length: CODE_LENGTH },
+  () => Math.floor(Math.random() * CODE_CHARACTER_COUNT)
+);
 const generateRoomId = () => Math.random().toString(36).substr(2, 9);
-const generateGameCode = () => DEBUG_TOOLS_ENABLED
-  ? [...DEBUG_ROOM_CODE]
-  : Array.from({ length: CODE_LENGTH }, () => Math.floor(Math.random() * 4));
-const generatePrivateCode = () => Array.from({ length: CODE_LENGTH }, () => Math.floor(Math.random() * 4));
+const generateGameCode = () => {
+  if (DEBUG_TOOLS_ENABLED) return [...DEBUG_ROOM_CODE];
+
+  const usedCodeKeys = new Set(
+    Object.values(rooms).map((room) => JSON.stringify(room.code))
+  );
+  const codeConflicts = (code) => (
+    usedCodeKeys.has(JSON.stringify(code))
+    || Boolean(findReconnectInviteByCode(code))
+  );
+  const availableEasyCode = EASY_PUBLIC_ROOM_CODES.find(
+    (code) => !codeConflicts(code)
+  );
+
+  if (availableEasyCode) return [...availableEasyCode];
+
+  for (let attempt = 0; attempt < 80; attempt += 1) {
+    const fallbackCode = createRandomCode();
+    if (!codeConflicts(fallbackCode)) return fallbackCode;
+  }
+
+  return createRandomCode();
+};
+const generatePrivateCode = () => createRandomCode();
 const codesMatch = (left, right) => JSON.stringify(left) === JSON.stringify(right);
 const getRoomReconnectInvites = (room) => {
   if (!room.reconnectInvites || typeof room.reconnectInvites !== 'object') {
@@ -880,6 +945,47 @@ io.on('connection', (socket) => {
       return;
     }
 
+    const activePlayer = room.players[room.turnIndex];
+    let targetPlayer = null;
+
+    if (bonusId === 'ctrl-z') {
+      if (room.status !== 'GAME_LOOP') {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_state' });
+        return;
+      }
+      if (!activePlayer || activePlayer.id !== player.id) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+        return;
+      }
+      if (room.currentTurnBonusUse?.turnIndex === room.turnIndex) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'turn_bonus_already_used' });
+        return;
+      }
+    } else if (bonusId === 'coffee-boss') {
+      targetPlayer = room.players.find((roomPlayer) => roomPlayer.id === targetPlayerId);
+      if (!targetPlayer || targetPlayer.id === player.id) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
+        return;
+      }
+      if (targetPlayer.skipNextTurn) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'target_already_skipped' });
+        return;
+      }
+    } else if (bonusId === 'choose-quiz') {
+      targetPlayer = room.players.find((roomPlayer) => roomPlayer.id === targetPlayerId);
+      if (!targetPlayer || targetPlayer.id === player.id) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
+        return;
+      }
+      if (room.pendingChooseQuizBonus) {
+        const reason = room.pendingChooseQuizBonus.targetPlayerId === targetPlayer.id
+          ? 'choose_quiz_already_pending'
+          : 'choose_quiz_room_pending';
+        if (typeof ack === 'function') ack({ ok: false, reason });
+        return;
+      }
+    }
+
     player.bonuses[bonusId] = currentQuantity - 1;
     if (player.bonuses[bonusId] <= 0) delete player.bonuses[bonusId];
 
@@ -891,34 +997,12 @@ io.on('connection', (socket) => {
         usedAt: Date.now()
       };
     } else if (bonusId === 'coffee-boss') {
-      const targetPlayer = room.players.find((roomPlayer) => roomPlayer.id === targetPlayerId);
-      if (!targetPlayer || targetPlayer.id === player.id) {
-        player.bonuses[bonusId] = currentQuantity;
-        if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
-        return;
-      }
-
       targetPlayer.skipNextTurn = {
         bonusId,
         byPlayerId: player.id,
         usedAt: Date.now()
       };
     } else if (bonusId === 'choose-quiz') {
-      const targetPlayer = room.players.find((roomPlayer) => roomPlayer.id === targetPlayerId);
-      if (!targetPlayer || targetPlayer.id === player.id) {
-        player.bonuses[bonusId] = currentQuantity;
-        if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
-        return;
-      }
-      if (room.pendingChooseQuizBonus) {
-        player.bonuses[bonusId] = currentQuantity;
-        const reason = room.pendingChooseQuizBonus.targetPlayerId === targetPlayer.id
-          ? 'choose_quiz_already_pending'
-          : 'choose_quiz_room_pending';
-        if (typeof ack === 'function') ack({ ok: false, reason });
-        return;
-      }
-
       room.pendingChooseQuizBonus = {
         bonusId,
         byPlayerId: player.id,

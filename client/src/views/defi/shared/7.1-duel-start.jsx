@@ -1,7 +1,7 @@
 import React from 'react'
 import DuelVersusIntro from './DuelVersusIntro'
 
-export default function DuelStart({ roomData, currentUserId, startDuel }) {
+export default function DuelStart({ roomData, startDuel }) {
   if (!roomData || !roomData.currentInteraction) return null
 
   const { type, duelists } = roomData.currentInteraction

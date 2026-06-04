@@ -68,7 +68,6 @@ export default function DuelRules({ roomData, currentUserId, acknowledgeRules })
   }
   
   const content = getRulesContent()
-  const capitalizeFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1)
   const acknowledged = roomData.currentInteraction?.acknowledgedRules || []
   const totalDuelists = duelists?.length || 2
   const ackCount = acknowledged.filter(id => duelists.includes(id)).length

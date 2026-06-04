@@ -50,7 +50,7 @@ export default function ChiffresReveal({ roomData, continueToFeedback, currentUs
   const correctDigits = correctStr.split('')
   
   // Fonction pour rendre les DigitBox avec virgule optionnelle
-  const renderDigitsWithDecimal = (answer, digitState) => {
+  const RenderDigitsWithDecimal = (answer, digitState) => {
     const answerStr = String(answer).padStart(digits, '0')
     const answerArray = answerStr.split('')
     const elements = []

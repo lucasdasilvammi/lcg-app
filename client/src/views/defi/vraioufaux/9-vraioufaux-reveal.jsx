@@ -1,6 +1,5 @@
 import React from 'react'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
-import CharacterCard from '../../../components/CharacterCard'
 import DuelNavbar from '../shared/DuelNavbar'
 import QuizAnswerButton from '../../../components/QuizAnswerButton'
 
@@ -11,10 +10,6 @@ export default function DuelReveal({ roomData, continueToFeedback, currentUserId
   const { type, data, readerId, duelists } = interaction
   const duelPlayers = roomData.players.filter(p => duelists?.includes(p.id))
   
-  const result = roomData.lastResult
-  const buzzedPlayer = result?.winnerId ? roomData.players.find(p => p.id === result.winnerId) : null
-  const success = result?.success || false
-  const capitalizeFirst = (str) => str.charAt(0).toUpperCase() + str.slice(1)
   const isMeReader = readerId === currentUserId
 
   return (

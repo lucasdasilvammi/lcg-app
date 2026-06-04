@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
+const fs = require('fs');
 const path = require('path');
 
 const app = express();
@@ -40,6 +41,7 @@ const io = new Server(server, {
 
 // --- DATA LOADING ---
 const CODE_LENGTH = 5;
+const CODE_CHARACTER_COUNT = 4;
 const MAX_PLAYERS = 4;
 const VALID_BONUS_IDS = new Set(['ctrl-z', 'coffee-boss', 'choose-quiz']);
 const DEBUG_TOOLS_ENABLED = process.env.LCG_ENABLE_DEBUG_TOOLS === 'true';
@@ -68,9 +70,11 @@ const QUIZ_DB = Object.keys(quizData)
 const CATEGORIES = Object.keys(quizData).filter(key => key !== '_comment');
 
 // Flatten duel database
-const DUELS_DB = Object.keys(duelsData)
-  .filter(key => !key.startsWith('_'))
-  .flatMap(type => duelsData[type]);
+const STATIC_DUEL_TYPES = Object.keys(duelsData).filter(key => !key.startsWith('_'));
+const STATIC_DUELS_BY_TYPE = STATIC_DUEL_TYPES.reduce((accumulator, type) => {
+  accumulator[type] = Array.isArray(duelsData[type]) ? duelsData[type] : [];
+  return accumulator;
+}, {});
 const HARD_QUIZ_DB = QUIZ_DB.filter(question =>
   question.diff === 4 && !question.q?.startsWith('[À REMPLACER]')
 );
@@ -79,9 +83,148 @@ const HARD_QUIZ_DB = QUIZ_DB.filter(question =>
 const EVENTS_DB = eventsData.events || [];
 const BONUS_IDS = Array.from(VALID_BONUS_IDS);
 const DUEL_TYPES = ['buzzer', 'vraioufaux', 'chiffres', 'zoom', 'pick'];
+const ZOOM_ASSETS_DIR = path.join(__dirname, 'client', 'public', 'defis', 'zoom');
+const ZOOM_ASSET_ROUTE = '/defis/zoom';
+const ZOOM_DISTRACTORS_FILE = path.join(__dirname, 'server', 'data', 'zoom-distractors.json');
+const ZOOM_IMAGE_EXTENSIONS = new Set(['.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg']);
 
 // --- UTILITIES ---
-const getDuelsByType = (type) => DUELS_DB.filter(d => d.type === type);
+const getRandomItem = (items) => items[Math.floor(Math.random() * items.length)];
+const shuffleArray = (items) => {
+  const copy = [...items];
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const randomIndex = Math.floor(Math.random() * (index + 1));
+    [copy[index], copy[randomIndex]] = [copy[randomIndex], copy[index]];
+  }
+  return copy;
+};
+const normalizeZoomAnswer = (value) => String(value || '')
+  .replace(/[_-]+/g, ' ')
+  .replace(/\s+/g, ' ')
+  .trim()
+  .toLocaleLowerCase('fr-FR');
+const formatZoomAnswerFromFileName = (fileName) => {
+  const rawName = path.parse(fileName).name
+    .replace(/[_-]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!rawName) return null;
+  if (/[A-ZÀ-Þ]/.test(rawName)) return rawName;
+
+  return rawName
+    .split(' ')
+    .filter(Boolean)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+const getZoomManualDistractors = () => {
+  try {
+    const rawConfig = fs.readFileSync(ZOOM_DISTRACTORS_FILE, 'utf8');
+    const config = JSON.parse(rawConfig);
+
+    return Object.entries(config).reduce((accumulator, [answer, distractors]) => {
+      if (answer.startsWith('_') || !Array.isArray(distractors)) return accumulator;
+
+      const cleanDistractors = distractors
+        .map(distractor => String(distractor || '').trim())
+        .filter(Boolean);
+
+      if (cleanDistractors.length > 0) {
+        accumulator.set(normalizeZoomAnswer(answer), cleanDistractors);
+      }
+
+      return accumulator;
+    }, new Map());
+  } catch (error) {
+    console.warn('Impossible de lire les mauvaises reponses Zoom personnalisees:', error.message);
+    return new Map();
+  }
+};
+const getZoomDistractors = (asset, allAnswers, manualDistractorsByAnswer) => {
+  const usedAnswers = new Set([asset.normalizedAnswer]);
+  const manualDistractors = manualDistractorsByAnswer.get(asset.normalizedAnswer) || [];
+  const selectedDistractors = [];
+
+  manualDistractors.forEach((distractor) => {
+    const normalizedDistractor = normalizeZoomAnswer(distractor);
+    if (!normalizedDistractor || usedAnswers.has(normalizedDistractor) || selectedDistractors.length >= 2) return;
+
+    usedAnswers.add(normalizedDistractor);
+    selectedDistractors.push(distractor);
+  });
+
+  if (selectedDistractors.length >= 2) return selectedDistractors;
+
+  const fallbackDistractors = shuffleArray(allAnswers)
+    .filter((answer) => {
+      const normalizedAnswer = normalizeZoomAnswer(answer);
+      if (!normalizedAnswer || usedAnswers.has(normalizedAnswer)) return false;
+      usedAnswers.add(normalizedAnswer);
+      return true;
+    });
+
+  return [...selectedDistractors, ...fallbackDistractors].slice(0, 2);
+};
+const getZoomDuelsFromAssets = () => {
+  let directoryEntries = [];
+
+  try {
+    directoryEntries = fs.readdirSync(ZOOM_ASSETS_DIR, { withFileTypes: true });
+  } catch {
+    return [];
+  }
+
+  const assets = directoryEntries
+    .filter((entry) => entry.isFile() && ZOOM_IMAGE_EXTENSIONS.has(path.extname(entry.name).toLowerCase()))
+    .map((entry) => {
+      const answer = formatZoomAnswerFromFileName(entry.name);
+      if (!answer) return null;
+
+      return {
+        fileName: entry.name,
+        answer,
+        normalizedAnswer: normalizeZoomAnswer(answer)
+      };
+    })
+    .filter(Boolean);
+
+  const uniqueAssets = Array.from(
+    assets.reduce((accumulator, asset) => {
+      if (!accumulator.has(asset.normalizedAnswer)) {
+        accumulator.set(asset.normalizedAnswer, asset);
+      }
+      return accumulator;
+    }, new Map()).values()
+  );
+
+  const allAnswers = uniqueAssets.map(asset => asset.answer);
+  const manualDistractorsByAnswer = getZoomManualDistractors();
+
+  return uniqueAssets.map((asset) => {
+    const distractors = getZoomDistractors(asset, allAnswers, manualDistractorsByAnswer);
+    const options = shuffleArray([asset.answer, ...distractors]);
+
+    return {
+      type: 'zoom',
+      question: 'Quel est ce logo ?',
+      image: `${ZOOM_ASSET_ROUTE}/${encodeURIComponent(asset.fileName)}`,
+      answer: asset.answer,
+      options,
+      correct: options.indexOf(asset.answer),
+      explanation: `Logo ${asset.answer} issu du dossier defis/zoom.`
+    };
+  });
+};
+const getDuelsByType = (type) => {
+  if (type === 'zoom') {
+    const zoomDuels = getZoomDuelsFromAssets();
+    if (zoomDuels.length > 0) return zoomDuels;
+  }
+
+  return STATIC_DUELS_BY_TYPE[type] || [];
+};
+const getAllDuels = () => STATIC_DUEL_TYPES.flatMap(type => getDuelsByType(type));
 const createBuzzerDuelFromQuiz = () => {
   const quizQuestion = getRandomItem(HARD_QUIZ_DB);
   if (!quizQuestion) return null;
@@ -143,9 +286,9 @@ const getNextDuelTypeForRoom = (room) => {
   return nextType;
 };
 
-const getRandomDuel = (type = null) => {
+const getRandomDuel = (type = null, { fallback = true } = {}) => {
   const selectedType = type || getRandomItem(getAvailableDuelTypes());
-  if (!selectedType) return getRandomItem(DUELS_DB);
+  if (!selectedType) return getRandomItem(getAllDuels());
 
   if (selectedType === 'pick') return createPickDuel();
   if (selectedType === 'buzzer') {
@@ -155,19 +298,18 @@ const getRandomDuel = (type = null) => {
   const filtered = getDuelsByType(selectedType);
   if (filtered.length > 0) return getRandomItem(filtered);
 
-  return type ? getRandomDuel() : null;
+  return type && fallback ? getRandomDuel() : null;
 };
 
-const getRandomItem = (items) => items[Math.floor(Math.random() * items.length)];
-
-const createRandomDuelInteraction = (room, initiatingPlayerId = null) => {
+const createRandomDuelInteraction = (room, initiatingPlayerId = null, forcedDuelType = null) => {
   const activePlayer = room.players.find(player => player.id === initiatingPlayerId) || room.players[room.turnIndex];
   if (!activePlayer) return null;
 
   const opponentCandidates = room.players.filter(player => player.id !== activePlayer.id);
   if (opponentCandidates.length === 0) return null;
 
-  const randomDuel = getRandomDuel(getNextDuelTypeForRoom(room));
+  const selectedDuelType = forcedDuelType || getNextDuelTypeForRoom(room);
+  const randomDuel = getRandomDuel(selectedDuelType, { fallback: !forcedDuelType });
   if (!randomDuel) return null;
   const opponent = getRandomItem(opponentCandidates);
   const readerCandidates = room.players.filter(player => player.id !== activePlayer.id && player.id !== opponent.id);
@@ -243,11 +385,75 @@ const canTriggerEvent = (room, event, activePlayer) => {
   );
 };
 
+const buildEasyPublicRoomCodes = () => {
+  const codes = [];
+  const seen = new Set();
+  const addCode = (code) => {
+    const key = JSON.stringify(code);
+    if (seen.has(key)) return;
+    seen.add(key);
+    codes.push(code);
+  };
+
+  // Prioritize very easy patterns such as AAAAB and AAABB.
+  for (let offset = 1; offset < CODE_CHARACTER_COUNT; offset += 1) {
+    for (let repeated = 0; repeated < CODE_CHARACTER_COUNT; repeated += 1) {
+      const trailing = (repeated + offset) % CODE_CHARACTER_COUNT;
+      addCode([repeated, repeated, repeated, repeated, trailing]);
+    }
+  }
+
+  for (let offset = 1; offset < CODE_CHARACTER_COUNT; offset += 1) {
+    for (let repeated = 0; repeated < CODE_CHARACTER_COUNT; repeated += 1) {
+      const trailing = (repeated + offset) % CODE_CHARACTER_COUNT;
+      addCode([repeated, repeated, repeated, trailing, trailing]);
+    }
+  }
+
+  for (let firstOffset = 1; firstOffset < CODE_CHARACTER_COUNT; firstOffset += 1) {
+    for (let secondOffset = 1; secondOffset < CODE_CHARACTER_COUNT; secondOffset += 1) {
+      if (firstOffset === secondOffset) continue;
+
+      for (let repeated = 0; repeated < CODE_CHARACTER_COUNT; repeated += 1) {
+        const fourth = (repeated + firstOffset) % CODE_CHARACTER_COUNT;
+        const fifth = (repeated + secondOffset) % CODE_CHARACTER_COUNT;
+        addCode([repeated, repeated, repeated, fourth, fifth]);
+      }
+    }
+  }
+
+  return codes;
+};
+const EASY_PUBLIC_ROOM_CODES = buildEasyPublicRoomCodes();
+const createRandomCode = () => Array.from(
+  { length: CODE_LENGTH },
+  () => Math.floor(Math.random() * CODE_CHARACTER_COUNT)
+);
 const generateRoomId = () => Math.random().toString(36).substr(2, 9);
-const generateGameCode = () => DEBUG_TOOLS_ENABLED
-  ? [...DEBUG_ROOM_CODE]
-  : Array.from({ length: CODE_LENGTH }, () => Math.floor(Math.random() * 4));
-const generatePrivateCode = () => Array.from({ length: CODE_LENGTH }, () => Math.floor(Math.random() * 4));
+const generateGameCode = () => {
+  if (DEBUG_TOOLS_ENABLED) return [...DEBUG_ROOM_CODE];
+
+  const usedCodeKeys = new Set(
+    Object.values(rooms).map((room) => JSON.stringify(room.code))
+  );
+  const codeConflicts = (code) => (
+    usedCodeKeys.has(JSON.stringify(code))
+    || Boolean(findReconnectInviteByCode(code))
+  );
+  const availableEasyCode = EASY_PUBLIC_ROOM_CODES.find(
+    (code) => !codeConflicts(code)
+  );
+
+  if (availableEasyCode) return [...availableEasyCode];
+
+  for (let attempt = 0; attempt < 80; attempt += 1) {
+    const fallbackCode = createRandomCode();
+    if (!codeConflicts(fallbackCode)) return fallbackCode;
+  }
+
+  return createRandomCode();
+};
+const generatePrivateCode = () => createRandomCode();
 const codesMatch = (left, right) => JSON.stringify(left) === JSON.stringify(right);
 const getRoomReconnectInvites = (room) => {
   if (!room.reconnectInvites || typeof room.reconnectInvites !== 'object') {
@@ -285,6 +491,7 @@ const generateUniqueReconnectCode = (room) => {
 
 // --- MIDDLEWARE ---
 app.use(express.json());
+app.use(ZOOM_ASSET_ROUTE, express.static(ZOOM_ASSETS_DIR));
 app.use(express.static(path.join(__dirname, 'build')));
 
 // --- HEALTH CHECK (Critical for Render Cold Start) ---
@@ -1258,6 +1465,47 @@ io.on('connection', (socket) => {
       return;
     }
 
+    const activePlayer = room.players[room.turnIndex];
+    let targetPlayer = null;
+
+    if (bonusId === 'ctrl-z') {
+      if (room.status !== 'GAME_LOOP') {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_state' });
+        return;
+      }
+      if (!activePlayer || activePlayer.id !== player.id) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+        return;
+      }
+      if (room.currentTurnBonusUse?.turnIndex === room.turnIndex) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'turn_bonus_already_used' });
+        return;
+      }
+    } else if (bonusId === 'coffee-boss') {
+      targetPlayer = room.players.find((roomPlayer) => roomPlayer.id === targetPlayerId);
+      if (!targetPlayer || targetPlayer.id === player.id) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
+        return;
+      }
+      if (targetPlayer.skipNextTurn) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'target_already_skipped' });
+        return;
+      }
+    } else if (bonusId === 'choose-quiz') {
+      targetPlayer = room.players.find((roomPlayer) => roomPlayer.id === targetPlayerId);
+      if (!targetPlayer || targetPlayer.id === player.id) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
+        return;
+      }
+      if (room.pendingChooseQuizBonus) {
+        const reason = room.pendingChooseQuizBonus.targetPlayerId === targetPlayer.id
+          ? 'choose_quiz_already_pending'
+          : 'choose_quiz_room_pending';
+        if (typeof ack === 'function') ack({ ok: false, reason });
+        return;
+      }
+    }
+
     player.bonuses[bonusId] = currentQuantity - 1;
     if (player.bonuses[bonusId] <= 0) delete player.bonuses[bonusId];
 
@@ -1269,34 +1517,12 @@ io.on('connection', (socket) => {
         usedAt: Date.now()
       };
     } else if (bonusId === 'coffee-boss') {
-      const targetPlayer = room.players.find((roomPlayer) => roomPlayer.id === targetPlayerId);
-      if (!targetPlayer || targetPlayer.id === player.id) {
-        player.bonuses[bonusId] = currentQuantity;
-        if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
-        return;
-      }
-
       targetPlayer.skipNextTurn = {
         bonusId,
         byPlayerId: player.id,
         usedAt: Date.now()
       };
     } else if (bonusId === 'choose-quiz') {
-      const targetPlayer = room.players.find((roomPlayer) => roomPlayer.id === targetPlayerId);
-      if (!targetPlayer || targetPlayer.id === player.id) {
-        player.bonuses[bonusId] = currentQuantity;
-        if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
-        return;
-      }
-      if (room.pendingChooseQuizBonus) {
-        player.bonuses[bonusId] = currentQuantity;
-        const reason = room.pendingChooseQuizBonus.targetPlayerId === targetPlayer.id
-          ? 'choose_quiz_already_pending'
-          : 'choose_quiz_room_pending';
-        if (typeof ack === 'function') ack({ ok: false, reason });
-        return;
-      }
-
       room.pendingChooseQuizBonus = {
         bonusId,
         byPlayerId: player.id,
@@ -1486,7 +1712,9 @@ io.on('connection', (socket) => {
   socket.on('roll_dice', () => { const room = findRoom(); if (room) { const activePlayer = room.players[room.turnIndex]; if (activePlayer?.skipNextTurn) return; room.status = 'GAME_LOOP'; syncRoom(room); }});
 
   // --- ACTIONS ---
-  socket.on('trigger_action', (actionType, ack) => {
+  socket.on('trigger_action', (actionPayload, ack) => {
+    const actionType = typeof actionPayload === 'string' ? actionPayload : actionPayload?.type;
+    const requestedDuelType = typeof actionPayload === 'object' ? actionPayload?.duelType : null;
     const room = findRoom();
     if (!room) {
       console.warn('trigger_action: player not in room', socket.id, 'actionType', actionType);
@@ -1517,7 +1745,10 @@ io.on('connection', (socket) => {
       syncRoom(room);
       if (typeof ack === 'function') ack({ ok: true, status: room.status });
     } else if (actionType === 'DEFI') {
-      const duelInteraction = createRandomDuelInteraction(room, socket.id);
+      const forcedDuelType = DUEL_TYPES.includes(requestedDuelType)
+        ? requestedDuelType
+        : null;
+      const duelInteraction = createRandomDuelInteraction(room, socket.id, forcedDuelType);
       if (!duelInteraction) {
         if (typeof ack === 'function') ack({ ok: false, reason: 'not_enough_players' });
         return;
@@ -1526,7 +1757,7 @@ io.on('connection', (socket) => {
       room.currentInteraction = duelInteraction;
       room.status = 'DUEL_START';
       syncRoom(room);
-      if (typeof ack === 'function') ack({ ok: true, status: room.status });
+      if (typeof ack === 'function') ack({ ok: true, status: room.status, duelType: duelInteraction.type });
     } else if (actionType === 'EVENT') {
       const activePlayer = room.players[room.turnIndex];
       const availableEvents = EVENTS_DB.filter(event => canTriggerEvent(room, event, activePlayer));

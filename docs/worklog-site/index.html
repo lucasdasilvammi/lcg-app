@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Worklog visuel</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="hero">
+        <div class="hero__eyebrow">Mini-site autonome</div>
+        <div class="hero__content">
+          <div>
+            <p class="hero__kicker">LCG App</p>
+            <h1>Worklog visuel</h1>
+          </div>
+          <p class="hero__intro">
+            Les sections du worklog et les points de TODO transformes en cartes.
+            Bascule entre ce qui est fait et ce qui reste en attente, puis clique pour ouvrir le detail.
+          </p>
+        </div>
+      </header>
+
+      <section class="board-switch" aria-label="Tableaux du suivi">
+        <button class="board-card is-active" type="button" data-view="done" aria-pressed="true">
+          <span class="board-card__label">Fait</span>
+          <strong id="done-total">0</strong>
+          <span>Worklog + TODO cochee</span>
+        </button>
+        <button class="board-card" type="button" data-view="pending" aria-pressed="false">
+          <span class="board-card__label">En attente</span>
+          <strong id="pending-total">0</strong>
+          <span>V1: <b id="pending-v1-total">0</b> · plus tard: <b id="pending-later-total">0</b></span>
+        </button>
+      </section>
+
+      <section class="toolbar" aria-label="Filtres du worklog">
+        <label class="search-box">
+          <span>Recherche</span>
+          <input id="search-input" type="search" placeholder="Bonus, menu, responsive..." autocomplete="off" />
+        </label>
+        <div id="filter-list" class="filter-list" aria-label="Categories"></div>
+      </section>
+      <section id="scope-switch" class="scope-switch" aria-label="Priorite des cartes en attente" hidden>
+        <button class="scope-button is-active" type="button" data-scope-filter="all" aria-pressed="true">Tout</button>
+        <button class="scope-button" type="button" data-scope-filter="v1" aria-pressed="false">Pour la V1</button>
+        <button class="scope-button" type="button" data-scope-filter="later" aria-pressed="false">Plus tard</button>
+      </section>
+
+      <section class="summary-strip" aria-live="polite">
+        <div>
+          <span id="visible-count" class="summary-strip__number">0</span>
+          <span>cartes affichees</span>
+        </div>
+        <div>
+          <span id="total-count" class="summary-strip__number">0</span>
+          <span id="current-view-label">entrees au total</span>
+        </div>
+        <div>
+          <span id="source-count" class="summary-strip__number">0</span>
+          <span>sources lues</span>
+        </div>
+      </section>
+      <p id="data-breakdown" class="data-breakdown"></p>
+
+      <section id="cards-grid" class="cards-grid" aria-label="Cartes du worklog"></section>
+      <p id="empty-state" class="empty-state" hidden>Aucune carte ne correspond a cette recherche.</p>
+    </main>
+
+    <div id="modal" class="modal" aria-hidden="true">
+      <button class="modal__backdrop" type="button" data-close-modal aria-label="Fermer le detail"></button>
+      <article class="modal__panel" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button class="modal__close" type="button" data-close-modal aria-label="Fermer">Fermer</button>
+        <div id="modal-content"></div>
+      </article>
+    </div>
+
+    <script src="./session-data.js"></script>
+    <script src="./worklog-data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>

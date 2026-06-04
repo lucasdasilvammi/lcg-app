@@ -1,0 +1,158 @@
+window.WORKLOG_SESSION_DONE_ITEMS = [
+  {
+    id: "session-worklog-site-timeline-priority-2026-06-04-1344",
+    type: "done",
+    source: "Session Codex",
+    sourceKind: "Journal recent",
+    sourceOrder: -400,
+    sortKey: "2026-06-04T13:44:25+02:00",
+    timePrecision: "minute",
+    title: "Mini-site worklog enrichi avec ordre, dates et priorites",
+    date: "Jeudi 4 Juin 2026",
+    time: "13:44",
+    category: "Documentation",
+    status: "En cours de finition",
+    impact: "docs/worklog-site",
+    summary: "Ajout d'une vraie lecture chronologique, d'un tri plus recent d'abord et d'une nuance V1 / Plus tard pour les cartes en attente.",
+    details: [
+      "Les cartes de session recentes passent en haut du tableau Fait.",
+      "Les anciennes entrees worklog gardent leur date, mais affichent heure non notee quand aucune heure n'existe dans la source.",
+      "Les cartes en attente peuvent etre classees V1 ou Plus tard depuis la popup.",
+      "Le classement manuel est garde dans le navigateur via localStorage."
+    ],
+    files: ["docs/worklog-site/index.html", "docs/worklog-site/app.js", "docs/worklog-site/session-data.js"],
+    humanReview: true,
+    reviewNote: "Verifier que l'ordre et les libelles correspondent bien a ta facon de piloter le projet."
+  },
+  {
+    id: "session-bonus-fixes-2026-06-04",
+    type: "done",
+    source: "Session Codex",
+    sourceKind: "Journal recent",
+    sourceOrder: -300,
+    sortKey: "2026-06-04",
+    timePrecision: "date",
+    title: "Bonus : IA valide, humain a verifier",
+    date: "Jeudi 4 Juin 2026",
+    time: "",
+    category: "Gameplay",
+    status: "IA valide / humain a verifier",
+    impact: "Bonus / serveur / tests multi-agents",
+    summary: "Les collisions bonus critiques detectees en test automatisé sont corrigees; il reste a valider le ressenti humain en partie.",
+    details: [
+      "Tests Socket.IO 4 agents relances avec 7 scenarios bonus PASS.",
+      "Le serveur ne consomme plus un bonus quand l'action est refusee.",
+      "Le comportement est valide techniquement sur ces scenarios precis.",
+      "Ca ne veut pas dire que tous les cas bonus possibles sont couverts: reconnexion, ordre du tour, annulation et ressenti utilisateur restent a verifier humainement."
+    ],
+    files: ["server.js", "server/index.js", "scripts/agent-swarm/run-bonus-collision-tests.js"],
+    aiValidated: true,
+    aiNote: "Tests automatises Socket.IO 4 agents OK sur les scenarios bonus critiques corriges.",
+    humanReview: true,
+    reviewNote: "Validation humaine conseillee avant de considerer le gameplay bonus comme totalement OK."
+  },
+  {
+    id: "session-lint-react-hooks-2026-06-04",
+    type: "done",
+    source: "Session Codex",
+    sourceKind: "Journal recent",
+    sourceOrder: -200,
+    sortKey: "2026-06-04",
+    timePrecision: "date",
+    title: "Lint React hooks et controles techniques corriges",
+    date: "Jeudi 4 Juin 2026",
+    time: "",
+    category: "Technique",
+    status: "Corrige",
+    impact: "Client React / tests serveur / dependances",
+    summary: "Passe technique pour corriger les soucis de lint React hooks, le faux positif de test personnage et l'audit npm/dependances demande auparavant.",
+    details: [
+      "Cette entree sert de rappel de session recente, car le worklog classique ne gardait pas encore l'heure et le contexte fin.",
+      "Les corrections sont dans le worktree actuel et doivent rester separees des changements de mini-site si on prepare un commit propre.",
+      "A relire si tu veux isoler precisement les fichiers touches par cette passe."
+    ],
+    files: ["client/src", "server/tests/integration.test.js", "package.json", "client/package.json"],
+    humanReview: false,
+    reviewNote: ""
+  },
+  {
+    id: "session-security-audit-2026-06-04",
+    type: "done",
+    source: "Session Codex",
+    sourceKind: "Journal recent",
+    sourceOrder: -100,
+    sortKey: "2026-06-04",
+    timePrecision: "date",
+    title: "Audit securite realise, fixes gardes pour plus tard",
+    date: "Jeudi 4 Juin 2026",
+    time: "",
+    category: "Technique",
+    status: "Audit fait",
+    impact: "Securite applicative",
+    summary: "Audit securite effectue avant de revenir aux corrections gameplay. Les fixes securite ne sont pas traites dans cette passe.",
+    details: [
+      "Cette carte sert de rappel explicite dans le mini-site pour ne pas perdre le sujet.",
+      "Les corrections de securite sont volontairement decalees apres les derniers problemes gameplay/bonus.",
+      "Le rapport detaille n'est pas encore consolide dans un fichier dedie du repo; a faire si on veut un suivi actionnable."
+    ],
+    files: [],
+    humanReview: false,
+    reviewNote: ""
+  }
+];
+
+window.WORKLOG_SESSION_PENDING_ITEMS = [
+  {
+    id: "session-human-review-bonus-2026-06-04",
+    type: "pending",
+    source: "Session Codex",
+    sourceKind: "Verification humaine",
+    sourceOrder: -300,
+    sortKey: "2026-06-04",
+    timePrecision: "date",
+    title: "Verifier humainement les corrections bonus en partie",
+    date: "Jeudi 4 Juin 2026",
+    time: "",
+    category: "Tests",
+    status: "A verifier humainement",
+    scope: "v1",
+    scopeLabel: "V1",
+    impact: "Playtest bonus",
+    summary: "Les tests automatises critiques passent, mais il faut valider le ressenti utilisateur et les cas bonus longs en vraie partie.",
+    details: [
+      "Tester CTRL + Z uniquement pendant le tour actif.",
+      "Tester deux joueurs qui ciblent la meme personne avec Va faire le cafe du boss.",
+      "Verifier que le refus est comprehensible et que personne ne perd de bonus par erreur.",
+      "Confirmer que le comportement colle a ton intention de jeu."
+    ],
+    files: ["server.js", "scripts/agent-swarm/run-bonus-collision-tests.js"],
+    aiValidated: true,
+    aiNote: "Pour l'IA, les corrections bonus critiques sont validees par tests automatises.",
+    humanReview: true,
+    reviewNote: "A jouer humainement pour confirmer que les refus, messages et timings correspondent a l'intention de jeu."
+  },
+  {
+    id: "session-security-fixes-later-2026-06-04",
+    type: "pending",
+    source: "Session Codex",
+    sourceKind: "Suite audit",
+    sourceOrder: -200,
+    sortKey: "2026-06-04",
+    timePrecision: "date",
+    title: "Reprendre les fixes issus de l'audit securite",
+    date: "Jeudi 4 Juin 2026",
+    time: "",
+    category: "Technique",
+    status: "Plus tard",
+    scope: "later",
+    scopeLabel: "Plus tard",
+    impact: "Securite",
+    summary: "Sujet important mais volontairement mis de cote pendant la passe gameplay/POC.",
+    details: [
+      "Consolider le rapport dans un fichier dedie avant correction.",
+      "Prioriser les vrais chemins d'attaque plutot que les alertes faibles.",
+      "Corriger et verifier dans une passe separee."
+    ],
+    files: []
+  }
+];

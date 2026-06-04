@@ -4,6 +4,163 @@
 
 ---
 
+## Mercredi 3 Juin 2026 - Travaux en cours non encore commit
+
+### Corrections bonus post-tests
+- Verrouillage serveur de `CTRL + Z` au joueur actif uniquement pendant `GAME_LOOP`.
+- Refus d'un deuxieme `Va faire le cafe du boss` sur une cible qui doit deja sauter son prochain tour.
+- Consommation des bonus deplacee apres les validations serveur pour eviter de perdre une carte sur refus.
+- Tests de collision bonus renforces pour verifier les refus, les codes d'erreur et la conservation de l'inventaire.
+
+### Defi Zoom pilote par les assets
+- Le defi `zoom` est en train d'etre decouple de `server/data/duels.json` pour pouvoir generer des duels directement depuis les images presentes dans `client/public/defis/zoom`.
+- Ajout d'un service statique `/defis/zoom` cote serveur pour exposer ces images directement en partie.
+- Ajout du fichier `server/data/zoom-distractors.json` pour definir des mauvaises reponses manuelles par logo.
+- Premiere banque d'images Zoom ajoutee: `Channel`, `Lacoste`, `Maserati`, `Peugeot`, `Ralph Lauren`, `Rolex`, `Starbucks`, `Volkswagen`.
+
+### Debug duel et UX Zoom
+- `6-game-loop.jsx` integre maintenant un selector debug de type de defi quand `VITE_ENABLE_DEBUG_TOOLS=true`.
+- En mode debug, il est possible de forcer `buzzer`, `vraioufaux`, `chiffres`, `zoom` ou `pick` au moment de lancer un defi.
+- `trigger_action` accepte desormais un payload objet `{ type: 'DEFI', duelType }` et renvoie le type reel retenu dans l'ACK.
+- Ajustements UX sur `8-zoom-game.jsx`: image conservee a l'ecran, textes reader/joueurs simplifies, lock icon inline au lieu d'un asset externe.
+
+### Codes de room publics simplifies
+- Nouveau generateur de codes publics en cours d'integration pour privilegier des combinaisons plus faciles a lire et memoriser (`AAAAB`, `AAABB`, etc.).
+- La logique evite les collisions avec les rooms actives et les codes de reconnexion deja reserves.
+- `server/tests/integration.test.js` commence a couvrir cette contrainte avec un test sur l'unicite et la simplicite des codes en concurrence.
+
+### Alignement technique
+- `server.js` et `server/index.js` sont mis a jour en parallele pour garder les deux backends alignes pendant cette passe.
+- La build statique locale a aussi ete rafraichie pour embarquer les nouveaux assets Zoom.
+## Mardi 2 Juin 2026 - V0.1 Pretest
+
+### Suivi de progression plateau et fin de partie
+- Extraction d'un moteur dedie `server/boardProgress.js` pour suivre les positions possibles des joueurs sur le plateau.
+- Ajout de la logique `canReachBoss` / `finishablePositions` pour savoir quand proposer l'action `Terminer`.
+- Ajout des tests serveur `server/tests/board_progress.test.js` pour couvrir progression, echanges de positions, deplacements d'event et fin de partie.
+
+### Events de plateau enrichis
+- Mise a niveau des events avec une distinction plus claire entre `effectType` et `boardEffectType`.
+- Ajout/clarification des effets `move-self-to-next-bonus`, `swap-with-player` et `piston`.
+- Refonte de `client/src/views/event/7-event-game.jsx` pour gerer les ecrans de reward bonus, vol de bonus, choix de cible et echange de place.
+- Mise a jour de `server/data/events.json` pour faire correspondre le contenu produit aux nouvelles logiques de plateau.
+
+### Fin de partie et socle V0.1
+- Ajout de `client/src/views/12-game-end.jsx` avec classement final, vainqueur mis en avant et retour accueil.
+- Ajout de `client/src/utils/fullscreen.js` pour fiabiliser la demande de fullscreen sur l'app.
+- Ajustements dans `App.jsx`, `6-game-loop.jsx`, `11-round-end.jsx`, `SettingsMenu.jsx`, `SocketContext.jsx` et les vues quiz/defi/event pour integrer le flux pretest V0.1.
+
+### Documentation
+- Creation de `docs/maintenance-impact-guide.md` comme pense-bete avant d'ajouter bonus, events, personnages, plateau, defis ou activites.
+- Mise a jour de `docs/README.md` et du `TODO.md` dans le cadre du pretest.
+
+## Dimanche 31 Mai 2026 - Activite logo, contenus reels et assets VS
+
+### Flow activite logo affine
+- Reprise du parcours `upload -> vote -> reveal` de l'activite logo pour clarifier les etats joueurs et fluidifier la sequence.
+- Ajout de nouveaux assets activite (`button-bg`, `clock`, `cube`) pour mieux porter la DA et les retours visuels.
+- Ajustements serveur associes pour mieux piloter les nouvelles etapes du flow activite.
+
+### Grammaire et textes dynamiques
+- Creation de `client/src/utils/frenchGrammar.js`.
+- Ajout de helpers pour mieux accorder les phrases automatiques selon le personnage/joueur.
+- Reprise de plusieurs vues (`feedback`, `turn-start`, `event`, `quiz`, `bonus`, `zoom`, etc.) pour fiabiliser les formulations.
+
+### Donnees de jeu mises a niveau
+- Gros refresh de `server/data/quiz.json` avec de vraies questions a la place d'une partie des placeholders.
+- Mise a jour de `server/data/duels.json` pour mieux coller au contenu reel utilise en partie.
+
+### Intro VS et build principale
+- Ajout des assets VS manquants dans `client/public/anim-vs/` (`V`, `S`, `cube-center`, fonds personnages/opposants).
+- Refresh de la build principale pour embarquer correctement ces assets.
+- Ajout de variables d'exemple supplementaires dans `.env.example`.
+
+## Vendredi 30 Mai 2026 - Refonte de l'activite commune
+
+### Refonte structurelle du flow activite
+- Refonte des 5 ecrans activite (`brief`, `creation`, `upload`, `vote`, `reveal`) pour repartir sur une base plus propre.
+- Mutualisation de briques communes dans `client/src/views/activite/ActivityShared.jsx`.
+- Ajout de `client/src/views/activite/ActivityData.js` pour centraliser les donnees UI/specifiques de l'activite.
+- Suppression de l'ancien `debug-duel-selector` dedie pour nettoyer le routing et la maintenance.
+
+### Assets et direction visuelle
+- Ajout de nombreux assets activite cote `client/public/activite/` et dans la build: camera, photo, poubelle, timer, boutons, compteur `+1/-1`, fonds et decors.
+- Renommage du tag categorie activite vers une version sans accent (`tag-activites.png`) pour fiabiliser les chemins d'assets.
+- Ajout d'un `lock.svg` cote defi pour mieux harmoniser certains etats UI.
+
+### Consolidation client/serveur
+- Ajustements serveur pour mieux supporter le redesign de l'activite commune et ses etats intermediaires.
+- Evolution de `SocketContext`, `Toasts`, `SettingsMenu`, `ScoreBar`, `CharacterTag`, `ButtonWithIcon` et plusieurs vues de jeu pour garder une UI coherente apres la refonte.
+- Premiere passe de rationalisation du defi Zoom avec l'ajout de `ZoomImageFrame.jsx`.
+
+### Build et suivi
+- Build production regeneree apres la refonte.
+- `TODO.md` et `docs/responsive-qa-checklist.md` remis a jour dans la foulee du redesign.
+
+## Dimanche 24 Mai 2026 - Responsive QA mobile et stabilisation UI
+
+### Checkpoint Git
+- Commit de securite effectue avant les modifications responsive: `48a35d7 Checkpoint before responsive scaling`.
+- Objectif de la session: stabiliser rapidement l'interface mobile sans refaire tous les breakpoints, avec une base visuelle 390px.
+
+### Responsive global
+- Ajout d'un shell responsive dans `App.jsx` avec `app-viewport`, `app-stage` et `app-stage-content`.
+- Largeur design logique fixee a 390px.
+- Sur petits ecrans, le contenu est scale proportionnellement au viewport au lieu de wrapper de maniere imprevisible.
+- Sur desktop/grands ecrans, l'app reste plafonnee visuellement a 390px.
+- Ajout des variables CSS globales: `--app-design-width`, `--app-visual-width`, `--app-scale`, `--app-viewport-height`, `--app-height`.
+- Neutralisation du breakpoint `phone:` sur desktop pour eviter les differences PC/mobile non voulues.
+- Correction du viewport HTML avec `viewport-fit=cover`.
+
+### Checklist QA responsive
+- Creation de `docs/responsive-qa-checklist.md`.
+- Liste numerotee `.1` a `.100` pour guider les tests dans l'ordre reel d'une partie.
+- Ajout des validations visuelles `OK` / `a tester` via icones dans le markdown.
+- Points valides pendant la session:
+  - `.0.1` a `.0.4`: rendu global OK sur Honor Magic 6 Pro Android Brave, desktop Brave et Chrome.
+  - `.1` a `.20`: setup, lobby, menus admin/joueur, confirmations, pause, regles.
+  - `.0.5`: salon supprime quand tous les joueurs quittent.
+  - `.20.1`: liseres actifs corriges sur tabs Lobby/Bonus, Pause, Utiliser/Valider bonus et gros boutons de choix de case.
+- iOS Safari reste a tester sur vrai iPhone.
+
+### Selection personnage
+- Remplacement des descriptions personnages par les textes definitifs.
+- Ajout du comportement prelock/lock:
+  - Preselection: le personnage est reserve temporairement, gris/opacity pour les autres.
+  - Verrouillage: le personnage repasse en opacity 100 et ne peut plus etre change.
+  - Retour avant verrouillage: deselectionne le personnage.
+- Suppression du bouton admin "Valider les equipes".
+- Passage automatique a l'ordre du tour quand tous les joueurs ont verrouille leur personnage.
+- Corrections serveur associees: `characterLocked`, event `lock_character`, blocage des picks apres lock, `unpick_character` ignore les joueurs verrouilles.
+- Avancement auto vers `DEFINE_ORDER` quand tous les joueurs sont locks.
+- Correction d'un scroll parasite dans le popup "Incarne ton stagiaire" en bloquant le scroll au niveau overlay.
+
+### Menu et confirmations
+- Les popups de confirmation du menu ne prennent plus toute la hauteur sur mobile.
+- Suppression de la regle mobile qui forcait les confirmations en full height.
+- Ajout d'animations d'entree/sortie bas -> haut et haut -> bas pour sauvegarde ordre, promote admin, kick, quitter partie et annuler action.
+- Correction du texte de confirmation "Annuler l'action": il cible maintenant le joueur actif du tour, pas l'admin qui ouvre le menu.
+- Correction de la barre decor top coupee sur les confirmations.
+- Ajustement visuel du popup de confirmation du bonus "choose-quiz": tete + nom plus serres, bouton Suivant plus propre.
+
+### Boutons et micro-fixes visuels
+- Retrait/ajustement des overflows qui provoquaient des scrollbars parasites au press.
+- Correction des liseres actifs sur `MenuButton` Lobby/Bonus, `ButtonWithIcon` variant menu et `BigButton` des choix Quiz/Defi/Activite/Bonus/Evenement.
+- Correction du `CharacterBorder`: les SVG decoratifs ne captent plus les clics.
+- Cause du bug `CharacterBorder`: le CSS global forcait `svg { pointer-events: auto !important; }`.
+- Fix: classe `character-border` + regle ciblee `pointer-events: none !important` sur les decors.
+
+### Build et validation technique
+- Build production lance plusieurs fois avec succes: `npm.cmd run build`.
+- Verification syntaxe serveur OK: `node --check server.js` et `node --check server/index.js`.
+
+### A reprendre demain
+- Continuer la checklist a partir de la Session 2 (`.21` et suivants), sauf retours utilisateurs sur les points deja coches.
+- Rechecker rapidement l'ecran "A toi de jouer" apres correction `CharacterBorder`.
+- Prevoir un vrai test iOS Safari des que possible.
+
+---
+
 ## 📅 Dimanche 17 Mai 2026
 
 ### ⚙️ V2 du Menu Settings
@@ -196,6 +353,78 @@
 
 ---
 
+## 📅 Mercredi 29 Janvier 2026
+
+### 🔢 Système de virgules décimales pour défi chiffres
+- **Problème** : Questions nécessitant des réponses décimales (ex: nombre d'or 1,618)
+- **Solution** : Système optionnel de positionnement de virgule
+
+#### 💾 Structure de données (duels.json)
+- **Nouveau champ optionnel** : `decimalPosition`
+  - Indique après quel chiffre placer la virgule
+  - Exemple 1: `"decimalPosition": 1` → affiche 1,618 (4 chiffres)
+  - Exemple 2: `"decimalPosition": 2` → affiche 15,64 (4 chiffres)
+  - Si absent : pas de virgule (comportement normal)
+
+#### 🎨 Affichage UI
+- **SVG virgule** : `/game/icons/virgule.svg`
+  - Inséré dynamiquement entre les DigitBox
+  - Taille adaptée : h-20 w-4 (large), h-14 w-3 (small)
+  - Position : `-mb-2` ou `-mb-1` pour alignement vertical
+  
+- **Zones d'affichage** :
+  - **Duellistes** (8-chiffres-game.jsx) : virgule entre les cases de saisie
+  - **Lecteur** (8-chiffres-game.jsx) : virgule dans les réponses des 2 joueurs temps réel
+  - **Révélation** (9-chiffres-reveal.jsx) : virgule dans bonne réponse + réponses joueurs
+
+#### 🧮 Calculs avec décimales (9-chiffres-reveal.jsx)
+- **Fonction `toDecimal(value)`** :
+  - Convertit entier stocké en valeur décimale
+  - Formule : `value / Math.pow(10, digits - decimalPosition)`
+  - Exemple : 1618 avec position 1 (4 digits) → 1618 / 10³ = 1.618
+  - Exemple : 1564 avec position 2 (4 digits) → 1564 / 10² = 15.64
+
+- **Fonction `formatDistance(distance)`** :
+  - Formate distance avec virgule française
+  - Utilise `toFixed(digits - decimalPosition)`
+  - Remplace `.` par `,` pour affichage
+  - Exemple : 0.002 → "0,002"
+  - Exemple : 0.64 → "0,64"
+
+- **Calcul distances** :
+  - Conversion des réponses en décimal avant calcul
+  - `distance = Math.abs(playerDecimal - correctDecimal)`
+  - Affichage formaté dans messages révélation
+
+#### 🔧 Implémentation technique
+- **React.Fragment** utilisé pour insérer virgule entre DigitBox
+- **Rendu conditionnel** : `decimalPosition && index === decimalPosition - 1`
+- **Compatibilité** : fonctionne avec 1-4 chiffres
+- **Flexibilité** : virgule peut être à n'importe quelle position valide
+
+#### 🎯 Exemples concrets
+1. **Nombre d'or** (1,618) :
+   - Stocké : 1618, digits: 4, decimalPosition: 1
+   - Affichage : 1,618
+   - Distance joueur 1620 : 0,002
+
+2. **Centimètres** (15,64) :
+   - Stocké : 1564, digits: 4, decimalPosition: 2
+   - Affichage : 15,64
+   - Distance joueur 1580 : 0,16
+
+3. **Sans virgule** (300 DPI) :
+   - Stocké : 300, digits: 3, pas de decimalPosition
+   - Affichage : 300
+   - Distance joueur 310 : 10
+
+### 🧹 Nettoyage codebase
+- **Fichiers supprimés** : Tous les doublons après migration (8-duel-game.jsx, 7.2-duel-rules.jsx, 8.1-duel-start.jsx en racine)
+- **Vérification** : Aucun fichier orphelin, tous les composants utilisés
+- **Documentation** : ARCHITECTURE.md et WORKLOG.md mis à jour
+
+---
+
 ## 📅 Mardi 28 Janvier 2026
 
 ### 🗂️ Restructuration majeure de l'architecture views/
@@ -317,78 +546,6 @@
   - `winnerDistance` : distance du gagnant pour clarté
   - `player1HasExact`, `player2HasExact`, `bothHaveExact`, `oneHasExact` : flags booléens
   - Rendu conditionnel JSX selon ces flags
-
----
-
-## 📅 Mercredi 29 Janvier 2026
-
-### 🔢 Système de virgules décimales pour défi chiffres
-- **Problème** : Questions nécessitant des réponses décimales (ex: nombre d'or 1,618)
-- **Solution** : Système optionnel de positionnement de virgule
-
-#### 💾 Structure de données (duels.json)
-- **Nouveau champ optionnel** : `decimalPosition`
-  - Indique après quel chiffre placer la virgule
-  - Exemple 1: `"decimalPosition": 1` → affiche 1,618 (4 chiffres)
-  - Exemple 2: `"decimalPosition": 2` → affiche 15,64 (4 chiffres)
-  - Si absent : pas de virgule (comportement normal)
-
-#### 🎨 Affichage UI
-- **SVG virgule** : `/game/icons/virgule.svg`
-  - Inséré dynamiquement entre les DigitBox
-  - Taille adaptée : h-20 w-4 (large), h-14 w-3 (small)
-  - Position : `-mb-2` ou `-mb-1` pour alignement vertical
-  
-- **Zones d'affichage** :
-  - **Duellistes** (8-chiffres-game.jsx) : virgule entre les cases de saisie
-  - **Lecteur** (8-chiffres-game.jsx) : virgule dans les réponses des 2 joueurs temps réel
-  - **Révélation** (9-chiffres-reveal.jsx) : virgule dans bonne réponse + réponses joueurs
-
-#### 🧮 Calculs avec décimales (9-chiffres-reveal.jsx)
-- **Fonction `toDecimal(value)`** :
-  - Convertit entier stocké en valeur décimale
-  - Formule : `value / Math.pow(10, digits - decimalPosition)`
-  - Exemple : 1618 avec position 1 (4 digits) → 1618 / 10³ = 1.618
-  - Exemple : 1564 avec position 2 (4 digits) → 1564 / 10² = 15.64
-
-- **Fonction `formatDistance(distance)`** :
-  - Formate distance avec virgule française
-  - Utilise `toFixed(digits - decimalPosition)`
-  - Remplace `.` par `,` pour affichage
-  - Exemple : 0.002 → "0,002"
-  - Exemple : 0.64 → "0,64"
-
-- **Calcul distances** :
-  - Conversion des réponses en décimal avant calcul
-  - `distance = Math.abs(playerDecimal - correctDecimal)`
-  - Affichage formaté dans messages révélation
-
-#### 🔧 Implémentation technique
-- **React.Fragment** utilisé pour insérer virgule entre DigitBox
-- **Rendu conditionnel** : `decimalPosition && index === decimalPosition - 1`
-- **Compatibilité** : fonctionne avec 1-4 chiffres
-- **Flexibilité** : virgule peut être à n'importe quelle position valide
-
-#### 🎯 Exemples concrets
-1. **Nombre d'or** (1,618) :
-   - Stocké : 1618, digits: 4, decimalPosition: 1
-   - Affichage : 1,618
-   - Distance joueur 1620 : 0,002
-
-2. **Centimètres** (15,64) :
-   - Stocké : 1564, digits: 4, decimalPosition: 2
-   - Affichage : 15,64
-   - Distance joueur 1580 : 0,16
-
-3. **Sans virgule** (300 DPI) :
-   - Stocké : 300, digits: 3, pas de decimalPosition
-   - Affichage : 300
-   - Distance joueur 310 : 10
-
-### 🧹 Nettoyage codebase
-- **Fichiers supprimés** : Tous les doublons après migration (8-duel-game.jsx, 7.2-duel-rules.jsx, 8.1-duel-start.jsx en racine)
-- **Vérification** : Aucun fichier orphelin, tous les composants utilisés
-- **Documentation** : ARCHITECTURE.md et WORKLOG.md mis à jour
 
 ---
 
@@ -598,64 +755,3 @@
 
 ---
 
-## Dimanche 24 Mai 2026 - Responsive QA mobile et stabilisation UI
-
-### Checkpoint Git
-- Commit de securite effectue avant les modifications responsive: `48a35d7 Checkpoint before responsive scaling`.
-- Objectif de la session: stabiliser rapidement l'interface mobile sans refaire tous les breakpoints, avec une base visuelle 390px.
-
-### Responsive global
-- Ajout d'un shell responsive dans `App.jsx` avec `app-viewport`, `app-stage` et `app-stage-content`.
-- Largeur design logique fixee a 390px.
-- Sur petits ecrans, le contenu est scale proportionnellement au viewport au lieu de wrapper de maniere imprevisible.
-- Sur desktop/grands ecrans, l'app reste plafonnee visuellement a 390px.
-- Ajout des variables CSS globales: `--app-design-width`, `--app-visual-width`, `--app-scale`, `--app-viewport-height`, `--app-height`.
-- Neutralisation du breakpoint `phone:` sur desktop pour eviter les differences PC/mobile non voulues.
-- Correction du viewport HTML avec `viewport-fit=cover`.
-
-### Checklist QA responsive
-- Creation de `docs/responsive-qa-checklist.md`.
-- Liste numerotee `.1` a `.100` pour guider les tests dans l'ordre reel d'une partie.
-- Ajout des validations visuelles `OK` / `a tester` via icones dans le markdown.
-- Points valides pendant la session:
-  - `.0.1` a `.0.4`: rendu global OK sur Honor Magic 6 Pro Android Brave, desktop Brave et Chrome.
-  - `.1` a `.20`: setup, lobby, menus admin/joueur, confirmations, pause, regles.
-  - `.0.5`: salon supprime quand tous les joueurs quittent.
-  - `.20.1`: liseres actifs corriges sur tabs Lobby/Bonus, Pause, Utiliser/Valider bonus et gros boutons de choix de case.
-- iOS Safari reste a tester sur vrai iPhone.
-
-### Selection personnage
-- Remplacement des descriptions personnages par les textes definitifs.
-- Ajout du comportement prelock/lock:
-  - Preselection: le personnage est reserve temporairement, gris/opacity pour les autres.
-  - Verrouillage: le personnage repasse en opacity 100 et ne peut plus etre change.
-  - Retour avant verrouillage: deselectionne le personnage.
-- Suppression du bouton admin "Valider les equipes".
-- Passage automatique a l'ordre du tour quand tous les joueurs ont verrouille leur personnage.
-- Corrections serveur associees: `characterLocked`, event `lock_character`, blocage des picks apres lock, `unpick_character` ignore les joueurs verrouilles.
-- Avancement auto vers `DEFINE_ORDER` quand tous les joueurs sont locks.
-- Correction d'un scroll parasite dans le popup "Incarne ton stagiaire" en bloquant le scroll au niveau overlay.
-
-### Menu et confirmations
-- Les popups de confirmation du menu ne prennent plus toute la hauteur sur mobile.
-- Suppression de la regle mobile qui forcait les confirmations en full height.
-- Ajout d'animations d'entree/sortie bas -> haut et haut -> bas pour sauvegarde ordre, promote admin, kick, quitter partie et annuler action.
-- Correction du texte de confirmation "Annuler l'action": il cible maintenant le joueur actif du tour, pas l'admin qui ouvre le menu.
-- Correction de la barre decor top coupee sur les confirmations.
-- Ajustement visuel du popup de confirmation du bonus "choose-quiz": tete + nom plus serres, bouton Suivant plus propre.
-
-### Boutons et micro-fixes visuels
-- Retrait/ajustement des overflows qui provoquaient des scrollbars parasites au press.
-- Correction des liseres actifs sur `MenuButton` Lobby/Bonus, `ButtonWithIcon` variant menu et `BigButton` des choix Quiz/Defi/Activite/Bonus/Evenement.
-- Correction du `CharacterBorder`: les SVG decoratifs ne captent plus les clics.
-- Cause du bug `CharacterBorder`: le CSS global forcait `svg { pointer-events: auto !important; }`.
-- Fix: classe `character-border` + regle ciblee `pointer-events: none !important` sur les decors.
-
-### Build et validation technique
-- Build production lance plusieurs fois avec succes: `npm.cmd run build`.
-- Verification syntaxe serveur OK: `node --check server.js` et `node --check server/index.js`.
-
-### A reprendre demain
-- Continuer la checklist a partir de la Session 2 (`.21` et suivants), sauf retours utilisateurs sur les points deja coches.
-- Rechecker rapidement l'ecran "A toi de jouer" apres correction `CharacterBorder`.
-- Prevoir un vrai test iOS Safari des que possible.

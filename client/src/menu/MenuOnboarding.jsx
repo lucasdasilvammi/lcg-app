@@ -407,7 +407,8 @@ export default function MenuOnboarding({ variant = 'player', onClose, onDone }) 
   const step = steps[stepIndex] || steps[0]
 
   useEffect(() => {
-    setStepIndex(0)
+    const timer = window.setTimeout(() => setStepIndex(0), 0)
+    return () => window.clearTimeout(timer)
   }, [variant])
 
   useEffect(() => {

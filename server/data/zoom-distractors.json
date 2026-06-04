@@ -1,0 +1,35 @@
+{
+  "_comment": "Mauvaises reponses personnalisees pour le defi Zoom. La cle doit correspondre au nom affiche de la marque ou au nom du fichier image sans extension.",
+  "Channel": [
+    "Dior",
+    "Yves Saint Laurent"
+  ],
+  "Lacoste": [
+    "Tommy Hilfiger",
+    "Fred Perry"
+  ],
+  "Maserati": [
+    "Abarth",
+    "Triton"
+  ],
+  "Peugeot": [
+    "Renault",
+    "Citroen"
+  ],
+  "Ralph Lauren": [
+    "Tommy Hilfiger",
+    "Hugo Boss"
+  ],
+  "Rolex": [
+    "Omega",
+    "Tag Heuer"
+  ],
+  "Starbucks": [
+    "Costa Coffee",
+    "Coffee Bean"
+  ],
+  "Volkswagen": [
+    "Audi",
+    "Skoda"
+  ]
+}

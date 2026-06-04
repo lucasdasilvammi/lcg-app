@@ -10,7 +10,8 @@
     "start": "node server.js",
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
     "server:dev": "nodemon server.js",
-    "client:dev": "cd client && npm run dev"
+    "client:dev": "cd client && npm run dev",
+    "test:swarm": "node scripts/agent-swarm/run-four-player-simulation.js --spawn-server --scenario scripts/agent-swarm/scenarios/default-four-player.json"
   },
   "keywords": [
     "game",

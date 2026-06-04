@@ -8,12 +8,11 @@ import Key from './components/Key'
 import DigitBox from './components/DigitBox'
 
 export default function ChiffresGame({ roomData, currentUserId }) {
-  if (!roomData || !roomData.currentInteraction) return null
-
   const { socket } = useSocket()
-  const { type, data, duelists, readerId } = roomData.currentInteraction
-  const duelPlayers = roomData.players.filter(p => duelists.includes(p.id))
-  const readerPlayer = roomData.players.find(p => p.id === readerId)
+  const interaction = roomData?.currentInteraction
+  const { type, data, duelists = [], readerId } = interaction || {}
+  const roomPlayers = roomData?.players || []
+  const duelPlayers = roomPlayers.filter(p => duelists.includes(p.id))
   const isMeReader = currentUserId === readerId
   const isDuelist = duelists.includes(currentUserId)
   const isSpectator = !isMeReader && !isDuelist
@@ -37,7 +36,7 @@ export default function ChiffresGame({ roomData, currentUserId }) {
       socket.emit('chiffres_answer_update', {
         playerId: currentUserId,
         answer: newAnswer,
-        roomId: roomData.id
+        roomId: roomData?.id
       })
     }
   }
@@ -104,7 +103,7 @@ export default function ChiffresGame({ roomData, currentUserId }) {
         socket.emit('chiffres_answer_submit', {
           playerId: currentUserId,
           answer: answer,
-          roomId: roomData.id
+          roomId: roomData?.id
         })
       }
       console.log('Réponse validée:', answerValue)
@@ -112,6 +111,8 @@ export default function ChiffresGame({ roomData, currentUserId }) {
   }
 
   const isComplete = answer.every(d => d !== '')
+
+  if (!roomData || !interaction) return null
 
   return (
  <div className='bg-bg relative max-w-full flex flex-col justify-between items-center h-dvh app-screen-y defi-screen-y px-6 text-center'>

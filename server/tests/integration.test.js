@@ -23,6 +23,25 @@ const stopServer = () => new Promise((resolve) => {
   serverProcess.on('close', () => resolve())
 })
 
+const getMaxConsecutiveRun = (code) => {
+  let maxRun = 0
+  let currentRun = 0
+  let previous = null
+
+  code.forEach((value) => {
+    if (value === previous) {
+      currentRun += 1
+    } else {
+      previous = value
+      currentRun = 1
+    }
+
+    if (currentRun > maxRun) maxRun = currentRun
+  })
+
+  return maxRun
+}
+
 afterEach(async () => {
   await stopServer()
 })
@@ -72,20 +91,57 @@ test('pick_character rejects duplicates', async () => {
   c1.emit('start_game')
   await new Promise((r) => setTimeout(r, 200))
 
-  // First picks character 0
-  c1.emit('pick_character', 0)
+  const duplicateCharacter = 'donatien'
+
+  // First picks a real playable character.
+  c1.emit('pick_character', duplicateCharacter)
   await new Promise((r) => setTimeout(r, 200))
 
-  // Second tries to pick 0 -> should get error_pick
+  // Second tries to pick the same character -> should get error_pick.
   let gotError = false
+  let errorMessage = null
   await new Promise((res) => {
-    c2.once('error_pick', (msg) => { gotError = true; res() })
-    c2.emit('pick_character', 0)
+    c2.once('error_pick', (msg) => { gotError = true; errorMessage = msg; res() })
+    c2.emit('pick_character', duplicateCharacter)
     setTimeout(res, 500)
   })
 
   expect(gotError).toBe(true)
+  expect(errorMessage).toBe('Ce personnage est d\u00e9j\u00e0 choisi.')
 
   c1.disconnect()
   c2.disconnect()
+})
+
+test('public room codes stay simple and unique for concurrent rooms', async () => {
+  await startServer()
+
+  const clients = await Promise.all(
+    Array.from({ length: 3 }, async () => {
+      const client = io.connect('http://localhost:3001')
+      await new Promise((res) => client.on('connect', res))
+      return client
+    })
+  )
+
+  const codes = []
+
+  for (const client of clients) {
+    const roomCode = await new Promise((resolve) => {
+      client.emit('create_room')
+      client.once('room_created', (data) => resolve(data.code))
+    })
+
+    codes.push(roomCode)
+  }
+
+  expect(new Set(codes.map((code) => JSON.stringify(code))).size).toBe(codes.length)
+
+  codes.forEach((code) => {
+    expect(code).toHaveLength(5)
+    expect(new Set(code).size).toBeLessThanOrEqual(3)
+    expect(getMaxConsecutiveRun(code)).toBeGreaterThanOrEqual(3)
+  })
+
+  clients.forEach((client) => client.disconnect())
 })

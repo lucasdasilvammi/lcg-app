@@ -69,18 +69,17 @@ const ColorDisplay = ({ color, size = 'small' }) => {
 }
 
 export default function PickReveal({ roomData, continueToFeedback, currentUserId }) {
-  if (!roomData || !roomData.lastResult) return null
-
-  const result = roomData.lastResult || {}
-  const { type, duelists } = result
-  const duelPlayers = roomData.players.filter(p => duelists?.includes(p.id))
+  const result = roomData?.lastResult || {}
+  const { type, duelists = [] } = result
+  const roomPlayers = roomData?.players || []
+  const duelPlayers = roomPlayers.filter(p => duelists.includes(p.id))
   const submittedColors = result.submittedColors || {}
   const targetColor = result.targetColor
 
-  const player1Id = duelists?.[0]
-  const player2Id = duelists?.[1]
-  const player1 = roomData.players.find(p => p.id === player1Id)
-  const player2 = roomData.players.find(p => p.id === player2Id)
+  const player1Id = duelists[0]
+  const player2Id = duelists[1]
+  const player1 = roomPlayers.find(p => p.id === player1Id)
+  const player2 = roomPlayers.find(p => p.id === player2Id)
 
   const player1Color = submittedColors[player1Id]
   const player2Color = submittedColors[player2Id]
@@ -104,21 +103,16 @@ export default function PickReveal({ roomData, continueToFeedback, currentUserId
     const maxTarget = Math.max(target1, target2, 1)
     const duration = 2500
     const easeOutCubic = (value) => 1 - Math.pow(1 - value, 3)
-    const startedAt = performance.now()
     let frameId = null
 
-    setAnimatedPercent1(0)
-    setAnimatedPercent2(0)
-    setShowResultText(false)
-
-    const tick = (now) => {
+    const tick = (startedAt, now) => {
       const progress = Math.min(1, (now - startedAt) / duration)
       const currentValue = maxTarget * easeOutCubic(progress)
       setAnimatedPercent1(Math.min(target1, currentValue))
       setAnimatedPercent2(Math.min(target2, currentValue))
 
       if (progress < 1) {
-        frameId = requestAnimationFrame(tick)
+        frameId = requestAnimationFrame((nextNow) => tick(startedAt, nextNow))
       } else {
         setAnimatedPercent1(target1)
         setAnimatedPercent2(target2)
@@ -126,7 +120,12 @@ export default function PickReveal({ roomData, continueToFeedback, currentUserId
       }
     }
 
-    frameId = requestAnimationFrame(tick)
+    frameId = requestAnimationFrame((startedAt) => {
+      setAnimatedPercent1(0)
+      setAnimatedPercent2(0)
+      setShowResultText(false)
+      frameId = requestAnimationFrame((now) => tick(startedAt, now))
+    })
     return () => {
       if (frameId) cancelAnimationFrame(frameId)
     }
@@ -138,14 +137,14 @@ export default function PickReveal({ roomData, continueToFeedback, currentUserId
     else if (percent2 > percent1) winnerId = player2Id
   }
 
-  const isMeReader = roomData.currentInteraction?.readerId === currentUserId
-
   // For Pick challenges, only next player can advance (same as feedback)
   const isPickChallenge = type === 'pick'
-  const nextPlayerIndex = (roomData.turnIndex + 1) % roomData.players.length
-  const nextPlayer = roomData.players[nextPlayerIndex]
+  const nextPlayerIndex = roomPlayers.length > 0 ? ((roomData?.turnIndex || 0) + 1) % roomPlayers.length : -1
+  const nextPlayer = nextPlayerIndex >= 0 ? roomPlayers[nextPlayerIndex] : null
   const isNextPlayer = nextPlayer && nextPlayer.id === currentUserId
   const canAdvance = isPickChallenge && isNextPlayer
+
+  if (!roomData || !roomData.lastResult) return null
 
   return (
  <div className="bg-bg relative w-full max-w-full mx-auto flex flex-col items-center h-dvh app-screen-y defi-screen-y px-6 text-center gap-4">

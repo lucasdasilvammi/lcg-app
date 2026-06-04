@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import DuelNavbar from '../shared/DuelNavbar'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import CharacterCard from '../../../components/CharacterCard'
@@ -26,11 +26,11 @@ const hslToHex = (h, s, l) => {
 }
 
 export default function PickGame({ roomData, currentUserId }) {
-  if (!roomData || !roomData.currentInteraction) return null
-
   const { socket } = useSocket()
-  const { type, duelists, data } = roomData.currentInteraction
-  const duelPlayers = roomData.players.filter(p => duelists.includes(p.id))
+  const interaction = roomData?.currentInteraction
+  const { type, duelists = [], data } = interaction || {}
+  const roomPlayers = roomData?.players || []
+  const duelPlayers = roomPlayers.filter(p => duelists.includes(p.id))
   const isDuelist = duelists.includes(currentUserId)
   const isSpectator = !isDuelist
   const targetColor = data?.targetColor || '#4F46E5'
@@ -40,7 +40,6 @@ export default function PickGame({ roomData, currentUserId }) {
   const [lightness, setLightness] = useState(50)
   const [hasSubmitted, setHasSubmitted] = useState(false)
   const [isDragging, setIsDragging] = useState(false)
-  const [opponentSubmitted, setOpponentSubmitted] = useState(false)
   const [countdown, setCountdown] = useState(15)
   const [player1Hue, setPlayer1Hue] = useState(180)
   const [player1Saturation, setPlayer1Saturation] = useState(100)
@@ -48,17 +47,14 @@ export default function PickGame({ roomData, currentUserId }) {
   const [player2Hue, setPlayer2Hue] = useState(180)
   const [player2Saturation, setPlayer2Saturation] = useState(100)
   const [player2Lightness, setPlayer2Lightness] = useState(50)
-  const [opponentHue, setOpponentHue] = useState(180)
-  const [opponentSaturation, setOpponentSaturation] = useState(100)
-  const [opponentLightness, setOpponentLightness] = useState(50)
   const [player1Submitted, setPlayer1Submitted] = useState(false)
   const [player2Submitted, setPlayer2Submitted] = useState(false)
   const [spectatorCountdown, setSpectatorCountdown] = useState(15)
 
   const squareRef = useRef(null)
   const canvasRef = useRef(null)
-  const deadlineRef = useRef(Date.now() + 15000)
-  const spectatorDeadlineRef = useRef(Date.now() + 15000)
+  const deadlineRef = useRef(0)
+  const spectatorDeadlineRef = useRef(0)
   const pickedColorRef = useRef(null)
   const autoSubmitRef = useRef(false)
 
@@ -69,6 +65,12 @@ export default function PickGame({ roomData, currentUserId }) {
   useEffect(() => {
     pickedColorRef.current = pickedColor
   }, [pickedColor])
+
+  useEffect(() => {
+    const initialDeadline = Date.now() + 15000
+    deadlineRef.current = initialDeadline
+    spectatorDeadlineRef.current = initialDeadline
+  }, [interaction])
 
   // Dessiner le gradient du carré sur canvas
   useEffect(() => {
@@ -103,20 +105,19 @@ export default function PickGame({ roomData, currentUserId }) {
   }, [hue])
 
   useEffect(() => {
-    const submitted = roomData.currentInteraction?.submittedColors || {}
-    if (submitted[currentUserId]) {
-      setHasSubmitted(true)
-    }
-    if (isDuelist) {
-      const opponentId = duelists.find(id => id !== currentUserId)
-      setOpponentSubmitted(opponentId ? submitted[opponentId] !== undefined : false)
-    }
-    // Update player submission status for spectators
-    if (isSpectator && duelists.length === 2) {
-      setPlayer1Submitted(submitted[duelists[0]] !== undefined)
-      setPlayer2Submitted(submitted[duelists[1]] !== undefined)
-    }
-  }, [roomData.currentInteraction, currentUserId, isDuelist, isSpectator, duelists])
+    const timer = window.setTimeout(() => {
+      const submitted = interaction?.submittedColors || {}
+      if (submitted[currentUserId]) {
+        setHasSubmitted(true)
+      }
+      // Update player submission status for spectators
+      if (isSpectator && duelists.length === 2) {
+        setPlayer1Submitted(submitted[duelists[0]] !== undefined)
+        setPlayer2Submitted(submitted[duelists[1]] !== undefined)
+      }
+    }, 0)
+    return () => window.clearTimeout(timer)
+  }, [interaction, currentUserId, isSpectator, duelists])
 
   // Countdown pour spectateurs quand un joueur a soumis
   useEffect(() => {
@@ -128,8 +129,10 @@ export default function PickGame({ roomData, currentUserId }) {
     if (oneSubmitted && !bothSubmitted) {
       spectatorDeadlineRef.current = Math.min(spectatorDeadlineRef.current, Date.now() + 5000)
     } else if (bothSubmitted) {
-      setSpectatorCountdown(null)
+      const timer = window.setTimeout(() => setSpectatorCountdown(null), 0)
+      return () => window.clearTimeout(timer)
     }
+    return undefined
   }, [player1Submitted, player2Submitted, isSpectator])
 
   // Timer pour spectator countdown
@@ -144,7 +147,7 @@ export default function PickGame({ roomData, currentUserId }) {
     return () => clearInterval(interval)
   }, [isSpectator, spectatorCountdown])
 
-  const updateColorFromPosition = (clientX, clientY) => {
+  const updateColorFromPosition = useCallback((clientX, clientY) => {
     if (!squareRef.current || hasSubmitted) return
     
     const rect = squareRef.current.getBoundingClientRect()
@@ -154,7 +157,7 @@ export default function PickGame({ roomData, currentUserId }) {
     // X = saturation (0-100), Y = lightness (100-0, inversé)
     setSaturation(Math.round(x * 100))
     setLightness(Math.round((1 - y) * 100))
-  }
+  }, [hasSubmitted])
 
   const handleSquareMouseDown = (e) => {
     if (hasSubmitted) return
@@ -205,7 +208,7 @@ export default function PickGame({ roomData, currentUserId }) {
       document.removeEventListener('touchend', handleTouchEnd)
       document.removeEventListener('touchcancel', handleTouchEnd)
     }
-  }, [isDragging, hasSubmitted])
+  }, [isDragging, hasSubmitted, updateColorFromPosition])
 
   const handleSubmit = () => {
     if (hasSubmitted || !socket) return
@@ -237,17 +240,10 @@ export default function PickGame({ roomData, currentUserId }) {
         setPlayer2Saturation(data.saturation)
         setPlayer2Lightness(data.lightness)
       }
-      // Si je suis duelliste, update aussi opponent color
-      if (isDuelist && data.playerId !== currentUserId) {
-        setOpponentHue(data.hue)
-        setOpponentSaturation(data.saturation)
-        setOpponentLightness(data.lightness)
-      }
     })
 
     socket.on('pick_opponent_submitted', (data) => {
       if (isDuelist && data.playerId !== currentUserId) {
-        setOpponentSubmitted(true)
         deadlineRef.current = Math.min(deadlineRef.current, Date.now() + 5000)
         setCountdown(Math.max(0, Math.ceil((deadlineRef.current - Date.now()) / 1000)))
       }
@@ -288,6 +284,8 @@ export default function PickGame({ roomData, currentUserId }) {
       lightness
     })
   }, [hue, saturation, lightness, isDuelist, socket, hasSubmitted])
+
+  if (!roomData || !interaction) return null
 
   return (
  <div className="bg-bg relative w-full max-w-full mx-auto flex flex-col justify-between items-center h-dvh app-screen-y defi-screen-y px-6 text-center">

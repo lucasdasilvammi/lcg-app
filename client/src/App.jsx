@@ -410,7 +410,7 @@ function AppContent() {
 
   useEffect(() => {
     window.__LEAVE = handleLeaveRoom
-  }, [leaveRoom])
+  })
 
   useEffect(() => {
     // Block context menu on images/SVGs to prevent "Save Image" popup
@@ -437,11 +437,16 @@ function AppContent() {
     pointerOriginRef.current = { x: event.clientX, y: event.clientY }
     clearLongPressTimer()
     longPressTimerRef.current = window.setTimeout(() => {
-      if (view === 'LOBBY' && roomData) {
-        setMenuOnboardingVariant(roomData.adminId === socket?.id ? 'admin' : 'player')
+      const onboardingVariant = roomData?.adminId === socket?.id ? 'admin' : 'player'
+      const hasSeenCurrentOnboarding = onboardingVariant === 'admin'
+        ? adminMenuOnboardingSeen
+        : playerMenuOnboardingSeen
+
+      if (view === 'LOBBY' && roomData && !hasSeenCurrentOnboarding) {
+        setMenuOnboardingVariant(onboardingVariant)
         setIsMenuOnboardingOpen(true)
       } else {
-        setIsSettingsOpen(true)
+        openSettingsMenu()
       }
       longPressTimerRef.current = null
     }, LONG_PRESS_MS)
@@ -482,6 +487,7 @@ function AppContent() {
   }
 
   useEffect(() => {
+    const timer = window.setTimeout(() => {
     if (isLeavingRef.current) {
       if (!roomData) {
         setView('HOME')
@@ -491,16 +497,23 @@ function AppContent() {
     }
 
     if (roomData?.status) setView(roomData.status);
+    }, 0)
+
+    return () => window.clearTimeout(timer)
   }, [roomData]);
 
   useEffect(() => {
-    if (errorMsg) setInputCode([]);
+    if (!errorMsg) return undefined
+    const timer = window.setTimeout(() => setInputCode([]), 0)
+    return () => window.clearTimeout(timer)
   }, [errorMsg]);
 
   useEffect(() => {
     if (!canOpenSettings && isSettingsOpen) {
-      closeSettingsMenu()
+      const timer = window.setTimeout(() => setIsSettingsOpen(false), 0)
+      return () => window.clearTimeout(timer)
     }
+    return undefined
   }, [canOpenSettings, isSettingsOpen])
 
   useEffect(() => {
@@ -545,16 +558,6 @@ function AppContent() {
     dismissReconnectInvite?.()
     setInputCode([])
   }
-
-  const movePlayer = (index, direction) => {
-    if (!roomData) return;
-    const newPlayers = [...roomData.players];
-    if (index + direction < 0 || index + direction >= newPlayers.length) return;
-    const temp = newPlayers[index];
-    newPlayers[index] = newPlayers[index + direction];
-    newPlayers[index + direction] = temp;
-    updateTurnOrder(newPlayers);
-  };
 
   return (
     <div
