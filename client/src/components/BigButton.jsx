@@ -1,9 +1,21 @@
 import React from 'react'
 
-export default function BigButton({ onClick, text, icon, className = "", disabled = false, compact = false }) {
-  const heightClass = compact ? 'h-15' : 'h-18'
-  const sideHeightClass = compact ? 'h-16' : 'h-19'
-  const textClass = compact ? 'text-[36px]' : 'text-[42px]'
+export default function BigButton({ onClick, text, icon, className = "", disabled = false, compact = false, responsiveCompact = false }) {
+  const heightClass = compact
+    ? 'h-15'
+    : responsiveCompact
+      ? 'h-18 [@media(max-height:760px)]:h-15'
+      : 'h-18'
+  const sideHeightClass = compact
+    ? 'h-16'
+    : responsiveCompact
+      ? 'h-19 [@media(max-height:760px)]:h-16'
+      : 'h-19'
+  const textClass = compact
+    ? 'text-[36px]'
+    : responsiveCompact
+      ? 'text-[42px] [@media(max-height:760px)]:text-[36px]'
+      : 'text-[42px]'
 
   return (
     <button

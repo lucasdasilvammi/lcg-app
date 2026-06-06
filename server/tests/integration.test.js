@@ -164,6 +164,45 @@ test('public room codes stay simple and unique for concurrent rooms', async () =
   clients.forEach((client) => client.disconnect())
 })
 
+test('pause remains available normally but is rejected during a common activity', async () => {
+  await startServer()
+
+  const admin = io.connect('http://localhost:3001')
+  await new Promise((resolve) => admin.on('connect', resolve))
+
+  await new Promise((resolve) => {
+    admin.emit('create_room')
+    admin.once('room_created', resolve)
+  })
+
+  const pausedStatePromise = waitForRoomState(admin, (room) => room.isPaused === true)
+  const pauseResponse = await emitWithAck(admin, 'pause_game', {})
+  expect(pauseResponse).toEqual({ ok: true })
+  await pausedStatePromise
+
+  const resumedStatePromise = waitForRoomState(admin, (room) => room.isPaused === false)
+  const resumeResponse = await emitWithAck(admin, 'resume_game', {})
+  expect(resumeResponse).toEqual({ ok: true })
+  await resumedStatePromise
+
+  const activityStatePromise = waitForRoomState(admin, (room) => room.status === 'ACTIVITE_BRIEF')
+  admin.emit('trigger_action', 'ACTIVITE')
+  await activityStatePromise
+
+  const blockedPauseResponse = await emitWithAck(admin, 'pause_game', {})
+  expect(blockedPauseResponse).toEqual({ ok: false, reason: 'pause_not_allowed' })
+
+  const refreshedStatePromise = waitForRoomState(
+    admin,
+    (room) => room.status === 'ACTIVITE_BRIEF'
+  )
+  admin.emit('request_room_state')
+  const refreshedState = await refreshedStatePromise
+  expect(refreshedState.isPaused).toBe(false)
+
+  admin.disconnect()
+})
+
 test('four-player activity keeps photo counters and vote timing synchronized', async () => {
   await startServer()
 

@@ -160,7 +160,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, cur
               resolveInteraction({ correct: selectedAnswerIndex === data.correct, selectedIndex: selectedAnswerIndex })
             }}
             text="Valider"
-            className="w-full"
+            className="w-fit"
             disabled={!hasSomeoneBuzzed || selectedAnswerIndex === null}
           />
         )}

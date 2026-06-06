@@ -4,13 +4,31 @@
 
 ---
 
+## Samedi 6 Juin 2026 - Finitions UX et verrouillage des phases
+
+### Parcours et affichage
+- Texte de l'étape 9/13 corrigé pour préciser qu'une expulsion est définitive.
+- Boutons de choix de case remis à leur taille normale, avec une réduction réservée aux écrans trop courts.
+- Fermeture de la popup du boss synchronisée avec la fin exacte de sa barre de progression.
+- Padding supérieur unifié entre les écrans de défi et bouton `Valider` du Buzzer ajusté à son contenu.
+
+### Activité photo
+- Bouton principal ancré en bas pendant l'ouverture de la caméra, la prise et la validation de la photo.
+- Message caméra clarifié et nouvel import de secours proposé uniquement en cas de refus ou d'indisponibilité.
+- Nouvelle tentative conservée lorsque le navigateur peut encore autoriser la caméra.
+
+### Sécurisation des phases
+- Pause masquée et refusée côté serveur pendant les défis et les activités communes.
+- Menu et annulation d'action bloqués sur le classement final pour tous les joueurs.
+- Ajout de tests unitaires et d'intégration pour les restrictions de phase.
+
 ## Samedi 6 Juin 2026 - Synchronisation des activités communes
 
 ### Photo et plein écran mobile
 - Ajout d'une récupération explicite du plein écran après l'autorisation ou l'utilisation de la caméra.
 - Écran photo rendu compact et scrollable pour éviter les boutons coupés ou superposés hors plein écran.
 - Caméra arrière utilisée seule afin d'imposer une prise de vue directe du dessin.
-- Commandes `Changer`, `Importer` et `Fermer` retirées de la caméra. Elles pourront être restaurées depuis l'historique de cette version si le besoin revient.
+- Commandes `Changer`, `Importer` et `Fermer` retirées du parcours normal. L'import reste disponible uniquement comme secours si la caméra est refusée ou indisponible.
 
 ### Compteurs et vote synchronisés
 - Compteur de photos recalculé côté serveur depuis la liste réelle des photos envoyées.

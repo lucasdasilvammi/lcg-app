@@ -68,6 +68,7 @@ const {
   normalizeLogoActivityState,
   setLogoActivityVoteTiming
 } = require('./server/activityState');
+const { isPauseAllowed, isUndoAllowed } = require('./server/phaseGuards');
 
 // Flatten quiz database
 const QUIZ_DB = Object.keys(quizData)
@@ -1421,6 +1422,11 @@ io.on('connection', (socket) => {
       return;
     }
 
+    if (!isUndoAllowed(room.status)) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'game_state_locked' });
+      return;
+    }
+
     const restored = restoreUndoSnapshot(room);
     if (!restored) {
       if (typeof ack === 'function') ack({ ok: false, reason: 'nothing_to_undo' });
@@ -1440,6 +1446,11 @@ io.on('connection', (socket) => {
 
     if (room.adminId !== socket.id) {
       if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
+      return;
+    }
+
+    if (!isPauseAllowed(room.status)) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'pause_not_allowed' });
       return;
     }
 

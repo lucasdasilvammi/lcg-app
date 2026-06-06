@@ -686,6 +686,12 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
   const playersCount = roomData?.players?.length || 0
   const isCurrentUserAdmin = roomData?.adminId === currentUserId
   const canUndo = Boolean(roomData?.canUndo) && isCurrentUserAdmin
+  const canPauseGame = Boolean(
+    roomData?.status
+    && roomData.status !== 'GAME_END'
+    && !roomData.status.startsWith('DUEL_')
+    && !roomData.status.startsWith('ACTIVITE_')
+  )
   const menuPlayers = useMemo(() => {
     const roomPlayers = roomData?.players || []
     const playersWithCharacter = roomPlayers.filter(player => player.character)
@@ -1160,13 +1166,15 @@ export default function SettingsMenu({ roomData, currentUserId, updateTurnOrder,
                 disabled={!canUndo}
                 className="bg-red-secondary text-red-primary"
               />
-              <ButtonWithIcon
-                variant="menu"
-                text="Pause"
-                icon={<MenuColorIcon src="/menu/icon/pause.svg" />}
-                onClick={handlePauseGame}
-                className=""
-              />
+              {canPauseGame && (
+                <ButtonWithIcon
+                  variant="menu"
+                  text="Pause"
+                  icon={<MenuColorIcon src="/menu/icon/pause.svg" />}
+                  onClick={handlePauseGame}
+                  className=""
+                />
+              )}
               </>
             )}
             </div>

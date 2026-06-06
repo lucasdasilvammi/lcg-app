@@ -11,6 +11,7 @@ import { pronoun } from '../utils/frenchGrammar'
 const CTRL_Z_BONUS = BONUS_CATALOG.find((bonus) => bonus.id === 'ctrl-z')
 const CTRL_Z_REMINDER_DURATION = 3000
 const FINISH_REMINDER_DURATION = 7000
+const REMINDER_EXIT_DURATION = 250
 const TOP_BORDER_MASK_STYLE = {
   WebkitMaskImage: 'url(/menu/menu-border-top.svg)',
   maskImage: 'url(/menu/menu-border-top.svg)',
@@ -275,7 +276,10 @@ function FinishReminderPopup({ onClose, onFinish, isClosing = false }) {
             className="absolute inset-0 overflow-hidden bg-light5"
             style={TOP_BORDER_MASK_STYLE}
           >
-            <div className="ctrl-z-reminder-top-progress absolute inset-0 bg-light" />
+            <div
+              className="ctrl-z-reminder-top-progress absolute inset-0 bg-light"
+              style={{ animationDuration: `${FINISH_REMINDER_DURATION}ms` }}
+            />
           </div>
         </div>
 
@@ -391,8 +395,8 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
       window.setTimeout(() => {
         setDismissedFinishReminderKey(finishTurnKey)
         setClosingFinishReminderKey(null)
-      }, 250)
-    }, FINISH_REMINDER_DURATION)
+      }, REMINDER_EXIT_DURATION)
+    }, FINISH_REMINDER_DURATION - REMINDER_EXIT_DURATION)
 
     return () => window.clearTimeout(timer)
   }, [finishTurnKey, showFinishReminder])
@@ -467,7 +471,7 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
     return (
  <div className="relative w-full overflow-hidden bg-bg">
         <style>{ctrlZReminderStyles}</style>
- <div className="relative z-10 h-dvh w-full max-w-full mx-auto flex flex-col items-center gap-5 px-10 py-8 text-center [@media(max-height:720px)]:gap-3 [@media(max-height:720px)]:py-5">
+ <div className="relative z-10 h-dvh w-full max-w-full mx-auto flex flex-col items-center gap-5 px-10 py-10 text-center [@media(max-height:760px)]:gap-3">
           {showCtrlZIndicator && (
             <div key={ctrlZTurnKey} className="absolute right-8 top-12 z-20">
               <button
@@ -488,13 +492,13 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
             </p>
           </div>
 
- <div className={`flex w-full min-h-0 flex-1 flex-col font-family-hakobi text-xl text-bg uppercase ${canDeclareFinish ? 'overflow-x-hidden overflow-y-auto' : 'justify-center overflow-hidden'}`}>
-            <div className="flex w-full flex-col gap-3 [@media(max-height:720px)]:gap-2.5">
+ <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-x-hidden overflow-y-auto font-family-hakobi text-xl uppercase text-bg">
+            <div className="flex w-full flex-col gap-3 [@media(max-height:760px)]:gap-2.5">
             {canDeclareFinish && (
               <BigButton
                 onClick={handleDeclareFinish}
                 text="Terminer"
-                compact
+                responsiveCompact
                 icon={<img src="/menu/icon/crown.svg" alt="arrivée" className="w-8 h-8" />}
                 className="bg-light text-bg"
               />
@@ -502,35 +506,35 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
             <BigButton
               onClick={() => triggerAction("QUIZ")}
               text="Quizz"
-              compact
+              responsiveCompact
  icon={<img src="/game/icons/cases/quizz.svg" alt="jalon" className="w-8 h-8" />}
               className="bg-yellow-primary"
             />
             <BigButton
               onClick={handleDefiClick}
               text="Défi"
-              compact
+              responsiveCompact
  icon={<img src="/game/icons/cases/defi.svg" alt="jalon" className="w-8 h-8" />}
               className="bg-blue-primary"
             />
             <BigButton
               onClick={() => triggerAction("ACTIVITE")}
               text="Activité"
-              compact
+              responsiveCompact
  icon={<img src="/game/icons/cases/activite.svg" alt="jalon" className="w-8 h-8" />}
               className="bg-orange-primary"
             />
             <BigButton
               onClick={() => triggerAction("BONUS")}
               text="Bonus"
-              compact
+              responsiveCompact
  icon={<img src="/game/icons/cases/bonus.svg" alt="jalon" className="w-8 h-8" />}
               className="bg-green-primary"
             />
             <BigButton
               onClick={() => triggerAction("EVENT")}
               text="Évènement"
-              compact
+              responsiveCompact
  icon={<img src="/game/icons/cases/evenement.svg" alt="jalon" className="w-8 h-8" />}
               className="bg-pink-primary"
             />

@@ -321,7 +321,10 @@ export default function DuelVersusIntro({ duelPlayers, type, startDuel }) {
           }
         `}
       </style>
-      <div className="relative z-20 flex flex-col items-center px-6 pt-14">
+      <div
+        className="relative z-20 flex flex-col items-center px-6"
+        style={{ paddingTop: 'var(--app-screen-padding-top, 5rem)' }}
+      >
         <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
       </div>
 

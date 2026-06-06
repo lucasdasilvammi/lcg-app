@@ -94,6 +94,7 @@ const getQuizQuestionerId = (roomData) => {
 
 const canOpenSettingsForContext = ({ view, roomData, currentUserId }) => {
   if (!roomData || !currentUserId) return false
+  if (view === 'GAME_END') return false
   if (CHARACTER_SETUP_MENU_BLOCKED_VIEWS.has(view)) return false
   if (roomData.adminId === currentUserId) return true
   if (view === 'LOBBY') return true
@@ -140,7 +141,6 @@ const canOpenSettingsForContext = ({ view, roomData, currentUserId }) => {
     case 'ACTIVITE_REVEAL':
     case 'FEEDBACK':
     case 'ROUND_END':
-    case 'GAME_END':
       return true
 
     default:

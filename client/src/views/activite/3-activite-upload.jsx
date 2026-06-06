@@ -61,6 +61,31 @@ const isMobileViewport = () => {
   return window.innerWidth < 470 || /iPhone|iPad|Android|Mobile/.test(navigator.userAgent)
 }
 
+const getCameraIssue = (error) => {
+  if (error?.name === 'NotAllowedError' || error?.name === 'SecurityError') {
+    return {
+      type: 'permission',
+      message: "L'accès à la caméra est bloqué. Autorise-la dans les réglages du site, puis réessaie. Tu peux aussi importer une image pour continuer."
+    }
+  }
+  if (error?.name === 'NotFoundError' || error?.name === 'OverconstrainedError') {
+    return {
+      type: 'unavailable',
+      message: "Aucune caméra utilisable n'a été trouvée sur cet appareil. Importe une image pour continuer."
+    }
+  }
+  if (error?.name === 'NotReadableError') {
+    return {
+      type: 'busy',
+      message: "La caméra est déjà utilisée ou inaccessible. Ferme les autres applications caméra, réessaie, ou importe une image."
+    }
+  }
+  return {
+    type: 'failed',
+    message: "Impossible d'ouvrir la caméra. Réessaie ou importe une image pour continuer."
+  }
+}
+
 export default function ActiviteUpload({ roomData, currentUserId, submitPhoto }) {
   const interaction = roomData?.currentInteraction || {}
   const {
@@ -75,9 +100,11 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
   const [photoPreview, setPhotoPreview] = useState(() => readPhotoDraft(draftKey))
   const [isUploading, setIsUploading] = useState(false)
   const [uploadError, setUploadError] = useState(null)
+  const [cameraIssue, setCameraIssue] = useState(null)
   const [cameraMode, setCameraMode] = useState('idle')
   const [isVideoReady, setIsVideoReady] = useState(false)
   const [fullscreenRecoveryNeeded, setFullscreenRecoveryNeeded] = useState(false)
+  const fileInputRef = useRef(null)
   const videoRef = useRef(null)
   const cameraStreamRef = useRef(null)
 
@@ -179,13 +206,79 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
     return canvas.toDataURL('image/jpeg', CAMERA_IMAGE_QUALITY)
   }
 
+  const fileToResizedDataUrl = (file) => new Promise((resolve, reject) => {
+    const image = new Image()
+    const reader = new FileReader()
+
+    reader.onerror = () => reject(new Error("Impossible de lire l'image."))
+    reader.onload = () => {
+      image.onload = () => {
+        const width = image.naturalWidth || image.width
+        const height = image.naturalHeight || image.height
+        if (!width || !height) {
+          reject(new Error('Image invalide.'))
+          return
+        }
+
+        const scale = Math.min(1, CAMERA_IMAGE_SIZE / Math.max(width, height))
+        const targetWidth = Math.max(1, Math.round(width * scale))
+        const targetHeight = Math.max(1, Math.round(height * scale))
+        const canvas = document.createElement('canvas')
+        canvas.width = targetWidth
+        canvas.height = targetHeight
+        const context = canvas.getContext('2d')
+        if (!context) {
+          reject(new Error('Canvas indisponible.'))
+          return
+        }
+
+        context.drawImage(image, 0, 0, targetWidth, targetHeight)
+        resolve(canvas.toDataURL('image/jpeg', CAMERA_IMAGE_QUALITY))
+      }
+      image.onerror = () => reject(new Error("Impossible de décoder l'image."))
+      image.src = reader.result
+    }
+    reader.readAsDataURL(file)
+  })
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files?.[0]
+    event.target.value = ''
+    if (!file) return
+
+    setUploadError(null)
+    setIsUploading(true)
+    try {
+      const resized = await fileToResizedDataUrl(file)
+      writePhotoDraft(draftKey, resized)
+      setPhotoPreview(resized)
+      setCameraIssue(null)
+      void restoreFullscreen('activity-photo-imported')
+    } catch (error) {
+      console.error(error)
+      setUploadError(error?.message || "Impossible d'importer cette image.")
+    } finally {
+      setIsUploading(false)
+    }
+  }
+
+  const handleOpenImport = () => {
+    fileInputRef.current?.click()
+  }
+
   const openIntegratedCamera = async () => {
     if (!canUseIntegratedCamera()) {
-      setUploadError("La caméra directe n'est pas disponible sur ce navigateur.")
+      const issue = {
+        type: 'unavailable',
+        message: "La caméra directe n'est pas disponible sur cet appareil. Importe une image pour continuer."
+      }
+      setCameraIssue(issue)
+      setUploadError(issue.message)
       return
     }
 
     setUploadError(null)
+    setCameraIssue(null)
     setIsVideoReady(false)
     setCameraMode('opening')
     stopStream(cameraStreamRef.current)
@@ -218,7 +311,9 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
     } catch (error) {
       console.error(error)
       closeIntegratedCamera({ clearError: false })
-      setUploadError("Impossible d'ouvrir la caméra arrière. Vérifie son autorisation puis réessaie.")
+      const issue = getCameraIssue(error)
+      setCameraIssue(issue)
+      setUploadError(issue.message)
     }
   }
 
@@ -246,6 +341,7 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
     setIsUploading(false)
     closeIntegratedCamera({ clearError: false })
     writePhotoDraft(draftKey, null)
+    setCameraIssue(null)
   }
 
   const uploadPhoto = (photoData) => {
@@ -272,8 +368,8 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
   if (!roomData || !roomData.currentInteraction) return null
 
   return (
-    <ActivityScreen scroll compactY className="gap-4">
-      <div className="flex w-full flex-col items-center gap-4">
+    <ActivityScreen compactY className="justify-between gap-3">
+      <div className="activity-scroll flex min-h-0 w-full flex-1 flex-col items-center gap-4 overflow-y-auto pb-2">
         <ActivityHeaderTag />
 
         <div className="flex flex-col items-center gap-2">
@@ -285,54 +381,77 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
           </p>
         </div>
 
-        {photoPreview ? (
-          <div className="relative w-full max-w-64">
-            <PhotoFrame src={photoPreview} alt="Aperçu du dessin" className="aspect-square w-full" imageClassName="object-cover" />
-          </div>
-        ) : isCameraOpen ? (
-          <CutPanel className="relative aspect-square w-full max-w-64 overflow-hidden bg-light5">
-            <video
-              ref={videoRef}
-              autoPlay
-              muted
-              playsInline
-              onLoadedMetadata={() => setIsVideoReady(true)}
-              className="h-full w-full object-cover"
-            />
-            {(cameraMode === 'opening' || !isVideoReady) && (
-              <div className="absolute inset-0 flex items-center justify-center bg-bg/70 px-8 text-center font-funnel text-base font-medium text-light">
-                Ouverture de la caméra...
-              </div>
-            )}
-          </CutPanel>
-        ) : (
-          <button
-            type="button"
-            className="flex h-60 w-full max-w-64 cursor-pointer flex-col items-center justify-center bg-contain bg-center bg-no-repeat px-8 text-center transition active:scale-95"
-            style={{ backgroundImage: 'url(/activite/bg-btn-big.svg)' }}
-            onClick={openIntegratedCamera}
-          >
-            <img src="/activite/camera.svg" alt="" aria-hidden="true" className="h-14 w-14 object-contain" />
-            <p className="font-funnel text-xl font-medium leading-tight text-light">
-              Appuyez pour ouvrir la caméra
-            </p>
-            <p className="mt-1 font-funnel text-sm text-light/60">
-              Caméra arrière uniquement
-            </p>
-          </button>
-        )}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          className="hidden"
+        />
+
+        <div className="flex min-h-60 w-full flex-1 items-center justify-center">
+          {photoPreview ? (
+            <div className="relative w-full max-w-64">
+              <PhotoFrame src={photoPreview} alt="Aperçu du dessin" className="aspect-square w-full" imageClassName="object-cover" />
+            </div>
+          ) : isCameraOpen ? (
+            <CutPanel className="relative aspect-square w-full max-w-64 overflow-hidden bg-light5">
+              <video
+                ref={videoRef}
+                autoPlay
+                muted
+                playsInline
+                onLoadedMetadata={() => setIsVideoReady(true)}
+                className="h-full w-full object-cover"
+              />
+              {(cameraMode === 'opening' || !isVideoReady) && (
+                <div className="absolute inset-0 flex items-center justify-center bg-bg/70 px-8 text-center font-funnel text-base font-medium text-light">
+                  Ouverture de la caméra...
+                </div>
+              )}
+            </CutPanel>
+          ) : (
+            <button
+              type="button"
+              className="flex h-60 w-full max-w-64 cursor-pointer flex-col items-center justify-center bg-contain bg-center bg-no-repeat px-8 text-center transition active:scale-95"
+              style={{ backgroundImage: 'url(/activite/bg-btn-big.svg)' }}
+              onClick={openIntegratedCamera}
+            >
+              <img src="/activite/camera.svg" alt="" aria-hidden="true" className="h-14 w-14 object-contain" />
+              <p className="font-funnel text-xl font-medium leading-tight text-light">
+                Appuyez pour ouvrir la caméra
+              </p>
+              <p className="mt-1 font-funnel text-sm text-light/60">
+                Prends ton logo en photo
+              </p>
+            </button>
+          )}
+        </div>
 
         {uploadError && (
           <div className="flex max-w-72 flex-col items-center gap-2">
             <p className="font-funnel text-sm font-semibold text-red-primary">{uploadError}</p>
             {!isCameraOpen && !photoPreview && (
-              <button
-                type="button"
-                onClick={openIntegratedCamera}
-                className="font-funnel text-sm font-semibold text-light underline decoration-light/50 underline-offset-4"
-              >
-                Réessayer la caméra
-              </button>
+              <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+                {cameraIssue?.type !== 'unavailable' && (
+                  <button
+                    type="button"
+                    onClick={openIntegratedCamera}
+                    className="font-funnel text-sm font-semibold text-light underline decoration-light/50 underline-offset-4"
+                  >
+                    Réessayer la caméra
+                  </button>
+                )}
+                {cameraIssue && (
+                  <button
+                    type="button"
+                    onClick={handleOpenImport}
+                    className="font-funnel text-sm font-semibold text-orange-primary underline decoration-orange-primary/60 underline-offset-4"
+                  >
+                    Importer une image
+                  </button>
+                )}
+              </div>
             )}
           </div>
         )}
@@ -373,15 +492,15 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
         >
           {uploadedCount}/{totalCount} Photos envoyées
         </StatusTag>
+      </div>
 
-        <div className="flex w-full justify-center pb-4 pt-1">
-          <ButtonWithIcon
-            onClick={photoPreview ? handleSubmit : isCameraOpen ? handleCapturePhoto : openIntegratedCamera}
-            text={hasUploaded ? 'En attente' : photoPreview ? 'Valider la photo' : isCameraOpen ? 'Prendre la photo' : 'Ouvrir la caméra'}
-            disabled={isUploading || hasUploaded || (isCameraOpen && (cameraMode === 'opening' || !isVideoReady))}
-            className="w-fit whitespace-nowrap"
-          />
-        </div>
+      <div className="flex h-20 w-full shrink-0 items-end justify-center pb-1">
+        <ButtonWithIcon
+          onClick={photoPreview ? handleSubmit : isCameraOpen ? handleCapturePhoto : openIntegratedCamera}
+          text={hasUploaded ? 'En attente' : photoPreview ? 'Valider la photo' : isCameraOpen ? 'Prendre la photo' : 'Ouvrir la caméra'}
+          disabled={isUploading || hasUploaded || (isCameraOpen && (cameraMode === 'opening' || !isVideoReady))}
+          className="w-fit whitespace-nowrap"
+        />
       </div>
     </ActivityScreen>
   )

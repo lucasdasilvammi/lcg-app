@@ -115,7 +115,7 @@ const ADMIN_STEPS = [
   {
     id: 'kick-player',
     title: 'Expulser un joueur',
-    text: "Si un joueur a un problème technique, qu'il reste connecté alors qu'il ne peut plus accéder à son personnage, tu peux le kick pour le réinviter.",
+    text: "Si un joueur ne participe plus à la partie, tu peux l'expulser définitivement. Attention : une fois expulsé, il ne pourra plus rejoindre cette partie.",
     label: 'Expulser un joueur',
     navIcon: 'lobby',
     image: '/menu/on-boarding/menu-lobby-assets-09.png',
