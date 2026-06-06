@@ -1,7 +1,7 @@
 const TAG_IMAGES = {
   quiz: '/game/categorie/tag-quizz.png',
   defi: '/game/categorie/tag-defis.png',
-  activite: '/game/categorie/tag-activités.png',
+  activite: '/game/categorie/tag-activites.png',
   bonus: '/game/categorie/tag-bonus.png',
   evenement: '/game/categorie/tag-events.png',
   jalons: '/game/categorie/tag-jalons.png',

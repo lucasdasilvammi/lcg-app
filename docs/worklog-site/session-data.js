@@ -103,6 +103,38 @@ window.WORKLOG_SESSION_DONE_ITEMS = [
 
 window.WORKLOG_SESSION_PENDING_ITEMS = [
   {
+    id: "session-human-review-evening-gameplay-2026-06-05",
+    type: "pending",
+    source: "Session Codex",
+    sourceKind: "Verification humaine",
+    sourceOrder: -500,
+    sortKey: "2026-06-05",
+    timePrecision: "date",
+    title: "Verifier en vraie partie la passe gameplay du 5 juin",
+    date: "Vendredi 5 Juin 2026",
+    time: "",
+    category: "Tests",
+    status: "A verifier humainement",
+    scope: "v1",
+    scopeLabel: "V1",
+    impact: "Quiz, defis, lobby, classement final, activite commune",
+    summary: "Valider sur le site que les corrections de soiree tiennent bien en conditions reelles, surtout avec plusieurs telephones connectes.",
+    details: [
+      "Verifier le choix puis Valider sur quiz, buzzer, vrai/faux et zoom.",
+      "Confirmer que le toast de fin affiche seulement Nom du personnage a termine.",
+      "Tester l'ecran Sur quelle case es-tu tombe sur un telephone bas en hauteur.",
+      "Comparer le compte a rebours et le dezoom du defi Zoom sur plusieurs appareils.",
+      "Verifier que le classement final reste fige meme si un joueur clique sur Accueil.",
+      "Tester le long-press menu dans le lobby admin et joueur.",
+      "Creer plusieurs rooms pour confirmer que les codes restent simples mais varient.",
+      "Verifier que le feedback de mauvaise reponse est identique pour tous les joueurs.",
+      "Tester une activite commune ou tout le monde finit a 0 point."
+    ],
+    files: ["client/src", "server.js", "server/index.js"],
+    humanReview: true,
+    reviewNote: "A jouer humainement avant de considerer cette passe comme totalement validee."
+  },
+  {
     id: "session-human-review-bonus-2026-06-04",
     type: "pending",
     source: "Session Codex",

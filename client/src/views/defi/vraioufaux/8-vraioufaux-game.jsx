@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import CharacterCard from '../../../components/CharacterCard'
 import CharacterTag from '../../../components/CharacterTag'
@@ -7,9 +7,14 @@ import QuizAnswerButton from '../../../components/QuizAnswerButton'
 import ScoreBar from '../../../components/ScoreBar'
 
 export default function DuelGame({ roomData, playerBuzz, resolveInteraction, currentUserId }) {
-  if (!roomData || !roomData.currentInteraction) return null
-  
-  const { type, data, readerId, duelists, buzzedPlayerId } = roomData.currentInteraction
+  const [selectedAnswer, setSelectedAnswer] = useState({ key: '', index: null })
+  const interaction = roomData?.currentInteraction || null
+  const { type, data, readerId, duelists = [], buzzedPlayerId } = interaction || {}
+  const selectionKey = `${type || ''}|${buzzedPlayerId || ''}|${data?.question || ''}`
+  const selectedAnswerIndex = selectedAnswer.key === selectionKey ? selectedAnswer.index : null
+
+  if (!roomData || !interaction) return null
+
   const duelPlayers = roomData.players.filter(p => duelists.includes(p.id))
   
   const isMeReader = readerId === currentUserId
@@ -85,9 +90,9 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, cur
                   key={index}
                   label={['A','B','C'][index]}
                   text={option}
-                  className="bg-light"
+                  className={`bg-light transition ${selectedAnswerIndex === index ? 'translate-x-1 scale-[1.01]' : ''} ${selectedAnswerIndex !== null && selectedAnswerIndex !== index ? 'opacity-35 grayscale' : ''}`}
                   disabled={!hasSomeoneBuzzed}
-                  onClick={() => resolveInteraction({ correct: index === data.correct, selectedIndex: index })}
+                  onClick={() => setSelectedAnswer({ key: selectionKey, index })}
                 />
               ))}
             </div>
@@ -150,9 +155,12 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, cur
         {/* Bouton Suivant invisible pour le reader - préserve la mise en page */}
         {isMeReader && (
           <ButtonWithIcon 
-            onClick={() => {}}
-            text="Voir le verdict"
-            className="opacity-0 pointer-events-none"
+            onClick={() => {
+              if (selectedAnswerIndex === null) return
+              resolveInteraction({ correct: selectedAnswerIndex === data.correct, selectedIndex: selectedAnswerIndex })
+            }}
+            text="Valider"
+            disabled={!hasSomeoneBuzzed || selectedAnswerIndex === null}
           />
         )}
         

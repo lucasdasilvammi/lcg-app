@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DuelNavbar from '../shared/DuelNavbar'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import CharacterTag from '../../../components/CharacterTag'
@@ -42,7 +42,7 @@ const LockIcon = () => (
   </svg>
 )
 
-export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomReaderVerdict, continueToFeedback }) {
+export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomReaderVerdict, continueToFeedback, serverClockOffsetMs = 0 }) {
   const interaction = roomData?.currentInteraction || {}
   const {
     type,
@@ -69,26 +69,31 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
   const isSpectator = !isDuelist && !isMeReader
   const iMeBuzzed = buzzedPlayerId === currentUserId
 
-  const [now, setNow] = useState(() => Date.now())
-  const [stableStartAt, setStableStartAt] = useState(() => (typeof zoomStartAt === 'number' ? zoomStartAt : Date.now() + 3000))
+  const getSyncedNow = useCallback(() => Date.now() + serverClockOffsetMs, [serverClockOffsetMs])
+  const [now, setNow] = useState(() => getSyncedNow())
+  const [fallbackStartAt] = useState(() => getSyncedNow() + 3000)
+  const [selectedOption, setSelectedOption] = useState({ key: '', index: null })
+  const [selectedVerdictState, setSelectedVerdictState] = useState({ key: '', value: null })
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setStableStartAt(typeof zoomStartAt === 'number' ? zoomStartAt : Date.now() + 3000)
-    }, 0)
-    return () => window.clearTimeout(timer)
-  }, [zoomStartAt, readerId, data?.image])
+    let frameId = null
 
-  useEffect(() => {
-    const interval = setInterval(() => setNow(Date.now()), 100)
-    return () => clearInterval(interval)
-  }, [])
+    const tick = () => {
+      setNow(getSyncedNow())
+      frameId = window.requestAnimationFrame(tick)
+    }
+
+    frameId = window.requestAnimationFrame(tick)
+    return () => {
+      if (frameId !== null) window.cancelAnimationFrame(frameId)
+    }
+  }, [getSyncedNow])
 
   const buzzedPlayer = buzzedPlayerId ? roomPlayers.find((p) => p.id === buzzedPlayerId) : null
   const myPlayer = roomPlayers.find((p) => p.id === currentUserId)
   const myCharacter = myPlayer?.character
 
-  const startAt = stableStartAt
+  const startAt = typeof zoomStartAt === 'number' ? zoomStartAt : fallbackStartAt
   const countdownMs = Math.max(0, startAt - now)
   const hasStarted = now >= startAt
   const countdownValue = Math.max(0, Math.ceil(countdownMs / 1000))
@@ -114,6 +119,10 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
   const timedOutNoBuzz = hasTimedOut && !buzzedPlayerId && !zoomResolvedCorrect
   const options = Array.isArray(data?.options) ? data.options : []
   const isReaderOptionsVisible = isMeReader && hasTimedOut && options.length > 0
+  const optionSelectionKey = `${isReaderOptionsVisible ? 'visible' : 'hidden'}|${buzzedPlayerId || ''}|${data?.answer || ''}`
+  const selectedOptionIndex = selectedOption.key === optionSelectionKey ? selectedOption.index : null
+  const verdictSelectionKey = `${buzzedPlayerId || ''}|${zoomResolvedCorrect ? 'resolved' : 'open'}|${data?.answer || ''}`
+  const selectedVerdict = selectedVerdictState.key === verdictSelectionKey ? selectedVerdictState.value : null
 
   const myBlockedUntil = blockedUntil[currentUserId] || 0
   const myBlockedMs = buzzedPlayerId && pauseStartedAt && myBlockedUntil > pauseStartedAt
@@ -151,10 +160,11 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
           alt={data?.answer || 'Logo mystere'}
           draggable={false}
           onContextMenu={e => e.preventDefault()}
-          className="h-full w-full object-cover transition-transform duration-200 select-none pointer-events-none"
+          className="h-full w-full object-cover select-none pointer-events-none"
           style={{
-            transform: `scale(${currentScale.toFixed(3)})`,
+            transform: `translateZ(0) scale(${currentScale.toFixed(3)})`,
             transformOrigin: 'center center',
+            willChange: 'transform',
             filter: hasStarted
               ? (buzzedPlayerId && !zoomResolvedCorrect ? 'grayscale(1)' : 'grayscale(0) blur(0px)')
               : 'grayscale(1) blur(18px) brightness(0.75)'
@@ -197,31 +207,49 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
         <ButtonWithIcon onClick={continueToFeedback} text="Suivant" />
       ) : isReaderOptionsVisible ? (
         <div className="flex w-full max-w-85 flex-col gap-3">
-          {options.map((option, index) => (
-            <QuizAnswerButton
-              key={index}
-              onClick={() => {
-                if (!buzzedPlayerId) return
-                zoomReaderVerdict(index === data?.correct, true, index)
-              }}
-              label={String.fromCharCode(65 + index)}
-              text={option}
-              className="bg-light"
-              disabled={!buzzedPlayerId}
-            />
-          ))}
+          {options.map((option, index) => {
+            const isSelected = selectedOptionIndex === index
+            const isFaded = selectedOptionIndex !== null && !isSelected
+
+            return (
+              <QuizAnswerButton
+                key={index}
+                onClick={() => setSelectedOption({ key: optionSelectionKey, index })}
+                label={String.fromCharCode(65 + index)}
+                text={option}
+                className={`bg-light transition ${isSelected ? 'translate-x-1 scale-[1.01]' : ''} ${isFaded ? 'opacity-35 grayscale' : ''}`}
+                disabled={!buzzedPlayerId}
+              />
+            )
+          })}
+          <ButtonWithIcon
+            onClick={() => {
+              if (!buzzedPlayerId || selectedOptionIndex === null) return
+              zoomReaderVerdict(selectedOptionIndex === data?.correct, true, selectedOptionIndex)
+            }}
+            text="Valider"
+            disabled={!buzzedPlayerId || selectedOptionIndex === null}
+          />
         </div>
       ) : isMeReader && buzzedPlayer ? (
         <div className="flex w-full flex-col items-center gap-3">
           <ButtonWithIcon
-            onClick={() => zoomReaderVerdict(true, false)}
+            onClick={() => setSelectedVerdictState({ key: verdictSelectionKey, value: true })}
             text={'Bonne r\u00e9ponse'}
-            className="w-fit !bg-green-secondary !text-green-primary"
+            className={`w-fit !bg-green-secondary !text-green-primary transition ${selectedVerdict === false ? 'opacity-35 grayscale' : ''} ${selectedVerdict === true ? 'translate-x-1 scale-[1.01]' : ''}`}
           />
           <ButtonWithIcon
-            onClick={() => zoomReaderVerdict(false, false)}
+            onClick={() => setSelectedVerdictState({ key: verdictSelectionKey, value: false })}
             text={'Mauvaise r\u00e9ponse'}
-            className="w-fit !bg-red-secondary !text-red-primary"
+            className={`w-fit !bg-red-secondary !text-red-primary transition ${selectedVerdict === true ? 'opacity-35 grayscale' : ''} ${selectedVerdict === false ? 'translate-x-1 scale-[1.01]' : ''}`}
+          />
+          <ButtonWithIcon
+            onClick={() => {
+              if (selectedVerdict === null) return
+              zoomReaderVerdict(selectedVerdict, false)
+            }}
+            text="Valider"
+            disabled={selectedVerdict === null}
           />
         </div>
       ) : isDuelist ? (

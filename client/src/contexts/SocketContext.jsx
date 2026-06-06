@@ -81,6 +81,7 @@ export const SocketProvider = ({ children }) => {
   const [toasts, setToasts] = useState([])
   const [pendingReconnectInvite, setPendingReconnectInvite] = useState(null)
   const [consumedReconnectInvite, setConsumedReconnectInvite] = useState(null)
+  const [serverClockOffsetMs, setServerClockOffsetMs] = useState(0)
   const toastQueueRef = useRef([])
   const addToastRef = useRef(null)
   const activeToastIdRef = useRef(null)
@@ -88,6 +89,7 @@ export const SocketProvider = ({ children }) => {
   const restoredRoomIdRef = useRef(roomData?.id || null)
   const roomStateConfirmedRef = useRef(false)
   const orphanSnapshotTimerRef = useRef(null)
+  const bestClockSyncRef = useRef({ rtt: Infinity, offset: 0 })
 
   const clearToastTimers = () => {
     toastTimersRef.current.forEach((timer) => window.clearTimeout(timer))
@@ -164,10 +166,43 @@ export const SocketProvider = ({ children }) => {
       reconnectionAttempts: Infinity
     })
     setSocket(s)
+    const clockSyncTimers = []
+    const syncServerClock = () => {
+      const sentAt = Date.now()
+      s.emit('sync_clock', {}, (response) => {
+        const receivedAt = Date.now()
+        const serverNow = Number(response?.serverNow)
+        if (!Number.isFinite(serverNow)) return
+
+        const rtt = receivedAt - sentAt
+        const offset = serverNow + (rtt / 2) - receivedAt
+        const previous = bestClockSyncRef.current
+
+        if (rtt <= previous.rtt + 100 || Math.abs(offset - previous.offset) > 250) {
+          bestClockSyncRef.current = { rtt, offset }
+          setServerClockOffsetMs(offset)
+        }
+      })
+    }
+    const clockSyncInterval = window.setInterval(syncServerClock, 15000)
+    const requestLatestRoomState = () => {
+      if (!s.connected || document.visibilityState === 'hidden') return
+      syncServerClock()
+      s.emit('request_room_state')
+    }
+    const handleVisibilityResume = () => {
+      if (document.visibilityState === 'visible') requestLatestRoomState()
+    }
 
     s.on('connect', () => {
       console.log('⚡ socket connected', s.id)
       window.__socket = s
+      bestClockSyncRef.current = { rtt: Infinity, offset: 0 }
+      syncServerClock()
+      ;[250, 1000, 2500].forEach((delay) => {
+        clockSyncTimers.push(window.setTimeout(syncServerClock, delay))
+      })
+      clockSyncTimers.push(window.setTimeout(() => s.emit('request_room_state'), 150))
       if (restoredRoomIdRef.current && !roomStateConfirmedRef.current) {
         if (orphanSnapshotTimerRef.current) window.clearTimeout(orphanSnapshotTimerRef.current)
         orphanSnapshotTimerRef.current = window.setTimeout(() => {
@@ -228,11 +263,34 @@ export const SocketProvider = ({ children }) => {
       window.__ROOM = room
       console.log('update_room_state', room.status)
     })
+    window.addEventListener('focus', requestLatestRoomState)
+    window.addEventListener('pageshow', requestLatestRoomState)
+    window.addEventListener('online', requestLatestRoomState)
+    document.addEventListener('visibilitychange', handleVisibilityResume)
 
     return () => {
+      clockSyncTimers.forEach((timer) => window.clearTimeout(timer))
+      window.clearInterval(clockSyncInterval)
+      window.removeEventListener('focus', requestLatestRoomState)
+      window.removeEventListener('pageshow', requestLatestRoomState)
+      window.removeEventListener('online', requestLatestRoomState)
+      document.removeEventListener('visibilitychange', handleVisibilityResume)
       s.disconnect()
     }
   }, [])
+
+  useEffect(() => {
+    if (!socket || !roomData?.id || !roomData.status?.startsWith('ACTIVITE_')) return undefined
+
+    const requestLatestRoomState = () => {
+      if (document.visibilityState !== 'hidden' && socket.connected) {
+        socket.emit('request_room_state')
+      }
+    }
+    requestLatestRoomState()
+    const interval = window.setInterval(requestLatestRoomState, 2500)
+    return () => window.clearInterval(interval)
+  }, [socket, roomData?.id, roomData?.status])
 
   // Emit helpers
   const createRoom = () => socket?.emit("create_room")
@@ -380,6 +438,7 @@ export const SocketProvider = ({ children }) => {
       socket,
       roomData,
       isAdmin,
+      serverClockOffsetMs,
       errorMsg,
       setErrorMsg,
       toasts,

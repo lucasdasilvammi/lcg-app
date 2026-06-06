@@ -38,7 +38,7 @@ import GameEnd from './views/12-game-end'
 import Toasts from './components/Toasts'
 import SettingsMenu from './menu/SettingsMenu'
 import MenuOnboarding from './menu/MenuOnboarding'
-import { requestAppFullscreen } from './utils/fullscreen'
+import { isFullscreenActive, requestAppFullscreen } from './utils/fullscreen'
 
 const CODE_CHARACTERS = [
   { id: 0, name: "Donatien" },
@@ -58,8 +58,8 @@ const PLAYABLE_CHARACTERS = [
   { id: 'tanguy', name: "Tanguy" }
 ];
 
-const PLAYER_MENU_ONBOARDING_STORAGE_KEY = 'lcg-player-menu-onboarding-seen-v2'
-const ADMIN_MENU_ONBOARDING_STORAGE_KEY = 'lcg-admin-menu-onboarding-seen-v1'
+const PLAYER_MENU_ONBOARDING_STORAGE_KEY = 'lcg-player-menu-onboarding-seen-v3'
+const ADMIN_MENU_ONBOARDING_STORAGE_KEY = 'lcg-admin-menu-onboarding-seen-v2'
 const APP_DESIGN_WIDTH = 390
 const FULLSCREEN_SCREEN_PADDING_TOP = '5rem'
 const FULLSCREEN_SCREEN_PADDING_BOTTOM = '3.5rem'
@@ -77,8 +77,7 @@ const ACTIVITY_MENU_BLOCKED_VIEWS = new Set([
   'ACTIVITE_VOTE'
 ])
 
-const SETUP_VIEWS = new Set([
-  'LOBBY',
+const CHARACTER_SETUP_MENU_BLOCKED_VIEWS = new Set([
   'SELECT_CHARACTER',
   'DEFINE_ORDER'
 ])
@@ -95,9 +94,9 @@ const getQuizQuestionerId = (roomData) => {
 
 const canOpenSettingsForContext = ({ view, roomData, currentUserId }) => {
   if (!roomData || !currentUserId) return false
+  if (CHARACTER_SETUP_MENU_BLOCKED_VIEWS.has(view)) return false
   if (roomData.adminId === currentUserId) return true
   if (view === 'LOBBY') return true
-  if (SETUP_VIEWS.has(view)) return false
   if (ACTIVITY_MENU_BLOCKED_VIEWS.has(view)) return false
 
   const interaction = roomData.currentInteraction
@@ -217,7 +216,7 @@ function ResponsiveViewport({ children }) {
       const visualWidth = Math.min(viewportWidth, APP_DESIGN_WIDTH)
       const scale = visualWidth / APP_DESIGN_WIDTH
       const logicalHeight = viewportHeight / scale
-      const shouldUseCompactPadding = isMobileViewport() && !document.fullscreenElement
+      const shouldUseCompactPadding = isMobileViewport() && !isFullscreenActive()
 
       document.documentElement.style.setProperty('--app-design-width', `${APP_DESIGN_WIDTH}px`)
       document.documentElement.style.setProperty('--app-visual-width', `${Math.round(visualWidth)}px`)
@@ -240,6 +239,7 @@ function ResponsiveViewport({ children }) {
     window.visualViewport?.addEventListener('resize', updateViewportMetrics)
     window.visualViewport?.addEventListener('scroll', updateViewportMetrics)
     document.addEventListener('fullscreenchange', updateViewportMetrics)
+    document.addEventListener('webkitfullscreenchange', updateViewportMetrics)
 
     return () => {
       window.removeEventListener('resize', updateViewportMetrics)
@@ -247,6 +247,7 @@ function ResponsiveViewport({ children }) {
       window.visualViewport?.removeEventListener('resize', updateViewportMetrics)
       window.visualViewport?.removeEventListener('scroll', updateViewportMetrics)
       document.removeEventListener('fullscreenchange', updateViewportMetrics)
+      document.removeEventListener('webkitfullscreenchange', updateViewportMetrics)
     }
   }, [])
 
@@ -316,7 +317,7 @@ function ReconnectInviteConfirm({ invite, onConfirm, onCancel }) {
 function AppContent() {
 
 
-  const { socket, roomData, isAdmin, errorMsg, setErrorMsg, addToast, pendingReconnectInvite, consumedReconnectInvite, confirmReconnectInvite, dismissReconnectInvite, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, acknowledgeChooseQuizBonus, selectQuizDifficulty, claimCaseBonus, stealEventBonus, previewEventStealTarget, swapEventPositions, declareFinish, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, createReconnectInvite, undoLastAction, pauseGame, resumeGame, useBonus, leaveRoom } = useSocket();
+  const { socket, roomData, isAdmin, serverClockOffsetMs, errorMsg, setErrorMsg, addToast, pendingReconnectInvite, consumedReconnectInvite, confirmReconnectInvite, dismissReconnectInvite, createRoom, joinRoomWithCode, startGame, pickCharacter, confirmSelection, updateTurnOrder, startGameLoop, rollDice, triggerAction, startSpecificQuiz, startDuel, acknowledgeRules, playerBuzz, resolveInteraction, zoomReaderVerdict, continueToFeedback, nextTurn, startNewRound, acknowledgeChooseQuizBonus, selectQuizDifficulty, claimCaseBonus, stealEventBonus, previewEventStealTarget, swapEventPositions, declareFinish, acknowledgeReady, submitDrawing, submitPhoto, submitVote, promoteAdmin, kickPlayer, createReconnectInvite, undoLastAction, pauseGame, resumeGame, useBonus, leaveRoom } = useSocket();
 
   const [view, setView] = useState("HOME");
   const [inputCode, setInputCode] = useState([]);
@@ -442,7 +443,7 @@ function AppContent() {
         ? adminMenuOnboardingSeen
         : playerMenuOnboardingSeen
 
-      if (view === 'LOBBY' && roomData && !hasSeenCurrentOnboarding) {
+      if (view === 'LOBBY' && roomData && (onboardingVariant === 'admin' || !hasSeenCurrentOnboarding)) {
         setMenuOnboardingVariant(onboardingVariant)
         setIsMenuOnboardingOpen(true)
       } else {
@@ -509,12 +510,31 @@ function AppContent() {
   }, [errorMsg]);
 
   useEffect(() => {
-    if (!canOpenSettings && isSettingsOpen) {
-      const timer = window.setTimeout(() => setIsSettingsOpen(false), 0)
-      return () => window.clearTimeout(timer)
-    }
+    if (canOpenSettings) return undefined
+
+    clearLongPressTimer()
+    if (!isSettingsOpen && !isMenuOnboardingOpen) return undefined
+
+    const timer = window.setTimeout(() => {
+      setIsSettingsOpen(false)
+      setIsMenuOnboardingOpen(false)
+    }, 0)
+    return () => window.clearTimeout(timer)
+  }, [canOpenSettings, isSettingsOpen, isMenuOnboardingOpen])
+
+  useEffect(() => {
+    const zoomImage = roomData?.currentInteraction?.type === 'zoom'
+      ? roomData.currentInteraction.data?.image
+      : null
+
+    if (!zoomImage) return undefined
+
+    const image = new Image()
+    image.src = zoomImage
+    image.decode?.().catch(() => {})
+
     return undefined
-  }, [canOpenSettings, isSettingsOpen])
+  }, [roomData?.currentInteraction?.type, roomData?.currentInteraction?.data?.image])
 
   useEffect(() => {
     return () => {
@@ -664,7 +684,7 @@ function AppContent() {
       )}
 
       {view === "ACTIVITE_VOTE" && roomData && roomData.currentInteraction && (
-        <ActiviteVote roomData={roomData} currentUserId={socket?.id} submitVote={submitVote} />
+        <ActiviteVote roomData={roomData} currentUserId={socket?.id} submitVote={submitVote} serverClockOffsetMs={serverClockOffsetMs} />
       )}
 
       {view === "ACTIVITE_REVEAL" && roomData && roomData.lastResult && (
@@ -694,7 +714,7 @@ function AppContent() {
         ) : roomData.currentInteraction.type === 'pick' ? (
           <PickGame roomData={roomData} currentUserId={socket?.id} />
         ) : roomData.currentInteraction.type === 'zoom' ? (
-          <ZoomGame roomData={roomData} currentUserId={socket?.id} playerBuzz={playerBuzz} zoomReaderVerdict={zoomReaderVerdict} continueToFeedback={continueToFeedback} />
+          <ZoomGame roomData={roomData} currentUserId={socket?.id} playerBuzz={playerBuzz} zoomReaderVerdict={zoomReaderVerdict} continueToFeedback={continueToFeedback} serverClockOffsetMs={serverClockOffsetMs} />
         ) : (
           <div>Type de défi non supporté : {roomData.currentInteraction.type}</div>
         )

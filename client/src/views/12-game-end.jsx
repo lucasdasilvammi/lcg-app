@@ -16,6 +16,10 @@ function formatCharacterName(name = '') {
   return `${lowerName.charAt(0).toLocaleUpperCase('fr-FR')}${lowerName.slice(1)}`
 }
 
+function formatFinalCharacterName(name = '') {
+  return String(name || '').trim().toLocaleUpperCase('fr-FR')
+}
+
 function CornerDecorations() {
   return (
     <>
@@ -57,7 +61,7 @@ function RankRow({ player, rank }) {
       />
       <div className="relative z-10 min-w-0 flex-1">
         <p className="truncate font-family-hakobi text-[32px] leading-none -mb-1" style={{ color: `var(--color-${player.character})` }}>
-          {formatCharacterName(player.character)}
+          {formatFinalCharacterName(player.character)}
         </p>
       </div>
       <div className="relative z-10 flex shrink-0 items-center gap-1" style={{ color: `var(--color-${player.character})` }}>
@@ -71,7 +75,9 @@ function RankRow({ player, rank }) {
 export default function GameEnd({ roomData, onGoHome }) {
   if (!roomData) return null
 
-  const players = [...roomData.players].sort((a, b) => (b.score || 0) - (a.score || 0))
+  const players = Array.isArray(roomData.finalRankings) && roomData.finalRankings.length > 0
+    ? roomData.finalRankings
+    : [...roomData.players].sort((a, b) => (b.score || 0) - (a.score || 0))
   const winner = players[0] || null
 
   return (

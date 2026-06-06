@@ -3,6 +3,7 @@ import CharacterBorder from '../components/CharacterBorder'
 import ButtonWithIcon from '../components/ButtonWithIcon'
 import CharacterCard from '../components/CharacterCard'
 import CharacterTag from '../components/CharacterTag'
+import { BossAvatar } from './activite/ActivityShared'
 import { agree, formatCharacterName } from '../utils/frenchGrammar'
 
 const SUCCESS_FEEDBACK_TEXTS = [
@@ -48,6 +49,7 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
   const winner = lastResult.winnerId ? roomData.players.find(p => p.id === lastResult.winnerId) : null
   const answeringPlayer = roomData.players[roomData.turnIndex]
   const isLogoActivity = lastResult.type === 'logo'
+  const isLogoFailure = isLogoActivity && !lastResult.success
 
   const buzzedPlayerCharacter = roomData.lastResult?.buzzedPlayerCharacter
   const buzzedPlayer = buzzedPlayerCharacter ? { character: buzzedPlayerCharacter } : null
@@ -66,13 +68,13 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
 
   const getCharacterColor = (charId) => `var(--color-${charId})`
   const borderCharacterId = isLogoActivity
-    ? winner?.character
+    ? (isLogoFailure ? null : winner?.character)
     : (lastResult.type === 'pick'
       ? winner?.character
       : (isDefi ? winner?.character : (lastResult.success ? winner?.character : answeringPlayer?.character)))
 
   const titleText = isLogoActivity
-    ? 'Felicitation'
+    ? (isLogoFailure ? 'DOMMAGE...' : 'Felicitation')
     : (lastResult.type === 'pick'
       ? 'Felicitation'
       : (isDefi && !lastResult.success
@@ -94,12 +96,13 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
     lastResult.interactionType,
     lastResult.buzzedPlayerCharacter,
     lastResult.selectedIndex,
-    lastResult.correctAnswer,
-    currentUserId
+    lastResult.correctAnswer
   ])
 
   const subtitleText = isLogoActivity
-    ? `${formatCharacterName(winner?.character || '')} remporte le brief logo ! ${successFeedbackText}`
+    ? (isLogoFailure
+      ? (lastResult.bossFeedback || "Bande de nazes, vous n'arrivez même pas à vous départager entre vous.")
+      : `${formatCharacterName(winner?.character || '')} remporte le brief logo ! ${successFeedbackText}`)
     : (lastResult.type === 'pick'
       ? `${formatCharacterName(winner?.character || '')} avait l'oeil le plus aiguise ! ${successFeedbackText}`
       : (isDefi && !lastResult.success
@@ -113,7 +116,9 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
       <CharacterBorder characterId={borderCharacterId}>
  <div className="w-full h-dvh app-screen-y px-10 flex flex-col justify-between items-center text-center bg-bg">
           <div className="flex flex-col gap-0 items-center">
-            {borderCharacterId && (
+            {isLogoFailure ? (
+              <BossAvatar className="h-20 w-20" />
+            ) : borderCharacterId && (
               <CharacterCard
                 charId={borderCharacterId}
                 size="medium"

@@ -4,6 +4,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-3-juin-2026-travaux-en-cours-non-encore-commit-corrections-bonus-post-tests-corrections-bonus-post-tests-1",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 0,
     "sortKey": "2026-06-03",
@@ -27,6 +28,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-3-juin-2026-travaux-en-cours-non-encore-commit-defi-zoom-pilote-par-les-assets-defi-zoom-pilote-par-les-assets-2",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 1,
     "sortKey": "2026-06-03",
@@ -50,6 +52,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-3-juin-2026-travaux-en-cours-non-encore-commit-debug-duel-et-ux-zoom-debug-duel-et-ux-zoom-3",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 2,
     "sortKey": "2026-06-03",
@@ -73,6 +76,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-3-juin-2026-travaux-en-cours-non-encore-commit-codes-de-room-publics-simplifies-codes-de-room-publics-simplifies-4",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 3,
     "sortKey": "2026-06-03",
@@ -95,6 +99,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-3-juin-2026-travaux-en-cours-non-encore-commit-alignement-technique-alignement-technique-5",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 4,
     "sortKey": "2026-06-03",
@@ -116,6 +121,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-2-juin-2026-v0-1-pretest-suivi-de-progression-plateau-et-fin-de-partie-suivi-de-progression-plateau-et-fin-de-partie-6",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 5,
     "sortKey": "2026-06-02",
@@ -138,6 +144,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-2-juin-2026-v0-1-pretest-events-de-plateau-enrichis-events-de-plateau-enrichis-7",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 6,
     "sortKey": "2026-06-02",
@@ -164,6 +171,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-2-juin-2026-v0-1-pretest-fin-de-partie-et-socle-v0-1-fin-de-partie-et-socle-v0-1-8",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 7,
     "sortKey": "2026-06-02",
@@ -189,6 +197,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-2-juin-2026-v0-1-pretest-documentation-documentation-9",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 8,
     "sortKey": "2026-06-02",
@@ -213,6 +222,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-31-mai-2026-activite-logo-contenus-reels-et-assets-vs-flow-activite-logo-affine-flow-activite-logo-affine-10",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 9,
     "sortKey": "2026-05-31",
@@ -235,6 +245,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-31-mai-2026-activite-logo-contenus-reels-et-assets-vs-grammaire-et-textes-dynamiques-grammaire-et-textes-dynamiques-11",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 10,
     "sortKey": "2026-05-31",
@@ -257,6 +268,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-31-mai-2026-activite-logo-contenus-reels-et-assets-vs-donnees-de-jeu-mises-a-niveau-donnees-de-jeu-mises-a-niveau-12",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 11,
     "sortKey": "2026-05-31",
@@ -278,6 +290,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-31-mai-2026-activite-logo-contenus-reels-et-assets-vs-intro-vs-et-build-principale-intro-vs-et-build-principale-13",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 12,
     "sortKey": "2026-05-31",
@@ -302,6 +315,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-vendredi-30-mai-2026-refonte-de-l-activite-commune-refonte-structurelle-du-flow-activite-refonte-structurelle-du-flow-activite-14",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 13,
     "sortKey": "2026-05-30",
@@ -325,6 +339,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-vendredi-30-mai-2026-refonte-de-l-activite-commune-assets-et-direction-visuelle-assets-et-direction-visuelle-15",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 14,
     "sortKey": "2026-05-30",
@@ -349,6 +364,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-vendredi-30-mai-2026-refonte-de-l-activite-commune-consolidation-client-serveur-consolidation-client-serveur-16",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 15,
     "sortKey": "2026-05-30",
@@ -371,6 +387,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-vendredi-30-mai-2026-refonte-de-l-activite-commune-build-et-suivi-build-et-suivi-17",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 16,
     "sortKey": "2026-05-30",
@@ -394,6 +411,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-24-mai-2026-responsive-qa-mobile-et-stabilisation-ui-checkpoint-git-checkpoint-git-18",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 17,
     "sortKey": "2026-05-24",
@@ -415,6 +433,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-24-mai-2026-responsive-qa-mobile-et-stabilisation-ui-responsive-global-responsive-global-19",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 18,
     "sortKey": "2026-05-24",
@@ -441,6 +460,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-24-mai-2026-responsive-qa-mobile-et-stabilisation-ui-checklist-qa-responsive-checklist-qa-responsive-20",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 19,
     "sortKey": "2026-05-24",
@@ -469,6 +489,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-24-mai-2026-responsive-qa-mobile-et-stabilisation-ui-selection-personnage-selection-personnage-21",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 20,
     "sortKey": "2026-05-24",
@@ -498,6 +519,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-24-mai-2026-responsive-qa-mobile-et-stabilisation-ui-menu-et-confirmations-menu-et-confirmations-22",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 21,
     "sortKey": "2026-05-24",
@@ -523,6 +545,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-24-mai-2026-responsive-qa-mobile-et-stabilisation-ui-boutons-et-micro-fixes-visuels-boutons-et-micro-fixes-visuels-23",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 22,
     "sortKey": "2026-05-24",
@@ -547,6 +570,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-24-mai-2026-responsive-qa-mobile-et-stabilisation-ui-build-et-validation-technique-build-et-validation-technique-24",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 23,
     "sortKey": "2026-05-24",
@@ -570,6 +594,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-24-mai-2026-responsive-qa-mobile-et-stabilisation-ui-a-reprendre-demain-a-reprendre-demain-25",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 24,
     "sortKey": "2026-05-24",
@@ -592,6 +617,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-17-mai-2026-v2-du-menu-settings-v2-du-menu-settings-26",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 25,
     "sortKey": "2026-05-17",
@@ -623,6 +649,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-samedi-16-mai-2026-menu-admin-lobby-finalise-cote-ux-menu-admin-lobby-finalise-cote-ux-27",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 26,
     "sortKey": "2026-05-16",
@@ -647,6 +674,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-samedi-16-mai-2026-changement-d-ordre-de-jeu-robuste-changement-d-ordre-de-jeu-robuste-28",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 27,
     "sortKey": "2026-05-16",
@@ -671,6 +699,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-samedi-16-mai-2026-actions-admin-branchees-de-bout-en-bout-actions-admin-branchees-de-bout-en-bout-29",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 28,
     "sortKey": "2026-05-16",
@@ -694,6 +723,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-samedi-16-mai-2026-annuler-l-action-implemente-annuler-l-action-implemente-30",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 29,
     "sortKey": "2026-05-16",
@@ -716,6 +746,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-samedi-16-mai-2026-presence-et-reconnexion-consolidees-presence-et-reconnexion-consolidees-31",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 30,
     "sortKey": "2026-05-16",
@@ -739,6 +770,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-samedi-16-mai-2026-documentation-documentation-32",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 31,
     "sortKey": "2026-05-16",
@@ -761,6 +793,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-jeudi-14-mai-2026-activite-commune-reparee-et-fiabilisee-activite-commune-reparee-et-fiabilisee-33",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 32,
     "sortKey": "2026-05-14",
@@ -783,6 +816,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-jeudi-14-mai-2026-vote-simultane-de-l-activite-vote-simultane-de-l-activite-34",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 33,
     "sortKey": "2026-05-14",
@@ -805,6 +839,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-jeudi-14-mai-2026-fondations-du-nouveau-menu-fondations-du-nouveau-menu-35",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 34,
     "sortKey": "2026-05-14",
@@ -827,6 +862,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-lundi-6-avril-2026-defi-zoom-integre-a-50-defi-zoom-integre-a-50-36",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 35,
     "sortKey": "2026-04-06",
@@ -852,6 +888,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-lundi-6-avril-2026-menu-parametres-sortie-de-room-stabilises-menu-parametres-sortie-de-room-stabilises-37",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 36,
     "sortKey": "2026-04-06",
@@ -874,6 +911,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-lundi-6-avril-2026-robustesse-multi-joueurs-et-sessions-robustesse-multi-joueurs-et-sessions-38",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 37,
     "sortKey": "2026-04-06",
@@ -897,6 +935,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-lundi-6-avril-2026-ajustements-ui-produit-ajustements-ui-produit-39",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 38,
     "sortKey": "2026-04-06",
@@ -921,6 +960,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-lundi-6-avril-2026-documentation-et-suivi-documentation-et-suivi-40",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 39,
     "sortKey": "2026-04-06",
@@ -945,6 +985,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-29-mars-2026-ajout-du-full-screen-sur-mobile-ajout-du-full-screen-sur-mobile-41",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 40,
     "sortKey": "2026-03-29",
@@ -965,6 +1006,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-29-mars-2026-passe-responsive-globale-quasi-complete-passe-responsive-globale-quasi-complete-42",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 41,
     "sortKey": "2026-03-29",
@@ -988,6 +1030,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-29-mars-2026-robustesse-session-deco-reco-sans-sortie-de-partie-robustesse-session-deco-reco-sans-sortie-de-partie-43",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 42,
     "sortKey": "2026-03-29",
@@ -1010,6 +1053,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-29-mars-2026-backup-de-travail-backup-de-travail-44",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 43,
     "sortKey": "2026-03-29",
@@ -1030,6 +1074,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-29-mars-2026-session-du-soir-depuis-22h-menu-sortie-de-room-et-robustesse-multi-jou-session-du-soir-depuis-22h-menu-sortie-de-room-et-robustesse-multi-jou-45",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 44,
     "sortKey": "2026-03-29",
@@ -1050,6 +1095,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-29-mars-2026-session-du-soir-depuis-22h-menu-sortie-de-room-et-robustesse-multi-jou-sortie-volontaire-de-room-fiable-46",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 45,
     "sortKey": "2026-03-29",
@@ -1075,6 +1121,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-29-mars-2026-session-du-soir-depuis-22h-menu-sortie-de-room-et-robustesse-multi-jou-reassignation-automatique-de-l-admin-47",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 46,
     "sortKey": "2026-03-29",
@@ -1097,6 +1144,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-29-mars-2026-session-du-soir-depuis-22h-menu-sortie-de-room-et-robustesse-multi-jou-deconnexion-refresh-et-reconnexion-48",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 47,
     "sortKey": "2026-03-29",
@@ -1120,6 +1168,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-29-mars-2026-session-du-soir-depuis-22h-menu-sortie-de-room-et-robustesse-multi-jou-menu-parametres-appui-long-49",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 48,
     "sortKey": "2026-03-29",
@@ -1142,6 +1191,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-29-mars-2026-session-du-soir-depuis-22h-menu-sortie-de-room-et-robustesse-multi-jou-debug-et-correction-d-architecture-50",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 49,
     "sortKey": "2026-03-29",
@@ -1166,6 +1216,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-29-mars-2026-session-du-soir-depuis-22h-menu-sortie-de-room-et-robustesse-multi-jou-documentation-todo-de-suivi-51",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 50,
     "sortKey": "2026-03-29",
@@ -1194,6 +1245,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-dimanche-29-mars-2026-session-du-soir-depuis-22h-menu-sortie-de-room-et-robustesse-multi-jou-validation-et-cloture-session-52",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 51,
     "sortKey": "2026-03-29",
@@ -1220,6 +1272,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-samedi-22-mars-2026-implementation-complete-du-defi-pick-couleurs-implementation-complete-du-defi-pick-couleurs-53",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 52,
     "sortKey": "2026-03-22",
@@ -1240,6 +1293,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-samedi-22-mars-2026-implementation-complete-du-defi-pick-couleurs-systeme-de-timeout-5-secondes-54",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 53,
     "sortKey": "2026-03-22",
@@ -1263,6 +1317,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-samedi-22-mars-2026-implementation-complete-du-defi-pick-couleurs-vue-spectateur-enrichie-55",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 54,
     "sortKey": "2026-03-22",
@@ -1286,6 +1341,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-samedi-22-mars-2026-implementation-complete-du-defi-pick-couleurs-corrections-techniques-56",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 55,
     "sortKey": "2026-03-22",
@@ -1309,6 +1365,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-samedi-22-mars-2026-implementation-complete-du-defi-pick-couleurs-logique-serveur-index-js-57",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 56,
     "sortKey": "2026-03-22",
@@ -1331,6 +1388,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-samedi-22-mars-2026-implementation-complete-du-defi-pick-couleurs-etats-visuels-ameliores-58",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 57,
     "sortKey": "2026-03-22",
@@ -1353,6 +1411,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-29-janvier-2026-systeme-de-virgules-decimales-pour-defi-chiffres-systeme-de-virgules-decimales-pour-defi-chiffres-59",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 58,
     "sortKey": "2026-01-29",
@@ -1374,6 +1433,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-29-janvier-2026-systeme-de-virgules-decimales-pour-defi-chiffres-structure-de-donnees-duels-json-60",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 59,
     "sortKey": "2026-01-29",
@@ -1398,6 +1458,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-29-janvier-2026-systeme-de-virgules-decimales-pour-defi-chiffres-affichage-ui-61",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 60,
     "sortKey": "2026-01-29",
@@ -1425,6 +1486,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-29-janvier-2026-systeme-de-virgules-decimales-pour-defi-chiffres-calculs-avec-decimales-9-chiffres-reveal-jsx-62",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 61,
     "sortKey": "2026-01-29",
@@ -1456,6 +1518,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-29-janvier-2026-systeme-de-virgules-decimales-pour-defi-chiffres-implementation-technique-63",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 62,
     "sortKey": "2026-01-29",
@@ -1479,6 +1542,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-29-janvier-2026-systeme-de-virgules-decimales-pour-defi-chiffres-exemples-concrets-64",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 63,
     "sortKey": "2026-01-29",
@@ -1510,6 +1574,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-29-janvier-2026-nettoyage-codebase-nettoyage-codebase-65",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 64,
     "sortKey": "2026-01-29",
@@ -1532,6 +1597,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-28-janvier-2026-restructuration-majeure-de-l-architecture-views-restructuration-majeure-de-l-architecture-views-66",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 65,
     "sortKey": "2026-01-28",
@@ -1563,6 +1629,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-28-janvier-2026-implementation-complete-du-defi-chiffres-implementation-complete-du-defi-chiffres-67",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 66,
     "sortKey": "2026-01-28",
@@ -1586,6 +1653,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-28-janvier-2026-implementation-complete-du-defi-chiffres-composants-ui-crees-68",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 67,
     "sortKey": "2026-01-28",
@@ -1616,6 +1684,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-28-janvier-2026-implementation-complete-du-defi-chiffres-vue-joueurs-8-chiffres-game-jsx-69",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 68,
     "sortKey": "2026-01-28",
@@ -1647,6 +1716,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-28-janvier-2026-implementation-complete-du-defi-chiffres-logique-serveur-index-js-70",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 69,
     "sortKey": "2026-01-28",
@@ -1674,6 +1744,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-28-janvier-2026-implementation-complete-du-defi-chiffres-corrections-effectuees-71",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 70,
     "sortKey": "2026-01-28",
@@ -1699,6 +1770,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-28-janvier-2026-implementation-complete-du-defi-chiffres-regles-ajoutees-7-2-duel-rules-jsx-72",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 71,
     "sortKey": "2026-01-28",
@@ -1722,6 +1794,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-28-janvier-2026-implementation-complete-du-defi-chiffres-polish-ui-ecran-revelation-chiffres-9-chiffres-reveal-jsx-73",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Sous-section worklog",
     "sourceOrder": 72,
     "sortKey": "2026-01-28",
@@ -1753,6 +1826,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-lundi-26-janvier-2026-conception-ux-defis-buzzer-vrai-faux-conception-ux-defis-buzzer-vrai-faux-74",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 73,
     "sortKey": "2026-01-26",
@@ -1776,6 +1850,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-15-janvier-2026-refactorisation-ui-ecrans-gameloop-et-quizoptions-refactorisation-ui-ecrans-gameloop-et-quizoptions-75",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 74,
     "sortKey": "2026-01-15",
@@ -1798,6 +1873,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-15-janvier-2026-redesign-ecran-quizoptions-redesign-ecran-quizoptions-76",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 75,
     "sortKey": "2026-01-15",
@@ -1825,6 +1901,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-15-janvier-2026-changement-complet-du-systeme-de-points-changement-complet-du-systeme-de-points-77",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 76,
     "sortKey": "2026-01-15",
@@ -1853,6 +1930,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-15-janvier-2026-ameliorations-ecran-selectcharacter-ameliorations-ecran-selectcharacter-78",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 77,
     "sortKey": "2026-01-15",
@@ -1875,6 +1953,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-15-janvier-2026-creation-quizanswerbutton-creation-quizanswerbutton-79",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 78,
     "sortKey": "2026-01-15",
@@ -1900,6 +1979,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-15-janvier-2026-masquage-de-la-bonne-reponse-au-questionneur-masquage-de-la-bonne-reponse-au-questionneur-80",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 79,
     "sortKey": "2026-01-15",
@@ -1924,6 +2004,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-15-janvier-2026-ajout-status-bar-quiz-dans-interaction-ajout-status-bar-quiz-dans-interaction-81",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 80,
     "sortKey": "2026-01-15",
@@ -1950,6 +2031,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mercredi-15-janvier-2026-details-techniques-details-techniques-82",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 81,
     "sortKey": "2026-01-15",
@@ -1973,6 +2055,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-14-janvier-2026-refactorisation-complete-de-l-ecran-selectcharacter-refactorisation-complete-de-l-ecran-selectcharacter-83",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 82,
     "sortKey": "2026-01-14",
@@ -2002,6 +2085,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-14-janvier-2026-correction-validation-serveur-pick-character-correction-validation-serveur-pick-character-84",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 83,
     "sortKey": "2026-01-14",
@@ -2028,6 +2112,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-14-janvier-2026-reparation-de-l-ordre-d-affichage-des-personnages-reparation-de-l-ordre-d-affichage-des-personnages-85",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 84,
     "sortKey": "2026-01-14",
@@ -2054,6 +2139,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-14-janvier-2026-refactorisation-ecran-defineorder-refactorisation-ecran-defineorder-86",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 85,
     "sortKey": "2026-01-14",
@@ -2081,6 +2167,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-14-janvier-2026-ajout-des-variables-couleur-css-ajout-des-variables-couleur-css-87",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 86,
     "sortKey": "2026-01-14",
@@ -2110,6 +2197,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-14-janvier-2026-separation-critique-code-characters-vs-playable-characters-separation-critique-code-characters-vs-playable-characters-88",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 87,
     "sortKey": "2026-01-14",
@@ -2141,6 +2229,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-14-janvier-2026-refactorisation-complete-de-gameloop-refactorisation-complete-de-gameloop-89",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 88,
     "sortKey": "2026-01-14",
@@ -2166,6 +2255,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-14-janvier-2026-reparation-des-composants-suivants-battage-en-breche-systeme-character-reparation-des-composants-suivants-battage-en-breche-systeme-character-90",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 89,
     "sortKey": "2026-01-14",
@@ -2188,6 +2278,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-14-janvier-2026-correction-du-clavier-ecran-join-correction-du-clavier-ecran-join-91",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 90,
     "sortKey": "2026-01-14",
@@ -2212,6 +2303,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-14-janvier-2026-parametre-temporaire-pour-les-tests-parametre-temporaire-pour-les-tests-92",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 91,
     "sortKey": "2026-01-14",
@@ -2236,6 +2328,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-mardi-14-janvier-2026-mise-a-jour-de-architecture-md-mise-a-jour-de-architecture-md-93",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 92,
     "sortKey": "2026-01-14",
@@ -2265,6 +2358,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-etat-actuel-fonctionnalites-operationnelles-fonctionnalites-operationnelles-94",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 93,
     "sortKey": "0000-00-00",
@@ -2294,6 +2388,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-etat-actuel-en-cours-de-debugging-en-cours-de-debugging-95",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 94,
     "sortKey": "0000-00-00",
@@ -2314,6 +2409,7 @@ window.WORKLOG_DONE_ITEMS = [
     "id": "done-etat-actuel-prochaines-etapes-envisagees-prochaines-etapes-envisagees-96",
     "type": "done",
     "source": "WORKLOG.md",
+    "sourceType": "worklog",
     "sourceKind": "Section worklog",
     "sourceOrder": 95,
     "sortKey": "0000-00-00",
@@ -2334,9 +2430,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-socle-temps-reel-room-joueurs-admin-1",
+    "id": "todo-resume-d-avancement-socle-temps-reel-room-joueurs-admin-4b22eb714c99",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-socle-temps-reel-room-joueurs-admin-1"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10000,
     "sortKey": "0000-00-00",
@@ -2350,6 +2450,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Socle temps réel room / joueurs / admin.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 11,
+      "section": "Résumé d'avancement",
+      "taskText": "Socle temps réel room / joueurs / admin.",
+      "markdown": "- [x] Socle temps réel room / joueurs / admin."
+    },
     "summary": "Socle temps réel room / joueurs / admin.",
     "aiValidated": false,
     "aiNote": "",
@@ -2363,9 +2470,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-creation-et-rejoindre-une-partie-par-code-2",
+    "id": "todo-resume-d-avancement-creation-et-rejoindre-une-partie-par-code-4a8bbaa79caa",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-creation-et-rejoindre-une-partie-par-code-2"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10001,
     "sortKey": "0000-00-00",
@@ -2379,6 +2490,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Création et rejoindre une partie par code.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 12,
+      "section": "Résumé d'avancement",
+      "taskText": "Création et rejoindre une partie par code.",
+      "markdown": "- [x] Création et rejoindre une partie par code."
+    },
     "summary": "Création et rejoindre une partie par code.",
     "aiValidated": false,
     "aiNote": "",
@@ -2392,9 +2510,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-selection-de-personnages-fonctionnelle-3",
+    "id": "todo-resume-d-avancement-selection-de-personnages-fonctionnelle-57f9277595f7",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-selection-de-personnages-fonctionnelle-3"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10002,
     "sortKey": "0000-00-00",
@@ -2408,6 +2530,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Sélection de personnages fonctionnelle.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 13,
+      "section": "Résumé d'avancement",
+      "taskText": "Sélection de personnages fonctionnelle.",
+      "markdown": "- [x] Sélection de personnages fonctionnelle."
+    },
     "summary": "Sélection de personnages fonctionnelle.",
     "aiValidated": false,
     "aiNote": "",
@@ -2421,9 +2550,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-ordre-de-jeu-et-changement-d-ordre-admin-4",
+    "id": "todo-resume-d-avancement-ordre-de-jeu-et-changement-d-ordre-admin-6a4058edb317",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-ordre-de-jeu-et-changement-d-ordre-admin-4"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10003,
     "sortKey": "0000-00-00",
@@ -2437,6 +2570,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Ordre de jeu et changement d'ordre admin.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 14,
+      "section": "Résumé d'avancement",
+      "taskText": "Ordre de jeu et changement d'ordre admin.",
+      "markdown": "- [x] Ordre de jeu et changement d'ordre admin."
+    },
     "summary": "Ordre de jeu et changement d'ordre admin.",
     "aiValidated": false,
     "aiNote": "",
@@ -2450,9 +2590,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-boucle-principale-de-tour-5",
+    "id": "todo-resume-d-avancement-boucle-principale-de-tour-0f4b44952d81",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-boucle-principale-de-tour-5"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10004,
     "sortKey": "0000-00-00",
@@ -2466,6 +2610,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Boucle principale de tour.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 15,
+      "section": "Résumé d'avancement",
+      "taskText": "Boucle principale de tour.",
+      "markdown": "- [x] Boucle principale de tour."
+    },
     "summary": "Boucle principale de tour.",
     "aiValidated": false,
     "aiNote": "",
@@ -2479,9 +2630,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-quiz-valide-6",
+    "id": "todo-resume-d-avancement-quiz-valide-72b0a25a5d50",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-quiz-valide-6"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10005,
     "sortKey": "0000-00-00",
@@ -2495,6 +2650,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Quiz valide.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 16,
+      "section": "Résumé d'avancement",
+      "taskText": "Quiz valide.",
+      "markdown": "- [x] Quiz valide."
+    },
     "summary": "Quiz valide.",
     "aiValidated": false,
     "aiNote": "",
@@ -2508,9 +2670,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-defis-buzzer-vrai-ou-faux-chiffres-pick-et-zoom-pr-7",
+    "id": "todo-resume-d-avancement-defis-buzzer-vrai-ou-faux-chiffres-pick-et-zoom-presents-3c36813289b4",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-defis-buzzer-vrai-ou-faux-chiffres-pick-et-zoom-pr-7"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10006,
     "sortKey": "0000-00-00",
@@ -2524,6 +2690,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Défis Buzzer, Vrai ou faux, Chiffres, Pick et Zoom présents.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 17,
+      "section": "Résumé d'avancement",
+      "taskText": "Défis Buzzer, Vrai ou faux, Chiffres, Pick et Zoom présents.",
+      "markdown": "- [x] Défis Buzzer, Vrai ou faux, Chiffres, Pick et Zoom présents."
+    },
     "summary": "Défis Buzzer, Vrai ou faux, Chiffres, Pick et Zoom présents.",
     "aiValidated": false,
     "aiNote": "",
@@ -2537,9 +2710,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-bonus-de-case-et-inventaire-bonus-8",
+    "id": "todo-resume-d-avancement-bonus-de-case-et-inventaire-bonus-de1515d112c5",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-bonus-de-case-et-inventaire-bonus-8"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10007,
     "sortKey": "0000-00-00",
@@ -2553,6 +2730,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Bonus de case et inventaire bonus.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 18,
+      "section": "Résumé d'avancement",
+      "taskText": "Bonus de case et inventaire bonus.",
+      "markdown": "- [x] Bonus de case et inventaire bonus."
+    },
     "summary": "Bonus de case et inventaire bonus.",
     "aiValidated": false,
     "aiNote": "",
@@ -2566,9 +2750,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-trois-bonus-principaux-implementes-ctrl-z-va-fai-9",
+    "id": "todo-resume-d-avancement-trois-bonus-principaux-implementes-ctrl-z-va-faire-le-cafe-du-boss-c-e-d83d16097db0",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-trois-bonus-principaux-implementes-ctrl-z-va-fai-9"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10008,
     "sortKey": "0000-00-00",
@@ -2582,6 +2770,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Trois bonus principaux implémentés : CTRL + Z, Va faire le café du boss, C'est moi qui choisis !.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 19,
+      "section": "Résumé d'avancement",
+      "taskText": "Trois bonus principaux implémentés : CTRL + Z, Va faire le café du boss, C'est moi qui choisis !.",
+      "markdown": "- [x] Trois bonus principaux implémentés : `CTRL + Z`, `Va faire le café du boss`, `C'est moi qui choisis !`."
+    },
     "summary": "Trois bonus principaux implémentés : CTRL + Z, Va faire le café du boss, C'est moi qui choisis !.",
     "aiValidated": false,
     "aiNote": "",
@@ -2595,9 +2790,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-activite-commune-photo-vote-resultat-implementee-10",
+    "id": "todo-resume-d-avancement-activite-commune-photo-vote-resultat-implementee-1c52a8f54a19",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-activite-commune-photo-vote-resultat-implementee-10"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10009,
     "sortKey": "0000-00-00",
@@ -2611,6 +2810,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Activité commune photo / vote / résultat implémentée.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 20,
+      "section": "Résumé d'avancement",
+      "taskText": "Activité commune photo / vote / résultat implémentée.",
+      "markdown": "- [x] Activité commune photo / vote / résultat implémentée."
+    },
     "summary": "Activité commune photo / vote / résultat implémentée.",
     "aiValidated": false,
     "aiNote": "",
@@ -2624,9 +2830,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-menu-settings-admin-lobby-bonus-11",
+    "id": "todo-resume-d-avancement-menu-settings-admin-lobby-bonus-00f391525d51",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-menu-settings-admin-lobby-bonus-11"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10010,
     "sortKey": "0000-00-00",
@@ -2640,6 +2850,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Menu settings admin / lobby / bonus.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 21,
+      "section": "Résumé d'avancement",
+      "taskText": "Menu settings admin / lobby / bonus.",
+      "markdown": "- [x] Menu settings admin / lobby / bonus."
+    },
     "summary": "Menu settings admin / lobby / bonus.",
     "aiValidated": false,
     "aiNote": "",
@@ -2653,9 +2870,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-pause-globale-12",
+    "id": "todo-resume-d-avancement-pause-globale-1640c58ffc46",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-pause-globale-12"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10011,
     "sortKey": "0000-00-00",
@@ -2669,6 +2890,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Pause globale.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 22,
+      "section": "Résumé d'avancement",
+      "taskText": "Pause globale.",
+      "markdown": "- [x] Pause globale."
+    },
     "summary": "Pause globale.",
     "aiValidated": false,
     "aiNote": "",
@@ -2682,9 +2910,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-regles-accessibles-depuis-le-menu-13",
+    "id": "todo-resume-d-avancement-regles-accessibles-depuis-le-menu-7ad15d3d3dc3",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-regles-accessibles-depuis-le-menu-13"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10012,
     "sortKey": "0000-00-00",
@@ -2698,6 +2930,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Règles accessibles depuis le menu.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 23,
+      "section": "Résumé d'avancement",
+      "taskText": "Règles accessibles depuis le menu.",
+      "markdown": "- [x] Règles accessibles depuis le menu."
+    },
     "summary": "Règles accessibles depuis le menu.",
     "aiValidated": false,
     "aiNote": "",
@@ -2711,9 +2950,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-classement-fonctionnel-en-fin-de-round-14",
+    "id": "todo-resume-d-avancement-classement-fonctionnel-en-fin-de-round-1168fce24887",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-classement-fonctionnel-en-fin-de-round-14"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10013,
     "sortKey": "0000-00-00",
@@ -2727,6 +2970,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Classement fonctionnel en fin de round.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 24,
+      "section": "Résumé d'avancement",
+      "taskText": "Classement fonctionnel en fin de round.",
+      "markdown": "- [x] Classement fonctionnel en fin de round."
+    },
     "summary": "Classement fonctionnel en fin de round.",
     "aiValidated": false,
     "aiNote": "",
@@ -2740,9 +2990,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-fin-de-partie-naturelle-via-logique-de-plateau-estim-15",
+    "id": "todo-resume-d-avancement-fin-de-partie-naturelle-via-logique-de-plateau-estimation-de-position--f8315d59f943",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-fin-de-partie-naturelle-via-logique-de-plateau-estim-15"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10014,
     "sortKey": "0000-00-00",
@@ -2756,6 +3010,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Fin de partie naturelle via logique de plateau, estimation de position et classement final.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 25,
+      "section": "Résumé d'avancement",
+      "taskText": "Fin de partie naturelle via logique de plateau, estimation de position et classement final.",
+      "markdown": "- [x] Fin de partie naturelle via logique de plateau, estimation de position et classement final."
+    },
     "summary": "Fin de partie naturelle via logique de plateau, estimation de position et classement final.",
     "aiValidated": false,
     "aiNote": "",
@@ -2769,9 +3030,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-documenter-les-impacts-a-verifier-avant-d-ajouter-un-16",
+    "id": "todo-resume-d-avancement-documenter-les-impacts-a-verifier-avant-d-ajouter-un-bonus-un-event-un-74d32a7233dc",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-documenter-les-impacts-a-verifier-avant-d-ajouter-un-16"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10015,
     "sortKey": "0000-00-00",
@@ -2785,6 +3050,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Documenter les impacts à vérifier avant d'ajouter un bonus, un event, un personnage, une case, un défi ou une activité.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 26,
+      "section": "Résumé d'avancement",
+      "taskText": "Documenter les impacts à vérifier avant d'ajouter un bonus, un event, un personnage, une case, un défi ou une activité.",
+      "markdown": "- [x] Documenter les impacts à vérifier avant d'ajouter un bonus, un event, un personnage, une case, un défi ou une activité."
+    },
     "summary": "Documenter les impacts à vérifier avant d'ajouter un bonus, un event, un personnage, une case, un défi ou une activité.",
     "aiValidated": false,
     "aiNote": "",
@@ -2798,9 +3070,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-stabilisation-mobile-des-popups-17",
+    "id": "todo-resume-d-avancement-stabilisation-mobile-des-popups-72a84e534918",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-stabilisation-mobile-des-popups-17"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10016,
     "sortKey": "0000-00-00",
@@ -2814,6 +3090,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Stabilisation mobile des popups.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 28,
+      "section": "Résumé d'avancement",
+      "taskText": "Stabilisation mobile des popups.",
+      "markdown": "- [x] Stabilisation mobile des popups."
+    },
     "summary": "Stabilisation mobile des popups.",
     "aiValidated": false,
     "aiNote": "",
@@ -2827,9 +3110,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-corrections-textes-accents-sur-les-ecrans-encore-to-18",
+    "id": "todo-resume-d-avancement-corrections-textes-accents-sur-les-ecrans-encore-touches-par-l-ancien--717cb1b1c839",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-corrections-textes-accents-sur-les-ecrans-encore-to-18"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10017,
     "sortKey": "0000-00-00",
@@ -2843,6 +3130,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Corrections textes / accents sur les écrans encore touchés par l'ancien encodage.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 29,
+      "section": "Résumé d'avancement",
+      "taskText": "Corrections textes / accents sur les écrans encore touchés par l'ancien encodage.",
+      "markdown": "- [x] Corrections textes / accents sur les écrans encore touchés par l'ancien encodage."
+    },
     "summary": "Corrections textes / accents sur les écrans encore touchés par l'ancien encodage.",
     "aiValidated": false,
     "aiNote": "",
@@ -2856,9 +3150,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-reconnexion-depuis-un-autre-appareil-ou-code-de-secou-19",
+    "id": "todo-resume-d-avancement-reconnexion-depuis-un-autre-appareil-ou-code-de-secours-845d77c75f41",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-reconnexion-depuis-un-autre-appareil-ou-code-de-secou-19"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10018,
     "sortKey": "0000-00-00",
@@ -2872,6 +3170,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Reconnexion depuis un autre appareil ou code de secours.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 30,
+      "section": "Résumé d'avancement",
+      "taskText": "Reconnexion depuis un autre appareil ou code de secours.",
+      "markdown": "- [x] Reconnexion depuis un autre appareil ou code de secours."
+    },
     "summary": "Reconnexion depuis un autre appareil ou code de secours.",
     "aiValidated": false,
     "aiNote": "",
@@ -2885,9 +3190,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-resume-d-avancement-derniers-contenus-evenements-activites-questions-20",
+    "id": "todo-resume-d-avancement-derniers-contenus-evenements-activites-questions-b522c8509588",
+    "legacyIds": [
+      "todo-done-resume-d-avancement-derniers-contenus-evenements-activites-questions-20"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10019,
     "sortKey": "0000-00-00",
@@ -2901,6 +3210,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Résumé d'avancement",
     "fullTitle": "Derniers contenus : évènements, activités, questions.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 31,
+      "section": "Résumé d'avancement",
+      "taskText": "Derniers contenus : évènements, activités, questions.",
+      "markdown": "- [x] Derniers contenus : évènements, activités, questions."
+    },
     "summary": "Derniers contenus : évènements, activités, questions.",
     "aiValidated": false,
     "aiNote": "",
@@ -2914,9 +3230,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-priorite-avant-v1-jouable-tous-les-types-de-cases-depuis-la-boucle-de-jeu-qui-21",
+    "id": "todo-priorite-avant-v1-jouable-tester-tous-les-types-de-cases-depuis-la-boucle-de-jeu-quizz-defi-bonu-a5981701fb8d",
+    "legacyIds": [
+      "todo-done-priorite-avant-v1-jouable-tous-les-types-de-cases-depuis-la-boucle-de-jeu-qui-21"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10020,
     "sortKey": "0000-00-00",
@@ -2930,6 +3250,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Priorité avant V1 jouable",
     "fullTitle": "Tester tous les types de cases depuis la boucle de jeu : Quizz, Défi, Bonus, Activité, Évènement.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 37,
+      "section": "Priorité avant V1 jouable",
+      "taskText": "Tester tous les types de cases depuis la boucle de jeu : Quizz, Défi, Bonus, Activité, Évènement.",
+      "markdown": "- [x] Tester tous les types de cases depuis la boucle de jeu : Quizz, Défi, Bonus, Activité, Évènement."
+    },
     "summary": "Tester tous les types de cases depuis la boucle de jeu : Quizz, Défi, Bonus, Activité, Évènement.",
     "aiValidated": false,
     "aiNote": "",
@@ -2943,9 +3270,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-priorite-avant-v1-jouable-tous-les-defis-buzzer-vrai-ou-faux-chiffres-pick-22",
+    "id": "todo-priorite-avant-v1-jouable-tester-tous-les-defis-buzzer-vrai-ou-faux-chiffres-pick-zoom-5d8324a1ae4f",
+    "legacyIds": [
+      "todo-done-priorite-avant-v1-jouable-tous-les-defis-buzzer-vrai-ou-faux-chiffres-pick-22"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10021,
     "sortKey": "0000-00-00",
@@ -2959,6 +3290,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Priorité avant V1 jouable",
     "fullTitle": "Tester tous les défis : Buzzer, Vrai ou faux, Chiffres, Pick, Zoom.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 38,
+      "section": "Priorité avant V1 jouable",
+      "taskText": "Tester tous les défis : Buzzer, Vrai ou faux, Chiffres, Pick, Zoom.",
+      "markdown": "- [x] Tester tous les défis : Buzzer, Vrai ou faux, Chiffres, Pick, Zoom."
+    },
     "summary": "Tester tous les défis : Buzzer, Vrai ou faux, Chiffres, Pick, Zoom.",
     "aiValidated": false,
     "aiNote": "",
@@ -2972,9 +3310,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-priorite-avant-v1-jouable-trois-bonus-de-bout-en-bout-23",
+    "id": "todo-priorite-avant-v1-jouable-tester-les-trois-bonus-de-bout-en-bout-5095ee2d721f",
+    "legacyIds": [
+      "todo-done-priorite-avant-v1-jouable-trois-bonus-de-bout-en-bout-23"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10022,
     "sortKey": "0000-00-00",
@@ -2988,6 +3330,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Priorité avant V1 jouable",
     "fullTitle": "Tester les trois bonus de bout en bout.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 39,
+      "section": "Priorité avant V1 jouable",
+      "taskText": "Tester les trois bonus de bout en bout.",
+      "markdown": "- [x] Tester les trois bonus de bout en bout."
+    },
     "summary": "Tester les trois bonus de bout en bout.",
     "aiValidated": false,
     "aiNote": "",
@@ -3001,9 +3350,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-priorite-avant-v1-jouable-textes-avec-accents-casses-dans-l-ui-24",
+    "id": "todo-priorite-avant-v1-jouable-corriger-les-textes-avec-accents-casses-dans-l-ui-464fee7d25ad",
+    "legacyIds": [
+      "todo-done-priorite-avant-v1-jouable-textes-avec-accents-casses-dans-l-ui-24"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10023,
     "sortKey": "0000-00-00",
@@ -3017,6 +3370,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Priorité avant V1 jouable",
     "fullTitle": "Corriger les textes avec accents cassés dans l'UI.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 40,
+      "section": "Priorité avant V1 jouable",
+      "taskText": "Corriger les textes avec accents cassés dans l'UI.",
+      "markdown": "- [x] Corriger les textes avec accents cassés dans l'UI."
+    },
     "summary": "Corriger les textes avec accents cassés dans l'UI.",
     "aiValidated": false,
     "aiNote": "",
@@ -3030,9 +3390,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-priorite-avant-v1-jouable-revoir-les-popups-admin-et-bonus-sur-mobile-25",
+    "id": "todo-priorite-avant-v1-jouable-revoir-les-popups-admin-et-bonus-sur-mobile-229073514368",
+    "legacyIds": [
+      "todo-done-priorite-avant-v1-jouable-revoir-les-popups-admin-et-bonus-sur-mobile-25"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10024,
     "sortKey": "0000-00-00",
@@ -3046,6 +3410,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Priorité avant V1 jouable",
     "fullTitle": "Revoir les popups admin et bonus sur mobile.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 41,
+      "section": "Priorité avant V1 jouable",
+      "taskText": "Revoir les popups admin et bonus sur mobile.",
+      "markdown": "- [x] Revoir les popups admin et bonus sur mobile."
+    },
     "summary": "Revoir les popups admin et bonus sur mobile.",
     "aiValidated": false,
     "aiNote": "",
@@ -3059,9 +3430,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-priorite-avant-v1-jouable-au-moins-assez-de-questions-evenements-activites-26",
+    "id": "todo-priorite-avant-v1-jouable-ajouter-au-moins-assez-de-questions-evenements-activites-pour-eviter-l-56086710ba3b",
+    "legacyIds": [
+      "todo-done-priorite-avant-v1-jouable-au-moins-assez-de-questions-evenements-activites-26"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10025,
     "sortKey": "0000-00-00",
@@ -3075,6 +3450,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Priorité avant V1 jouable",
     "fullTitle": "Ajouter au moins assez de questions / évènements / activités pour éviter les répétitions trop visibles.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 42,
+      "section": "Priorité avant V1 jouable",
+      "taskText": "Ajouter au moins assez de questions / évènements / activités pour éviter les répétitions trop visibles.",
+      "markdown": "- [x] Ajouter au moins assez de questions / évènements / activités pour éviter les répétitions trop visibles."
+    },
     "summary": "Ajouter au moins assez de questions / évènements / activités pour éviter les répétitions trop visibles.",
     "aiValidated": false,
     "aiNote": "",
@@ -3088,9 +3470,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-priorite-avant-v1-jouable-desactiver-ou-encadrer-les-outils-bonus-de-test-ava-27",
+    "id": "todo-priorite-avant-v1-jouable-desactiver-ou-encadrer-les-outils-bonus-de-test-avant-release-code-de--98fcab8f7a17",
+    "legacyIds": [
+      "todo-done-priorite-avant-v1-jouable-desactiver-ou-encadrer-les-outils-bonus-de-test-ava-27"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10026,
     "sortKey": "0000-00-00",
@@ -3104,6 +3490,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Priorité avant V1 jouable",
     "fullTitle": "Désactiver ou encadrer les outils / bonus de test avant release : code de room forcé, bonus donnés par défaut, helper console __GIVE_BONUS / socket debug_give_bonus.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 43,
+      "section": "Priorité avant V1 jouable",
+      "taskText": "Désactiver ou encadrer les outils / bonus de test avant release : code de room forcé, bonus donnés par défaut, helper console __GIVE_BONUS / socket debug_give_bonus.",
+      "markdown": "- [x] Désactiver ou encadrer les outils / bonus de test avant release : code de room forcé, bonus donnés par défaut, helper console `__GIVE_BONUS` / socket `debug_give_bonus`."
+    },
     "summary": "Désactiver ou encadrer les outils / bonus de test avant release : code de room forcé, bonus donnés par défaut, helper console __GIVE_BONUS / socket debug_give_bonus.",
     "aiValidated": false,
     "aiNote": "",
@@ -3117,9 +3510,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-revoir-la-repartition-des-defis-tires-automatiquement-28",
+    "id": "todo-retours-test-render-avant-v1-test-revoir-la-repartition-des-defis-tires-automatiquement-repartition-ajou-b548235a4301",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-revoir-la-repartition-des-defis-tires-automatiquement-28"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10027,
     "sortKey": "0000-00-00",
@@ -3133,6 +3530,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Revoir la répartition des défis tirés automatiquement : répartition ajoutée par type de défi.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 50,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Revoir la répartition des défis tirés automatiquement : répartition ajoutée par type de défi.",
+      "markdown": "- [x] Revoir la répartition des défis tirés automatiquement : répartition ajoutée par type de défi."
+    },
     "summary": "Revoir la répartition des défis tirés automatiquement : répartition ajoutée par type de défi.",
     "aiValidated": false,
     "aiNote": "",
@@ -3146,9 +3550,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-ou-ajuster-la-ponderation-des-defis-pour-faire-sortir-29",
+    "id": "todo-retours-test-render-avant-v1-test-ajouter-ou-ajuster-la-ponderation-des-defis-pour-faire-sortir-plus-sou-fad158d0927a",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-ou-ajuster-la-ponderation-des-defis-pour-faire-sortir-29"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10028,
     "sortKey": "0000-00-00",
@@ -3162,6 +3570,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Ajouter ou ajuster la pondération des défis pour faire sortir plus souvent chiffres si c'est le comportement voulu.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 51,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Ajouter ou ajuster la pondération des défis pour faire sortir plus souvent chiffres si c'est le comportement voulu.",
+      "markdown": "- [x] Ajouter ou ajuster la pondération des défis pour faire sortir plus souvent `chiffres` si c'est le comportement voulu."
+    },
     "summary": "Ajouter ou ajuster la pondération des défis pour faire sortir plus souvent chiffres si c'est le comportement voulu.",
     "aiValidated": false,
     "aiNote": "",
@@ -3175,9 +3590,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-pick-peut-tomber-naturellement-dans-le-tirage-automat-30",
+    "id": "todo-retours-test-render-avant-v1-test-verifier-que-pick-peut-tomber-naturellement-dans-le-tirage-automatique-fe744b9e6122",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-pick-peut-tomber-naturellement-dans-le-tirage-automat-30"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10029,
     "sortKey": "0000-00-00",
@@ -3191,6 +3610,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Vérifier que pick peut tomber naturellement dans le tirage automatique des défis.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 52,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Vérifier que pick peut tomber naturellement dans le tirage automatique des défis.",
+      "markdown": "- [x] Vérifier que `pick` peut tomber naturellement dans le tirage automatique des défis."
+    },
     "summary": "Vérifier que pick peut tomber naturellement dans le tirage automatique des défis.",
     "aiValidated": false,
     "aiNote": "",
@@ -3204,9 +3630,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-clarification-zoom-vrai-faux-pick-activite-logo-31",
+    "id": "todo-retours-test-render-avant-v1-test-clarification-zoom-vrai-faux-pick-activite-logo-pas-d-action-v1-note-d-da798b5c22d4",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-clarification-zoom-vrai-faux-pick-activite-logo-31"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10030,
     "sortKey": "0000-00-00",
@@ -3220,6 +3650,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Clarification Zoom / Vrai-Faux / Pick / activité logo : pas d'action V1, note de compréhension retirée du périmètre.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 53,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Clarification Zoom / Vrai-Faux / Pick / activité logo : pas d'action V1, note de compréhension retirée du périmètre.",
+      "markdown": "- [x] Clarification Zoom / Vrai-Faux / Pick / activité logo : pas d'action V1, note de compréhension retirée du périmètre."
+    },
     "summary": "Clarification Zoom / Vrai-Faux / Pick / activité logo : pas d'action V1, note de compréhension retirée du périmètre.",
     "aiValidated": false,
     "aiNote": "",
@@ -3233,9 +3670,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-la-nuance-du-nombre-de-cases-et-integrer-une-vraie-co-32",
+    "id": "todo-retours-test-render-avant-v1-test-ajouter-la-nuance-du-nombre-de-cases-et-integrer-une-vraie-condition-d-c96335951dd1",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-la-nuance-du-nombre-de-cases-et-integrer-une-vraie-co-32"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10031,
     "sortKey": "0000-00-00",
@@ -3249,6 +3690,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Ajouter la nuance du nombre de cases et intégrer une vraie condition de fin de partie dans l'application.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 54,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Ajouter la nuance du nombre de cases et intégrer une vraie condition de fin de partie dans l'application.",
+      "markdown": "- [x] Ajouter la nuance du nombre de cases et intégrer une vraie condition de fin de partie dans l'application."
+    },
     "summary": "Ajouter la nuance du nombre de cases et intégrer une vraie condition de fin de partie dans l'application.",
     "aiValidated": false,
     "aiNote": "",
@@ -3262,9 +3710,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-integrer-la-structure-definitive-du-plateau-dans-l-ap-33",
+    "id": "todo-retours-test-render-avant-v1-test-integrer-la-structure-definitive-du-plateau-dans-l-app-ordre-exact-des-c978455b2d2e",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-integrer-la-structure-definitive-du-plateau-dans-l-ap-33"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10032,
     "sortKey": "0000-00-00",
@@ -3278,6 +3730,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Intégrer la structure définitive du plateau dans l'app : ordre exact des cases 0 -> 20, types de cases 1 -> 19 et position du bureau du boss.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 55,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Intégrer la structure définitive du plateau dans l'app : ordre exact des cases 0 -> 20, types de cases 1 -> 19 et position du bureau du boss.",
+      "markdown": "- [x] Intégrer la structure définitive du plateau dans l'app : ordre exact des cases 0 -> 20, types de cases 1 -> 19 et position du bureau du boss."
+    },
     "summary": "Intégrer la structure définitive du plateau dans l'app : ordre exact des cases 0 -> 20, types de cases 1 -> 19 et position du bureau du boss.",
     "aiValidated": false,
     "aiNote": "",
@@ -3291,9 +3750,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-estimer-pour-chaque-joueur-un-ensemble-de-positions-p-34",
+    "id": "todo-retours-test-render-avant-v1-test-estimer-pour-chaque-joueur-un-ensemble-de-positions-possibles-a-partir-ece95809b08b",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-estimer-pour-chaque-joueur-un-ensemble-de-positions-p-34"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10033,
     "sortKey": "0000-00-00",
@@ -3307,6 +3770,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Estimer pour chaque joueur un ensemble de positions possibles à partir de l'historique réel des types de cases joués, plutôt qu'une position unique.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 56,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Estimer pour chaque joueur un ensemble de positions possibles à partir de l'historique réel des types de cases joués, plutôt qu'une position unique.",
+      "markdown": "- [x] Estimer pour chaque joueur un ensemble de positions possibles à partir de l'historique réel des types de cases joués, plutôt qu'une position unique."
+    },
     "summary": "Estimer pour chaque joueur un ensemble de positions possibles à partir de l'historique réel des types de cases joués, plutôt qu'une position unique.",
     "aiValidated": false,
     "aiNote": "",
@@ -3320,9 +3790,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-utiliser-ce-recalcul-cumulatif-pour-resserrer-les-pos-35",
+    "id": "todo-retours-test-render-avant-v1-test-utiliser-ce-recalcul-cumulatif-pour-resserrer-les-positions-possibles--1a818a198f6b",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-utiliser-ce-recalcul-cumulatif-pour-resserrer-les-pos-35"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10034,
     "sortKey": "0000-00-00",
@@ -3336,6 +3810,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Utiliser ce recalcul cumulatif pour resserrer les positions possibles quand une nouvelle case jouée élimine des chemins incompatibles.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 57,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Utiliser ce recalcul cumulatif pour resserrer les positions possibles quand une nouvelle case jouée élimine des chemins incompatibles.",
+      "markdown": "- [x] Utiliser ce recalcul cumulatif pour resserrer les positions possibles quand une nouvelle case jouée élimine des chemins incompatibles."
+    },
     "summary": "Utiliser ce recalcul cumulatif pour resserrer les positions possibles quand une nouvelle case jouée élimine des chemins incompatibles.",
     "aiValidated": false,
     "aiNote": "",
@@ -3349,9 +3830,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-detecter-automatiquement-quand-le-bureau-du-boss-devi-36",
+    "id": "todo-retours-test-render-avant-v1-test-detecter-automatiquement-quand-le-bureau-du-boss-devient-atteignable-a-629360fc0fe9",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-detecter-automatiquement-quand-le-bureau-du-boss-devi-36"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10035,
     "sortKey": "0000-00-00",
@@ -3365,6 +3850,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Détecter automatiquement quand le bureau du boss devient atteignable avec un lancer entre 1 et 6, puis proposer Terminer sans bouton admin manuel.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 58,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Détecter automatiquement quand le bureau du boss devient atteignable avec un lancer entre 1 et 6, puis proposer Terminer sans bouton admin manuel.",
+      "markdown": "- [x] Détecter automatiquement quand le bureau du boss devient atteignable avec un lancer entre 1 et 6, puis proposer `Terminer` sans bouton admin manuel."
+    },
     "summary": "Détecter automatiquement quand le bureau du boss devient atteignable avec un lancer entre 1 et 6, puis proposer Terminer sans bouton admin manuel.",
     "aiValidated": false,
     "aiNote": "",
@@ -3378,9 +3870,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-afficher-la-proposition-terminer-sous-forme-de-popup-37",
+    "id": "todo-retours-test-render-avant-v1-test-afficher-la-proposition-terminer-sous-forme-de-popup-reminder-sur-l-ec-80436f8f5b99",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-afficher-la-proposition-terminer-sous-forme-de-popup-37"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10036,
     "sortKey": "0000-00-00",
@@ -3394,6 +3890,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Afficher la proposition Terminer sous forme de popup / reminder sur l'écran de choix du type de case, dans l'esprit du rappel de relance du dé.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 59,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Afficher la proposition Terminer sous forme de popup / reminder sur l'écran de choix du type de case, dans l'esprit du rappel de relance du dé.",
+      "markdown": "- [x] Afficher la proposition `Terminer` sous forme de popup / reminder sur l'écran de choix du type de case, dans l'esprit du rappel de relance du dé."
+    },
     "summary": "Afficher la proposition Terminer sous forme de popup / reminder sur l'écran de choix du type de case, dans l'esprit du rappel de relance du dé.",
     "aiValidated": false,
     "aiNote": "",
@@ -3407,9 +3910,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-quand-un-joueur-termine-laisser-finir-la-rotation-en-38",
+    "id": "todo-retours-test-render-avant-v1-test-quand-un-joueur-termine-laisser-finir-la-rotation-en-cours-puis-arrete-20b7ce7da727",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-quand-un-joueur-termine-laisser-finir-la-rotation-en-38"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10037,
     "sortKey": "0000-00-00",
@@ -3423,6 +3930,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Quand un joueur termine, laisser finir la rotation en cours puis arrêter définitivement la partie au moment où son tour devrait revenir.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 60,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Quand un joueur termine, laisser finir la rotation en cours puis arrêter définitivement la partie au moment où son tour devrait revenir.",
+      "markdown": "- [x] Quand un joueur termine, laisser finir la rotation en cours puis arrêter définitivement la partie au moment où son tour devrait revenir."
+    },
     "summary": "Quand un joueur termine, laisser finir la rotation en cours puis arrêter définitivement la partie au moment où son tour devrait revenir.",
     "aiValidated": false,
     "aiNote": "",
@@ -3436,9 +3950,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-modeliser-les-evenements-de-deplacement-actuellement-39",
+    "id": "todo-retours-test-render-avant-v1-test-modeliser-les-evenements-de-deplacement-actuellement-presents-pour-qu--3200e8608fe9",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-modeliser-les-evenements-de-deplacement-actuellement-39"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10038,
     "sortKey": "0000-00-00",
@@ -3452,6 +3970,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Modéliser les événements de déplacement actuellement présents pour qu'ils recalculent aussi les positions estimées.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 61,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Modéliser les événements de déplacement actuellement présents pour qu'ils recalculent aussi les positions estimées.",
+      "markdown": "- [x] Modéliser les événements de déplacement actuellement présents pour qu'ils recalculent aussi les positions estimées."
+    },
     "summary": "Modéliser les événements de déplacement actuellement présents pour qu'ils recalculent aussi les positions estimées.",
     "aiValidated": false,
     "aiNote": "",
@@ -3465,9 +3990,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-pour-l-evenement-d-echange-de-place-demander-explici-40",
+    "id": "todo-retours-test-render-avant-v1-test-pour-l-evenement-d-echange-de-place-demander-explicitement-avec-quel-j-f2bb8c8efd02",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-pour-l-evenement-d-echange-de-place-demander-explici-40"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10039,
     "sortKey": "0000-00-00",
@@ -3481,6 +4010,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Pour l'événement d'échange de place, demander explicitement avec quel joueur l'échange a été fait afin de conserver une estimation fiable des deux positions.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 62,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Pour l'événement d'échange de place, demander explicitement avec quel joueur l'échange a été fait afin de conserver une estimation fiable des deux positions.",
+      "markdown": "- [x] Pour l'événement d'échange de place, demander explicitement avec quel joueur l'échange a été fait afin de conserver une estimation fiable des deux positions."
+    },
     "summary": "Pour l'événement d'échange de place, demander explicitement avec quel joueur l'échange a été fait afin de conserver une estimation fiable des deux positions.",
     "aiValidated": false,
     "aiNote": "",
@@ -3494,9 +4030,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-l-affichage-6-dans-la-room-select-il-doit-afficher-41",
+    "id": "todo-retours-test-render-avant-v1-test-corriger-l-affichage-6-dans-la-room-select-il-doit-afficher-4-et-la-ro-2092849cb2a2",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-l-affichage-6-dans-la-room-select-il-doit-afficher-41"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10040,
     "sortKey": "0000-00-00",
@@ -3510,6 +4050,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Corriger l'affichage /6 dans la room select : il doit afficher /4 et la room doit refuser au-delà de 4 joueurs.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 64,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Corriger l'affichage /6 dans la room select : il doit afficher /4 et la room doit refuser au-delà de 4 joueurs.",
+      "markdown": "- [x] Corriger l'affichage `/6` dans la room select : il doit afficher `/4` et la room doit refuser au-delà de 4 joueurs."
+    },
     "summary": "Corriger l'affichage /6 dans la room select : il doit afficher /4 et la room doit refuser au-delà de 4 joueurs.",
     "aiValidated": false,
     "aiNote": "",
@@ -3523,9 +4070,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-enlever-les-guillemets-au-debut-et-a-la-fin-des-quest-42",
+    "id": "todo-retours-test-render-avant-v1-test-enlever-les-guillemets-au-debut-et-a-la-fin-des-questions-et-libelles--b8a9cc8ad8f5",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-enlever-les-guillemets-au-debut-et-a-la-fin-des-quest-42"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10041,
     "sortKey": "0000-00-00",
@@ -3539,6 +4090,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Enlever les guillemets au début et à la fin des questions et libellés de questions.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 67,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Enlever les guillemets au début et à la fin des questions et libellés de questions.",
+      "markdown": "- [x] Enlever les guillemets au début et à la fin des questions et libellés de questions."
+    },
     "summary": "Enlever les guillemets au début et à la fin des questions et libellés de questions.",
     "aiValidated": false,
     "aiNote": "",
@@ -3552,9 +4110,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-retours-test-render-avant-v1-test-autoriser-l-ouverture-du-menu-bonus-tout-le-temps-sa-43",
+    "id": "todo-retours-test-render-avant-v1-test-autoriser-l-ouverture-du-menu-bonus-tout-le-temps-sauf-sur-les-ecrans--f5743a8eaf40",
+    "legacyIds": [
+      "todo-done-retours-test-render-avant-v1-test-autoriser-l-ouverture-du-menu-bonus-tout-le-temps-sa-43"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10042,
     "sortKey": "0000-00-00",
@@ -3568,6 +4130,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Autoriser l'ouverture du menu bonus tout le temps, sauf sur les écrans où cela gêne réellement le déroulé.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 68,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Autoriser l'ouverture du menu bonus tout le temps, sauf sur les écrans où cela gêne réellement le déroulé.",
+      "markdown": "- [x] Autoriser l'ouverture du menu bonus tout le temps, sauf sur les écrans où cela gêne réellement le déroulé."
+    },
     "summary": "Autoriser l'ouverture du menu bonus tout le temps, sauf sur les écrans où cela gêne réellement le déroulé.",
     "aiValidated": false,
     "aiNote": "",
@@ -3581,9 +4150,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-bonus-retester-les-trois-bonus-de-bout-en-bout-ctrl-z-44",
+    "id": "todo-verification-release-bonus-retester-les-trois-bonus-de-bout-en-bout-ctrl-z-va-faire-le-cafe-du-bo-feec1f8e2511",
+    "legacyIds": [
+      "todo-done-verification-release-bonus-retester-les-trois-bonus-de-bout-en-bout-ctrl-z-44"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10043,
     "sortKey": "0000-00-00",
@@ -3597,6 +4170,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / Bonus",
     "fullTitle": "Retester les trois bonus de bout en bout : CTRL + Z, Va faire le café du boss, C'est moi qui choisis !.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 75,
+      "section": "Vérification release / Bonus",
+      "taskText": "Retester les trois bonus de bout en bout : CTRL + Z, Va faire le café du boss, C'est moi qui choisis !.",
+      "markdown": "- [x] Retester les trois bonus de bout en bout : `CTRL + Z`, `Va faire le café du boss`, `C'est moi qui choisis !`."
+    },
     "summary": "Retester les trois bonus de bout en bout : CTRL + Z, Va faire le café du boss, C'est moi qui choisis !.",
     "aiValidated": false,
     "aiNote": "",
@@ -3610,9 +4190,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-bonus-les-bonus-consomment-bien-l-inventaire-du-joueur-qui-45",
+    "id": "todo-verification-release-bonus-verifier-que-les-bonus-consomment-bien-l-inventaire-du-joueur-qui-les--5274223b62fd",
+    "legacyIds": [
+      "todo-done-verification-release-bonus-les-bonus-consomment-bien-l-inventaire-du-joueur-qui-45"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10044,
     "sortKey": "0000-00-00",
@@ -3626,6 +4210,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / Bonus",
     "fullTitle": "Vérifier que les bonus consomment bien l'inventaire du joueur qui les utilise, jamais celui de la cible.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 82,
+      "section": "Vérification release / Bonus",
+      "taskText": "Vérifier que les bonus consomment bien l'inventaire du joueur qui les utilise, jamais celui de la cible.",
+      "markdown": "- [x] Vérifier que les bonus consomment bien l'inventaire du joueur qui les utilise, jamais celui de la cible."
+    },
     "summary": "Vérifier que les bonus consomment bien l'inventaire du joueur qui les utilise, jamais celui de la cible.",
     "aiValidated": false,
     "aiNote": "",
@@ -3639,9 +4230,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-ctrl-z-implementer-le-rappel-l-indicateur-la-popup-d-utili-46",
+    "id": "todo-verification-release-ctrl-z-implementer-le-rappel-l-indicateur-la-popup-d-utilisation-la-consommat-00d8cc70a293",
+    "legacyIds": [
+      "todo-done-verification-release-ctrl-z-implementer-le-rappel-l-indicateur-la-popup-d-utili-46"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10045,
     "sortKey": "0000-00-00",
@@ -3655,6 +4250,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / CTRL + Z",
     "fullTitle": "Implémenter le rappel, l'indicateur, la popup d'utilisation, la consommation et l'état spectateur.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 86,
+      "section": "Vérification release / CTRL + Z",
+      "taskText": "Implémenter le rappel, l'indicateur, la popup d'utilisation, la consommation et l'état spectateur.",
+      "markdown": "- [x] Implémenter le rappel, l'indicateur, la popup d'utilisation, la consommation et l'état spectateur."
+    },
     "summary": "Implémenter le rappel, l'indicateur, la popup d'utilisation, la consommation et l'état spectateur.",
     "aiValidated": false,
     "aiNote": "",
@@ -3668,9 +4270,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-ctrl-z-le-rappel-de-3-secondes-apparait-uniquement-au-joueur-47",
+    "id": "todo-verification-release-ctrl-z-verifier-que-le-rappel-de-3-secondes-apparait-uniquement-au-joueur-act-6dbef203b7a8",
+    "legacyIds": [
+      "todo-done-verification-release-ctrl-z-le-rappel-de-3-secondes-apparait-uniquement-au-joueur-47"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10046,
     "sortKey": "0000-00-00",
@@ -3684,6 +4290,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / CTRL + Z",
     "fullTitle": "Vérifier que le rappel de 3 secondes apparaît uniquement au joueur actif qui possède le bonus.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 87,
+      "section": "Vérification release / CTRL + Z",
+      "taskText": "Vérifier que le rappel de 3 secondes apparaît uniquement au joueur actif qui possède le bonus.",
+      "markdown": "- [x] Vérifier que le rappel de 3 secondes apparaît uniquement au joueur actif qui possède le bonus."
+    },
     "summary": "Vérifier que le rappel de 3 secondes apparaît uniquement au joueur actif qui possède le bonus.",
     "aiValidated": false,
     "aiNote": "",
@@ -3697,9 +4310,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-ctrl-z-l-indicateur-en-haut-a-droite-apparait-apres-le-rappe-48",
+    "id": "todo-verification-release-ctrl-z-verifier-que-l-indicateur-en-haut-a-droite-apparait-apres-le-rappel-et-3d8139f8490f",
+    "legacyIds": [
+      "todo-done-verification-release-ctrl-z-l-indicateur-en-haut-a-droite-apparait-apres-le-rappe-48"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10047,
     "sortKey": "0000-00-00",
@@ -3713,6 +4330,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / CTRL + Z",
     "fullTitle": "Vérifier que l'indicateur en haut à droite apparaît après le rappel et reste cliquable.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 88,
+      "section": "Vérification release / CTRL + Z",
+      "taskText": "Vérifier que l'indicateur en haut à droite apparaît après le rappel et reste cliquable.",
+      "markdown": "- [x] Vérifier que l'indicateur en haut à droite apparaît après le rappel et reste cliquable."
+    },
     "summary": "Vérifier que l'indicateur en haut à droite apparaît après le rappel et reste cliquable.",
     "aiValidated": false,
     "aiNote": "",
@@ -3726,9 +4350,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-ctrl-z-l-utilisation-consomme-un-seul-ctrl-z-49",
+    "id": "todo-verification-release-ctrl-z-verifier-que-l-utilisation-consomme-un-seul-ctrl-z-839666141fdf",
+    "legacyIds": [
+      "todo-done-verification-release-ctrl-z-l-utilisation-consomme-un-seul-ctrl-z-49"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10048,
     "sortKey": "0000-00-00",
@@ -3742,6 +4370,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / CTRL + Z",
     "fullTitle": "Vérifier que l'utilisation consomme un seul CTRL + Z.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 89,
+      "section": "Vérification release / CTRL + Z",
+      "taskText": "Vérifier que l'utilisation consomme un seul CTRL + Z.",
+      "markdown": "- [x] Vérifier que l'utilisation consomme un seul `CTRL + Z`."
+    },
     "summary": "Vérifier que l'utilisation consomme un seul CTRL + Z.",
     "aiValidated": false,
     "aiNote": "",
@@ -3755,9 +4390,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-ctrl-z-le-texte-de-l-ecran-de-choix-de-case-passe-bien-en-mo-50",
+    "id": "todo-verification-release-ctrl-z-verifier-que-le-texte-de-l-ecran-de-choix-de-case-passe-bien-en-mode-m-e5f10856f053",
+    "legacyIds": [
+      "todo-done-verification-release-ctrl-z-le-texte-de-l-ecran-de-choix-de-case-passe-bien-en-mo-50"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10049,
     "sortKey": "0000-00-00",
@@ -3771,6 +4410,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / CTRL + Z",
     "fullTitle": "Vérifier que le texte de l'écran de choix de case passe bien en mode \"Maintenant que tu as relancé...\".",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 90,
+      "section": "Vérification release / CTRL + Z",
+      "taskText": "Vérifier que le texte de l'écran de choix de case passe bien en mode \"Maintenant que tu as relancé...\".",
+      "markdown": "- [x] Vérifier que le texte de l'écran de choix de case passe bien en mode \"Maintenant que tu as relancé...\"."
+    },
     "summary": "Vérifier que le texte de l'écran de choix de case passe bien en mode \"Maintenant que tu as relancé...\".",
     "aiValidated": false,
     "aiNote": "",
@@ -3784,9 +4430,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-ctrl-z-les-spectateurs-voient-bien-le-tag-indiquant-que-le-b-51",
+    "id": "todo-verification-release-ctrl-z-verifier-que-les-spectateurs-voient-bien-le-tag-indiquant-que-le-bonus-18b86eac9043",
+    "legacyIds": [
+      "todo-done-verification-release-ctrl-z-les-spectateurs-voient-bien-le-tag-indiquant-que-le-b-51"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10050,
     "sortKey": "0000-00-00",
@@ -3800,6 +4450,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / CTRL + Z",
     "fullTitle": "Vérifier que les spectateurs voient bien le tag indiquant que le bonus a été utilisé.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 91,
+      "section": "Vérification release / CTRL + Z",
+      "taskText": "Vérifier que les spectateurs voient bien le tag indiquant que le bonus a été utilisé.",
+      "markdown": "- [x] Vérifier que les spectateurs voient bien le tag indiquant que le bonus a été utilisé."
+    },
     "summary": "Vérifier que les spectateurs voient bien le tag indiquant que le bonus a été utilisé.",
     "aiValidated": false,
     "aiNote": "",
@@ -3813,9 +4470,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-va-faire-le-cafe-du-boss-coffee-boss-bloque-le-de-52",
+    "id": "todo-verification-release-va-faire-le-cafe-du-boss-implementer-la-selection-cible-la-consommation-l-ecran-de-confirmation-34b882af930e",
+    "legacyIds": [
+      "todo-done-verification-release-va-faire-le-cafe-du-boss-coffee-boss-bloque-le-de-52"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10051,
     "sortKey": "0000-00-00",
@@ -3829,6 +4490,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / Va faire le café du boss",
     "fullTitle": "Implémenter la sélection cible, la consommation, l'écran de confirmation et le tour sauté.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 95,
+      "section": "Vérification release / Va faire le café du boss",
+      "taskText": "Implémenter la sélection cible, la consommation, l'écran de confirmation et le tour sauté.",
+      "markdown": "- [x] Implémenter la sélection cible, la consommation, l'écran de confirmation et le tour sauté."
+    },
     "summary": "Implémenter la sélection cible, la consommation, l'écran de confirmation et le tour sauté.",
     "aiValidated": false,
     "aiNote": "",
@@ -3842,9 +4510,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-c-est-moi-qui-choisis-poseur-choisit-seul-53",
+    "id": "todo-verification-release-c-est-moi-qui-choisis-implementer-la-selection-cible-l-attente-du-quizz-cible-le-choix-de-di-b5b687dae441",
+    "legacyIds": [
+      "todo-done-verification-release-c-est-moi-qui-choisis-poseur-choisit-seul-53"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10052,
     "sortKey": "0000-00-00",
@@ -3858,6 +4530,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / C'est moi qui choisis !",
     "fullTitle": "Implémenter la sélection cible, l'attente du Quizz cible, le choix de difficulté par le joueur qui a posé le bonus et la vue spectateurs.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 104,
+      "section": "Vérification release / C'est moi qui choisis !",
+      "taskText": "Implémenter la sélection cible, l'attente du Quizz cible, le choix de difficulté par le joueur qui a posé le bonus et la vue spectateurs.",
+      "markdown": "- [x] Implémenter la sélection cible, l'attente du Quizz cible, le choix de difficulté par le joueur qui a posé le bonus et la vue spectateurs."
+    },
     "summary": "Implémenter la sélection cible, l'attente du Quizz cible, le choix de difficulté par le joueur qui a posé le bonus et la vue spectateurs.",
     "aiValidated": false,
     "aiNote": "",
@@ -3871,9 +4550,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-c-est-moi-qui-choisis-le-bonus-ne-s-active-que-quand-la-cible-exacte-tombe-54",
+    "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-que-le-bonus-ne-s-active-que-quand-la-cible-exacte-tombe-sur--f2fc18247a66",
+    "legacyIds": [
+      "todo-done-verification-release-c-est-moi-qui-choisis-le-bonus-ne-s-active-que-quand-la-cible-exacte-tombe-54"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10053,
     "sortKey": "0000-00-00",
@@ -3887,6 +4570,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / C'est moi qui choisis !",
     "fullTitle": "Vérifier que le bonus ne s'active que quand la cible exacte tombe sur une case Quizz.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 105,
+      "section": "Vérification release / C'est moi qui choisis !",
+      "taskText": "Vérifier que le bonus ne s'active que quand la cible exacte tombe sur une case Quizz.",
+      "markdown": "- [x] Vérifier que le bonus ne s'active que quand la cible exacte tombe sur une case Quizz."
+    },
     "summary": "Vérifier que le bonus ne s'active que quand la cible exacte tombe sur une case Quizz.",
     "aiValidated": false,
     "aiNote": "",
@@ -3900,9 +4590,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-c-est-moi-qui-choisis-le-bonus-n-interfere-pas-avec-les-tours-quizz-des-aut-55",
+    "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-que-le-bonus-n-interfere-pas-avec-les-tours-quizz-des-autres--e420d3e7b6f4",
+    "legacyIds": [
+      "todo-done-verification-release-c-est-moi-qui-choisis-le-bonus-n-interfere-pas-avec-les-tours-quizz-des-aut-55"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10054,
     "sortKey": "0000-00-00",
@@ -3916,6 +4610,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / C'est moi qui choisis !",
     "fullTitle": "Vérifier que le bonus n'interfère pas avec les tours Quizz des autres joueurs.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 106,
+      "section": "Vérification release / C'est moi qui choisis !",
+      "taskText": "Vérifier que le bonus n'interfère pas avec les tours Quizz des autres joueurs.",
+      "markdown": "- [x] Vérifier que le bonus n'interfère pas avec les tours Quizz des autres joueurs."
+    },
     "summary": "Vérifier que le bonus n'interfère pas avec les tours Quizz des autres joueurs.",
     "aiValidated": false,
     "aiNote": "",
@@ -3929,9 +4630,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-menu-popups-mobile-l-acces-aux-regles-dans-le-menu-via-le-bouton-regles-56",
+    "id": "todo-verification-release-menu-popups-mobile-ajouter-l-acces-aux-regles-dans-le-menu-via-le-bouton-regles-prevu-dan-6ea5a3e31879",
+    "legacyIds": [
+      "todo-done-verification-release-menu-popups-mobile-l-acces-aux-regles-dans-le-menu-via-le-bouton-regles-56"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10055,
     "sortKey": "0000-00-00",
@@ -3945,6 +4650,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / Menu / popups / mobile",
     "fullTitle": "Ajouter l'accès aux règles dans le menu via le bouton règles prévu dans la barre haute.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 117,
+      "section": "Vérification release / Menu / popups / mobile",
+      "taskText": "Ajouter l'accès aux règles dans le menu via le bouton règles prévu dans la barre haute.",
+      "markdown": "- [x] Ajouter l'accès aux règles dans le menu via le bouton règles prévu dans la barre haute."
+    },
     "summary": "Ajouter l'accès aux règles dans le menu via le bouton règles prévu dans la barre haute.",
     "aiValidated": false,
     "aiNote": "",
@@ -3958,9 +4670,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-menu-popups-mobile-rendre-les-textes-ui-non-selectionnables-hors-zones-57",
+    "id": "todo-verification-release-menu-popups-mobile-rendre-les-textes-ui-non-selectionnables-hors-zones-de-saisie-52cda198a384",
+    "legacyIds": [
+      "todo-done-verification-release-menu-popups-mobile-rendre-les-textes-ui-non-selectionnables-hors-zones-57"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10056,
     "sortKey": "0000-00-00",
@@ -3974,6 +4690,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / Menu / popups / mobile",
     "fullTitle": "Rendre les textes UI non sélectionnables, hors zones de saisie.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 118,
+      "section": "Vérification release / Menu / popups / mobile",
+      "taskText": "Rendre les textes UI non sélectionnables, hors zones de saisie.",
+      "markdown": "- [x] Rendre les textes UI non sélectionnables, hors zones de saisie."
+    },
     "summary": "Rendre les textes UI non sélectionnables, hors zones de saisie.",
     "aiValidated": false,
     "aiNote": "",
@@ -3987,9 +4710,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-menu-popups-mobile-onboarding-indice-de-premier-usage-pour-l-appui-lon-58",
+    "id": "todo-verification-release-menu-popups-mobile-ajouter-un-onboarding-indice-de-premier-usage-pour-l-appui-long-menu-d-1c066f71e33e",
+    "legacyIds": [
+      "todo-done-verification-release-menu-popups-mobile-onboarding-indice-de-premier-usage-pour-l-appui-lon-58"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10057,
     "sortKey": "0000-00-00",
@@ -4003,6 +4730,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / Menu / popups / mobile",
     "fullTitle": "Ajouter un onboarding / indice de premier usage pour l'appui long menu dans le lobby.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 119,
+      "section": "Vérification release / Menu / popups / mobile",
+      "taskText": "Ajouter un onboarding / indice de premier usage pour l'appui long menu dans le lobby.",
+      "markdown": "- [x] Ajouter un onboarding / indice de premier usage pour l'appui long menu dans le lobby."
+    },
     "summary": "Ajouter un onboarding / indice de premier usage pour l'appui long menu dans le lobby.",
     "aiValidated": false,
     "aiNote": "",
@@ -4016,9 +4750,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-menu-popups-mobile-revoir-le-design-des-popups-bonus-2-et-3-espacement-59",
+    "id": "todo-verification-release-menu-popups-mobile-revoir-le-design-des-popups-bonus-2-et-3-espacements-hierarchie-bouton-cc5d6f58b103",
+    "legacyIds": [
+      "todo-done-verification-release-menu-popups-mobile-revoir-le-design-des-popups-bonus-2-et-3-espacement-59"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10058,
     "sortKey": "0000-00-00",
@@ -4032,6 +4770,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / Menu / popups / mobile",
     "fullTitle": "Revoir le design des popups bonus 2 et 3 : espacements, hiérarchie, boutons, états de sélection.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 120,
+      "section": "Vérification release / Menu / popups / mobile",
+      "taskText": "Revoir le design des popups bonus 2 et 3 : espacements, hiérarchie, boutons, états de sélection.",
+      "markdown": "- [x] Revoir le design des popups bonus 2 et 3 : espacements, hiérarchie, boutons, états de sélection."
+    },
     "summary": "Revoir le design des popups bonus 2 et 3 : espacements, hiérarchie, boutons, états de sélection.",
     "aiValidated": false,
     "aiNote": "",
@@ -4045,9 +4790,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-menu-popups-mobile-revoir-tous-les-popups-de-confirmation-admin-promot-60",
+    "id": "todo-verification-release-menu-popups-mobile-revoir-tous-les-popups-de-confirmation-admin-promote-kick-leave-annule-3579c0dae11d",
+    "legacyIds": [
+      "todo-done-verification-release-menu-popups-mobile-revoir-tous-les-popups-de-confirmation-admin-promot-60"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10059,
     "sortKey": "0000-00-00",
@@ -4061,6 +4810,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / Menu / popups / mobile",
     "fullTitle": "Revoir tous les popups de confirmation admin : promote, kick, leave, annuler l'action, changement d'ordre.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 121,
+      "section": "Vérification release / Menu / popups / mobile",
+      "taskText": "Revoir tous les popups de confirmation admin : promote, kick, leave, annuler l'action, changement d'ordre.",
+      "markdown": "- [x] Revoir tous les popups de confirmation admin : promote, kick, leave, annuler l'action, changement d'ordre."
+    },
     "summary": "Revoir tous les popups de confirmation admin : promote, kick, leave, annuler l'action, changement d'ordre.",
     "aiValidated": false,
     "aiNote": "",
@@ -4074,9 +4830,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-menu-popups-mobile-popups-admin-sur-telephone-notamment-le-bug-constate-61",
+    "id": "todo-verification-release-menu-popups-mobile-tester-les-popups-admin-sur-telephone-notamment-le-bug-constate-sur-mo-01595c2970d8",
+    "legacyIds": [
+      "todo-done-verification-release-menu-popups-mobile-popups-admin-sur-telephone-notamment-le-bug-constate-61"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10060,
     "sortKey": "0000-00-00",
@@ -4090,6 +4850,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / Menu / popups / mobile",
     "fullTitle": "Tester les popups admin sur téléphone, notamment le bug constaté sur mobile.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 122,
+      "section": "Vérification release / Menu / popups / mobile",
+      "taskText": "Tester les popups admin sur téléphone, notamment le bug constaté sur mobile.",
+      "markdown": "- [x] Tester les popups admin sur téléphone, notamment le bug constaté sur mobile."
+    },
     "summary": "Tester les popups admin sur téléphone, notamment le bug constaté sur mobile.",
     "aiValidated": false,
     "aiNote": "",
@@ -4103,9 +4870,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-menu-popups-mobile-les-popups-gardent-une-animation-d-entree-sortie-co-62",
+    "id": "todo-verification-release-menu-popups-mobile-verifier-que-les-popups-gardent-une-animation-d-entree-sortie-coherent-dde99cff2e32",
+    "legacyIds": [
+      "todo-done-verification-release-menu-popups-mobile-les-popups-gardent-une-animation-d-entree-sortie-co-62"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10061,
     "sortKey": "0000-00-00",
@@ -4119,6 +4890,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / Menu / popups / mobile",
     "fullTitle": "Vérifier que les popups gardent une animation d'entrée / sortie cohérente et ne cassent pas la hauteur mobile.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 123,
+      "section": "Vérification release / Menu / popups / mobile",
+      "taskText": "Vérifier que les popups gardent une animation d'entrée / sortie cohérente et ne cassent pas la hauteur mobile.",
+      "markdown": "- [x] Vérifier que les popups gardent une animation d'entrée / sortie cohérente et ne cassent pas la hauteur mobile."
+    },
     "summary": "Vérifier que les popups gardent une animation d'entrée / sortie cohérente et ne cassent pas la hauteur mobile.",
     "aiValidated": false,
     "aiNote": "",
@@ -4132,9 +4910,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-verification-release-menu-popups-mobile-repasser-les-textes-des-bonus-et-menus-pour-corriger-63",
+    "id": "todo-verification-release-menu-popups-mobile-repasser-les-textes-des-bonus-et-menus-pour-corriger-les-accents-et-li-c5280f14596b",
+    "legacyIds": [
+      "todo-done-verification-release-menu-popups-mobile-repasser-les-textes-des-bonus-et-menus-pour-corriger-63"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10062,
     "sortKey": "0000-00-00",
@@ -4148,6 +4930,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Vérification release / Menu / popups / mobile",
     "fullTitle": "Repasser les textes des bonus et menus pour corriger les accents et libellés manquants : dé, difficulté, désigné, connecté, déconnecté, en attente, etc.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 124,
+      "section": "Vérification release / Menu / popups / mobile",
+      "taskText": "Repasser les textes des bonus et menus pour corriger les accents et libellés manquants : dé, difficulté, désigné, connecté, déconnecté, en attente, etc.",
+      "markdown": "- [x] Repasser les textes des bonus et menus pour corriger les accents et libellés manquants : dé, difficulté, désigné, connecté, déconnecté, en attente, etc."
+    },
     "summary": "Repasser les textes des bonus et menus pour corriger les accents et libellés manquants : dé, difficulté, désigné, connecté, déconnecté, en attente, etc.",
     "aiValidated": false,
     "aiNote": "",
@@ -4161,9 +4950,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-quizz-partie-quizz-validee-64",
+    "id": "todo-quizz-partie-quizz-validee-52d72160f690",
+    "legacyIds": [
+      "todo-done-quizz-partie-quizz-validee-64"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10063,
     "sortKey": "0000-00-00",
@@ -4177,6 +4970,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Quizz",
     "fullTitle": "Partie quizz validee.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 128,
+      "section": "Quizz",
+      "taskText": "Partie quizz validee.",
+      "markdown": "- [x] Partie quizz validee."
+    },
     "summary": "Partie quizz validee.",
     "aiValidated": false,
     "aiNote": "",
@@ -4190,9 +4990,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-character-select-la-logique-de-verrouillage-du-personnage-lors-de-la-n-65",
+    "id": "todo-character-select-corriger-la-logique-de-verrouillage-du-personnage-lors-de-la-navigatio-bf6f35ba649e",
+    "legacyIds": [
+      "todo-done-character-select-la-logique-de-verrouillage-du-personnage-lors-de-la-n-65"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10064,
     "sortKey": "0000-00-00",
@@ -4206,6 +5010,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Character Select",
     "fullTitle": "Corriger la logique de verrouillage du personnage lors de la navigation entre cartes.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 132,
+      "section": "Character Select",
+      "taskText": "Corriger la logique de verrouillage du personnage lors de la navigation entre cartes.",
+      "markdown": "- [x] Corriger la logique de verrouillage du personnage lors de la navigation entre cartes."
+    },
     "summary": "Corriger la logique de verrouillage du personnage lors de la navigation entre cartes.",
     "aiValidated": false,
     "aiNote": "",
@@ -4219,9 +5030,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-reassignation-auto-de-l-admin-si-l-admin-quitte-la-ro-66",
+    "id": "todo-parametres-menu-settings-reassignation-auto-de-l-admin-si-l-admin-quitte-la-room-7e74f23b9d54",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-reassignation-auto-de-l-admin-si-l-admin-quitte-la-ro-66"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10065,
     "sortKey": "0000-00-00",
@@ -4235,6 +5050,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Réassignation auto de l'admin si l'admin quitte la room.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 140,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Réassignation auto de l'admin si l'admin quitte la room.",
+      "markdown": "- [x] Réassignation auto de l'admin si l'admin quitte la room."
+    },
     "summary": "Réassignation auto de l'admin si l'admin quitte la room.",
     "aiValidated": false,
     "aiNote": "",
@@ -4248,9 +5070,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-menu-modal-avec-action-quitter-la-partie-67",
+    "id": "todo-parametres-menu-settings-ajouter-un-menu-modal-avec-action-quitter-la-partie-2b438881de72",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-menu-modal-avec-action-quitter-la-partie-67"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10066,
     "sortKey": "0000-00-00",
@@ -4264,6 +5090,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Ajouter un menu modal avec action \"Quitter la partie\".",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 141,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Ajouter un menu modal avec action \"Quitter la partie\".",
+      "markdown": "- [x] Ajouter un menu modal avec action \"Quitter la partie\"."
+    },
     "summary": "Ajouter un menu modal avec action \"Quitter la partie\".",
     "aiValidated": false,
     "aiNote": "",
@@ -4277,9 +5110,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-popup-parametres-accessible-via-appui-long-sur-l-ecra-68",
+    "id": "todo-parametres-menu-settings-ajouter-une-popup-parametres-accessible-via-appui-long-sur-l-ecran-3a78ffecef56",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-popup-parametres-accessible-via-appui-long-sur-l-ecra-68"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10067,
     "sortKey": "0000-00-00",
@@ -4293,6 +5130,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Ajouter une popup paramètres accessible via appui long sur l'écran.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 142,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Ajouter une popup paramètres accessible via appui long sur l'écran.",
+      "markdown": "- [x] Ajouter une popup paramètres accessible via appui long sur l'écran."
+    },
     "summary": "Ajouter une popup paramètres accessible via appui long sur l'écran.",
     "aiValidated": false,
     "aiNote": "",
@@ -4306,9 +5150,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-centraliser-les-regles-d-ouverture-du-menu-selon-la-v-69",
+    "id": "todo-parametres-menu-settings-centraliser-les-regles-d-ouverture-du-menu-selon-la-vue-le-joueur-acti-14694c7b45f0",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-centraliser-les-regles-d-ouverture-du-menu-selon-la-v-69"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10068,
     "sortKey": "0000-00-00",
@@ -4322,6 +5170,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Centraliser les règles d'ouverture du menu selon la vue, le joueur actif, le reader, les spectateurs et l'admin.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 143,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Centraliser les règles d'ouverture du menu selon la vue, le joueur actif, le reader, les spectateurs et l'admin.",
+      "markdown": "- [x] Centraliser les règles d'ouverture du menu selon la vue, le joueur actif, le reader, les spectateurs et l'admin."
+    },
     "summary": "Centraliser les règles d'ouverture du menu selon la vue, le joueur actif, le reader, les spectateurs et l'admin.",
     "aiValidated": false,
     "aiNote": "",
@@ -4335,9 +5190,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-autoriser-l-admin-a-ouvrir-le-menu-sur-tous-les-ecran-70",
+    "id": "todo-parametres-menu-settings-autoriser-l-admin-a-ouvrir-le-menu-sur-tous-les-ecrans-de-partie-dd1f32ef065d",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-autoriser-l-admin-a-ouvrir-le-menu-sur-tous-les-ecran-70"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10069,
     "sortKey": "0000-00-00",
@@ -4351,6 +5210,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Autoriser l'admin à ouvrir le menu sur tous les écrans de partie.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 144,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Autoriser l'admin à ouvrir le menu sur tous les écrans de partie.",
+      "markdown": "- [x] Autoriser l'admin à ouvrir le menu sur tous les écrans de partie."
+    },
     "summary": "Autoriser l'admin à ouvrir le menu sur tous les écrans de partie.",
     "aiValidated": false,
     "aiNote": "",
@@ -4364,9 +5230,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-prevoir-deux-onglets-de-menu-lobby-admin-et-bonus-71",
+    "id": "todo-parametres-menu-settings-prevoir-deux-onglets-de-menu-lobby-admin-et-bonus-e5cf177d14ce",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-prevoir-deux-onglets-de-menu-lobby-admin-et-bonus-71"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10070,
     "sortKey": "0000-00-00",
@@ -4380,6 +5250,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Prévoir deux onglets de menu : Lobby/Admin et Bonus.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 145,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Prévoir deux onglets de menu : Lobby/Admin et Bonus.",
+      "markdown": "- [x] Prévoir deux onglets de menu : Lobby/Admin et Bonus."
+    },
     "summary": "Prévoir deux onglets de menu : Lobby/Admin et Bonus.",
     "aiValidated": false,
     "aiNote": "",
@@ -4393,9 +5270,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-afficher-les-joueurs-dans-le-lobby-avec-etat-connecte-72",
+    "id": "todo-parametres-menu-settings-afficher-les-joueurs-dans-le-lobby-avec-etat-connecte-en-attente-decon-f7300190e693",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-afficher-les-joueurs-dans-le-lobby-avec-etat-connecte-72"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10071,
     "sortKey": "0000-00-00",
@@ -4409,6 +5290,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Afficher les joueurs dans le Lobby avec état connecté / en attente / déconnecté.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 146,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Afficher les joueurs dans le Lobby avec état connecté / en attente / déconnecté.",
+      "markdown": "- [x] Afficher les joueurs dans le Lobby avec état connecté / en attente / déconnecté."
+    },
     "summary": "Afficher les joueurs dans le Lobby avec état connecté / en attente / déconnecté.",
     "aiValidated": false,
     "aiNote": "",
@@ -4422,9 +5310,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-timer-d-attente-avant-passage-en-deconnecte-73",
+    "id": "todo-parametres-menu-settings-ajouter-le-timer-d-attente-avant-passage-en-deconnecte-1909d5e5c697",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-timer-d-attente-avant-passage-en-deconnecte-73"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10072,
     "sortKey": "0000-00-00",
@@ -4438,6 +5330,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Ajouter le timer d'attente avant passage en déconnecté.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 147,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Ajouter le timer d'attente avant passage en déconnecté.",
+      "markdown": "- [x] Ajouter le timer d'attente avant passage en déconnecté."
+    },
     "summary": "Ajouter le timer d'attente avant passage en déconnecté.",
     "aiValidated": false,
     "aiNote": "",
@@ -4451,9 +5350,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-conserver-les-joueurs-dans-la-room-apres-deconnexion-74",
+    "id": "todo-parametres-menu-settings-conserver-les-joueurs-dans-la-room-apres-deconnexion-pour-permettre-la-affec091091a",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-conserver-les-joueurs-dans-la-room-apres-deconnexion-74"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10073,
     "sortKey": "0000-00-00",
@@ -4467,6 +5370,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Conserver les joueurs dans la room après déconnexion pour permettre la reconnexion.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 148,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Conserver les joueurs dans la room après déconnexion pour permettre la reconnexion.",
+      "markdown": "- [x] Conserver les joueurs dans la room après déconnexion pour permettre la reconnexion."
+    },
     "summary": "Conserver les joueurs dans la room après déconnexion pour permettre la reconnexion.",
     "aiValidated": false,
     "aiNote": "",
@@ -4480,9 +5390,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-afficher-la-couronne-admin-et-le-tag-moi-dans-la-li-75",
+    "id": "todo-parametres-menu-settings-afficher-la-couronne-admin-et-le-tag-moi-dans-la-liste-joueurs-885f9e57e270",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-afficher-la-couronne-admin-et-le-tag-moi-dans-la-li-75"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10074,
     "sortKey": "0000-00-00",
@@ -4496,6 +5410,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Afficher la couronne admin et le tag \"moi\" dans la liste joueurs.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 149,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Afficher la couronne admin et le tag \"moi\" dans la liste joueurs.",
+      "markdown": "- [x] Afficher la couronne admin et le tag \"moi\" dans la liste joueurs."
+    },
     "summary": "Afficher la couronne admin et le tag \"moi\" dans la liste joueurs.",
     "aiValidated": false,
     "aiNote": "",
@@ -4509,9 +5430,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-boutons-admin-kick-leave-promote-ajouter-en-ui-76",
+    "id": "todo-parametres-menu-settings-ajouter-les-boutons-admin-kick-leave-promote-ajouter-en-ui-76d6137e47b3",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-boutons-admin-kick-leave-promote-ajouter-en-ui-76"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10075,
     "sortKey": "0000-00-00",
@@ -4525,6 +5450,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Ajouter les boutons admin kick / leave / promote / ajouter en UI.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 150,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Ajouter les boutons admin kick / leave / promote / ajouter en UI.",
+      "markdown": "- [x] Ajouter les boutons admin kick / leave / promote / ajouter en UI."
+    },
     "summary": "Ajouter les boutons admin kick / leave / promote / ajouter en UI.",
     "aiValidated": false,
     "aiNote": "",
@@ -4538,9 +5470,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-brancher-promote-admin-avec-popup-de-confirmation-77",
+    "id": "todo-parametres-menu-settings-brancher-promote-admin-avec-popup-de-confirmation-842bf2385ac5",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-brancher-promote-admin-avec-popup-de-confirmation-77"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10076,
     "sortKey": "0000-00-00",
@@ -4554,6 +5490,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Brancher promote admin avec popup de confirmation.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 151,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Brancher promote admin avec popup de confirmation.",
+      "markdown": "- [x] Brancher promote admin avec popup de confirmation."
+    },
     "summary": "Brancher promote admin avec popup de confirmation.",
     "aiValidated": false,
     "aiNote": "",
@@ -4567,9 +5510,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-brancher-kick-joueur-avec-popup-de-confirmation-78",
+    "id": "todo-parametres-menu-settings-brancher-kick-joueur-avec-popup-de-confirmation-5f35030e4d56",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-brancher-kick-joueur-avec-popup-de-confirmation-78"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10077,
     "sortKey": "0000-00-00",
@@ -4583,6 +5530,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Brancher kick joueur avec popup de confirmation.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 152,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Brancher kick joueur avec popup de confirmation.",
+      "markdown": "- [x] Brancher kick joueur avec popup de confirmation."
+    },
     "summary": "Brancher kick joueur avec popup de confirmation.",
     "aiValidated": false,
     "aiNote": "",
@@ -4596,9 +5550,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-brancher-leave-admin-avec-reassignation-automatique-79",
+    "id": "todo-parametres-menu-settings-brancher-leave-admin-avec-reassignation-automatique-7e9c4a84306a",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-brancher-leave-admin-avec-reassignation-automatique-79"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10078,
     "sortKey": "0000-00-00",
@@ -4612,6 +5570,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Brancher leave admin avec reassignation automatique.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 153,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Brancher leave admin avec reassignation automatique.",
+      "markdown": "- [x] Brancher leave admin avec reassignation automatique."
+    },
     "summary": "Brancher leave admin avec reassignation automatique.",
     "aiValidated": false,
     "aiNote": "",
@@ -4625,9 +5590,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-changement-d-ordre-avec-drag-sur-toute-la-ligne-joueu-80",
+    "id": "todo-parametres-menu-settings-ajouter-le-changement-d-ordre-avec-drag-sur-toute-la-ligne-joueur-73efce276c62",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-changement-d-ordre-avec-drag-sur-toute-la-ligne-joueu-80"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10079,
     "sortKey": "0000-00-00",
@@ -4641,6 +5610,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Ajouter le changement d'ordre avec drag sur toute la ligne joueur.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 154,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Ajouter le changement d'ordre avec drag sur toute la ligne joueur.",
+      "markdown": "- [x] Ajouter le changement d'ordre avec drag sur toute la ligne joueur."
+    },
     "summary": "Ajouter le changement d'ordre avec drag sur toute la ligne joueur.",
     "aiValidated": false,
     "aiNote": "",
@@ -4654,9 +5630,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-appliquer-le-changement-d-ordre-a-la-fin-du-tour-de-t-81",
+    "id": "todo-parametres-menu-settings-appliquer-le-changement-d-ordre-a-la-fin-du-tour-de-table-pas-a-la-fin-ce7f564234dd",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-appliquer-le-changement-d-ordre-a-la-fin-du-tour-de-t-81"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10080,
     "sortKey": "0000-00-00",
@@ -4670,6 +5650,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Appliquer le changement d'ordre à la fin du tour de table, pas à la fin du tour du joueur actif.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 155,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Appliquer le changement d'ordre à la fin du tour de table, pas à la fin du tour du joueur actif.",
+      "markdown": "- [x] Appliquer le changement d'ordre à la fin du tour de table, pas à la fin du tour du joueur actif."
+    },
     "summary": "Appliquer le changement d'ordre à la fin du tour de table, pas à la fin du tour du joueur actif.",
     "aiValidated": false,
     "aiNote": "",
@@ -4683,9 +5670,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-l-annulation-d-action-admin-avec-popup-de-confirmatio-82",
+    "id": "todo-parametres-menu-settings-ajouter-l-annulation-d-action-admin-avec-popup-de-confirmation-3b66cb4c8139",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-l-annulation-d-action-admin-avec-popup-de-confirmatio-82"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10081,
     "sortKey": "0000-00-00",
@@ -4699,6 +5690,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Ajouter l'annulation d'action admin avec popup de confirmation.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 156,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Ajouter l'annulation d'action admin avec popup de confirmation.",
+      "markdown": "- [x] Ajouter l'annulation d'action admin avec popup de confirmation."
+    },
     "summary": "Ajouter l'annulation d'action admin avec popup de confirmation.",
     "aiValidated": false,
     "aiNote": "",
@@ -4712,9 +5710,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-pause-play-global-avec-overlay-blur-83",
+    "id": "todo-parametres-menu-settings-ajouter-pause-play-global-avec-overlay-blur-48009b7143f4",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-pause-play-global-avec-overlay-blur-83"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10082,
     "sortKey": "0000-00-00",
@@ -4728,6 +5730,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Ajouter pause / play global avec overlay blur.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 157,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Ajouter pause / play global avec overlay blur.",
+      "markdown": "- [x] Ajouter pause / play global avec overlay blur."
+    },
     "summary": "Ajouter pause / play global avec overlay blur.",
     "aiValidated": false,
     "aiNote": "",
@@ -4741,9 +5750,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-exclure-certaines-zones-de-l-appui-long-menu-via-data-84",
+    "id": "todo-parametres-menu-settings-exclure-certaines-zones-de-l-appui-long-menu-via-data-no-longpress-872ea83e7fec",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-exclure-certaines-zones-de-l-appui-long-menu-via-data-84"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10083,
     "sortKey": "0000-00-00",
@@ -4757,6 +5770,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Exclure certaines zones de l'appui long menu via data-no-longpress.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 158,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Exclure certaines zones de l'appui long menu via data-no-longpress.",
+      "markdown": "- [x] Exclure certaines zones de l'appui long menu via `data-no-longpress`."
+    },
     "summary": "Exclure certaines zones de l'appui long menu via data-no-longpress.",
     "aiValidated": false,
     "aiNote": "",
@@ -4770,9 +5790,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-rendre-les-textes-ui-non-selectionnables-sauf-zones-85",
+    "id": "todo-parametres-menu-settings-rendre-les-textes-ui-non-selectionnables-sauf-zones-de-saisie-0e8c93512aee",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-rendre-les-textes-ui-non-selectionnables-sauf-zones-85"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10084,
     "sortKey": "0000-00-00",
@@ -4786,6 +5810,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Rendre les textes UI non sélectionnables, sauf zones de saisie.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 159,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Rendre les textes UI non sélectionnables, sauf zones de saisie.",
+      "markdown": "- [x] Rendre les textes UI non sélectionnables, sauf zones de saisie."
+    },
     "summary": "Rendre les textes UI non sélectionnables, sauf zones de saisie.",
     "aiValidated": false,
     "aiNote": "",
@@ -4799,9 +5830,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-popup-parcours-pedagogique-au-premier-usage-du-menu-86",
+    "id": "todo-parametres-menu-settings-ajouter-un-popup-parcours-pedagogique-au-premier-usage-du-menu-3e16bc8d6877",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-popup-parcours-pedagogique-au-premier-usage-du-menu-86"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10085,
     "sortKey": "0000-00-00",
@@ -4815,6 +5850,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Ajouter un popup / parcours pédagogique au premier usage du menu.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 160,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Ajouter un popup / parcours pédagogique au premier usage du menu.",
+      "markdown": "- [x] Ajouter un popup / parcours pédagogique au premier usage du menu."
+    },
     "summary": "Ajouter un popup / parcours pédagogique au premier usage du menu.",
     "aiValidated": false,
     "aiNote": "",
@@ -4828,9 +5870,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-brancher-le-bouton-regles-dans-la-barre-haute-du-menu-87",
+    "id": "todo-parametres-menu-settings-brancher-le-bouton-regles-dans-la-barre-haute-du-menu-c5d62cfc0413",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-brancher-le-bouton-regles-dans-la-barre-haute-du-menu-87"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10086,
     "sortKey": "0000-00-00",
@@ -4844,6 +5890,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Brancher le bouton règles dans la barre haute du menu.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 161,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Brancher le bouton règles dans la barre haute du menu.",
+      "markdown": "- [x] Brancher le bouton règles dans la barre haute du menu."
+    },
     "summary": "Brancher le bouton règles dans la barre haute du menu.",
     "aiValidated": false,
     "aiNote": "",
@@ -4857,9 +5910,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-generer-ou-afficher-un-code-de-secours-pour-faire-rev-88",
+    "id": "todo-parametres-menu-settings-generer-ou-afficher-un-code-de-secours-pour-faire-revenir-un-joueur-qu-b1936d0d35f2",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-generer-ou-afficher-un-code-de-secours-pour-faire-rev-88"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10087,
     "sortKey": "0000-00-00",
@@ -4873,6 +5930,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Générer ou afficher un code de secours pour faire revenir un joueur qui a crash ou perdu sa session.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 162,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Générer ou afficher un code de secours pour faire revenir un joueur qui a crash ou perdu sa session.",
+      "markdown": "- [x] Générer ou afficher un code de secours pour faire revenir un joueur qui a crash ou perdu sa session."
+    },
     "summary": "Générer ou afficher un code de secours pour faire revenir un joueur qui a crash ou perdu sa session.",
     "aiValidated": false,
     "aiNote": "",
@@ -4886,9 +5950,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-parametres-menu-settings-revoir-le-comportement-mobile-des-popups-admin-89",
+    "id": "todo-parametres-menu-settings-revoir-le-comportement-mobile-des-popups-admin-07276f0e5a02",
+    "legacyIds": [
+      "todo-done-parametres-menu-settings-revoir-le-comportement-mobile-des-popups-admin-89"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10088,
     "sortKey": "0000-00-00",
@@ -4902,6 +5970,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Paramètres / Menu Settings",
     "fullTitle": "Revoir le comportement mobile des popups admin.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 163,
+      "section": "Paramètres / Menu Settings",
+      "taskText": "Revoir le comportement mobile des popups admin.",
+      "markdown": "- [x] Revoir le comportement mobile des popups admin."
+    },
     "summary": "Revoir le comportement mobile des popups admin.",
     "aiValidated": false,
     "aiNote": "",
@@ -4915,9 +5990,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-bonus-creer-un-catalogue-de-bonus-centralise-90",
+    "id": "todo-bonus-creer-un-catalogue-de-bonus-centralise-e7d5a1df04e0",
+    "legacyIds": [
+      "todo-done-bonus-creer-un-catalogue-de-bonus-centralise-90"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10089,
     "sortKey": "0000-00-00",
@@ -4931,6 +6010,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Bonus",
     "fullTitle": "Créer un catalogue de bonus centralisé.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 167,
+      "section": "Bonus",
+      "taskText": "Créer un catalogue de bonus centralisé.",
+      "markdown": "- [x] Créer un catalogue de bonus centralisé."
+    },
     "summary": "Créer un catalogue de bonus centralisé.",
     "aiValidated": false,
     "aiNote": "",
@@ -4944,9 +6030,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-bonus-stocker-les-bonus-dans-player-bonuses-91",
+    "id": "todo-bonus-stocker-les-bonus-dans-player-bonuses-7956c1ec5361",
+    "legacyIds": [
+      "todo-done-bonus-stocker-les-bonus-dans-player-bonuses-91"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10090,
     "sortKey": "0000-00-00",
@@ -4960,6 +6050,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Bonus",
     "fullTitle": "Stocker les bonus dans player.bonuses.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 168,
+      "section": "Bonus",
+      "taskText": "Stocker les bonus dans player.bonuses.",
+      "markdown": "- [x] Stocker les bonus dans `player.bonuses`."
+    },
     "summary": "Stocker les bonus dans player.bonuses.",
     "aiValidated": false,
     "aiNote": "",
@@ -4973,9 +6070,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-bonus-creer-la-vue-bonus-du-settings-menu-92",
+    "id": "todo-bonus-creer-la-vue-bonus-du-settings-menu-82f1c67672c6",
+    "legacyIds": [
+      "todo-done-bonus-creer-la-vue-bonus-du-settings-menu-92"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10091,
     "sortKey": "0000-00-00",
@@ -4989,6 +6090,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Bonus",
     "fullTitle": "Créer la vue Bonus du Settings Menu.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 169,
+      "section": "Bonus",
+      "taskText": "Créer la vue Bonus du Settings Menu.",
+      "markdown": "- [x] Créer la vue Bonus du Settings Menu."
+    },
     "summary": "Créer la vue Bonus du Settings Menu.",
     "aiValidated": false,
     "aiNote": "",
@@ -5002,9 +6110,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-bonus-afficher-les-bonus-disponibles-avec-quantite-93",
+    "id": "todo-bonus-afficher-les-bonus-disponibles-avec-quantite-f97ed375f775",
+    "legacyIds": [
+      "todo-done-bonus-afficher-les-bonus-disponibles-avec-quantite-93"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10092,
     "sortKey": "0000-00-00",
@@ -5018,6 +6130,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Bonus",
     "fullTitle": "Afficher les bonus disponibles avec quantité.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 170,
+      "section": "Bonus",
+      "taskText": "Afficher les bonus disponibles avec quantité.",
+      "markdown": "- [x] Afficher les bonus disponibles avec quantité."
+    },
     "summary": "Afficher les bonus disponibles avec quantité.",
     "aiValidated": false,
     "aiNote": "",
@@ -5031,9 +6150,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-bonus-afficher-les-placeholders-quand-le-joueur-n-a-pas-tou-94",
+    "id": "todo-bonus-afficher-les-placeholders-quand-le-joueur-n-a-pas-tous-les-bonus-880f5ae2c45a",
+    "legacyIds": [
+      "todo-done-bonus-afficher-les-placeholders-quand-le-joueur-n-a-pas-tou-94"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10093,
     "sortKey": "0000-00-00",
@@ -5047,6 +6170,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Bonus",
     "fullTitle": "Afficher les placeholders quand le joueur n'a pas tous les bonus.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 171,
+      "section": "Bonus",
+      "taskText": "Afficher les placeholders quand le joueur n'a pas tous les bonus.",
+      "markdown": "- [x] Afficher les placeholders quand le joueur n'a pas tous les bonus."
+    },
     "summary": "Afficher les placeholders quand le joueur n'a pas tous les bonus.",
     "aiValidated": false,
     "aiNote": "",
@@ -5060,9 +6190,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-bonus-popups-details-des-bonus-via-un-composant-commun-bonu-95",
+    "id": "todo-bonus-ajouter-les-popups-details-des-bonus-via-un-composant-commun-bonuspopu-b942f4bf052a",
+    "legacyIds": [
+      "todo-done-bonus-popups-details-des-bonus-via-un-composant-commun-bonu-95"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10094,
     "sortKey": "0000-00-00",
@@ -5076,6 +6210,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Bonus",
     "fullTitle": "Ajouter les popups détails des bonus via un composant commun BonusPopup.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 172,
+      "section": "Bonus",
+      "taskText": "Ajouter les popups détails des bonus via un composant commun BonusPopup.",
+      "markdown": "- [x] Ajouter les popups détails des bonus via un composant commun `BonusPopup`."
+    },
     "summary": "Ajouter les popups détails des bonus via un composant commun BonusPopup.",
     "aiValidated": false,
     "aiNote": "",
@@ -5089,9 +6230,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-bonus-implementer-ctrl-z-rappel-indicateur-popup-d-ut-96",
+    "id": "todo-bonus-implementer-ctrl-z-rappel-indicateur-popup-d-utilisation-consommation--6e5a6b66328a",
+    "legacyIds": [
+      "todo-done-bonus-implementer-ctrl-z-rappel-indicateur-popup-d-ut-96"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10095,
     "sortKey": "0000-00-00",
@@ -5105,6 +6250,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Bonus",
     "fullTitle": "Implémenter CTRL + Z : rappel, indicateur, popup d'utilisation, consommation, état spectateur.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 173,
+      "section": "Bonus",
+      "taskText": "Implémenter CTRL + Z : rappel, indicateur, popup d'utilisation, consommation, état spectateur.",
+      "markdown": "- [x] Implémenter `CTRL + Z` : rappel, indicateur, popup d'utilisation, consommation, état spectateur."
+    },
     "summary": "Implémenter CTRL + Z : rappel, indicateur, popup d'utilisation, consommation, état spectateur.",
     "aiValidated": false,
     "aiNote": "",
@@ -5118,9 +6270,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-bonus-coffee-boss-bloque-le-de-97",
+    "id": "todo-bonus-implementer-va-faire-le-cafe-du-boss-selection-cible-consommation-ecra-847920cb6a4e",
+    "legacyIds": [
+      "todo-done-bonus-coffee-boss-bloque-le-de-97"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10096,
     "sortKey": "0000-00-00",
@@ -5134,6 +6290,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Bonus",
     "fullTitle": "Implémenter Va faire le café du boss : sélection cible, consommation, écran de confirmation, tour sauté.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 174,
+      "section": "Bonus",
+      "taskText": "Implémenter Va faire le café du boss : sélection cible, consommation, écran de confirmation, tour sauté.",
+      "markdown": "- [x] Implémenter `Va faire le café du boss` : sélection cible, consommation, écran de confirmation, tour sauté."
+    },
     "summary": "Implémenter Va faire le café du boss : sélection cible, consommation, écran de confirmation, tour sauté.",
     "aiValidated": false,
     "aiNote": "",
@@ -5147,9 +6310,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-bonus-poseur-choisit-seul-98",
+    "id": "todo-bonus-implementer-c-est-moi-qui-choisis-selection-cible-attente-du-quizz-cib-e73ebcdfdeba",
+    "legacyIds": [
+      "todo-done-bonus-poseur-choisit-seul-98"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10097,
     "sortKey": "0000-00-00",
@@ -5163,6 +6330,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Bonus",
     "fullTitle": "Implémenter C'est moi qui choisis ! : sélection cible, attente du Quizz cible, choix de difficulté par le joueur qui a posé le bonus, vue spectateurs.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 175,
+      "section": "Bonus",
+      "taskText": "Implémenter C'est moi qui choisis ! : sélection cible, attente du Quizz cible, choix de difficulté par le joueur qui a posé le bonus, vue spectateurs.",
+      "markdown": "- [x] Implémenter `C'est moi qui choisis !` : sélection cible, attente du Quizz cible, choix de difficulté par le joueur qui a posé le bonus, vue spectateurs."
+    },
     "summary": "Implémenter C'est moi qui choisis ! : sélection cible, attente du Quizz cible, choix de difficulté par le joueur qui a posé le bonus, vue spectateurs.",
     "aiValidated": false,
     "aiNote": "",
@@ -5176,9 +6350,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-bonus-revoir-le-design-final-des-popups-bonus-2-et-3-99",
+    "id": "todo-bonus-revoir-le-design-final-des-popups-bonus-2-et-3-0e02070b2f38",
+    "legacyIds": [
+      "todo-done-bonus-revoir-le-design-final-des-popups-bonus-2-et-3-99"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10098,
     "sortKey": "0000-00-00",
@@ -5192,6 +6370,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Bonus",
     "fullTitle": "Revoir le design final des popups bonus 2 et 3.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 176,
+      "section": "Bonus",
+      "taskText": "Revoir le design final des popups bonus 2 et 3.",
+      "markdown": "- [x] Revoir le design final des popups bonus 2 et 3."
+    },
     "summary": "Revoir le design final des popups bonus 2 et 3.",
     "aiValidated": false,
     "aiNote": "",
@@ -5205,9 +6390,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-bonus-accents-et-textes-des-bonus-100",
+    "id": "todo-bonus-corriger-les-accents-et-textes-des-bonus-bd91075e4d96",
+    "legacyIds": [
+      "todo-done-bonus-accents-et-textes-des-bonus-100"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10099,
     "sortKey": "0000-00-00",
@@ -5221,6 +6410,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Bonus",
     "fullTitle": "Corriger les accents et textes des bonus.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 177,
+      "section": "Bonus",
+      "taskText": "Corriger les accents et textes des bonus.",
+      "markdown": "- [x] Corriger les accents et textes des bonus."
+    },
     "summary": "Corriger les accents et textes des bonus.",
     "aiValidated": false,
     "aiNote": "",
@@ -5234,9 +6430,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-bonus-desactiver-les-bonus-de-test-par-defaut-avant-release-101",
+    "id": "todo-bonus-desactiver-les-bonus-de-test-par-defaut-avant-release-si-besoin-a6e890c746ab",
+    "legacyIds": [
+      "todo-done-bonus-desactiver-les-bonus-de-test-par-defaut-avant-release-101"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10100,
     "sortKey": "0000-00-00",
@@ -5250,6 +6450,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Bonus",
     "fullTitle": "Désactiver les bonus de test par défaut avant release si besoin.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 178,
+      "section": "Bonus",
+      "taskText": "Désactiver les bonus de test par défaut avant release si besoin.",
+      "markdown": "- [x] Désactiver les bonus de test par défaut avant release si besoin."
+    },
     "summary": "Désactiver les bonus de test par défaut avant release si besoin.",
     "aiValidated": false,
     "aiNote": "",
@@ -5263,9 +6470,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-presence-messages-room-distinguer-joueurs-reserves-dans-la-partie-vs-joueurs-102",
+    "id": "todo-presence-messages-room-distinguer-joueurs-reserves-dans-la-partie-vs-joueurs-actuellement-con-6abb103a9884",
+    "legacyIds": [
+      "todo-done-presence-messages-room-distinguer-joueurs-reserves-dans-la-partie-vs-joueurs-102"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10101,
     "sortKey": "0000-00-00",
@@ -5279,6 +6490,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Présence / Messages room",
     "fullTitle": "Distinguer joueurs réservés dans la partie vs joueurs actuellement connectés dans le menu settings.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 182,
+      "section": "Présence / Messages room",
+      "taskText": "Distinguer joueurs réservés dans la partie vs joueurs actuellement connectés dans le menu settings.",
+      "markdown": "- [x] Distinguer joueurs réservés dans la partie vs joueurs actuellement connectés dans le menu settings."
+    },
     "summary": "Distinguer joueurs réservés dans la partie vs joueurs actuellement connectés dans le menu settings.",
     "aiValidated": false,
     "aiNote": "",
@@ -5292,9 +6510,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-presence-messages-room-messages-de-statut-room-pour-tous-les-cas-de-figure-l-103",
+    "id": "todo-presence-messages-room-ajouter-des-messages-de-statut-room-pour-tous-les-cas-de-figure-leave--d2bbe98354ce",
+    "legacyIds": [
+      "todo-done-presence-messages-room-messages-de-statut-room-pour-tous-les-cas-de-figure-l-103"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10102,
     "sortKey": "0000-00-00",
@@ -5308,6 +6530,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Présence / Messages room",
     "fullTitle": "Ajouter des messages de statut room pour tous les cas de figure leave / crash / reco.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 183,
+      "section": "Présence / Messages room",
+      "taskText": "Ajouter des messages de statut room pour tous les cas de figure leave / crash / reco.",
+      "markdown": "- [x] Ajouter des messages de statut room pour tous les cas de figure leave / crash / reco."
+    },
     "summary": "Ajouter des messages de statut room pour tous les cas de figure leave / crash / reco.",
     "aiValidated": false,
     "aiNote": "",
@@ -5321,9 +6550,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-presence-messages-room-harmoniser-le-design-des-messages-d-erreur-avec-les-m-104",
+    "id": "todo-presence-messages-room-harmoniser-le-design-des-messages-d-erreur-avec-les-messages-systeme-d-9c4ec02987be",
+    "legacyIds": [
+      "todo-done-presence-messages-room-harmoniser-le-design-des-messages-d-erreur-avec-les-m-104"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10103,
     "sortKey": "0000-00-00",
@@ -5337,6 +6570,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Présence / Messages room",
     "fullTitle": "Harmoniser le design des messages d'erreur avec les messages système de room.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 185,
+      "section": "Présence / Messages room",
+      "taskText": "Harmoniser le design des messages d'erreur avec les messages système de room.",
+      "markdown": "- [x] Harmoniser le design des messages d'erreur avec les messages système de room."
+    },
     "summary": "Harmoniser le design des messages d'erreur avec les messages système de room.",
     "aiValidated": false,
     "aiNote": "",
@@ -5350,9 +6590,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-reconnexion-joueur-crash-remplacement-appareil-permettre-la-reconnexion-meme-appareil-apres-passage-105",
+    "id": "todo-reconnexion-joueur-crash-remplacement-appareil-permettre-la-reconnexion-meme-appareil-apres-passage-en-attente-puis-d-ef3ce2591e9b",
+    "legacyIds": [
+      "todo-done-reconnexion-joueur-crash-remplacement-appareil-permettre-la-reconnexion-meme-appareil-apres-passage-105"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10104,
     "sortKey": "0000-00-00",
@@ -5366,6 +6610,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Reconnexion joueur crash / remplacement appareil",
     "fullTitle": "Permettre la reconnexion même appareil après passage en attente puis déconnecté.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 193,
+      "section": "Reconnexion joueur crash / remplacement appareil",
+      "taskText": "Permettre la reconnexion même appareil après passage en attente puis déconnecté.",
+      "markdown": "- [x] Permettre la reconnexion même appareil après passage en attente puis déconnecté."
+    },
     "summary": "Permettre la reconnexion même appareil après passage en attente puis déconnecté.",
     "aiValidated": false,
     "aiNote": "",
@@ -5379,9 +6630,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-reconnexion-joueur-crash-remplacement-appareil-permettre-de-reprendre-un-slot-personnage-vacant-depu-106",
+    "id": "todo-reconnexion-joueur-crash-remplacement-appareil-permettre-de-reprendre-un-slot-personnage-vacant-depuis-un-autre-appar-a3c9a79224c9",
+    "legacyIds": [
+      "todo-done-reconnexion-joueur-crash-remplacement-appareil-permettre-de-reprendre-un-slot-personnage-vacant-depu-106"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10105,
     "sortKey": "0000-00-00",
@@ -5395,6 +6650,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Reconnexion joueur crash / remplacement appareil",
     "fullTitle": "Permettre de reprendre un slot personnage vacant depuis un autre appareil après crash / timeout.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 194,
+      "section": "Reconnexion joueur crash / remplacement appareil",
+      "taskText": "Permettre de reprendre un slot personnage vacant depuis un autre appareil après crash / timeout.",
+      "markdown": "- [x] Permettre de reprendre un slot personnage vacant depuis un autre appareil après crash / timeout."
+    },
     "summary": "Permettre de reprendre un slot personnage vacant depuis un autre appareil après crash / timeout.",
     "aiValidated": false,
     "aiNote": "",
@@ -5408,9 +6670,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-onboarding-onboarding-du-menu-settings-avec-indication-d-appui-l-107",
+    "id": "todo-onboarding-ajouter-un-onboarding-du-menu-settings-avec-indication-d-appui-long-et-b12ba1d24ee5",
+    "legacyIds": [
+      "todo-done-onboarding-onboarding-du-menu-settings-avec-indication-d-appui-l-107"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10106,
     "sortKey": "0000-00-00",
@@ -5424,6 +6690,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Onboarding",
     "fullTitle": "Ajouter un onboarding du menu settings avec indication d'appui long et mémorisation locale.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 202,
+      "section": "Onboarding",
+      "taskText": "Ajouter un onboarding du menu settings avec indication d'appui long et mémorisation locale.",
+      "markdown": "- [x] Ajouter un onboarding du menu settings avec indication d'appui long et mémorisation locale."
+    },
     "summary": "Ajouter un onboarding du menu settings avec indication d'appui long et mémorisation locale.",
     "aiValidated": false,
     "aiNote": "",
@@ -5437,9 +6710,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-intro-vs-commune-revoir-le-tout-premier-ecran-avec-les-opposants-s-af-108",
+    "id": "todo-defis-intro-vs-commune-revoir-le-tout-premier-ecran-avec-les-opposants-s-affrontent-et-le-rem-5bc0f872941a",
+    "legacyIds": [
+      "todo-done-defis-intro-vs-commune-revoir-le-tout-premier-ecran-avec-les-opposants-s-af-108"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10107,
     "sortKey": "0000-00-00",
@@ -5453,6 +6730,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Intro VS commune",
     "fullTitle": "Revoir le tout premier écran avec \"Les opposants s'affrontent\" et le remplacer par une intro VS animée commune.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 213,
+      "section": "Défis / Intro VS commune",
+      "taskText": "Revoir le tout premier écran avec \"Les opposants s'affrontent\" et le remplacer par une intro VS animée commune.",
+      "markdown": "- [x] Revoir le tout premier écran avec \"Les opposants s'affrontent\" et le remplacer par une intro VS animée commune."
+    },
     "summary": "Revoir le tout premier écran avec \"Les opposants s'affrontent\" et le remplacer par une intro VS animée commune.",
     "aiValidated": false,
     "aiNote": "",
@@ -5466,9 +6750,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-buzzer-premier-ecran-de-duel-branche-sur-l-intro-vs-commune-109",
+    "id": "todo-defis-buzzer-premier-ecran-de-duel-branche-sur-l-intro-vs-commune-e6d0c3f4b589",
+    "legacyIds": [
+      "todo-done-defis-buzzer-premier-ecran-de-duel-branche-sur-l-intro-vs-commune-109"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10108,
     "sortKey": "0000-00-00",
@@ -5482,6 +6770,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Buzzer",
     "fullTitle": "Premier écran de duel branché sur l'intro VS commune.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 217,
+      "section": "Défis / Buzzer",
+      "taskText": "Premier écran de duel branché sur l'intro VS commune.",
+      "markdown": "- [x] Premier écran de duel branché sur l'intro VS commune."
+    },
     "summary": "Premier écran de duel branché sur l'intro VS commune.",
     "aiValidated": false,
     "aiNote": "",
@@ -5495,9 +6790,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-vrai-ou-faux-premier-ecran-de-duel-branche-sur-l-intro-vs-commune-110",
+    "id": "todo-defis-vrai-ou-faux-premier-ecran-de-duel-branche-sur-l-intro-vs-commune-00d3c4b8a2e3",
+    "legacyIds": [
+      "todo-done-defis-vrai-ou-faux-premier-ecran-de-duel-branche-sur-l-intro-vs-commune-110"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10109,
     "sortKey": "0000-00-00",
@@ -5511,6 +6810,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Vrai ou faux",
     "fullTitle": "Premier écran de duel branché sur l'intro VS commune.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 221,
+      "section": "Défis / Vrai ou faux",
+      "taskText": "Premier écran de duel branché sur l'intro VS commune.",
+      "markdown": "- [x] Premier écran de duel branché sur l'intro VS commune."
+    },
     "summary": "Premier écran de duel branché sur l'intro VS commune.",
     "aiValidated": false,
     "aiNote": "",
@@ -5524,9 +6830,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-chiffres-premier-ecran-de-duel-branche-sur-l-intro-vs-commune-111",
+    "id": "todo-defis-chiffres-premier-ecran-de-duel-branche-sur-l-intro-vs-commune-1883b2a07f20",
+    "legacyIds": [
+      "todo-done-defis-chiffres-premier-ecran-de-duel-branche-sur-l-intro-vs-commune-111"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10110,
     "sortKey": "0000-00-00",
@@ -5540,6 +6850,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Chiffres",
     "fullTitle": "Premier écran de duel branché sur l'intro VS commune.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 225,
+      "section": "Défis / Chiffres",
+      "taskText": "Premier écran de duel branché sur l'intro VS commune.",
+      "markdown": "- [x] Premier écran de duel branché sur l'intro VS commune."
+    },
     "summary": "Premier écran de duel branché sur l'intro VS commune.",
     "aiValidated": false,
     "aiNote": "",
@@ -5553,9 +6870,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-chiffres-condition-si-les-2-joueurs-donnent-la-meme-mauvaise-112",
+    "id": "todo-defis-chiffres-ajouter-une-condition-si-les-2-joueurs-donnent-la-meme-mauvaise-repons-2a220773683d",
+    "legacyIds": [
+      "todo-done-defis-chiffres-condition-si-les-2-joueurs-donnent-la-meme-mauvaise-112"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10111,
     "sortKey": "0000-00-00",
@@ -5569,6 +6890,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Chiffres",
     "fullTitle": "Ajouter une condition : si les 2 joueurs donnent la même mauvaise réponse, définir et appliquer la règle de résolution.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 226,
+      "section": "Défis / Chiffres",
+      "taskText": "Ajouter une condition : si les 2 joueurs donnent la même mauvaise réponse, définir et appliquer la règle de résolution.",
+      "markdown": "- [x] Ajouter une condition : si les 2 joueurs donnent la même mauvaise réponse, définir et appliquer la règle de résolution."
+    },
     "summary": "Ajouter une condition : si les 2 joueurs donnent la même mauvaise réponse, définir et appliquer la règle de résolution.",
     "aiValidated": false,
     "aiNote": "",
@@ -5582,9 +6910,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-pick-color-pick-premier-ecran-de-duel-branche-sur-l-intro-vs-commune-113",
+    "id": "todo-defis-pick-color-pick-premier-ecran-de-duel-branche-sur-l-intro-vs-commune-6bbdf4027350",
+    "legacyIds": [
+      "todo-done-defis-pick-color-pick-premier-ecran-de-duel-branche-sur-l-intro-vs-commune-113"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10112,
     "sortKey": "0000-00-00",
@@ -5598,6 +6930,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Pick (Color Pick)",
     "fullTitle": "Premier écran de duel branché sur l'intro VS commune.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 230,
+      "section": "Défis / Pick (Color Pick)",
+      "taskText": "Premier écran de duel branché sur l'intro VS commune.",
+      "markdown": "- [x] Premier écran de duel branché sur l'intro VS commune."
+    },
     "summary": "Premier écran de duel branché sur l'intro VS commune.",
     "aiValidated": false,
     "aiNote": "",
@@ -5611,9 +6950,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-pick-color-pick-l-ecran-des-spectateurs-pendant-que-les-joueurs-picke-114",
+    "id": "todo-defis-pick-color-pick-faire-l-ecran-des-spectateurs-pendant-que-les-joueurs-pickent-une-coul-324ec267c2de",
+    "legacyIds": [
+      "todo-done-defis-pick-color-pick-l-ecran-des-spectateurs-pendant-que-les-joueurs-picke-114"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10113,
     "sortKey": "0000-00-00",
@@ -5627,6 +6970,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Pick (Color Pick)",
     "fullTitle": "Faire l'écran des spectateurs pendant que les joueurs pickent une couleur.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 231,
+      "section": "Défis / Pick (Color Pick)",
+      "taskText": "Faire l'écran des spectateurs pendant que les joueurs pickent une couleur.",
+      "markdown": "- [x] Faire l'écran des spectateurs pendant que les joueurs pickent une couleur."
+    },
     "summary": "Faire l'écran des spectateurs pendant que les joueurs pickent une couleur.",
     "aiValidated": false,
     "aiNote": "",
@@ -5640,9 +6990,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-pick-color-pick-revoir-l-ecran-une-fois-que-les-joueurs-ont-valide-115",
+    "id": "todo-defis-pick-color-pick-revoir-l-ecran-une-fois-que-les-joueurs-ont-valide-cdf14faa3bbf",
+    "legacyIds": [
+      "todo-done-defis-pick-color-pick-revoir-l-ecran-une-fois-que-les-joueurs-ont-valide-115"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10114,
     "sortKey": "0000-00-00",
@@ -5656,6 +7010,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Pick (Color Pick)",
     "fullTitle": "Revoir l'écran une fois que les joueurs ont validé.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 232,
+      "section": "Défis / Pick (Color Pick)",
+      "taskText": "Revoir l'écran une fois que les joueurs ont validé.",
+      "markdown": "- [x] Revoir l'écran une fois que les joueurs ont validé."
+    },
     "summary": "Revoir l'écran une fois que les joueurs ont validé.",
     "aiValidated": false,
     "aiNote": "",
@@ -5669,9 +7030,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-pick-color-pick-donner-le-bouton-suivant-uniquement-au-joueur-qui-j-116",
+    "id": "todo-defis-pick-color-pick-donner-le-bouton-suivant-uniquement-au-joueur-qui-jouera-ensuite-2396844c5ba7",
+    "legacyIds": [
+      "todo-done-defis-pick-color-pick-donner-le-bouton-suivant-uniquement-au-joueur-qui-j-116"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10115,
     "sortKey": "0000-00-00",
@@ -5685,6 +7050,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Pick (Color Pick)",
     "fullTitle": "Donner le bouton \"Suivant\" uniquement au joueur qui jouera ensuite.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 233,
+      "section": "Défis / Pick (Color Pick)",
+      "taskText": "Donner le bouton \"Suivant\" uniquement au joueur qui jouera ensuite.",
+      "markdown": "- [x] Donner le bouton \"Suivant\" uniquement au joueur qui jouera ensuite."
+    },
     "summary": "Donner le bouton \"Suivant\" uniquement au joueur qui jouera ensuite.",
     "aiValidated": false,
     "aiNote": "",
@@ -5698,9 +7070,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-pick-color-pick-flux-pick-a-3-et-4-joueurs-117",
+    "id": "todo-defis-pick-color-pick-tester-le-flux-pick-a-3-et-4-joueurs-e037e766a0d7",
+    "legacyIds": [
+      "todo-done-defis-pick-color-pick-flux-pick-a-3-et-4-joueurs-117"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10116,
     "sortKey": "0000-00-00",
@@ -5714,6 +7090,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Pick (Color Pick)",
     "fullTitle": "Tester le flux Pick à 3 et 4 joueurs.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 234,
+      "section": "Défis / Pick (Color Pick)",
+      "taskText": "Tester le flux Pick à 3 et 4 joueurs.",
+      "markdown": "- [x] Tester le flux Pick à 3 et 4 joueurs."
+    },
     "summary": "Tester le flux Pick à 3 et 4 joueurs.",
     "aiValidated": false,
     "aiNote": "",
@@ -5727,9 +7110,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-zoom-commencer-l-implementation-118",
+    "id": "todo-defis-zoom-commencer-l-implementation-12a5995dbc71",
+    "legacyIds": [
+      "todo-done-defis-zoom-commencer-l-implementation-118"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10117,
     "sortKey": "0000-00-00",
@@ -5743,6 +7130,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Zoom",
     "fullTitle": "Commencer l'implémentation.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 238,
+      "section": "Défis / Zoom",
+      "taskText": "Commencer l'implémentation.",
+      "markdown": "- [x] Commencer l'implémentation."
+    },
     "summary": "Commencer l'implémentation.",
     "aiValidated": false,
     "aiNote": "",
@@ -5756,9 +7150,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-zoom-brancher-le-duel-zoom-dans-le-serveur-et-l-applicatio-119",
+    "id": "todo-defis-zoom-brancher-le-duel-zoom-dans-le-serveur-et-l-application-78c9891392e6",
+    "legacyIds": [
+      "todo-done-defis-zoom-brancher-le-duel-zoom-dans-le-serveur-et-l-applicatio-119"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10118,
     "sortKey": "0000-00-00",
@@ -5772,6 +7170,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Zoom",
     "fullTitle": "Brancher le duel Zoom dans le serveur et l'application.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 239,
+      "section": "Défis / Zoom",
+      "taskText": "Brancher le duel Zoom dans le serveur et l'application.",
+      "markdown": "- [x] Brancher le duel Zoom dans le serveur et l'application."
+    },
     "summary": "Brancher le duel Zoom dans le serveur et l'application.",
     "aiValidated": false,
     "aiNote": "",
@@ -5785,9 +7190,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-zoom-l-ecran-de-jeu-zoom-et-l-ecran-reveal-120",
+    "id": "todo-defis-zoom-ajouter-l-ecran-de-jeu-zoom-et-l-ecran-reveal-850f61558158",
+    "legacyIds": [
+      "todo-done-defis-zoom-l-ecran-de-jeu-zoom-et-l-ecran-reveal-120"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10119,
     "sortKey": "0000-00-00",
@@ -5801,6 +7210,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Zoom",
     "fullTitle": "Ajouter l'écran de jeu Zoom et l'écran reveal.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 240,
+      "section": "Défis / Zoom",
+      "taskText": "Ajouter l'écran de jeu Zoom et l'écran reveal.",
+      "markdown": "- [x] Ajouter l'écran de jeu Zoom et l'écran reveal."
+    },
     "summary": "Ajouter l'écran de jeu Zoom et l'écran reveal.",
     "aiValidated": false,
     "aiNote": "",
@@ -5814,9 +7230,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-zoom-flux-zoom-de-bout-en-bout-avec-reader-joueurs-et-spe-121",
+    "id": "todo-defis-zoom-tester-le-flux-zoom-de-bout-en-bout-avec-reader-joueurs-et-spectateurs-90bef1d58d78",
+    "legacyIds": [
+      "todo-done-defis-zoom-flux-zoom-de-bout-en-bout-avec-reader-joueurs-et-spe-121"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10120,
     "sortKey": "0000-00-00",
@@ -5830,6 +7250,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Zoom",
     "fullTitle": "Tester le flux Zoom de bout en bout avec reader, joueurs et spectateurs.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 241,
+      "section": "Défis / Zoom",
+      "taskText": "Tester le flux Zoom de bout en bout avec reader, joueurs et spectateurs.",
+      "markdown": "- [x] Tester le flux Zoom de bout en bout avec reader, joueurs et spectateurs."
+    },
     "summary": "Tester le flux Zoom de bout en bout avec reader, joueurs et spectateurs.",
     "aiValidated": false,
     "aiNote": "",
@@ -5843,9 +7270,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-defis-zoom-accents-des-textes-zoom-122",
+    "id": "todo-defis-zoom-corriger-les-accents-des-textes-zoom-a91b309f8c54",
+    "legacyIds": [
+      "todo-done-defis-zoom-accents-des-textes-zoom-122"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10121,
     "sortKey": "0000-00-00",
@@ -5859,6 +7290,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Défis / Zoom",
     "fullTitle": "Corriger les accents des textes Zoom.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 242,
+      "section": "Défis / Zoom",
+      "taskText": "Corriger les accents des textes Zoom.",
+      "markdown": "- [x] Corriger les accents des textes Zoom."
+    },
     "summary": "Corriger les accents des textes Zoom.",
     "aiValidated": false,
     "aiNote": "",
@@ -5872,9 +7310,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-classement-integrer-un-classement-fonctionnel-a-la-fin-du-tour-d-123",
+    "id": "todo-classement-integrer-un-classement-fonctionnel-a-la-fin-du-tour-de-tous-les-joueur-0321c970a856",
+    "legacyIds": [
+      "todo-done-classement-integrer-un-classement-fonctionnel-a-la-fin-du-tour-d-123"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10122,
     "sortKey": "0000-00-00",
@@ -5888,6 +7330,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Classement",
     "fullTitle": "Intégrer un classement fonctionnel à la fin du tour de tous les joueurs.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 246,
+      "section": "Classement",
+      "taskText": "Intégrer un classement fonctionnel à la fin du tour de tous les joueurs.",
+      "markdown": "- [x] Intégrer un classement fonctionnel à la fin du tour de tous les joueurs."
+    },
     "summary": "Intégrer un classement fonctionnel à la fin du tour de tous les joueurs.",
     "aiValidated": false,
     "aiNote": "",
@@ -5901,9 +7350,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-classement-maquetter-revoir-le-design-final-du-classement-pour-124",
+    "id": "todo-classement-maquetter-revoir-le-design-final-du-classement-pour-qu-il-colle-a-la-d-d6dacc343379",
+    "legacyIds": [
+      "todo-done-classement-maquetter-revoir-le-design-final-du-classement-pour-124"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10123,
     "sortKey": "0000-00-00",
@@ -5917,6 +7370,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Classement",
     "fullTitle": "Maquetter / revoir le design final du classement pour qu'il colle à la direction graphique.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 247,
+      "section": "Classement",
+      "taskText": "Maquetter / revoir le design final du classement pour qu'il colle à la direction graphique.",
+      "markdown": "- [x] Maquetter / revoir le design final du classement pour qu'il colle à la direction graphique."
+    },
     "summary": "Maquetter / revoir le design final du classement pour qu'il colle à la direction graphique.",
     "aiValidated": false,
     "aiNote": "",
@@ -5930,9 +7390,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-classement-passage-classement-nouveau-round-125",
+    "id": "todo-classement-tester-le-passage-classement-nouveau-round-5285f8ae2d3b",
+    "legacyIds": [
+      "todo-done-classement-passage-classement-nouveau-round-125"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10124,
     "sortKey": "0000-00-00",
@@ -5946,6 +7410,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Classement",
     "fullTitle": "Tester le passage classement -> nouveau round.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 248,
+      "section": "Classement",
+      "taskText": "Tester le passage classement -> nouveau round.",
+      "markdown": "- [x] Tester le passage classement -> nouveau round."
+    },
     "summary": "Tester le passage classement -> nouveau round.",
     "aiValidated": false,
     "aiNote": "",
@@ -5959,9 +7430,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-partie-activite-commune-bonus-events-commencer-la-partie-bonus-126",
+    "id": "todo-partie-activite-commune-bonus-events-commencer-la-partie-bonus-ab04637022f8",
+    "legacyIds": [
+      "todo-done-partie-activite-commune-bonus-events-commencer-la-partie-bonus-126"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10125,
     "sortKey": "0000-00-00",
@@ -5975,6 +7450,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Partie activité commune / bonus / events",
     "fullTitle": "Commencer la partie bonus.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 252,
+      "section": "Partie activité commune / bonus / events",
+      "taskText": "Commencer la partie bonus.",
+      "markdown": "- [x] Commencer la partie bonus."
+    },
     "summary": "Commencer la partie bonus.",
     "aiValidated": false,
     "aiNote": "",
@@ -5988,9 +7470,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-partie-activite-commune-bonus-events-implementer-le-parcours-activite-commune-photo-vote-127",
+    "id": "todo-partie-activite-commune-bonus-events-implementer-le-parcours-activite-commune-photo-vote-resultat-4fad0a7ef2ae",
+    "legacyIds": [
+      "todo-done-partie-activite-commune-bonus-events-implementer-le-parcours-activite-commune-photo-vote-127"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10126,
     "sortKey": "0000-00-00",
@@ -6004,6 +7490,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Partie activité commune / bonus / events",
     "fullTitle": "Implémenter le parcours activité commune photo / vote / résultat.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 253,
+      "section": "Partie activité commune / bonus / events",
+      "taskText": "Implémenter le parcours activité commune photo / vote / résultat.",
+      "markdown": "- [x] Implémenter le parcours activité commune photo / vote / résultat."
+    },
     "summary": "Implémenter le parcours activité commune photo / vote / résultat.",
     "aiValidated": false,
     "aiNote": "",
@@ -6017,9 +7510,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-partie-activite-commune-bonus-events-optimiser-le-stockage-et-l-envoi-des-photos-d-activit-128",
+    "id": "todo-partie-activite-commune-bonus-events-optimiser-le-stockage-et-l-envoi-des-photos-d-activite-commune-sortir--b6d92c58dc84",
+    "legacyIds": [
+      "todo-done-partie-activite-commune-bonus-events-optimiser-le-stockage-et-l-envoi-des-photos-d-activit-128"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10127,
     "sortKey": "0000-00-00",
@@ -6033,6 +7530,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Partie activité commune / bonus / events",
     "fullTitle": "Optimiser le stockage et l'envoi des photos d'activité commune : sortir les base64 de room.currentInteraction, garder une room légère, envoyer uniquement les photos nécessaires au vote / résultat, puis nettoyer les photos à la fin de l'épreuve.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 254,
+      "section": "Partie activité commune / bonus / events",
+      "taskText": "Optimiser le stockage et l'envoi des photos d'activité commune : sortir les base64 de room.currentInteraction, garder une room légère, envoyer uniquement les photos nécessaires au vote / résultat, puis nettoyer les photos à la fin de l'épreuve.",
+      "markdown": "- [x] Optimiser le stockage et l'envoi des photos d'activité commune : sortir les base64 de `room.currentInteraction`, garder une room légère, envoyer uniquement les photos nécessaires au vote / résultat, puis nettoyer les photos à la fin de l'épreuve."
+    },
     "summary": "Optimiser le stockage et l'envoi des photos d'activité commune : sortir les base64 de room.currentInteraction, garder une room légère, envoyer uniquement les photos néce...",
     "aiValidated": false,
     "aiNote": "",
@@ -6046,9 +7550,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-partie-activite-commune-bonus-events-creer-les-derniers-evenements-qui-n-ont-pas-encore-et-129",
+    "id": "todo-partie-activite-commune-bonus-events-creer-les-derniers-evenements-qui-n-ont-pas-encore-ete-integres-7be2eabfcbd8",
+    "legacyIds": [
+      "todo-done-partie-activite-commune-bonus-events-creer-les-derniers-evenements-qui-n-ont-pas-encore-et-129"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10128,
     "sortKey": "0000-00-00",
@@ -6062,6 +7570,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Partie activité commune / bonus / events",
     "fullTitle": "Créer les derniers évènements qui n'ont pas encore été intégrés.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 255,
+      "section": "Partie activité commune / bonus / events",
+      "taskText": "Créer les derniers évènements qui n'ont pas encore été intégrés.",
+      "markdown": "- [x] Créer les derniers évènements qui n'ont pas encore été intégrés."
+    },
     "summary": "Créer les derniers évènements qui n'ont pas encore été intégrés.",
     "aiValidated": false,
     "aiNote": "",
@@ -6075,9 +7590,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-partie-activite-commune-bonus-events-2-evenements-lies-aux-bonus-une-fois-le-systeme-bonus-130",
+    "id": "todo-partie-activite-commune-bonus-events-ajouter-les-2-evenements-lies-aux-bonus-une-fois-le-systeme-bonus-inte-fb3d0e866186",
+    "legacyIds": [
+      "todo-done-partie-activite-commune-bonus-events-2-evenements-lies-aux-bonus-une-fois-le-systeme-bonus-130"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10129,
     "sortKey": "0000-00-00",
@@ -6091,6 +7610,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Partie activité commune / bonus / events",
     "fullTitle": "Ajouter les 2 évènements liés aux bonus une fois le système bonus intégré.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 256,
+      "section": "Partie activité commune / bonus / events",
+      "taskText": "Ajouter les 2 évènements liés aux bonus une fois le système bonus intégré.",
+      "markdown": "- [x] Ajouter les 2 évènements liés aux bonus une fois le système bonus intégré."
+    },
     "summary": "Ajouter les 2 évènements liés aux bonus une fois le système bonus intégré.",
     "aiValidated": false,
     "aiNote": "",
@@ -6104,9 +7630,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-partie-activite-commune-bonus-events-de-nouvelles-activites-communes-pour-enrichir-la-vari-131",
+    "id": "todo-partie-activite-commune-bonus-events-ajouter-de-nouvelles-activites-communes-pour-enrichir-la-variete-des-m-4e3e90129f71",
+    "legacyIds": [
+      "todo-done-partie-activite-commune-bonus-events-de-nouvelles-activites-communes-pour-enrichir-la-vari-131"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10130,
     "sortKey": "0000-00-00",
@@ -6120,6 +7650,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Partie activité commune / bonus / events",
     "fullTitle": "Ajouter de nouvelles activités communes pour enrichir la variété des manches.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 257,
+      "section": "Partie activité commune / bonus / events",
+      "taskText": "Ajouter de nouvelles activités communes pour enrichir la variété des manches.",
+      "markdown": "- [x] Ajouter de nouvelles activités communes pour enrichir la variété des manches."
+    },
     "summary": "Ajouter de nouvelles activités communes pour enrichir la variété des manches.",
     "aiValidated": false,
     "aiNote": "",
@@ -6133,9 +7670,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-partie-activite-commune-bonus-events-revoir-le-design-de-l-activite-commune-depuis-les-maq-132",
+    "id": "todo-partie-activite-commune-bonus-events-revoir-le-design-de-l-activite-commune-depuis-les-maquettes-figma-5758e5a6f017",
+    "legacyIds": [
+      "todo-done-partie-activite-commune-bonus-events-revoir-le-design-de-l-activite-commune-depuis-les-maq-132"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10131,
     "sortKey": "0000-00-00",
@@ -6149,6 +7690,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Partie activité commune / bonus / events",
     "fullTitle": "Revoir le design de l'activité commune depuis les maquettes Figma.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 258,
+      "section": "Partie activité commune / bonus / events",
+      "taskText": "Revoir le design de l'activité commune depuis les maquettes Figma.",
+      "markdown": "- [x] Revoir le design de l'activité commune depuis les maquettes Figma."
+    },
     "summary": "Revoir le design de l'activité commune depuis les maquettes Figma.",
     "aiValidated": false,
     "aiNote": "",
@@ -6162,9 +7710,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-redaction-des-questions-avancement-estime-autour-de-20-continuer-la-redact-133",
+    "id": "todo-redaction-des-questions-avancement-estime-autour-de-20-continuer-la-redaction-46069ca3b4a8",
+    "legacyIds": [
+      "todo-done-redaction-des-questions-avancement-estime-autour-de-20-continuer-la-redact-133"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10132,
     "sortKey": "0000-00-00",
@@ -6178,6 +7730,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Rédaction des questions",
     "fullTitle": "Avancement estimé autour de 20% : continuer la rédaction.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 262,
+      "section": "Rédaction des questions",
+      "taskText": "Avancement estimé autour de 20% : continuer la rédaction.",
+      "markdown": "- [x] Avancement estimé autour de 20% : continuer la rédaction."
+    },
     "summary": "Avancement estimé autour de 20% : continuer la rédaction.",
     "aiValidated": false,
     "aiNote": "",
@@ -6191,9 +7750,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-redaction-des-questions-les-questions-couvrent-assez-de-categories-et-difficu-134",
+    "id": "todo-redaction-des-questions-verifier-que-les-questions-couvrent-assez-de-categories-et-difficultes-1fc0e46725ba",
+    "legacyIds": [
+      "todo-done-redaction-des-questions-les-questions-couvrent-assez-de-categories-et-difficu-134"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10133,
     "sortKey": "0000-00-00",
@@ -6207,6 +7770,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Rédaction des questions",
     "fullTitle": "Vérifier que les questions couvrent assez de catégories et difficultés pour une session V1.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 263,
+      "section": "Rédaction des questions",
+      "taskText": "Vérifier que les questions couvrent assez de catégories et difficultés pour une session V1.",
+      "markdown": "- [x] Vérifier que les questions couvrent assez de catégories et difficultés pour une session V1."
+    },
     "summary": "Vérifier que les questions couvrent assez de catégories et difficultés pour une session V1.",
     "aiValidated": false,
     "aiNote": "",
@@ -6220,9 +7790,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-technique-validation-lancer-npm-run-build-apres-stabilisation-des-changeme-135",
+    "id": "todo-technique-validation-lancer-npm-run-build-apres-stabilisation-des-changements-en-cours-4604aaffed96",
+    "legacyIds": [
+      "todo-done-technique-validation-lancer-npm-run-build-apres-stabilisation-des-changeme-135"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10134,
     "sortKey": "0000-00-00",
@@ -6236,6 +7810,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Technique / validation",
     "fullTitle": "Lancer npm run build après stabilisation des changements en cours.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 267,
+      "section": "Technique / validation",
+      "taskText": "Lancer npm run build après stabilisation des changements en cours.",
+      "markdown": "- [x] Lancer `npm run build` après stabilisation des changements en cours."
+    },
     "summary": "Lancer npm run build après stabilisation des changements en cours.",
     "aiValidated": false,
     "aiNote": "",
@@ -6249,9 +7830,13 @@ window.WORKLOG_DONE_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-done-technique-validation-lancer-les-tests-serveur-quand-le-serveur-n-est-pas-d-136",
+    "id": "todo-technique-validation-lancer-les-tests-serveur-quand-le-serveur-n-est-pas-deja-occupe-sur-le-d5f16dae6da5",
+    "legacyIds": [
+      "todo-done-technique-validation-lancer-les-tests-serveur-quand-le-serveur-n-est-pas-d-136"
+    ],
     "type": "done",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist validee",
     "sourceOrder": 10135,
     "sortKey": "0000-00-00",
@@ -6265,6 +7850,13 @@ window.WORKLOG_DONE_ITEMS = [
     "scopeLabel": "Fait",
     "impact": "Technique / validation",
     "fullTitle": "Lancer les tests serveur quand le serveur n'est pas déjà occupé sur les ports utilisés.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 268,
+      "section": "Technique / validation",
+      "taskText": "Lancer les tests serveur quand le serveur n'est pas déjà occupé sur les ports utilisés.",
+      "markdown": "- [x] Lancer les tests serveur quand le serveur n'est pas déjà occupé sur les ports utilisés."
+    },
     "summary": "Lancer les tests serveur quand le serveur n'est pas déjà occupé sur les ports utilisés.",
     "aiValidated": false,
     "aiNote": "",
@@ -6280,9 +7872,13 @@ window.WORKLOG_DONE_ITEMS = [
 ];
 window.WORKLOG_PENDING_ITEMS = [
   {
-    "id": "todo-pending-resume-d-avancement-gros-passage-de-test-bout-en-bout-a-3-et-4-joueurs-1",
+    "id": "todo-resume-d-avancement-gros-passage-de-test-bout-en-bout-a-3-et-4-joueurs-7a5b91c8ca53",
+    "legacyIds": [
+      "todo-pending-resume-d-avancement-gros-passage-de-test-bout-en-bout-a-3-et-4-joueurs-1"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20000,
     "sortKey": "0000-00-00",
@@ -6296,6 +7892,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Résumé d'avancement",
     "fullTitle": "Gros passage de test bout en bout à 3 et 4 joueurs.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 27,
+      "section": "Résumé d'avancement",
+      "taskText": "Gros passage de test bout en bout à 3 et 4 joueurs.",
+      "markdown": "- [ ] Gros passage de test bout en bout à 3 et 4 joueurs."
+    },
     "summary": "Gros passage de test bout en bout à 3 et 4 joueurs.",
     "aiValidated": false,
     "aiNote": "",
@@ -6310,9 +7913,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-priorite-avant-v1-jouable-session-test-3-joueurs-2",
+    "id": "todo-priorite-avant-v1-jouable-faire-une-session-test-complete-a-3-joueurs-creation-lobby-personnages-b87eb04c6967",
+    "legacyIds": [
+      "todo-pending-priorite-avant-v1-jouable-session-test-3-joueurs-2"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20001,
     "sortKey": "0000-00-00",
@@ -6326,6 +7933,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Priorité avant V1 jouable",
     "fullTitle": "Faire une session test complète à 3 joueurs : création, lobby, personnages, ordre, 1 round complet, classement, nouveau round.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 35,
+      "section": "Priorité avant V1 jouable",
+      "taskText": "Faire une session test complète à 3 joueurs : création, lobby, personnages, ordre, 1 round complet, classement, nouveau round.",
+      "markdown": "- [ ] Faire une session test complète à 3 joueurs : création, lobby, personnages, ordre, 1 round complet, classement, nouveau round."
+    },
     "summary": "Faire une session test complète à 3 joueurs : création, lobby, personnages, ordre, 1 round complet, classement, nouveau round.",
     "aiValidated": false,
     "aiNote": "",
@@ -6340,9 +7954,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-priorite-avant-v1-jouable-session-test-4-joueurs-3",
+    "id": "todo-priorite-avant-v1-jouable-faire-une-session-test-complete-a-4-joueurs-3064f0d037a3",
+    "legacyIds": [
+      "todo-pending-priorite-avant-v1-jouable-session-test-4-joueurs-3"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20002,
     "sortKey": "0000-00-00",
@@ -6356,6 +7974,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Priorité avant V1 jouable",
     "fullTitle": "Faire une session test complète à 4 joueurs.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 36,
+      "section": "Priorité avant V1 jouable",
+      "taskText": "Faire une session test complète à 4 joueurs.",
+      "markdown": "- [ ] Faire une session test complète à 4 joueurs."
+    },
     "summary": "Faire une session test complète à 4 joueurs.",
     "aiValidated": false,
     "aiNote": "",
@@ -6370,9 +7995,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-retours-test-render-avant-v1-test-nouveaux-logos-zoom-4",
+    "id": "todo-retours-test-render-avant-v1-test-importer-les-8-nouveaux-logos-prepares-pour-le-defi-zoom-a73327b012f7",
+    "legacyIds": [
+      "todo-pending-retours-test-render-avant-v1-test-nouveaux-logos-zoom-4"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20003,
     "sortKey": "0000-00-00",
@@ -6386,6 +8015,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Importer les 8 nouveaux logos préparés pour le défi Zoom.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 49,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Importer les 8 nouveaux logos préparés pour le défi Zoom.",
+      "markdown": "- [ ] Importer les 8 nouveaux logos préparés pour le défi Zoom."
+    },
     "summary": "Importer les 8 nouveaux logos préparés pour le défi Zoom.",
     "aiValidated": false,
     "aiNote": "",
@@ -6400,9 +8036,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-retours-test-render-avant-v1-test-futurs-events-deplacement-5",
+    "id": "todo-retours-test-render-avant-v1-test-etendre-le-moteur-si-de-nouveaux-evenements-de-deplacement-sont-ajoute-15eeb66751f0",
+    "legacyIds": [
+      "todo-pending-retours-test-render-avant-v1-test-futurs-events-deplacement-5"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20004,
     "sortKey": "0000-00-00",
@@ -6416,6 +8056,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Étendre le moteur si de nouveaux événements de déplacement sont ajoutés plus tard.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 63,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Étendre le moteur si de nouveaux événements de déplacement sont ajoutés plus tard.",
+      "markdown": "- [ ] Étendre le moteur si de nouveaux événements de déplacement sont ajoutés plus tard."
+    },
     "summary": "Étendre le moteur si de nouveaux événements de déplacement sont ajoutés plus tard.",
     "aiValidated": false,
     "aiNote": "",
@@ -6430,9 +8077,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-retours-test-render-avant-v1-test-onboarding-bonus-6",
+    "id": "todo-retours-test-render-avant-v1-test-plus-tard-au-premier-bonus-obtenu-expliquer-ou-retrouver-ses-bonus-pou-4105412a57e9",
+    "legacyIds": [
+      "todo-pending-retours-test-render-avant-v1-test-onboarding-bonus-6"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20005,
     "sortKey": "0000-00-00",
@@ -6446,6 +8097,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "Plus tard",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Plus tard - Au premier bonus obtenu, expliquer où retrouver ses bonus pour les joueurs qui n'ont pas vu l'onboarding menu.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 65,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Plus tard - Au premier bonus obtenu, expliquer où retrouver ses bonus pour les joueurs qui n'ont pas vu l'onboarding menu.",
+      "markdown": "- [ ] Plus tard - Au premier bonus obtenu, expliquer où retrouver ses bonus pour les joueurs qui n'ont pas vu l'onboarding menu."
+    },
     "summary": "Plus tard - Au premier bonus obtenu, expliquer où retrouver ses bonus pour les joueurs qui n'ont pas vu l'onboarding menu.",
     "aiValidated": false,
     "aiNote": "",
@@ -6461,9 +8119,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-retours-test-render-avant-v1-test-fullscreen-double-tap-7",
+    "id": "todo-retours-test-render-avant-v1-test-verifier-et-corriger-le-fullscreen-double-tap-il-ne-fonctionne-pas-tou-0b5e9a32b942",
+    "legacyIds": [
+      "todo-pending-retours-test-render-avant-v1-test-fullscreen-double-tap-7"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20006,
     "sortKey": "0000-00-00",
@@ -6477,6 +8139,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Vérifier et corriger le fullscreen double tap : il ne fonctionne pas toujours, notamment depuis le menu, sauf après fermeture / retour dans la fenêtre.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 66,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Vérifier et corriger le fullscreen double tap : il ne fonctionne pas toujours, notamment depuis le menu, sauf après fermeture / retour dans la fenêtre.",
+      "markdown": "- [ ] Vérifier et corriger le fullscreen double tap : il ne fonctionne pas toujours, notamment depuis le menu, sauf après fermeture / retour dans la fenêtre."
+    },
     "summary": "Vérifier et corriger le fullscreen double tap : il ne fonctionne pas toujours, notamment depuis le menu, sauf après fermeture / retour dans la fenêtre.",
     "aiValidated": false,
     "aiNote": "",
@@ -6491,9 +8160,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-retours-test-render-avant-v1-test-livret-de-regles-8",
+    "id": "todo-retours-test-render-avant-v1-test-imprimer-un-nouveau-livret-de-regles-d8715d49c99c",
+    "legacyIds": [
+      "todo-pending-retours-test-render-avant-v1-test-livret-de-regles-8"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20007,
     "sortKey": "0000-00-00",
@@ -6507,6 +8180,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Retours test Render - avant V1 test",
     "fullTitle": "Imprimer un nouveau livret de règles.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 69,
+      "section": "Retours test Render - avant V1 test",
+      "taskText": "Imprimer un nouveau livret de règles.",
+      "markdown": "- [ ] Imprimer un nouveau livret de règles."
+    },
     "summary": "Imprimer un nouveau livret de règles.",
     "aiValidated": false,
     "aiNote": "",
@@ -6521,9 +8201,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-bonus-bonus-3-et-4-joueurs-9",
+    "id": "todo-verification-release-bonus-tester-les-bonus-avec-3-joueurs-puis-avec-4-joueurs-c61bf62b3f77",
+    "legacyIds": [
+      "todo-pending-verification-release-bonus-bonus-3-et-4-joueurs-9"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20008,
     "sortKey": "0000-00-00",
@@ -6537,6 +8221,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / Bonus",
     "fullTitle": "Tester les bonus avec 3 joueurs puis avec 4 joueurs.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 76,
+      "section": "Vérification release / Bonus",
+      "taskText": "Tester les bonus avec 3 joueurs puis avec 4 joueurs.",
+      "markdown": "- [ ] Tester les bonus avec 3 joueurs puis avec 4 joueurs."
+    },
     "summary": "Tester les bonus avec 3 joueurs puis avec 4 joueurs.",
     "aiValidated": false,
     "aiNote": "",
@@ -6551,9 +8242,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-bonus-collisions-bonus-globales-10",
+    "id": "todo-verification-release-bonus-tester-les-collisions-entre-bonus-bonus-utilises-au-meme-tour-bonus-en-75b8ed1618be",
+    "legacyIds": [
+      "todo-pending-verification-release-bonus-collisions-bonus-globales-10"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20009,
     "sortKey": "0000-00-00",
@@ -6567,6 +8262,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / Bonus",
     "fullTitle": "Tester les collisions entre bonus : bonus utilisés au même tour, bonus en attente, bonus déjà posé sur un joueur, annulation d'action après bonus.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 77,
+      "section": "Vérification release / Bonus",
+      "taskText": "Tester les collisions entre bonus : bonus utilisés au même tour, bonus en attente, bonus déjà posé sur un joueur, annulation d'action après bonus.",
+      "markdown": "- [ ] Tester les collisions entre bonus : bonus utilisés au même tour, bonus en attente, bonus déjà posé sur un joueur, annulation d'action après bonus."
+    },
     "summary": "Tester les collisions entre bonus : bonus utilisés au même tour, bonus en attente, bonus déjà posé sur un joueur, annulation d'action après bonus.",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -6582,9 +8284,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-bonus-bonus-ordre-du-tour-11",
+    "id": "todo-verification-release-bonus-tester-les-collisions-entre-bonus-et-changement-d-ordre-appliquer-un-n-e249810e14c1",
+    "legacyIds": [
+      "todo-pending-verification-release-bonus-bonus-ordre-du-tour-11"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20010,
     "sortKey": "0000-00-00",
@@ -6598,6 +8304,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / Bonus",
     "fullTitle": "Tester les collisions entre bonus et changement d'ordre : appliquer un nouvel ordre, poser un bonus, finir le tour de table, puis vérifier que la cible et le prochain joueur restent corrects.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 78,
+      "section": "Vérification release / Bonus",
+      "taskText": "Tester les collisions entre bonus et changement d'ordre : appliquer un nouvel ordre, poser un bonus, finir le tour de table, puis vérifier que la cible et le prochain joueur restent corrects.",
+      "markdown": "- [ ] Tester les collisions entre bonus et changement d'ordre : appliquer un nouvel ordre, poser un bonus, finir le tour de table, puis vérifier que la cible et le prochain joueur restent corrects."
+    },
     "summary": "Tester les collisions entre bonus et changement d'ordre : appliquer un nouvel ordre, poser un bonus, finir le tour de table, puis vérifier que la cible et le prochain jo...",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -6613,9 +8326,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-bonus-bonus-nouveau-round-12",
+    "id": "todo-verification-release-bonus-tester-les-collisions-entre-bonus-et-changement-de-round-bonus-pose-av-447ba32383a7",
+    "legacyIds": [
+      "todo-pending-verification-release-bonus-bonus-nouveau-round-12"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20011,
     "sortKey": "0000-00-00",
@@ -6629,6 +8346,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / Bonus",
     "fullTitle": "Tester les collisions entre bonus et changement de round : bonus posé avant le classement, effet attendu au round suivant.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 79,
+      "section": "Vérification release / Bonus",
+      "taskText": "Tester les collisions entre bonus et changement de round : bonus posé avant le classement, effet attendu au round suivant.",
+      "markdown": "- [ ] Tester les collisions entre bonus et changement de round : bonus posé avant le classement, effet attendu au round suivant."
+    },
     "summary": "Tester les collisions entre bonus et changement de round : bonus posé avant le classement, effet attendu au round suivant.",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -6644,9 +8368,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-bonus-bonus-annulation-13",
+    "id": "todo-verification-release-bonus-tester-les-collisions-entre-bonus-et-annulation-d-action-poser-un-bonu-b1b8a2839a54",
+    "legacyIds": [
+      "todo-pending-verification-release-bonus-bonus-annulation-13"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20012,
     "sortKey": "0000-00-00",
@@ -6660,6 +8388,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / Bonus",
     "fullTitle": "Tester les collisions entre bonus et annulation d'action : poser un bonus, annuler l'action en cours, puis vérifier que le bonus consomme ou attend comme prévu.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 80,
+      "section": "Vérification release / Bonus",
+      "taskText": "Tester les collisions entre bonus et annulation d'action : poser un bonus, annuler l'action en cours, puis vérifier que le bonus consomme ou attend comme prévu.",
+      "markdown": "- [ ] Tester les collisions entre bonus et annulation d'action : poser un bonus, annuler l'action en cours, puis vérifier que le bonus consomme ou attend comme prévu."
+    },
     "summary": "Tester les collisions entre bonus et annulation d'action : poser un bonus, annuler l'action en cours, puis vérifier que le bonus consomme ou attend comme prévu.",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -6675,9 +8410,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-bonus-bonus-reconnexion-14",
+    "id": "todo-verification-release-bonus-tester-les-collisions-entre-bonus-et-reconnexion-cible-ou-utilisateur--0947b0e99d08",
+    "legacyIds": [
+      "todo-pending-verification-release-bonus-bonus-reconnexion-14"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20013,
     "sortKey": "0000-00-00",
@@ -6691,6 +8430,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / Bonus",
     "fullTitle": "Tester les collisions entre bonus et reconnexion : cible ou utilisateur du bonus déconnecté / reconnecté avant que l'effet soit résolu.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 81,
+      "section": "Vérification release / Bonus",
+      "taskText": "Tester les collisions entre bonus et reconnexion : cible ou utilisateur du bonus déconnecté / reconnecté avant que l'effet soit résolu.",
+      "markdown": "- [ ] Tester les collisions entre bonus et reconnexion : cible ou utilisateur du bonus déconnecté / reconnecté avant que l'effet soit résolu."
+    },
     "summary": "Tester les collisions entre bonus et reconnexion : cible ou utilisateur du bonus déconnecté / reconnecté avant que l'effet soit résolu.",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -6706,9 +8452,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-va-faire-le-cafe-du-boss-coffee-boss-sur-joueur-actif-15",
+    "id": "todo-verification-release-va-faire-le-cafe-du-boss-tester-quand-la-cible-est-le-joueur-actif-au-moment-de-l-utilisation-l-beee94aaf68e",
+    "legacyIds": [
+      "todo-pending-verification-release-va-faire-le-cafe-du-boss-coffee-boss-sur-joueur-actif-15"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20014,
     "sortKey": "0000-00-00",
@@ -6722,6 +8472,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / Va faire le café du boss",
     "fullTitle": "Tester quand la cible est le joueur actif au moment de l'utilisation : le skip doit attendre son prochain tour, même si un classement et un nouveau round passent entre temps.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 96,
+      "section": "Vérification release / Va faire le café du boss",
+      "taskText": "Tester quand la cible est le joueur actif au moment de l'utilisation : le skip doit attendre son prochain tour, même si un classement et un nouveau round passent entre temps.",
+      "markdown": "- [ ] Tester quand la cible est le joueur actif au moment de l'utilisation : le skip doit attendre son prochain tour, même si un classement et un nouveau round passent entre temps."
+    },
     "summary": "Tester quand la cible est le joueur actif au moment de l'utilisation : le skip doit attendre son prochain tour, même si un classement et un nouveau round passent entre t...",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -6737,9 +8494,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-va-faire-le-cafe-du-boss-coffee-boss-plus-tard-16",
+    "id": "todo-verification-release-va-faire-le-cafe-du-boss-tester-quand-la-cible-joue-plus-tard-dans-le-meme-tour-de-table-f035ec62cc03",
+    "legacyIds": [
+      "todo-pending-verification-release-va-faire-le-cafe-du-boss-coffee-boss-plus-tard-16"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20015,
     "sortKey": "0000-00-00",
@@ -6753,6 +8514,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / Va faire le café du boss",
     "fullTitle": "Tester quand la cible joue plus tard dans le même tour de table.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 97,
+      "section": "Vérification release / Va faire le café du boss",
+      "taskText": "Tester quand la cible joue plus tard dans le même tour de table.",
+      "markdown": "- [ ] Tester quand la cible joue plus tard dans le même tour de table."
+    },
     "summary": "Tester quand la cible joue plus tard dans le même tour de table.",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -6768,9 +8536,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-va-faire-le-cafe-du-boss-coffee-boss-annulation-round-17",
+    "id": "todo-verification-release-va-faire-le-cafe-du-boss-tester-avec-annulation-d-action-et-changement-de-round-5df78a3e5f9f",
+    "legacyIds": [
+      "todo-pending-verification-release-va-faire-le-cafe-du-boss-coffee-boss-annulation-round-17"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20016,
     "sortKey": "0000-00-00",
@@ -6784,6 +8556,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / Va faire le café du boss",
     "fullTitle": "Tester avec annulation d'action et changement de round.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 98,
+      "section": "Vérification release / Va faire le café du boss",
+      "taskText": "Tester avec annulation d'action et changement de round.",
+      "markdown": "- [ ] Tester avec annulation d'action et changement de round."
+    },
     "summary": "Tester avec annulation d'action et changement de round.",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -6799,9 +8578,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-va-faire-le-cafe-du-boss-coffee-boss-reconnexion-18",
+    "id": "todo-verification-release-va-faire-le-cafe-du-boss-tester-les-reconnects-avant-le-tour-saute-la-cible-doit-garder-son-sta-d0f6a903beb8",
+    "legacyIds": [
+      "todo-pending-verification-release-va-faire-le-cafe-du-boss-coffee-boss-reconnexion-18"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20017,
     "sortKey": "0000-00-00",
@@ -6815,6 +8598,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / Va faire le café du boss",
     "fullTitle": "Tester les reconnects avant le tour sauté : la cible doit garder son statut de tour à passer.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 99,
+      "section": "Vérification release / Va faire le café du boss",
+      "taskText": "Tester les reconnects avant le tour sauté : la cible doit garder son statut de tour à passer.",
+      "markdown": "- [ ] Tester les reconnects avant le tour sauté : la cible doit garder son statut de tour à passer."
+    },
     "summary": "Tester les reconnects avant le tour sauté : la cible doit garder son statut de tour à passer.",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -6830,9 +8620,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-va-faire-le-cafe-du-boss-coffee-boss-bloque-le-de-19",
+    "id": "todo-verification-release-va-faire-le-cafe-du-boss-verifier-que-le-joueur-cible-ne-peut-pas-lancer-le-de-quand-son-tour-d-fb50ad2d996f",
+    "legacyIds": [
+      "todo-pending-verification-release-va-faire-le-cafe-du-boss-coffee-boss-bloque-le-de-19"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20018,
     "sortKey": "0000-00-00",
@@ -6846,6 +8640,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / Va faire le café du boss",
     "fullTitle": "Vérifier que le joueur cible ne peut pas lancer le dé quand son tour doit être sauté.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 100,
+      "section": "Vérification release / Va faire le café du boss",
+      "taskText": "Vérifier que le joueur cible ne peut pas lancer le dé quand son tour doit être sauté.",
+      "markdown": "- [ ] Vérifier que le joueur cible ne peut pas lancer le dé quand son tour doit être sauté."
+    },
     "summary": "Vérifier que le joueur cible ne peut pas lancer le dé quand son tour doit être sauté.",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -6861,9 +8662,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-c-est-moi-qui-choisis-double-sabotage-quiz-20",
+    "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-qu-un-joueur-ne-peut-pas-recevoir-ce-bonus-deux-fois-tant-que-33a8f498a573",
+    "legacyIds": [
+      "todo-pending-verification-release-c-est-moi-qui-choisis-double-sabotage-quiz-20"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20019,
     "sortKey": "0000-00-00",
@@ -6877,6 +8682,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / C'est moi qui choisis !",
     "fullTitle": "Vérifier qu'un joueur ne peut pas recevoir ce bonus deux fois tant que le premier sabotage est en attente.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 107,
+      "section": "Vérification release / C'est moi qui choisis !",
+      "taskText": "Vérifier qu'un joueur ne peut pas recevoir ce bonus deux fois tant que le premier sabotage est en attente.",
+      "markdown": "- [ ] Vérifier qu'un joueur ne peut pas recevoir ce bonus deux fois tant que le premier sabotage est en attente."
+    },
     "summary": "Vérifier qu'un joueur ne peut pas recevoir ce bonus deux fois tant que le premier sabotage est en attente.",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -6892,9 +8704,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-c-est-moi-qui-choisis-sabotage-quiz-deja-pose-21",
+    "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-qu-on-ne-peut-pas-ecraser-un-sabotage-quizz-deja-en-attente-a-6ffaa286d7eb",
+    "legacyIds": [
+      "todo-pending-verification-release-c-est-moi-qui-choisis-sabotage-quiz-deja-pose-21"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20020,
     "sortKey": "0000-00-00",
@@ -6908,6 +8724,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / C'est moi qui choisis !",
     "fullTitle": "Vérifier qu'on ne peut pas écraser un sabotage Quizz déjà en attente avec un autre.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 108,
+      "section": "Vérification release / C'est moi qui choisis !",
+      "taskText": "Vérifier qu'on ne peut pas écraser un sabotage Quizz déjà en attente avec un autre.",
+      "markdown": "- [ ] Vérifier qu'on ne peut pas écraser un sabotage Quizz déjà en attente avec un autre."
+    },
     "summary": "Vérifier qu'on ne peut pas écraser un sabotage Quizz déjà en attente avec un autre.",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -6923,9 +8746,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-c-est-moi-qui-choisis-explication-cible-sabotage-22",
+    "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-que-la-cible-voit-d-abord-l-ecran-explicatif-et-doit-cliquer--c2c4d4205384",
+    "legacyIds": [
+      "todo-pending-verification-release-c-est-moi-qui-choisis-explication-cible-sabotage-22"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20021,
     "sortKey": "0000-00-00",
@@ -6939,6 +8766,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / C'est moi qui choisis !",
     "fullTitle": "Vérifier que la cible voit d'abord l'écran explicatif et doit cliquer sur Suivant.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 109,
+      "section": "Vérification release / C'est moi qui choisis !",
+      "taskText": "Vérifier que la cible voit d'abord l'écran explicatif et doit cliquer sur Suivant.",
+      "markdown": "- [ ] Vérifier que la cible voit d'abord l'écran explicatif et doit cliquer sur `Suivant`."
+    },
     "summary": "Vérifier que la cible voit d'abord l'écran explicatif et doit cliquer sur Suivant.",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -6954,9 +8788,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-c-est-moi-qui-choisis-poseur-choisit-seul-23",
+    "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-que-le-joueur-qui-a-pose-le-bonus-est-le-seul-a-pouvoir-chois-5a41a0085293",
+    "legacyIds": [
+      "todo-pending-verification-release-c-est-moi-qui-choisis-poseur-choisit-seul-23"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20022,
     "sortKey": "0000-00-00",
@@ -6970,6 +8808,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / C'est moi qui choisis !",
     "fullTitle": "Vérifier que le joueur qui a posé le bonus est le seul à pouvoir choisir la difficulté.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 110,
+      "section": "Vérification release / C'est moi qui choisis !",
+      "taskText": "Vérifier que le joueur qui a posé le bonus est le seul à pouvoir choisir la difficulté.",
+      "markdown": "- [ ] Vérifier que le joueur qui a posé le bonus est le seul à pouvoir choisir la difficulté."
+    },
     "summary": "Vérifier que le joueur qui a posé le bonus est le seul à pouvoir choisir la difficulté.",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -6985,9 +8830,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-c-est-moi-qui-choisis-vue-spectateurs-sabotage-24",
+    "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-que-les-spectateurs-voient-le-theme-les-cinq-difficultes-la-d-86370d293b62",
+    "legacyIds": [
+      "todo-pending-verification-release-c-est-moi-qui-choisis-vue-spectateurs-sabotage-24"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20023,
     "sortKey": "0000-00-00",
@@ -7001,6 +8850,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / C'est moi qui choisis !",
     "fullTitle": "Vérifier que les spectateurs voient le thème, les cinq difficultés, la difficulté choisie en live, et le tag \"X choisit\".",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 111,
+      "section": "Vérification release / C'est moi qui choisis !",
+      "taskText": "Vérifier que les spectateurs voient le thème, les cinq difficultés, la difficulté choisie en live, et le tag \"X choisit\".",
+      "markdown": "- [ ] Vérifier que les spectateurs voient le thème, les cinq difficultés, la difficulté choisie en live, et le tag \"X choisit\"."
+    },
     "summary": "Vérifier que les spectateurs voient le thème, les cinq difficultés, la difficulté choisie en live, et le tag \"X choisit\".",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -7016,9 +8872,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-c-est-moi-qui-choisis-theme-quiz-aleatoire-25",
+    "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-que-le-theme-du-quiz-reste-aleatoire-comme-dans-un-quiz-norma-fef909e0ab4c",
+    "legacyIds": [
+      "todo-pending-verification-release-c-est-moi-qui-choisis-theme-quiz-aleatoire-25"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20024,
     "sortKey": "0000-00-00",
@@ -7032,6 +8892,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / C'est moi qui choisis !",
     "fullTitle": "Vérifier que le thème du quiz reste aléatoire comme dans un quiz normal.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 112,
+      "section": "Vérification release / C'est moi qui choisis !",
+      "taskText": "Vérifier que le thème du quiz reste aléatoire comme dans un quiz normal.",
+      "markdown": "- [ ] Vérifier que le thème du quiz reste aléatoire comme dans un quiz normal."
+    },
     "summary": "Vérifier que le thème du quiz reste aléatoire comme dans un quiz normal.",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -7047,9 +8914,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-verification-release-c-est-moi-qui-choisis-difficulte-choisie-appliquee-26",
+    "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-que-la-question-finale-utilise-bien-la-difficulte-choisie-par-41713d77204d",
+    "legacyIds": [
+      "todo-pending-verification-release-c-est-moi-qui-choisis-difficulte-choisie-appliquee-26"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20025,
     "sortKey": "0000-00-00",
@@ -7063,6 +8934,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Vérification release / C'est moi qui choisis !",
     "fullTitle": "Vérifier que la question finale utilise bien la difficulté choisie par le joueur qui a posé le bonus.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 113,
+      "section": "Vérification release / C'est moi qui choisis !",
+      "taskText": "Vérifier que la question finale utilise bien la difficulté choisie par le joueur qui a posé le bonus.",
+      "markdown": "- [ ] Vérifier que la question finale utilise bien la difficulté choisie par le joueur qui a posé le bonus."
+    },
     "summary": "Vérifier que la question finale utilise bien la difficulté choisie par le joueur qui a posé le bonus.",
     "aiValidated": true,
     "aiNote": "IA/test auto OK sur les scenarios bonus critiques deja corriges. Cette carte garde la verification humaine ou un cas long a rejouer.",
@@ -7078,9 +8956,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-presence-messages-room-cette-distinction-au-lobby-et-a-la-character-select-s-27",
+    "id": "todo-presence-messages-room-etendre-cette-distinction-au-lobby-et-a-la-character-select-si-besoin-6450cf42ebb5",
+    "legacyIds": [
+      "todo-pending-presence-messages-room-cette-distinction-au-lobby-et-a-la-character-select-s-27"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20026,
     "sortKey": "0000-00-00",
@@ -7094,6 +8976,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Présence / Messages room",
     "fullTitle": "Étendre cette distinction au lobby et à la character select si besoin.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 184,
+      "section": "Présence / Messages room",
+      "taskText": "Étendre cette distinction au lobby et à la character select si besoin.",
+      "markdown": "- [ ] Étendre cette distinction au lobby et à la character select si besoin."
+    },
     "summary": "Étendre cette distinction au lobby et à la character select si besoin.",
     "aiValidated": false,
     "aiNote": "",
@@ -7108,9 +8997,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-onboarding-onboarding-global-v2-28",
+    "id": "todo-onboarding-v2-ajouter-un-onboarding-global-au-lancement-avec-question-as-tu-deja--8fdfb20a484f",
+    "legacyIds": [
+      "todo-pending-onboarding-onboarding-global-v2-28"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20027,
     "sortKey": "0000-00-00",
@@ -7124,6 +9017,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "Plus tard",
     "impact": "Onboarding",
     "fullTitle": "V2 - Ajouter un onboarding global au lancement avec question \"As-tu déjà joué ?\" (hors périmètre V1).",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 203,
+      "section": "Onboarding",
+      "taskText": "V2 - Ajouter un onboarding global au lancement avec question \"As-tu déjà joué ?\" (hors périmètre V1).",
+      "markdown": "- [ ] V2 - Ajouter un onboarding global au lancement avec question \"As-tu déjà joué ?\" (hors périmètre V1)."
+    },
     "summary": "V2 - Ajouter un onboarding global au lancement avec question \"As-tu déjà joué ?\" (hors périmètre V1).",
     "aiValidated": false,
     "aiNote": "",
@@ -7139,9 +9039,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-technique-validation-test-mobile-reel-29",
+    "id": "todo-technique-validation-faire-un-test-manuel-mobile-idealement-sur-iphone-android-reel-b6d627d8fbee",
+    "legacyIds": [
+      "todo-pending-technique-validation-test-mobile-reel-29"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20028,
     "sortKey": "0000-00-00",
@@ -7155,6 +9059,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Technique / validation",
     "fullTitle": "Faire un test manuel mobile, idéalement sur iPhone/Android réel.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 269,
+      "section": "Technique / validation",
+      "taskText": "Faire un test manuel mobile, idéalement sur iPhone/Android réel.",
+      "markdown": "- [ ] Faire un test manuel mobile, idéalement sur iPhone/Android réel."
+    },
     "summary": "Faire un test manuel mobile, idéalement sur iPhone/Android réel.",
     "aiValidated": false,
     "aiNote": "",
@@ -7169,9 +9080,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-technique-validation-l-activite-commune-surtout-l-import-prise-de-photo-30",
+    "id": "todo-technique-validation-tester-l-activite-commune-surtout-l-import-prise-de-photo-sur-chrome-m-14fdb5c7753f",
+    "legacyIds": [
+      "todo-pending-technique-validation-l-activite-commune-surtout-l-import-prise-de-photo-30"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20029,
     "sortKey": "0000-00-00",
@@ -7185,6 +9100,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Technique / validation",
     "fullTitle": "Tester l'activité commune, surtout l'import / prise de photo, sur Chrome mobile.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 270,
+      "section": "Technique / validation",
+      "taskText": "Tester l'activité commune, surtout l'import / prise de photo, sur Chrome mobile.",
+      "markdown": "- [ ] Tester l'activité commune, surtout l'import / prise de photo, sur Chrome mobile."
+    },
     "summary": "Tester l'activité commune, surtout l'import / prise de photo, sur Chrome mobile.",
     "aiValidated": false,
     "aiNote": "",
@@ -7199,9 +9121,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "files": []
   },
   {
-    "id": "todo-pending-technique-validation-test-de-reconnexion-refresh-fermeture-onglet-cras-31",
+    "id": "todo-technique-validation-faire-un-test-de-reconnexion-refresh-fermeture-onglet-crash-simule-ret-e5ea97284714",
+    "legacyIds": [
+      "todo-pending-technique-validation-test-de-reconnexion-refresh-fermeture-onglet-cras-31"
+    ],
     "type": "pending",
     "source": "TODO.md",
+    "sourceType": "todo",
     "sourceKind": "Checklist en attente",
     "sourceOrder": 20030,
     "sortKey": "0000-00-00",
@@ -7215,6 +9141,13 @@ window.WORKLOG_PENDING_ITEMS = [
     "scopeLabel": "V1",
     "impact": "Technique / validation",
     "fullTitle": "Faire un test de reconnexion : refresh, fermeture onglet, crash simulé, retour dans la room.",
+    "todoReference": {
+      "file": "TODO.md",
+      "line": 271,
+      "section": "Technique / validation",
+      "taskText": "Faire un test de reconnexion : refresh, fermeture onglet, crash simulé, retour dans la room.",
+      "markdown": "- [ ] Faire un test de reconnexion : refresh, fermeture onglet, crash simulé, retour dans la room."
+    },
     "summary": "Faire un test de reconnexion : refresh, fermeture onglet, crash simulé, retour dans la room.",
     "aiValidated": false,
     "aiNote": "",
@@ -7232,7 +9165,7 @@ window.WORKLOG_PENDING_ITEMS = [
 window.WORKLOG_ITEMS = window.WORKLOG_DONE_ITEMS;
 window.TODO_ITEMS = window.WORKLOG_PENDING_ITEMS;
 window.WORKLOG_META = {
-  "generatedAt": "2026-06-04T12:13:29.744Z",
+  "generatedAt": "2026-06-06T09:22:30.522Z",
   "sources": [
     "WORKLOG.md",
     "TODO.md"

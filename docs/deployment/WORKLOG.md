@@ -4,6 +4,21 @@
 
 ---
 
+## Samedi 6 Juin 2026 - Synchronisation des activités communes
+
+### Photo et plein écran mobile
+- Ajout d'une récupération explicite du plein écran après l'autorisation ou l'utilisation de la caméra.
+- Écran photo rendu compact et scrollable pour éviter les boutons coupés ou superposés hors plein écran.
+- Caméra arrière utilisée seule afin d'imposer une prise de vue directe du dessin.
+- Commandes `Changer`, `Importer` et `Fermer` retirées de la caméra. Elles pourront être restaurées depuis l'historique de cette version si le besoin revient.
+
+### Compteurs et vote synchronisés
+- Compteur de photos recalculé côté serveur depuis la liste réelle des photos envoyées.
+- Resynchronisation automatique de la room après retour d'onglet, retour de caméra, reconnexion ou reprise réseau.
+- Timer de vote basé sur l'horloge serveur et identifié par round sur tous les appareils.
+- Barre de temps corrigée pour aller réellement de 100 % à 0 %.
+- Ajout de tests serveur unitaires et d'un scénario d'intégration à quatre joueurs.
+
 ## Mercredi 3 Juin 2026 - Travaux en cours non encore commit
 
 ### Corrections bonus post-tests

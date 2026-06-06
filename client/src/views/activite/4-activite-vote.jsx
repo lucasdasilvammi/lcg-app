@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { isFullscreenActive, requestAppFullscreen } from '../../utils/fullscreen'
 import {
   ActivityScreen,
   ActivityHeaderTag,
@@ -9,7 +10,12 @@ import {
   VoteTimerBar
 } from './ActivityShared'
 
-export default function ActiviteVote({ roomData, currentUserId, submitVote }) {
+const isMobileViewport = () => (
+  typeof window !== 'undefined'
+  && (window.innerWidth < 470 || /iPhone|iPad|Android|Mobile/.test(navigator.userAgent))
+)
+
+export default function ActiviteVote({ roomData, currentUserId, submitVote, serverClockOffsetMs = 0 }) {
   const interaction = roomData?.currentInteraction || {}
 
   const {
@@ -18,7 +24,8 @@ export default function ActiviteVote({ roomData, currentUserId, submitVote }) {
     votes = {},
     voteStartedAt = null,
     voteEndsAt = null,
-    voteDurationMs = 12000
+    voteDurationMs = 12000,
+    voteRoundId = 0
   } = interaction
 
   const currentPhoto = photos[currentPhotoIndex]
@@ -29,12 +36,38 @@ export default function ActiviteVote({ roomData, currentUserId, submitVote }) {
   const isOwnPhoto = currentPhoto?.playerId === currentUserId
   const canVote = Boolean(currentPhoto && !isOwnPhoto && !hasVoted)
 
-  const [now, setNow] = useState(() => Date.now())
+  const [now, setNow] = useState(() => Date.now() + serverClockOffsetMs)
+  const [fullscreenRecoveryNeeded, setFullscreenRecoveryNeeded] = useState(() => (
+    isMobileViewport() && !isFullscreenActive()
+  ))
 
   useEffect(() => {
-    const timer = window.setInterval(() => setNow(Date.now()), 120)
-    return () => window.clearInterval(timer)
-  }, [voteEndsAt, currentPhotoIndex])
+    let animationFrame = null
+    const updateNow = () => {
+      setNow(Date.now() + serverClockOffsetMs)
+      animationFrame = window.requestAnimationFrame(updateNow)
+    }
+
+    updateNow()
+    return () => window.cancelAnimationFrame(animationFrame)
+  }, [serverClockOffsetMs, voteEndsAt, currentPhotoIndex, voteRoundId])
+
+  useEffect(() => {
+    const updateFullscreenState = () => setFullscreenRecoveryNeeded(
+      isMobileViewport() && !isFullscreenActive()
+    )
+    document.addEventListener('fullscreenchange', updateFullscreenState)
+    document.addEventListener('webkitfullscreenchange', updateFullscreenState)
+    return () => {
+      document.removeEventListener('fullscreenchange', updateFullscreenState)
+      document.removeEventListener('webkitfullscreenchange', updateFullscreenState)
+    }
+  }, [])
+
+  const restoreFullscreen = async () => {
+    const restored = await requestAppFullscreen({ source: 'activity-vote-recovery' })
+    setFullscreenRecoveryNeeded(!restored)
+  }
 
   const remainingMs = voteEndsAt ? Math.max(0, voteEndsAt - now) : voteDurationMs
   const timeLeft = Math.ceil(remainingMs / 1000)
@@ -49,7 +82,7 @@ export default function ActiviteVote({ roomData, currentUserId, submitVote }) {
   if (!roomData || !roomData.currentInteraction) return null
 
   return (
-    <ActivityScreen className="justify-between gap-6">
+    <ActivityScreen scroll compactY className="justify-between gap-5">
       <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-6">
         <ActivityHeaderTag />
 
@@ -62,6 +95,15 @@ export default function ActiviteVote({ roomData, currentUserId, submitVote }) {
             <StatusTag tone="gray" icon={<MaskAssetIcon src="/activite/cube.svg" />}>{currentPhotoIndex + 1}/{photos.length || 1}</StatusTag>
           </div>
           <VoteTimerBar progress={progress} className="w-[19.5rem]" />
+          {fullscreenRecoveryNeeded && (
+            <button
+              type="button"
+              onClick={restoreFullscreen}
+              className="font-funnel text-sm font-semibold text-orange-primary underline decoration-orange-primary/60 underline-offset-4"
+            >
+              Repasser en plein écran
+            </button>
+          )}
         </div>
 
         <div className="flex w-full flex-1 flex-col items-center justify-center gap-4">

@@ -1,5 +1,6 @@
 const fs = require("fs");
 const path = require("path");
+const crypto = require("crypto");
 
 const SITE_DIR = __dirname;
 const ROOT_DIR = path.resolve(SITE_DIR, "..", "..");
@@ -120,6 +121,10 @@ function slugify(value, fallback) {
   return slug || fallback;
 }
 
+function shortHash(value) {
+  return crypto.createHash("sha256").update(String(value || ""), "utf8").digest("hex").slice(0, 12);
+}
+
 function extractFiles(...parts) {
   const text = parts.join(" ");
   const files = new Set();
@@ -213,6 +218,7 @@ function buildWorklogDoneItems() {
       id: `done-${slugify(active.date, "date")}-${slugify(active.parentTitle || title, "section")}-${slugify(title, `item-${items.length}`)}-${items.length + 1}`,
       type: "done",
       source: WORKLOG_SOURCE,
+      sourceType: "worklog",
       sourceKind: active.level === 4 ? "Sous-section worklog" : "Section worklog",
       sourceOrder: items.length,
       sortKey: dateKey,
@@ -278,7 +284,8 @@ function buildTodoItems() {
     sectionStack.length = index + 1;
   }
 
-  for (const line of lines) {
+  for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
+    const line = lines[lineIndex];
     const heading = line.match(/^(#{2,4})\s+(.+?)\s*$/);
     if (heading) {
       setSection(heading[1].length, heading[2]);
@@ -299,10 +306,14 @@ function buildTodoItems() {
     const isBonusRelated = /(bonus|ctrl \+ z|coffee|cafe|choisis|sabotage)/i.test(normalizedTask);
     const isBroadBonusTodo = /(onboarding|3 joueurs|4 joueurs)/i.test(normalizedTask);
     const isBonusHumanCheck = !done && scope === "v1" && isBonusRelated && !isBroadBonusTodo;
+    const stableId = `todo-${slugify(sectionPath, "todo")}-${slugify(fullTitle, "task")}-${shortHash(`${sectionPath}\n${fullTitle}`)}`;
+    const legacyId = `${done ? "todo-done" : "todo-pending"}-${slugify(sectionPath, "todo")}-${slugify(title, "task")}-${done ? doneItems.length + 1 : pendingItems.length + 1}`;
     const item = {
-      id: `${done ? "todo-done" : "todo-pending"}-${slugify(sectionPath, "todo")}-${slugify(title, "task")}-${done ? doneItems.length + 1 : pendingItems.length + 1}`,
+      id: stableId,
+      legacyIds: [legacyId],
       type: done ? "done" : "pending",
       source: TODO_SOURCE,
+      sourceType: "todo",
       sourceKind: done ? "Checklist validee" : "Checklist en attente",
       sourceOrder: done ? 10000 + doneItems.length : 20000 + pendingItems.length,
       sortKey: "0000-00-00",
@@ -316,6 +327,13 @@ function buildTodoItems() {
       scopeLabel: done ? "Fait" : getScopeLabel(scope),
       impact: sectionPath,
       fullTitle,
+      todoReference: {
+        file: TODO_SOURCE,
+        line: lineIndex + 1,
+        section: sectionPath,
+        taskText: fullTitle,
+        markdown: line.trim()
+      },
       summary: truncate(fullTitle),
       aiValidated: isBonusHumanCheck,
       aiNote: isBonusHumanCheck

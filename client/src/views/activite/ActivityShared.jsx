@@ -124,7 +124,7 @@ export function ActivityScreen({ children, scroll = false, className = '', compa
   return (
     <div className="relative w-full overflow-hidden bg-bg">
       <div
-        className={`relative mx-auto flex h-dvh app-screen-y w-full max-w-full flex-col items-center px-6 text-center ${scroll ? 'overflow-y-auto' : 'overflow-hidden'} ${className}`}
+        className={`relative mx-auto flex h-dvh app-screen-y w-full max-w-full flex-col items-center px-6 text-center ${scroll ? 'activity-scroll overflow-y-auto' : 'overflow-hidden'} ${className}`}
         style={{
           paddingTop: `calc(var(--app-screen-padding-top, 4.5rem) - ${compactY ? '0.9rem' : '0.5rem'})`,
           paddingBottom: `calc(var(--app-screen-padding-bottom, 3.5rem) - ${compactY ? '0.9rem' : '0.5rem'})`
@@ -213,7 +213,7 @@ export function PhotoFrame({ src, alt = '', className = '', imageClassName = '' 
 }
 
 export function VoteTimerBar({ progress = 1, className = '' }) {
-  const fillWidth = 20 + Math.max(0, Math.min(1, progress)) * 80
+  const fillWidth = Math.max(0, Math.min(1, progress)) * 100
   const maskStyle = {
     WebkitMaskImage: 'url(/activite/time-bar.svg)',
     maskImage: 'url(/activite/time-bar.svg)',
@@ -228,7 +228,7 @@ export function VoteTimerBar({ progress = 1, className = '' }) {
   return (
     <div className={`relative h-5 w-full overflow-hidden ${className}`} style={maskStyle}>
       <div className="absolute inset-0 bg-light/20" />
-      <div className="absolute inset-y-0 left-0 bg-light transition-[width] duration-200 ease-linear" style={{ width: `${fillWidth}%` }} />
+      <div className="absolute inset-y-0 left-0 bg-light" style={{ width: `${fillWidth}%` }} />
     </div>
   )
 }

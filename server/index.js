@@ -45,10 +45,16 @@ const MAX_PLAYERS = 4;
 const VALID_BONUS_IDS = new Set(['ctrl-z', 'coffee-boss', 'choose-quiz']);
 const DUEL_TYPES = ['buzzer', 'vraioufaux', 'chiffres', 'zoom', 'pick'];
 const DEBUG_TOOLS_ENABLED = process.env.LCG_ENABLE_DEBUG_TOOLS === 'true';
+const USE_FIXED_DEBUG_ROOM_CODE = process.env.LCG_USE_FIXED_ROOM_CODE === 'true';
 const DEBUG_ROOM_CODE = [2, 2, 2, 2, 2];
 const TEST_DEFAULT_BONUSES = { 'ctrl-z': 1, 'coffee-boss': 1, 'choose-quiz': 1 };
 const quizData = require('./data/quiz.json');
 const duelsData = require('./data/duels.json');
+const {
+  hasAllLogoActivityPhotos,
+  normalizeLogoActivityState,
+  setLogoActivityVoteTiming
+} = require('./activityState');
 
 // Flattener la structure par catégorie en un array simple
 const QUIZ_DB = Object.keys(quizData)
@@ -186,7 +192,7 @@ const createRandomDuelInteraction = (room, initiatingPlayerId = null) => {
 let rooms = {};
 // Sur mobile, l'ouverture de l'appareil photo peut couper temporairement la socket.
 // On garde une marge courte, sans bloquer longtemps la réinvitation.
-const DISCONNECT_GRACE_MS = 30000; // 30 secondes
+const DISCONNECT_GRACE_MS = Math.max(0, Number(process.env.LCG_DISCONNECT_GRACE_MS) || 30000);
 const pendingDisconnectTimers = new Map();
 const undoSnapshotsByRoomId = new Map();
 const DEFAULT_BONUSES = DEBUG_TOOLS_ENABLED ? TEST_DEFAULT_BONUSES : {};
@@ -430,13 +436,18 @@ const buildEasyPublicRoomCodes = () => {
   return codes;
 };
 const EASY_PUBLIC_ROOM_CODES = buildEasyPublicRoomCodes();
+let lastPublicRoomCodeKey = null;
 const createRandomCode = () => Array.from(
   { length: CODE_LENGTH },
   () => Math.floor(Math.random() * CODE_CHARACTER_COUNT)
 );
 const generateRoomId = () => Math.random().toString(36).substr(2, 9);
+const rememberPublicRoomCode = (code) => {
+  lastPublicRoomCodeKey = JSON.stringify(code);
+  return [...code];
+};
 const generateGameCode = () => {
-  if (DEBUG_TOOLS_ENABLED) return [...DEBUG_ROOM_CODE];
+  if (USE_FIXED_DEBUG_ROOM_CODE) return [...DEBUG_ROOM_CODE];
 
   const usedCodeKeys = new Set(
     Object.values(rooms).map((room) => JSON.stringify(room.code))
@@ -445,18 +456,18 @@ const generateGameCode = () => {
     usedCodeKeys.has(JSON.stringify(code))
     || Boolean(findReconnectInviteByCode(code))
   );
-  const availableEasyCode = EASY_PUBLIC_ROOM_CODES.find(
-    (code) => !codeConflicts(code)
-  );
+  const availableEasyCodes = EASY_PUBLIC_ROOM_CODES.filter((code) => !codeConflicts(code));
+  const variedEasyCodes = availableEasyCodes.filter((code) => JSON.stringify(code) !== lastPublicRoomCodeKey);
+  const availableEasyCode = getRandomItem(variedEasyCodes.length > 0 ? variedEasyCodes : availableEasyCodes);
 
-  if (availableEasyCode) return [...availableEasyCode];
+  if (availableEasyCode) return rememberPublicRoomCode(availableEasyCode);
 
   for (let attempt = 0; attempt < 80; attempt += 1) {
     const fallbackCode = createRandomCode();
-    if (!codeConflicts(fallbackCode)) return fallbackCode;
+    if (!codeConflicts(fallbackCode)) return rememberPublicRoomCode(fallbackCode);
   }
 
-  return createRandomCode();
+  return rememberPublicRoomCode(createRandomCode());
 };
 const generatePrivateCode = () => createRandomCode();
 const codesMatch = (left, right) => JSON.stringify(left) === JSON.stringify(right);
@@ -498,9 +509,27 @@ io.on('connection', (socket) => {
   const sessionToken = socket.handshake.auth?.sessionToken;
   console.log('🔌 socket connected:', socket.id);
   const findRoom = () => findRoomByPlayerId(socket.id);
-  const syncRoom = (room) => io.to(room.id).emit("update_room_state", {
-    ...room,
-    canUndo: undoSnapshotsByRoomId.has(room.id)
+  socket.on('sync_clock', (_payload, ack) => {
+    if (typeof ack === 'function') ack({ serverNow: Date.now() });
+  });
+
+  const createRoomStatePayload = (room) => {
+    normalizeLogoActivityState(room.currentInteraction);
+    return {
+      ...room,
+      canUndo: undoSnapshotsByRoomId.has(room.id)
+    };
+  };
+  const syncRoom = (room) => io.to(room.id).emit("update_room_state", createRoomStatePayload(room));
+  socket.on('request_room_state', (_payload, ack) => {
+    const room = findRoom();
+    if (!room) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
+      return;
+    }
+
+    socket.emit('update_room_state', createRoomStatePayload(room));
+    if (typeof ack === 'function') ack({ ok: true, serverNow: Date.now() });
   });
   const clearRoomUndo = (roomId) => {
     if (!roomId) return;
@@ -578,8 +607,10 @@ io.on('connection', (socket) => {
       })
       .sort((a, b) => b.score - a.score);
 
-    const winnerId = rankings[0]?.playerId;
-    const winner = room.players.find(p => p.id === winnerId);
+    const topScore = rankings[0]?.score ?? 0;
+    const hasWinningScore = topScore > 0;
+    const winnerId = hasWinningScore ? rankings[0]?.playerId : null;
+    const winner = winnerId ? room.players.find(p => p.id === winnerId) : null;
     if (winner) {
       winner.score += 2;
     }
@@ -589,8 +620,9 @@ io.on('connection', (socket) => {
       brandName: ci.brandName,
       rankings,
       winnerId,
-      points: 2,
-      success: true,
+      points: hasWinningScore ? 2 : 0,
+      success: hasWinningScore,
+      bossFeedback: hasWinningScore ? null : "Bande de nazes, vous n'arrivez même pas à vous départager entre vous.",
       questionerId: ci.questionerId || room.players[room.turnIndex]?.id
     };
 
@@ -613,21 +645,20 @@ io.on('connection', (socket) => {
 
     ci.currentPhotoIndex = photoIndex;
     setActiviteCurrentPhotoData(room, photoIndex);
-    ci.voteStartedAt = Date.now();
-    ci.voteEndsAt = ci.voteStartedAt + durationMs;
-    ci.voteDurationMs = durationMs;
+    const voteRoundId = setLogoActivityVoteTiming(ci, durationMs);
     room.status = "ACTIVITE_VOTE";
 
     const timer = setTimeout(() => {
-      advanceActiviteVoteRound(room, photoIndex);
+      advanceActiviteVoteRound(room, photoIndex, voteRoundId);
     }, durationMs);
     activiteVoteTimersByRoomId.set(room.id, timer);
   };
 
-  const advanceActiviteVoteRound = (room, expectedPhotoIndex = null) => {
+  const advanceActiviteVoteRound = (room, expectedPhotoIndex = null, expectedVoteRoundId = null) => {
     const ci = room?.currentInteraction;
     if (!room || !ci || ci.type !== 'logo' || room.status !== 'ACTIVITE_VOTE') return;
     if (expectedPhotoIndex !== null && ci.currentPhotoIndex !== expectedPhotoIndex) return;
+    if (expectedVoteRoundId !== null && ci.voteRoundId !== expectedVoteRoundId) return;
 
     const nextPhotoIndex = (ci.currentPhotoIndex || 0) + 1;
     startActiviteVoteRound(room, nextPhotoIndex, 12000);
@@ -643,13 +674,15 @@ io.on('connection', (socket) => {
 
     const photoIndex = ci.currentPhotoIndex || 0;
     startActiviteVoteRound(room, photoIndex, 3000);
-    ci.voteStartedAt = now;
-    ci.voteEndsAt = now + 3000;
   };
-  const pickNextAdminId = (room) => {
+  const pickNextAdminId = (room, excludedPlayerId = null) => {
     if (!room || !Array.isArray(room.players) || room.players.length === 0) return null;
-    const connectedPlayer = room.players.find((p) => p.connected !== false && !p.isWaiting && !p.isDisconnected);
-    return (connectedPlayer || room.players[0]).id;
+    const candidates = room.players.filter((player) => player.id !== excludedPlayerId);
+    const connectedPlayer = candidates.find((player) => (
+      player.connected !== false && !player.isWaiting && !player.isDisconnected
+    ));
+    const waitingPlayer = candidates.find((player) => player.isWaiting && !player.isDisconnected);
+    return (connectedPlayer || waitingPlayer || candidates[0] || null)?.id || null;
   };
   const removePlayerFromRoom = ({ room, playerId = null, playerSessionToken = null, reason = 'unknown' }) => {
     if (!room) {
@@ -1324,6 +1357,9 @@ io.on('connection', (socket) => {
         voteStartedAt: null,
         voteEndsAt: null,
         voteDurationMs: 12000,
+        voteRoundId: 0,
+        participantCount: participants.length,
+        uploadedPhotoCount: 0,
         timeUp: false
       };
       room.status = "ACTIVITE_BRIEF";
@@ -1445,9 +1481,20 @@ io.on('connection', (socket) => {
       if (typeof ack === 'function') ack({ ok: false, reason: 'activity_not_active' });
       return;
     }
-    
+
+    const interaction = room.currentInteraction;
+    normalizeLogoActivityState(interaction);
+    if (!interaction.participants.includes(socket.id)) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'player_not_participant' });
+      return;
+    }
+    if (typeof photoData !== 'string' || !photoData.startsWith('data:image/')) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_photo' });
+      return;
+    }
+
     // Stocker la photo anonymement
-    const photos = room.currentInteraction.photos || [];
+    const photos = interaction.photos;
     const existingIndex = photos.findIndex(p => p.playerId === socket.id);
     const photoStore = getActivitePhotoStore(room.id);
     const photoId = existingIndex >= 0
@@ -1461,17 +1508,8 @@ io.on('connection', (socket) => {
       photos.push({ playerId: socket.id, photoId });
     }
     
-    room.currentInteraction.photos = photos;
-    room.currentInteraction.uploadedPhotos = {
-      ...room.currentInteraction.uploadedPhotos,
-      [socket.id]: true
-    };
-    
-    // Vérifier si tous ont upload
-    const participants = room.currentInteraction.participants || [];
-    const allUploaded = participants.length > 0 && participants.every(id => 
-      room.currentInteraction.uploadedPhotos[id]
-    );
+    interaction.photos = photos;
+    const allUploaded = hasAllLogoActivityPhotos(interaction);
     
     if (allUploaded) {
       // Passer au vote - mélanger les photos pour l'anonymat
@@ -1918,8 +1956,12 @@ io.on('connection', (socket) => {
         explanation: room.currentInteraction.data?.explanation
       };
 
+      const now = Date.now();
+      const pauseStartedAt = room.currentInteraction.pauseStartedAt || now;
+      const pauseDurationMs = Math.max(0, now - pauseStartedAt);
+      room.currentInteraction.pausedDurationMs = (room.currentInteraction.pausedDurationMs || 0) + pauseDurationMs;
       room.currentInteraction.zoomResolvedCorrect = true;
-      room.currentInteraction.zoomFastRevealStartAt = Date.now();
+      room.currentInteraction.zoomFastRevealStartAt = now;
       room.currentInteraction.pauseStartedAt = null;
       syncRoom(room);
       return;
@@ -2051,15 +2093,6 @@ io.on('connection', (socket) => {
 
     markPlayerPresence(player, 'waiting');
 
-    if (room.adminId === socket.id && room.players.length > 1) {
-      const fallbackAdmin = room.players.find((p) => p.id !== socket.id && p.connected !== false && !p.isWaiting && !p.isDisconnected);
-      if (fallbackAdmin) {
-        room.adminId = fallbackAdmin.id;
-        console.log(`👑 temporary admin reassigned on disconnect in room ${room.id}:`, room.adminId);
-        syncRoom(room);
-      }
-    }
-
     syncRoom(room);
 
     // A disconnected player gets a grace period to reconnect with the same session token.
@@ -2073,6 +2106,14 @@ io.on('connection', (socket) => {
         }
 
         markPlayerPresence(latest.player, 'disconnected');
+        const previousAdminId = latest.room.adminId;
+        if (previousAdminId === latest.player.id) {
+          const nextAdminId = pickNextAdminId(latest.room, latest.player.id);
+          if (nextAdminId) {
+            latest.room.adminId = nextAdminId;
+            console.log(`👑 admin reassigned after disconnect timeout in room ${latest.room.id}: ${previousAdminId} -> ${nextAdminId}`);
+          }
+        }
         syncRoom(latest.room);
 
         pendingDisconnectTimers.delete(player.sessionToken);
@@ -2084,6 +2125,14 @@ io.on('connection', (socket) => {
     }
 
     markPlayerPresence(player, 'disconnected');
+    const previousAdminId = room.adminId;
+    if (previousAdminId === player.id) {
+      const nextAdminId = pickNextAdminId(room, player.id);
+      if (nextAdminId) {
+        room.adminId = nextAdminId;
+        console.log(`👑 admin reassigned after disconnect in room ${room.id}: ${previousAdminId} -> ${nextAdminId}`);
+      }
+    }
     syncRoom(room);
   });
 });

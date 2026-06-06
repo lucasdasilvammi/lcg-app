@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "updatedAt": "2026-06-06T09:29:47.936Z",
+  "validations": [
+    {
+      "id": "todo-technique-validation-faire-un-test-de-reconnexion-refresh-fermeture-onglet-crash-simule-ret-e5ea97284714",
+      "title": "test de reconnexion : refresh, fermeture onglet, cras...",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A tester",
+      "validatedAt": "2026-06-06T09:29:28.985Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 271,
+        "section": "Technique / validation",
+        "taskText": "Faire un test de reconnexion : refresh, fermeture onglet, crash simulé, retour dans la room.",
+        "markdown": "- [ ] Faire un test de reconnexion : refresh, fermeture onglet, crash simulé, retour dans la room."
+      }
+    },
+    {
+      "id": "todo-technique-validation-tester-l-activite-commune-surtout-l-import-prise-de-photo-sur-chrome-m-14fdb5c7753f",
+      "title": "l'activité commune, surtout l'import / prise de photo...",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A tester",
+      "validatedAt": "2026-06-06T09:29:47.922Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 270,
+        "section": "Technique / validation",
+        "taskText": "Tester l'activité commune, surtout l'import / prise de photo, sur Chrome mobile.",
+        "markdown": "- [ ] Tester l'activité commune, surtout l'import / prise de photo, sur Chrome mobile."
+      }
+    }
+  ]
+}

@@ -1,12 +1,17 @@
-import React from 'react'
+import React, { useState } from 'react'
 import QuizAnswerButton from '../../components/QuizAnswerButton'
 import ButtonWithIcon from '../../components/ButtonWithIcon'
 import CharacterCard from '../../components/CharacterCard'
 import ScoreBar from '../../components/ScoreBar'
 
 export default function Interaction({ roomData, resolveInteraction, playerBuzz, currentUserId }) {
-  if (!roomData || !roomData.currentInteraction) return null
-  const { type, data, readerId } = roomData.currentInteraction
+  const [selectedAnswer, setSelectedAnswer] = useState({ key: '', index: null })
+  const interaction = roomData?.currentInteraction || null
+  const { type, data, readerId } = interaction || {}
+  const selectionKey = `${type || ''}|${readerId || ''}|${data?.q || ''}`
+  const selectedAnswerIndex = selectedAnswer.key === selectionKey ? selectedAnswer.index : null
+
+  if (!roomData || !interaction) return null
 
   if (type === 'QUIZ') {
     const isMeReader = readerId === currentUserId
@@ -65,11 +70,13 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
               <p className="text-2xl font-medium font-family-funnel">{data.q}</p>
               <div className="flex flex-col gap-3 w-full">
                 {data.options.map((option, index) => {
+                  const isSelected = selectedAnswerIndex === index
+                  const isFaded = selectedAnswerIndex !== null && !isSelected
                   return (
                     <QuizAnswerButton
-                      className='bg-light'
+                      className={`bg-light transition ${isSelected ? 'translate-x-1 scale-[1.01]' : ''} ${isFaded ? 'opacity-35 grayscale' : ''}`}
                       key={index}
-                      onClick={() => resolveInteraction({ correct: index === data.correct, selectedIndex: index })}
+                      onClick={() => setSelectedAnswer({ key: selectionKey, index })}
                       label={['A','B','C'][index]}
                       text={option}
                     />
@@ -96,7 +103,16 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
             </div>
           )}
 
-          {isMeReader && <ButtonWithIcon onClick={() => {}} text="Suivant" className="opacity-0 pointer-events-none" />}
+          {isMeReader && (
+            <ButtonWithIcon
+              onClick={() => {
+                if (selectedAnswerIndex === null) return
+                resolveInteraction({ correct: selectedAnswerIndex === data.correct, selectedIndex: selectedAnswerIndex })
+              }}
+              text="Valider"
+              disabled={selectedAnswerIndex === null}
+            />
+          )}
           {!isMeReader && <ScoreBar players={roomData.players} currentUserId={currentUserId} bleed />}
         </div>
       </div>

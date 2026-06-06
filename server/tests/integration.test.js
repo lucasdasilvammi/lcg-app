@@ -23,6 +23,24 @@ const stopServer = () => new Promise((resolve) => {
   serverProcess.on('close', () => resolve())
 })
 
+const waitForRoomState = (client, predicate, timeoutMs = 4000) => new Promise((resolve, reject) => {
+  const timeout = setTimeout(() => {
+    client.off('update_room_state', handleState)
+    reject(new Error('Timed out waiting for matching room state'))
+  }, timeoutMs)
+  const handleState = (room) => {
+    if (!predicate(room)) return
+    clearTimeout(timeout)
+    client.off('update_room_state', handleState)
+    resolve(room)
+  }
+  client.on('update_room_state', handleState)
+})
+
+const emitWithAck = (client, event, payload) => new Promise((resolve) => {
+  client.emit(event, payload, resolve)
+})
+
 const getMaxConsecutiveRun = (code) => {
   let maxRun = 0
   let currentRun = 0
@@ -141,6 +159,105 @@ test('public room codes stay simple and unique for concurrent rooms', async () =
     expect(code).toHaveLength(5)
     expect(new Set(code).size).toBeLessThanOrEqual(3)
     expect(getMaxConsecutiveRun(code)).toBeGreaterThanOrEqual(3)
+  })
+
+  clients.forEach((client) => client.disconnect())
+})
+
+test('four-player activity keeps photo counters and vote timing synchronized', async () => {
+  await startServer()
+
+  const clients = await Promise.all(
+    Array.from({ length: 4 }, async () => {
+      const client = io.connect('http://localhost:3001')
+      await new Promise((resolve) => client.on('connect', resolve))
+      return client
+    })
+  )
+  const [admin, ...guests] = clients
+
+  const roomCode = await new Promise((resolve) => {
+    admin.emit('create_room')
+    admin.once('room_created', (data) => resolve(data.code))
+  })
+  for (const guest of guests) {
+    await new Promise((resolve) => {
+      guest.emit('join_room_with_code', roomCode)
+      guest.once('room_joined', resolve)
+    })
+  }
+
+  const briefStatePromise = waitForRoomState(admin, (room) => room.status === 'ACTIVITE_BRIEF')
+  admin.emit('trigger_action', 'ACTIVITE')
+  await briefStatePromise
+
+  const creationStatePromise = waitForRoomState(admin, (room) => room.status === 'ACTIVITE_CREATION')
+  clients.forEach((client) => client.emit('activite_acknowledge_ready'))
+  await creationStatePromise
+
+  const uploadStatePromise = waitForRoomState(admin, (room) => room.status === 'ACTIVITE_UPLOAD')
+  clients.forEach((client) => client.emit('activite_submit_drawing'))
+  await uploadStatePromise
+
+  for (const client of clients.slice(0, -1)) {
+    const response = await emitWithAck(client, 'activite_submit_photo', {
+      photoData: `data:image/jpeg;base64,photo-${client.id}`
+    })
+    expect(response.ok).toBe(true)
+  }
+
+  const voteStatePromises = clients.map((client) => waitForRoomState(
+    client,
+    (room) => room.status === 'ACTIVITE_VOTE'
+      && room.currentInteraction?.uploadedPhotoCount === 4
+  ))
+  const lastPhotoResponse = await emitWithAck(clients.at(-1), 'activite_submit_photo', {
+    photoData: `data:image/jpeg;base64,photo-${clients.at(-1).id}`
+  })
+  expect(lastPhotoResponse.ok).toBe(true)
+
+  const voteStates = await Promise.all(voteStatePromises)
+  const referenceVote = voteStates[0].currentInteraction
+  expect(referenceVote.participantCount).toBe(4)
+  expect(referenceVote.uploadedPhotoCount).toBe(4)
+  expect(Object.keys(referenceVote.uploadedPhotos)).toHaveLength(4)
+  expect(referenceVote.voteEndsAt - referenceVote.voteStartedAt).toBe(12000)
+  voteStates.forEach((room) => {
+    expect(room.currentInteraction.currentPhotoIndex).toBe(referenceVote.currentPhotoIndex)
+    expect(room.currentInteraction.voteRoundId).toBe(referenceVote.voteRoundId)
+    expect(room.currentInteraction.voteStartedAt).toBe(referenceVote.voteStartedAt)
+    expect(room.currentInteraction.voteEndsAt).toBe(referenceVote.voteEndsAt)
+  })
+
+  const refreshedStatePromise = waitForRoomState(
+    clients[2],
+    (room) => room.currentInteraction?.voteRoundId === referenceVote.voteRoundId
+  )
+  clients[2].emit('request_room_state')
+  const refreshedState = await refreshedStatePromise
+  expect(refreshedState.currentInteraction.uploadedPhotoCount).toBe(4)
+
+  const currentPhoto = referenceVote.photos[referenceVote.currentPhotoIndex]
+  const eligibleVoters = clients.filter((client) => client.id !== currentPhoto.playerId)
+  const tightenedStatePromises = clients.map((client) => waitForRoomState(
+    client,
+    (room) => room.currentInteraction?.voteDurationMs === 3000
+      && room.currentInteraction?.voteRoundId > referenceVote.voteRoundId
+  ))
+  eligibleVoters.forEach((client) => {
+    client.emit('activite_vote', {
+      photoIndex: referenceVote.currentPhotoIndex,
+      voteType: 'neutral'
+    })
+  })
+
+  const tightenedStates = await Promise.all(tightenedStatePromises)
+  const tightenedVote = tightenedStates[0].currentInteraction
+  expect(tightenedVote.voteEndsAt - tightenedVote.voteStartedAt).toBe(3000)
+  tightenedStates.forEach((room) => {
+    expect(room.currentInteraction.voteRoundId).toBe(tightenedVote.voteRoundId)
+    expect(room.currentInteraction.voteStartedAt).toBe(tightenedVote.voteStartedAt)
+    expect(room.currentInteraction.voteEndsAt).toBe(tightenedVote.voteEndsAt)
   })
 
   clients.forEach((client) => client.disconnect())

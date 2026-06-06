@@ -467,7 +467,7 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
     return (
  <div className="relative w-full overflow-hidden bg-bg">
         <style>{ctrlZReminderStyles}</style>
- <div className="relative z-10 h-dvh w-full max-w-full mx-auto flex flex-col items-center gap-5 px-12 py-12 text-center">
+ <div className="relative z-10 h-dvh w-full max-w-full mx-auto flex flex-col items-center gap-5 px-10 py-8 text-center [@media(max-height:720px)]:gap-3 [@media(max-height:720px)]:py-5">
           {showCtrlZIndicator && (
             <div key={ctrlZTurnKey} className="absolute right-8 top-12 z-20">
               <button
@@ -489,43 +489,49 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
           </div>
 
  <div className={`flex w-full min-h-0 flex-1 flex-col font-family-hakobi text-xl text-bg uppercase ${canDeclareFinish ? 'overflow-x-hidden overflow-y-auto' : 'justify-center overflow-hidden'}`}>
-            <div className="flex w-full flex-col gap-4">
+            <div className="flex w-full flex-col gap-3 [@media(max-height:720px)]:gap-2.5">
             {canDeclareFinish && (
               <BigButton
                 onClick={handleDeclareFinish}
                 text="Terminer"
-                icon={<img src="/menu/icon/crown.svg" alt="arrivée" className="w-10 h-10" />}
+                compact
+                icon={<img src="/menu/icon/crown.svg" alt="arrivée" className="w-8 h-8" />}
                 className="bg-light text-bg"
               />
             )}
             <BigButton
               onClick={() => triggerAction("QUIZ")}
               text="Quizz"
- icon={<img src="/game/icons/cases/quizz.svg" alt="jalon" className="w-10 h-10" />}
+              compact
+ icon={<img src="/game/icons/cases/quizz.svg" alt="jalon" className="w-8 h-8" />}
               className="bg-yellow-primary"
             />
             <BigButton
               onClick={handleDefiClick}
               text="Défi"
- icon={<img src="/game/icons/cases/defi.svg" alt="jalon" className="w-10 h-10" />}
+              compact
+ icon={<img src="/game/icons/cases/defi.svg" alt="jalon" className="w-8 h-8" />}
               className="bg-blue-primary"
             />
             <BigButton
               onClick={() => triggerAction("ACTIVITE")}
               text="Activité"
- icon={<img src="/game/icons/cases/activite.svg" alt="jalon" className="w-10 h-10" />}
+              compact
+ icon={<img src="/game/icons/cases/activite.svg" alt="jalon" className="w-8 h-8" />}
               className="bg-orange-primary"
             />
             <BigButton
               onClick={() => triggerAction("BONUS")}
               text="Bonus"
- icon={<img src="/game/icons/cases/bonus.svg" alt="jalon" className="w-10 h-10" />}
+              compact
+ icon={<img src="/game/icons/cases/bonus.svg" alt="jalon" className="w-8 h-8" />}
               className="bg-green-primary"
             />
             <BigButton
               onClick={() => triggerAction("EVENT")}
               text="Évènement"
- icon={<img src="/game/icons/cases/evenement.svg" alt="jalon" className="w-10 h-10" />}
+              compact
+ icon={<img src="/game/icons/cases/evenement.svg" alt="jalon" className="w-8 h-8" />}
               className="bg-pink-primary"
             />
             </div>
