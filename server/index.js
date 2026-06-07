@@ -55,7 +55,9 @@ const {
   normalizeLogoActivityState,
   setLogoActivityVoteTiming
 } = require('./activityState');
+const { getLogoActivityOutcome } = require('./activityResult');
 const { isPauseAllowed, isUndoAllowed } = require('./phaseGuards');
+const { createPickDeadline, tightenPickDeadline } = require('./pickTiming');
 
 // Flattener la structure par catégorie en un array simple
 const QUIZ_DB = Object.keys(quizData)
@@ -608,22 +610,20 @@ io.on('connection', (socket) => {
       })
       .sort((a, b) => b.score - a.score);
 
-    const topScore = rankings[0]?.score ?? 0;
-    const hasWinningScore = topScore > 0;
-    const winnerId = hasWinningScore ? rankings[0]?.playerId : null;
-    const winner = winnerId ? room.players.find(p => p.id === winnerId) : null;
-    if (winner) {
-      winner.score += 2;
+    const outcome = getLogoActivityOutcome(rankings);
+    if (outcome.success) {
+      outcome.winnerIds.forEach((winnerId) => {
+        const winner = room.players.find(p => p.id === winnerId);
+        if (winner) winner.score += outcome.points;
+      });
     }
 
     room.lastResult = {
       type: 'logo',
       brandName: ci.brandName,
       rankings,
-      winnerId,
-      points: hasWinningScore ? 2 : 0,
-      success: hasWinningScore,
-      bossFeedback: hasWinningScore ? null : "Bande de nazes, vous n'arrivez même pas à vous départager entre vous.",
+      ...outcome,
+      feedbackWinnerIndex: 0,
       questionerId: ci.questionerId || room.players[room.turnIndex]?.id
     };
 
@@ -1410,6 +1410,8 @@ io.on('connection', (socket) => {
     if (allAcknowledged) {
       if (room.currentInteraction.type === 'zoom') {
         room.currentInteraction.zoomStartAt = Date.now() + 3000;
+      } else if (room.currentInteraction.type === 'pick') {
+        room.currentInteraction.pickEndsAt = createPickDeadline();
       }
       room.status = "DUEL_GAME";
     }
@@ -1683,6 +1685,9 @@ io.on('connection', (socket) => {
 
     room.currentInteraction.submittedColors[playerId] = color;
     room.currentInteraction.submissionOrder.push(playerId);
+    room.currentInteraction.pickEndsAt = tightenPickDeadline(
+      room.currentInteraction.pickEndsAt
+    );
 
     const allSubmitted = duelists.every(id => room.currentInteraction.submittedColors[id] !== undefined);
 
@@ -2056,6 +2061,11 @@ io.on('connection', (socket) => {
   socket.on("continue_to_feedback", () => {
     const room = findRoom();
     if (room) {
+      if (room.status === 'ACTIVITE_REVEAL' && room.lastResult?.type === 'logo') {
+        const nextPlayer = room.players[(room.turnIndex + 1) % room.players.length];
+        if (nextPlayer?.id !== socket.id) return;
+      }
+
       // record who clicked 'voir le verdict' so only that player can advance
       if (room.lastResult) {
         room.lastResult.verdictViewerId = socket.id;
@@ -2076,6 +2086,22 @@ io.on('connection', (socket) => {
   socket.on("next_turn", () => {
     const room = findRoom();
     if (!room) return;
+    if (room.status === 'FEEDBACK' && room.lastResult?.type === 'logo') {
+      const nextPlayer = room.players[(room.turnIndex + 1) % room.players.length];
+      if (nextPlayer?.id !== socket.id) return;
+    }
+
+    if (room.status === 'FEEDBACK' && room.lastResult?.type === 'logo' && Array.isArray(room.lastResult.winnerIds)) {
+      const currentIndex = room.lastResult.feedbackWinnerIndex || 0;
+      const nextWinnerId = room.lastResult.winnerIds[currentIndex + 1];
+      if (nextWinnerId) {
+        room.lastResult.feedbackWinnerIndex = currentIndex + 1;
+        room.lastResult.winnerId = nextWinnerId;
+        syncRoom(room);
+        return;
+      }
+    }
+
     const activePlayer = room.players[room.turnIndex];
     if (room.status === 'TURN_START' && activePlayer?.skipNextTurn) {
       delete activePlayer.skipNextTurn;

@@ -10,7 +10,7 @@ import { pronoun } from '../utils/frenchGrammar'
 
 const CTRL_Z_BONUS = BONUS_CATALOG.find((bonus) => bonus.id === 'ctrl-z')
 const CTRL_Z_REMINDER_DURATION = 3000
-const FINISH_REMINDER_DURATION = 7000
+const FINISH_REMINDER_DURATION = 4500
 const REMINDER_EXIT_DURATION = 250
 const TOP_BORDER_MASK_STYLE = {
   WebkitMaskImage: 'url(/menu/menu-border-top.svg)',
@@ -471,7 +471,7 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
     return (
  <div className="relative w-full overflow-hidden bg-bg">
         <style>{ctrlZReminderStyles}</style>
- <div className="relative z-10 h-dvh w-full max-w-full mx-auto flex flex-col items-center gap-5 px-10 py-10 text-center [@media(max-height:760px)]:gap-3">
+ <div className="relative z-10 flex h-dvh w-full flex-col justify-center gap-8 overflow-y-auto px-10 py-8 text-center [@media(max-height:760px)]:gap-4">
           {showCtrlZIndicator && (
             <div key={ctrlZTurnKey} className="absolute right-8 top-12 z-20">
               <button
@@ -487,13 +487,13 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
 
           <div className="flex flex-col gap-2 items-center">
             <CharacterCard charId={activePlayer.character} size="low" />
- <p className="text-2xl text-light font-family-funnel">
+ <p className="font-family-funnel text-2xl text-light [@media(max-height:760px)]:text-xl">
               {hasUsedCtrlZThisTurn ? <>Maintenant que tu as relancé, sur quelle case<br/>es-tu tombé ?</> : <>Sur quelle case<br/>es-tu tombé ?</>}
             </p>
           </div>
 
- <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-x-hidden overflow-y-auto font-family-hakobi text-xl uppercase text-bg">
-            <div className="flex w-full flex-col gap-3 [@media(max-height:760px)]:gap-2.5">
+ <div className="flex w-full flex-col justify-center overflow-hidden font-family-hakobi text-xl uppercase text-bg">
+            <div className="flex w-full flex-col gap-3 overflow-y-auto overflow-x-hidden">
             {canDeclareFinish && (
               <BigButton
                 onClick={handleDeclareFinish}

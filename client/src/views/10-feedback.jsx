@@ -30,6 +30,8 @@ const FAILURE_FEEDBACK_TEXTS = [
   "Pas validé. C'était presque convaincant, ce qui est déjà dangereux."
 ]
 
+const NO_ACTIVITY_WINNER_MESSAGE = "Bande de nazes, vous n'arrivez même pas à vous départager entre vous. Pour la peine, personne ne remportera de jalons sur cette manche !"
+
 const pickFeedbackText = (texts, seedParts) => {
   const seed = seedParts.filter(part => part !== undefined && part !== null).join('|')
   let hash = 0
@@ -46,10 +48,15 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
   if (!roomData || !roomData.lastResult) return null
 
   const { lastResult } = roomData
-  const winner = lastResult.winnerId ? roomData.players.find(p => p.id === lastResult.winnerId) : null
-  const answeringPlayer = roomData.players[roomData.turnIndex]
   const isLogoActivity = lastResult.type === 'logo'
-  const isLogoFailure = isLogoActivity && !lastResult.success
+  const isLogoFailure = isLogoActivity && (
+    lastResult.feedbackVariant === 'no-winner'
+    || !lastResult.success
+  )
+  const winner = !isLogoFailure && lastResult.winnerId
+    ? roomData.players.find(p => p.id === lastResult.winnerId)
+    : null
+  const answeringPlayer = roomData.players[roomData.turnIndex]
 
   const buzzedPlayerCharacter = roomData.lastResult?.buzzedPlayerCharacter
   const buzzedPlayer = buzzedPlayerCharacter ? { character: buzzedPlayerCharacter } : null
@@ -101,7 +108,7 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
 
   const subtitleText = isLogoActivity
     ? (isLogoFailure
-      ? (lastResult.bossFeedback || "Bande de nazes, vous n'arrivez même pas à vous départager entre vous.")
+      ? (lastResult.bossFeedback || NO_ACTIVITY_WINNER_MESSAGE)
       : `${formatCharacterName(winner?.character || '')} remporte le brief logo ! ${successFeedbackText}`)
     : (lastResult.type === 'pick'
       ? `${formatCharacterName(winner?.character || '')} avait l'oeil le plus aiguise ! ${successFeedbackText}`

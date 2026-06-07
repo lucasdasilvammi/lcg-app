@@ -68,7 +68,9 @@ const {
   normalizeLogoActivityState,
   setLogoActivityVoteTiming
 } = require('./server/activityState');
+const { getLogoActivityOutcome } = require('./server/activityResult');
 const { isPauseAllowed, isUndoAllowed } = require('./server/phaseGuards');
+const { createPickDeadline, tightenPickDeadline } = require('./server/pickTiming');
 
 // Flatten quiz database
 const QUIZ_DB = Object.keys(quizData)
@@ -1143,18 +1145,12 @@ io.on('connection', (socket) => {
       })
       .sort((a, b) => b.score - a.score);
 
-    const topScore = rankings[0]?.score ?? 0;
-    const hasWinningScore = topScore > 0;
-    const winnerIds = hasWinningScore
-      ? rankings
-        .filter(rank => rank.score === topScore)
-        .map(rank => rank.playerId)
-      : [];
+    const outcome = getLogoActivityOutcome(rankings);
 
-    if (hasWinningScore) {
-      winnerIds.forEach((winnerId) => {
+    if (outcome.success) {
+      outcome.winnerIds.forEach((winnerId) => {
         const winner = room.players.find(p => p.id === winnerId);
-        if (winner) winner.score += 2; // 2 jalons pour chaque meilleure réalisation
+        if (winner) winner.score += outcome.points;
       });
     }
 
@@ -1162,12 +1158,8 @@ io.on('connection', (socket) => {
       type: 'logo',
       brandName: ci.brandName,
       rankings,
-      winnerId: winnerIds[0] || null,
-      winnerIds,
+      ...outcome,
       feedbackWinnerIndex: 0,
-      points: hasWinningScore ? 2 : 0,
-      success: hasWinningScore,
-      bossFeedback: hasWinningScore ? null : "Bande de nazes, vous n'arrivez même pas à vous départager entre vous.",
       questionerId: ci.questionerId || room.players[room.turnIndex]?.id
     };
 
@@ -2275,6 +2267,8 @@ io.on('connection', (socket) => {
     if (allAcknowledged) {
       if (room.currentInteraction.type === 'zoom') {
         room.currentInteraction.zoomStartAt = Date.now() + 3000;
+      } else if (room.currentInteraction.type === 'pick') {
+        room.currentInteraction.pickEndsAt = createPickDeadline();
       }
       room.status = 'DUEL_GAME';
     }
@@ -2378,6 +2372,9 @@ io.on('connection', (socket) => {
 
     room.currentInteraction.submittedColors[playerId] = color;
     room.currentInteraction.submissionOrder.push(playerId);
+    room.currentInteraction.pickEndsAt = tightenPickDeadline(
+      room.currentInteraction.pickEndsAt
+    );
 
     const allSubmitted = duelists.every(id => room.currentInteraction.submittedColors[id] !== undefined);
 

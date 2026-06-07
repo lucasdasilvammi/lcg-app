@@ -2,6 +2,7 @@ import React from 'react'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import CharacterTag from '../../../components/CharacterTag'
 import DuelNavbar from './DuelNavbar'
+import { getDuelRewardPoints } from './duelReward'
 
 export default function DuelRules({ roomData, currentUserId, acknowledgeRules }) {
   if (!roomData || !roomData.currentInteraction) return null
@@ -9,6 +10,7 @@ export default function DuelRules({ roomData, currentUserId, acknowledgeRules })
   const { type, duelists, readerId } = roomData.currentInteraction
   const duelPlayers = roomData.players.filter(p => duelists.includes(p.id))
   const readerPlayer = roomData.players.find(p => p.id === readerId)
+  const rewardPoints = getDuelRewardPoints(roomData.currentInteraction)
   
   const getRulesContent = () => {
     switch(type) {
@@ -17,8 +19,8 @@ export default function DuelRules({ roomData, currentUserId, acknowledgeRules })
           title: 'DÉFI BUZZER',
           rules: [
             'Le défi Buzzer est une épreuve de rapidité.',
-            'Le premier à répondre juste : gagne le défi, remporte 3 jalons.',
-            'Si le premier se trompe : son adversaire remporte les 3 jalons.'
+            `Le premier à répondre juste gagne le défi et remporte ${rewardPoints} jalons.`,
+            `Si le premier se trompe, son adversaire remporte les ${rewardPoints} jalons.`
           ],
           hint: 'Vous pouvez buzzer avant la fin de la question, le lecteur doit alors immédiatement stopper la lecture.'
         }
@@ -28,7 +30,7 @@ export default function DuelRules({ roomData, currentUserId, acknowledgeRules })
           rules: [
             'Le défi Chiffres est une épreuve d’estimation.',
             'Chaque joueur entre une valeur libre.',
-            'Le joueur dont la valeur est la plus proche de la bonne réponse gagne le défi et remporte 3 jalons.'
+            `Le joueur dont la valeur est la plus proche de la bonne réponse gagne le défi et remporte ${rewardPoints} jalons.`
           ],
           hint: null
         }
@@ -38,8 +40,8 @@ export default function DuelRules({ roomData, currentUserId, acknowledgeRules })
           rules: [
             'Le défi Pick est une épreuve de perception visuelle.',
             'Les deux joueurs doivent pick la même couleur cible.',
-            'À la fin du temps imparti, le joueur dont la couleur est la plus proche de la couleur cible gagne le défi et remporte 3 jalons.',
-            'Si l’un des joueurs valide sa couleur avant la fin du chrono, son adversaire n’a plus que 5 secondes pour ajuster sa couleur avant qu’elle soit verrouillée.'
+            `À la fin du temps imparti, le joueur dont la couleur est la plus proche de la couleur cible gagne le défi et remporte ${rewardPoints} jalons.`,
+            'Si un joueur valide alors qu’il reste plus de 5 secondes, son adversaire n’a plus que 5 secondes. S’il reste moins de 5 secondes, le chrono ne change pas.'
           ],
           hint: null
         }
@@ -48,8 +50,8 @@ export default function DuelRules({ roomData, currentUserId, acknowledgeRules })
           title: 'DÉFI ZOOM',
           rules: [
             'Le défi Zoom est une épreuve d’observation et de rapidité.',
-            'Le premier joueur à buzzer et à donner la bonne réponse gagne le défi et remporte 2 jalons.',
-            'En cas de mauvaise réponse, son adversaire remporte immédiatement les 2 jalons.',
+            `Le premier joueur à buzzer et à donner la bonne réponse gagne le défi et remporte ${rewardPoints} jalons.`,
+            `En cas de mauvaise réponse, son adversaire remporte immédiatement les ${rewardPoints} jalons.`,
             'Si personne ne buzz après 15 secondes de dézoom, le reader reçoit 3 propositions pour aider le duel.'
           ],
           hint: 'Le lecteur valide oralement la réponse du joueur qui a buzzé avant de relancer le défi.'
@@ -59,8 +61,8 @@ export default function DuelRules({ roomData, currentUserId, acknowledgeRules })
           title: 'DÉFI',
           rules: [
             'Le défi Vrai ou Faux est une épreuve de rapidité et de réactivité.',
-            'Le premier à donner la bonne réponse gagne le défi, remporte 3 jalons.',
-            'Si le premier se trompe : son adversaire remporte les 3 jalons.'
+            `Le premier à donner la bonne réponse gagne le défi et remporte ${rewardPoints} jalons.`,
+            `Si le premier se trompe, son adversaire remporte les ${rewardPoints} jalons.`
           ],
           hint: 'Vous pouvez buzzer avant la fin de la question, le lecteur doit alors immédiatement stopper la lecture.'
         }
@@ -78,7 +80,12 @@ export default function DuelRules({ roomData, currentUserId, acknowledgeRules })
  <div className="relative w-full overflow-hidden bg-bg">
  <div className="relative mx-auto flex h-dvh app-screen-y w-full max-w-full flex-col items-center justify-between gap-6 px-8 text-center">
  <div className='flex min-h-0 w-full flex-1 flex-col gap-8'>
-          <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
+          <DuelNavbar
+            duelPlayers={duelPlayers}
+            type={type}
+            diff={rewardPoints}
+            className="-mx-2 w-[calc(100%+1rem)]"
+          />
 
           <div className="flex min-h-0 flex-1 flex-col items-center gap-4">
  <h1 className="text-5xl font-hakobi uppercase text-light">quelques règles</h1>

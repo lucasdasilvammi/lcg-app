@@ -4,6 +4,24 @@
 
 ---
 
+## Dimanche 7 Juin 2026 - Ajustements workshop 8.3
+
+### Choix de case et popup boss
+- Centrage global du bloc personnage, question et types de cases conservé.
+- Texte de la question réduit avec les boutons uniquement sur les écrans courts.
+- Popup d'arrivée au bureau du boss raccourcie à 4,5 secondes.
+
+### Défis
+- Padding horizontal de la navbar des règles aligné sur les autres écrans.
+- Nombre de jalons de l'intro et des règles branché sur la récompense réelle du défi.
+- Timer ColorPick synchronisé sur une échéance serveur commune, sans remise à 15 secondes ni ajout de temps sous les 5 secondes.
+- Vue reader du Zoom allégée avec une image plus petite, le tag de proposition retiré sur les choix et le bouton `Valider` ajusté à son contenu.
+
+### Activité commune
+- Résultat sans gagnant centralisé pour afficher le même feedback à tous les joueurs.
+- Message complété pour préciser qu'aucun jalon n'est remporté sur la manche.
+- À faire quand les fichiers seront fournis : remplacer l'avatar temporaire par le vrai boss et appliquer sa couleur au véritable écran feedback.
+
 ## Samedi 6 Juin 2026 - Finitions UX et verrouillage des phases
 
 ### Parcours et affichage

@@ -712,7 +712,7 @@ function AppContent() {
         ) : roomData.currentInteraction.type === 'chiffres' ? (
           <ChiffresGame roomData={roomData} currentUserId={socket?.id} />
         ) : roomData.currentInteraction.type === 'pick' ? (
-          <PickGame roomData={roomData} currentUserId={socket?.id} />
+          <PickGame roomData={roomData} currentUserId={socket?.id} serverClockOffsetMs={serverClockOffsetMs} />
         ) : roomData.currentInteraction.type === 'zoom' ? (
           <ZoomGame roomData={roomData} currentUserId={socket?.id} playerBuzz={playerBuzz} zoomReaderVerdict={zoomReaderVerdict} continueToFeedback={continueToFeedback} serverClockOffsetMs={serverClockOffsetMs} />
         ) : (

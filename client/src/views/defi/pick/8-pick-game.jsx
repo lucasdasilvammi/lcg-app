@@ -25,10 +25,10 @@ const hslToHex = (h, s, l) => {
   return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`.toUpperCase()
 }
 
-export default function PickGame({ roomData, currentUserId }) {
+export default function PickGame({ roomData, currentUserId, serverClockOffsetMs = 0 }) {
   const { socket } = useSocket()
   const interaction = roomData?.currentInteraction
-  const { type, duelists = [], data } = interaction || {}
+  const { type, duelists = [], data, pickEndsAt } = interaction || {}
   const roomPlayers = roomData?.players || []
   const duelPlayers = roomPlayers.filter(p => duelists.includes(p.id))
   const isDuelist = duelists.includes(currentUserId)
@@ -54,23 +54,33 @@ export default function PickGame({ roomData, currentUserId }) {
   const squareRef = useRef(null)
   const canvasRef = useRef(null)
   const deadlineRef = useRef(0)
-  const spectatorDeadlineRef = useRef(0)
   const pickedColorRef = useRef(null)
   const autoSubmitRef = useRef(false)
 
   const pickedColor = hslToHex(hue, saturation, lightness)
   const timerCharId = countdown !== null && countdown <= 5 ? 'virginie' : 'lucien'
   const spectatorTimerCharId = spectatorCountdown !== null && spectatorCountdown <= 5 ? 'virginie' : 'lucien'
+  const getSyncedNow = useCallback(
+    () => Date.now() + serverClockOffsetMs,
+    [serverClockOffsetMs]
+  )
 
   useEffect(() => {
     pickedColorRef.current = pickedColor
   }, [pickedColor])
 
   useEffect(() => {
-    const initialDeadline = Date.now() + 15000
-    deadlineRef.current = initialDeadline
-    spectatorDeadlineRef.current = initialDeadline
-  }, [interaction])
+    const now = getSyncedNow()
+    const deadline = Number.isFinite(pickEndsAt) ? pickEndsAt : now + 15000
+    const remainingSeconds = Math.max(0, Math.ceil((deadline - now) / 1000))
+    deadlineRef.current = deadline
+    autoSubmitRef.current = false
+    const timer = window.setTimeout(() => {
+      setCountdown(remainingSeconds)
+      setSpectatorCountdown(remainingSeconds)
+    }, 0)
+    return () => window.clearTimeout(timer)
+  }, [pickEndsAt, getSyncedNow])
 
   // Dessiner le gradient du carré sur canvas
   useEffect(() => {
@@ -119,33 +129,20 @@ export default function PickGame({ roomData, currentUserId }) {
     return () => window.clearTimeout(timer)
   }, [interaction, currentUserId, isSpectator, duelists])
 
-  // Countdown pour spectateurs quand un joueur a soumis
   useEffect(() => {
-    if (!isSpectator) return
-
-    const oneSubmitted = player1Submitted || player2Submitted
-    const bothSubmitted = player1Submitted && player2Submitted
-
-    if (oneSubmitted && !bothSubmitted) {
-      spectatorDeadlineRef.current = Math.min(spectatorDeadlineRef.current, Date.now() + 5000)
-    } else if (bothSubmitted) {
+    if (!isSpectator) return undefined
+    if (player1Submitted && player2Submitted) {
       const timer = window.setTimeout(() => setSpectatorCountdown(null), 0)
       return () => window.clearTimeout(timer)
     }
-    return undefined
-  }, [player1Submitted, player2Submitted, isSpectator])
-
-  // Timer pour spectator countdown
-  useEffect(() => {
-    if (!isSpectator || spectatorCountdown === null) return
 
     const interval = setInterval(() => {
-      const remainingSeconds = Math.max(0, Math.ceil((spectatorDeadlineRef.current - Date.now()) / 1000))
+      const remainingSeconds = Math.max(0, Math.ceil((deadlineRef.current - getSyncedNow()) / 1000))
       setSpectatorCountdown(remainingSeconds)
     }, 100)
 
     return () => clearInterval(interval)
-  }, [isSpectator, spectatorCountdown])
+  }, [isSpectator, player1Submitted, player2Submitted, pickEndsAt, getSyncedNow])
 
   const updateColorFromPosition = useCallback((clientX, clientY) => {
     if (!squareRef.current || hasSubmitted) return
@@ -218,15 +215,6 @@ export default function PickGame({ roomData, currentUserId }) {
     })
   }
 
-  // Émettre notification opponent que j'ai submitté
-  useEffect(() => {
-    if (!isDuelist || !socket || !hasSubmitted) return
-    socket.emit('pick_opponent_submitted', {
-      playerId: currentUserId
-    })
-  }, [hasSubmitted, isDuelist, socket, currentUserId])
-
-  // Listener pour recevoir les mises à jour temps réel et événement opponent submit
   useEffect(() => {
     if (!socket) return
 
@@ -242,25 +230,16 @@ export default function PickGame({ roomData, currentUserId }) {
       }
     })
 
-    socket.on('pick_opponent_submitted', (data) => {
-      if (isDuelist && data.playerId !== currentUserId) {
-        deadlineRef.current = Math.min(deadlineRef.current, Date.now() + 5000)
-        setCountdown(Math.max(0, Math.ceil((deadlineRef.current - Date.now()) / 1000)))
-      }
-    })
-
     return () => {
       socket.off('pick_color_update')
-      socket.off('pick_opponent_submitted')
     }
-  }, [socket, isDuelist, currentUserId, duelists])
+  }, [socket, duelists])
 
-  // Countdown timer pour auto-submit après 5 secondes
   useEffect(() => {
-    if (!isDuelist || countdown === null || hasSubmitted) return
+    if (!isDuelist || hasSubmitted) return undefined
 
     const interval = setInterval(() => {
-      const remainingSeconds = Math.max(0, Math.ceil((deadlineRef.current - Date.now()) / 1000))
+      const remainingSeconds = Math.max(0, Math.ceil((deadlineRef.current - getSyncedNow()) / 1000))
       setCountdown(remainingSeconds)
 
       if (remainingSeconds <= 0 && socket && !autoSubmitRef.current) {
@@ -273,7 +252,7 @@ export default function PickGame({ roomData, currentUserId }) {
     }, 100)
 
     return () => clearInterval(interval)
-  }, [isDuelist, countdown, hasSubmitted, socket])
+  }, [isDuelist, hasSubmitted, socket, pickEndsAt, getSyncedNow])
 
   // Émettre les changements de couleur en temps réel
   useEffect(() => {

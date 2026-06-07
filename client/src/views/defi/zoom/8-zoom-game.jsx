@@ -154,7 +154,7 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
 
   const zoomImage = (
     <div className="flex w-full items-center justify-center">
-      <ZoomImageFrame className={isReaderOptionsVisible ? 'max-w-48' : (isMeReader ? 'max-w-72' : 'max-w-80 [@media(max-height:720px)]:max-w-64')}>
+      <ZoomImageFrame className={isReaderOptionsVisible ? 'max-w-40' : (isMeReader ? 'max-w-52 [@media(max-height:760px)]:max-w-44' : 'max-w-80 [@media(max-height:720px)]:max-w-64')}>
         <img
           src={data?.image}
           alt={data?.answer || 'Logo mystere'}
@@ -229,6 +229,7 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
             }}
             text="Valider"
             disabled={!buzzedPlayerId || selectedOptionIndex === null}
+            className="w-fit self-center"
           />
         </div>
       ) : isMeReader && buzzedPlayer ? (
@@ -299,12 +300,14 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
                 </div>
               )}
 
-              <div className="flex h-10 w-full items-center justify-center">
-                {isMeReader
-                  ? (readerBuzzedTag || <p className="font-funnel text-base text-light opacity-80">{helperText}</p>)
-                  : (buzzedTag || <p className="font-funnel text-base text-light opacity-80">{helperText}</p>)
-                }
-              </div>
+              {(!isMeReader || !isReaderOptionsVisible) && (
+                <div className="flex h-10 w-full items-center justify-center">
+                  {isMeReader
+                    ? (readerBuzzedTag || <p className="font-funnel text-base text-light opacity-80">{helperText}</p>)
+                    : (buzzedTag || <p className="font-funnel text-base text-light opacity-80">{helperText}</p>)
+                  }
+                </div>
+              )}
 
             </>
           )}

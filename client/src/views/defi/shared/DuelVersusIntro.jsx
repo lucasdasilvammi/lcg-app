@@ -198,7 +198,7 @@ function VersusBadge({ phase }) {
   )
 }
 
-export default function DuelVersusIntro({ duelPlayers, type, startDuel }) {
+export default function DuelVersusIntro({ duelPlayers, type, rewardPoints, startDuel }) {
   const [animationKey, setAnimationKey] = useState(0)
   const [phase, setPhase] = useState('entry')
   const [showLayers, setShowLayers] = useState(true)
@@ -325,7 +325,7 @@ export default function DuelVersusIntro({ duelPlayers, type, startDuel }) {
         className="relative z-20 flex flex-col items-center px-6"
         style={{ paddingTop: 'var(--app-screen-padding-top, 5rem)' }}
       >
-        <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
+        <DuelNavbar duelPlayers={duelPlayers} type={type} diff={rewardPoints} />
       </div>
 
       {showLayers && (
