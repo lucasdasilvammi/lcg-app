@@ -3,6 +3,7 @@ import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import CharacterCard from '../../../components/CharacterCard'
 import CharacterTag from '../../../components/CharacterTag'
 import DuelNavbar from '../shared/DuelNavbar'
+import { getOrderedDuelPlayers } from '../shared/duelPlayers'
 import QuizAnswerButton from '../../../components/QuizAnswerButton'
 import ScoreBar from '../../../components/ScoreBar'
 
@@ -15,7 +16,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, cur
 
   if (!roomData || !interaction) return null
 
-  const duelPlayers = roomData.players.filter(p => duelists.includes(p.id))
+  const duelPlayers = getOrderedDuelPlayers(roomData.players, duelists)
   
   const isMeReader = readerId === currentUserId
   const isDuelist = duelists.includes(currentUserId)
@@ -56,7 +57,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, cur
   // Support buzzer et vraioufaux
   if (type === 'buzzer' || type === 'vraioufaux') {
     return (
- <div className="bg-bg relative max-w-full flex flex-col justify-between items-center h-dvh app-screen-y defi-screen-y px-6 text-center">
+ <div className="bg-bg relative flex h-dvh max-w-full flex-col items-center justify-between gap-4 app-screen-y defi-screen-y px-6 text-center">
         {/* Navbar avec participants, tag défi et jalons */}
         <DuelNavbar duelPlayers={duelPlayers} type={type} diff={3} />
 
@@ -70,19 +71,19 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, cur
 
         {/* Question (visible par tous) */}
         {isSpectator ? (
-          <div className="relative flex flex-col items-center gap-8 w-full max-w-3xl">
+          <div className="flex min-h-0 w-full max-w-3xl flex-1 flex-col items-center justify-center gap-5">
             {/* Les 2 opposants pour les spectateurs */}
-            <div className="flex flex-col items-center justify-center gap-8 w-full">
+            <div className="flex w-full flex-col items-center justify-center gap-8 [@media(max-height:720px)]:gap-4">
               <CharacterCard charId={duelPlayers[0]?.character} size="horizontal" />
               <img src="/game/categorie/vs.png" alt="vs" className="h-20" />
               <CharacterCard charId={duelPlayers[1]?.character} size="horizontal" />
-              <div className='absolute -bottom-22'>
-                {hasSomeoneBuzzed && <CharacterTag charId={buzzedPlayer?.character} text="a buzzé !" />}
-              </div>
+            </div>
+            <div className="flex min-h-10 shrink-0 items-center justify-center">
+              {hasSomeoneBuzzed && <CharacterTag charId={buzzedPlayer?.character} text="a buzzé !" />}
             </div>
           </div>
         ) : isMeReader ? (
-          <div className="relative flex flex-col items-center gap-10 w-full max-w-3xl">
+          <div className="activity-scroll flex min-h-0 w-full max-w-3xl flex-1 flex-col items-center justify-center gap-5 overflow-y-auto py-2">
             <p className="text-2xl font-medium font-family-funnel text-light">{data.question}</p>
             <div className="flex flex-col gap-3 w-full">
               {(data.options || []).map((option, index) => (
@@ -96,12 +97,21 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, cur
                 />
               ))}
             </div>
-            <div className='absolute -bottom-24'>
+            <div className="flex min-h-10 shrink-0 items-center justify-center">
               {hasSomeoneBuzzed && <CharacterTag charId={buzzedPlayer?.character} text="a buzzé !" />}
             </div>
+            <ButtonWithIcon
+              onClick={() => {
+                if (selectedAnswerIndex === null) return
+                resolveInteraction({ correct: selectedAnswerIndex === data.correct, selectedIndex: selectedAnswerIndex })
+              }}
+              text="Valider"
+              className="w-fit shrink-0"
+              disabled={!hasSomeoneBuzzed || selectedAnswerIndex === null}
+            />
           </div>
         ) : (
-          <div className="flex flex-col justify-center items-center gap-8 w-full h-full max-w-3xl">
+          <div className="flex min-h-0 w-full max-w-3xl flex-1 flex-col items-center justify-center gap-8">
             {!isDuelist && <h2 className="text-3xl font-bold font-hakobi text-light">{data.question}</h2>}
             
             {/* Statut buzzer */}
@@ -151,20 +161,6 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, cur
           </div>
         )}
 
-        {/* Bouton Suivant (visible par tous après la validation) */}
-        {/* Bouton Suivant invisible pour le reader - préserve la mise en page */}
-        {isMeReader && (
-          <ButtonWithIcon 
-            onClick={() => {
-              if (selectedAnswerIndex === null) return
-              resolveInteraction({ correct: selectedAnswerIndex === data.correct, selectedIndex: selectedAnswerIndex })
-            }}
-            text="Valider"
-            className="w-fit"
-            disabled={!hasSomeoneBuzzed || selectedAnswerIndex === null}
-          />
-        )}
-        
         {/* Barre de score en bas (pas pour le reader ni les duellistes) */}
         {!isMeReader && !isDuelist && <ScoreBar players={roomData.players} currentUserId={currentUserId} bleed />}
         

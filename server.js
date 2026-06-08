@@ -69,6 +69,7 @@ const {
   setLogoActivityVoteTiming
 } = require('./server/activityState');
 const { getLogoActivityOutcome } = require('./server/activityResult');
+const { DUEL_REWARD_POINTS, getDuelRewardPoints } = require('./server/duelReward');
 const { isPauseAllowed, isUndoAllowed } = require('./server/phaseGuards');
 const { createPickDeadline, tightenPickDeadline } = require('./server/pickTiming');
 
@@ -331,7 +332,7 @@ const createRandomDuelInteraction = (room, initiatingPlayerId = null, forcedDuel
     duelists: [activePlayer.id, opponent.id],
     readerId: reader.id,
     buzzedPlayerId: null,
-    potentialPoints: isZoomDuel ? 2 : 3,
+    potentialPoints: DUEL_REWARD_POINTS,
     acknowledgedRules: [],
     ...(isZoomDuel
       ? {
@@ -2595,7 +2596,7 @@ io.on('connection', (socket) => {
       const winnerId = correct === true
         ? buzzedPlayerId
         : (duelists.find(id => id !== buzzedPlayerId) || null);
-      const points = room.currentInteraction.potentialPoints || 2;
+      const points = getDuelRewardPoints(room.currentInteraction);
 
       if (winnerId) {
         const winner = room.players.find(p => p.id === winnerId);
@@ -2629,7 +2630,7 @@ io.on('connection', (socket) => {
     }
 
     if (correct === true) {
-      const points = room.currentInteraction.potentialPoints || 2;
+      const points = getDuelRewardPoints(room.currentInteraction);
       const winnerId = buzzedPlayerId;
       const winner = room.players.find(p => p.id === winnerId);
       if (winner) winner.score += points;

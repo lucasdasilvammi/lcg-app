@@ -41,6 +41,10 @@ const SIZE_CONFIG = {
   mini: {
     image: 'w-20 h-20',
     title: 'text-3xl'
+  },
+  'vertical-small': {
+    image: 'h-16 w-16',
+    title: 'text-2xl'
   }
 }
 
@@ -160,7 +164,7 @@ export default function CharacterCard({
   }
 
   return (
-    <div className={`flex flex-col items-center ${size === 'mini' ? 'gap-1' : 'gap-2'}`}>
+    <div className={`flex flex-col items-center ${size === 'mini' || size === 'vertical-small' ? 'gap-1' : 'gap-2'}`}>
       <img
         src={`/game/${charId}.svg`}
         alt={charId}

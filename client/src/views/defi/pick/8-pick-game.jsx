@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from 'react'
 import DuelNavbar from '../shared/DuelNavbar'
+import { getOrderedDuelPlayers } from '../shared/duelPlayers'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import CharacterCard from '../../../components/CharacterCard'
 import CharacterTag from '../../../components/CharacterTag'
@@ -30,7 +31,7 @@ export default function PickGame({ roomData, currentUserId, serverClockOffsetMs 
   const interaction = roomData?.currentInteraction
   const { type, duelists = [], data, pickEndsAt } = interaction || {}
   const roomPlayers = roomData?.players || []
-  const duelPlayers = roomPlayers.filter(p => duelists.includes(p.id))
+  const duelPlayers = getOrderedDuelPlayers(roomPlayers, duelists)
   const isDuelist = duelists.includes(currentUserId)
   const isSpectator = !isDuelist
   const targetColor = data?.targetColor || '#4F46E5'

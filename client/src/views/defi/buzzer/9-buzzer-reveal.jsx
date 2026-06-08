@@ -1,6 +1,7 @@
 import React from 'react'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import DuelNavbar from '../shared/DuelNavbar'
+import { getOrderedDuelPlayers } from '../shared/duelPlayers'
 import QuizAnswerButton from '../../../components/QuizAnswerButton'
 
 export default function DuelReveal({ roomData, continueToFeedback, currentUserId }) {
@@ -8,7 +9,7 @@ export default function DuelReveal({ roomData, continueToFeedback, currentUserId
 
   const interaction = roomData.currentInteraction || {}
   const { type, data, readerId, duelists } = interaction
-  const duelPlayers = roomData.players.filter(p => duelists?.includes(p.id))
+  const duelPlayers = getOrderedDuelPlayers(roomData.players, duelists)
   
   const isMeReader = readerId === currentUserId
 

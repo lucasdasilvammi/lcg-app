@@ -2,13 +2,14 @@ import React from 'react'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import CharacterTag from '../../../components/CharacterTag'
 import DuelNavbar from './DuelNavbar'
+import { getOrderedDuelPlayers } from './duelPlayers'
 import { getDuelRewardPoints } from './duelReward'
 
 export default function DuelRules({ roomData, currentUserId, acknowledgeRules }) {
   if (!roomData || !roomData.currentInteraction) return null
   
   const { type, duelists, readerId } = roomData.currentInteraction
-  const duelPlayers = roomData.players.filter(p => duelists.includes(p.id))
+  const duelPlayers = getOrderedDuelPlayers(roomData.players, duelists)
   const readerPlayer = roomData.players.find(p => p.id === readerId)
   const rewardPoints = getDuelRewardPoints(roomData.currentInteraction)
   

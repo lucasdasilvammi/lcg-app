@@ -1,5 +1,6 @@
 import React from 'react'
 import DuelNavbar from '../shared/DuelNavbar'
+import { getOrderedDuelPlayers } from '../shared/duelPlayers'
 import CharacterCard from '../../../components/CharacterCard'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import DigitBox from './components/DigitBox'
@@ -9,7 +10,7 @@ export default function ChiffresReveal({ roomData, continueToFeedback, currentUs
 
   const { type, duelists, readerId, data } = roomData.currentInteraction
   const { player1Answer, player2Answer, correctAnswer, winnerId } = roomData.lastResult
-  const duelPlayers = roomData.players.filter(p => duelists.includes(p.id))
+  const duelPlayers = getOrderedDuelPlayers(roomData.players, duelists)
   const isMeReader = currentUserId === readerId
   
   const player1 = roomData.players.find(p => p.id === duelists[0])

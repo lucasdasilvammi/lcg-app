@@ -4,6 +4,25 @@
 
 ---
 
+## Dimanche 7 Juin 2026 - Ajustements workshop 8.4
+
+### Choix de case et navigateur
+- Scroll retiré du choix de case sur les écrans qui disposent de suffisamment de hauteur.
+- Scroll autorisé uniquement en mode compact si le contenu dépasse réellement la hauteur disponible.
+- Marqueurs `notranslate` retirés : ils ne peuvent pas garantir le blocage d'une traduction pilotée par le navigateur.
+
+### Défis et bonus
+- Top bar des défis vérifiée : les phases utilisent déjà la même hauteur, le décalage isolé est traité comme un cache navigateur.
+- Ordre des duellistes stabilisé entre l'animation, les règles, le jeu et le résultat pour tous les types de défis.
+- Récompense du défi Zoom harmonisée à 3 jalons côté serveur, règles et affichages.
+- Tags de buzz du Buzzer replacés dans le flux pour éviter les chevauchements avec le bouton et la barre de score.
+- Nouveau format vertical réduit pour le personnage sur l'écran `Va faire le café du boss`.
+
+### Activité photo
+- Message d'autorisation caméra raccourci.
+- Libellé `Réessayer la caméra` remplacé par `Réessayer`.
+- L'import conserve le sélecteur système, qui peut proposer la caméra externe selon le navigateur et l'appareil.
+
 ## Dimanche 7 Juin 2026 - Ajustements workshop 8.3
 
 ### Choix de case et popup boss

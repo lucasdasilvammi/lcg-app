@@ -3,6 +3,7 @@ import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import CharacterCard from '../../../components/CharacterCard'
 import CharacterTag from '../../../components/CharacterTag'
 import DuelNavbar from '../shared/DuelNavbar'
+import { getOrderedDuelPlayers } from '../shared/duelPlayers'
 import QuizAnswerButton from '../../../components/QuizAnswerButton'
 import ScoreBar from '../../../components/ScoreBar'
 
@@ -15,7 +16,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, cur
 
   if (!roomData || !interaction) return null
 
-  const duelPlayers = roomData.players.filter(p => duelists.includes(p.id))
+  const duelPlayers = getOrderedDuelPlayers(roomData.players, duelists)
   
   const isMeReader = readerId === currentUserId
   const isDuelist = duelists.includes(currentUserId)

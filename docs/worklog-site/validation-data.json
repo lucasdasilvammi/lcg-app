@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-06-06T09:29:47.936Z",
+  "updatedAt": "2026-06-07T14:25:13.087Z",
   "validations": [
     {
       "id": "todo-technique-validation-faire-un-test-de-reconnexion-refresh-fermeture-onglet-crash-simule-ret-e5ea97284714",
@@ -32,6 +32,426 @@
         "section": "Technique / validation",
         "taskText": "Tester l'activité commune, surtout l'import / prise de photo, sur Chrome mobile.",
         "markdown": "- [ ] Tester l'activité commune, surtout l'import / prise de photo, sur Chrome mobile."
+      }
+    },
+    {
+      "id": "session-human-review-evening-gameplay-2026-06-05",
+      "title": "Verifier en vraie partie la passe gameplay du 5 juin",
+      "source": "Session Codex",
+      "sourceType": "session",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T12:50:22.674Z",
+      "todoReference": null
+    },
+    {
+      "id": "session-human-review-bonus-2026-06-04",
+      "title": "Verifier humainement les corrections bonus en partie",
+      "source": "Session Codex",
+      "sourceType": "session",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T13:00:47.978Z",
+      "todoReference": null
+    },
+    {
+      "id": "todo-resume-d-avancement-gros-passage-de-test-bout-en-bout-a-3-et-4-joueurs-7a5b91c8ca53",
+      "title": "Gros passage de test bout en bout à 3 et 4 joueurs.",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A tester",
+      "validatedAt": "2026-06-07T13:24:31.164Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 27,
+        "section": "Résumé d'avancement",
+        "taskText": "Gros passage de test bout en bout à 3 et 4 joueurs.",
+        "markdown": "- [ ] Gros passage de test bout en bout à 3 et 4 joueurs."
+      }
+    },
+    {
+      "id": "todo-priorite-avant-v1-jouable-faire-une-session-test-complete-a-3-joueurs-creation-lobby-personnages-b87eb04c6967",
+      "title": "Session test 3 joueurs",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A tester",
+      "validatedAt": "2026-06-07T13:24:50.007Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 35,
+        "section": "Priorité avant V1 jouable",
+        "taskText": "Faire une session test complète à 3 joueurs : création, lobby, personnages, ordre, 1 round complet, classement, nouveau round.",
+        "markdown": "- [ ] Faire une session test complète à 3 joueurs : création, lobby, personnages, ordre, 1 round complet, classement, nouveau round."
+      }
+    },
+    {
+      "id": "todo-priorite-avant-v1-jouable-faire-une-session-test-complete-a-4-joueurs-3064f0d037a3",
+      "title": "Session test 4 joueurs",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A tester",
+      "validatedAt": "2026-06-07T13:25:05.679Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 36,
+        "section": "Priorité avant V1 jouable",
+        "taskText": "Faire une session test complète à 4 joueurs.",
+        "markdown": "- [ ] Faire une session test complète à 4 joueurs."
+      }
+    },
+    {
+      "id": "todo-retours-test-render-avant-v1-test-importer-les-8-nouveaux-logos-prepares-pour-le-defi-zoom-a73327b012f7",
+      "title": "Nouveaux logos Zoom",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "En attente",
+      "validatedAt": "2026-06-07T13:25:18.487Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 49,
+        "section": "Retours test Render - avant V1 test",
+        "taskText": "Importer les 8 nouveaux logos préparés pour le défi Zoom.",
+        "markdown": "- [ ] Importer les 8 nouveaux logos préparés pour le défi Zoom."
+      }
+    },
+    {
+      "id": "todo-retours-test-render-avant-v1-test-etendre-le-moteur-si-de-nouveaux-evenements-de-deplacement-sont-ajoute-15eeb66751f0",
+      "title": "Futurs events deplacement",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "En attente",
+      "validatedAt": "2026-06-07T13:31:03.485Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 63,
+        "section": "Retours test Render - avant V1 test",
+        "taskText": "Étendre le moteur si de nouveaux événements de déplacement sont ajoutés plus tard.",
+        "markdown": "- [ ] Étendre le moteur si de nouveaux événements de déplacement sont ajoutés plus tard."
+      }
+    },
+    {
+      "id": "todo-retours-test-render-avant-v1-test-verifier-et-corriger-le-fullscreen-double-tap-il-ne-fonctionne-pas-tou-0b5e9a32b942",
+      "title": "Fullscreen double tap",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A tester",
+      "validatedAt": "2026-06-07T13:31:31.353Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 66,
+        "section": "Retours test Render - avant V1 test",
+        "taskText": "Vérifier et corriger le fullscreen double tap : il ne fonctionne pas toujours, notamment depuis le menu, sauf après fermeture / retour dans la fenêtre.",
+        "markdown": "- [ ] Vérifier et corriger le fullscreen double tap : il ne fonctionne pas toujours, notamment depuis le menu, sauf après fermeture / retour dans la fenêtre."
+      }
+    },
+    {
+      "id": "todo-verification-release-bonus-tester-les-bonus-avec-3-joueurs-puis-avec-4-joueurs-c61bf62b3f77",
+      "title": "Bonus 3 et 4 joueurs",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A tester",
+      "validatedAt": "2026-06-07T13:31:53.839Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 76,
+        "section": "Vérification release / Bonus",
+        "taskText": "Tester les bonus avec 3 joueurs puis avec 4 joueurs.",
+        "markdown": "- [ ] Tester les bonus avec 3 joueurs puis avec 4 joueurs."
+      }
+    },
+    {
+      "id": "todo-verification-release-bonus-tester-les-collisions-entre-bonus-bonus-utilises-au-meme-tour-bonus-en-75b8ed1618be",
+      "title": "Collisions bonus globales",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T13:32:26.096Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 77,
+        "section": "Vérification release / Bonus",
+        "taskText": "Tester les collisions entre bonus : bonus utilisés au même tour, bonus en attente, bonus déjà posé sur un joueur, annulation d'action après bonus.",
+        "markdown": "- [ ] Tester les collisions entre bonus : bonus utilisés au même tour, bonus en attente, bonus déjà posé sur un joueur, annulation d'action après bonus."
+      }
+    },
+    {
+      "id": "todo-verification-release-bonus-tester-les-collisions-entre-bonus-et-changement-d-ordre-appliquer-un-n-e249810e14c1",
+      "title": "Bonus + ordre du tour",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T13:40:57.080Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 78,
+        "section": "Vérification release / Bonus",
+        "taskText": "Tester les collisions entre bonus et changement d'ordre : appliquer un nouvel ordre, poser un bonus, finir le tour de table, puis vérifier que la cible et le prochain joueur restent corrects.",
+        "markdown": "- [ ] Tester les collisions entre bonus et changement d'ordre : appliquer un nouvel ordre, poser un bonus, finir le tour de table, puis vérifier que la cible et le prochain joueur restent corrects."
+      }
+    },
+    {
+      "id": "todo-verification-release-bonus-tester-les-collisions-entre-bonus-et-changement-de-round-bonus-pose-av-447ba32383a7",
+      "title": "Bonus + nouveau round",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T13:41:44.814Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 79,
+        "section": "Vérification release / Bonus",
+        "taskText": "Tester les collisions entre bonus et changement de round : bonus posé avant le classement, effet attendu au round suivant.",
+        "markdown": "- [ ] Tester les collisions entre bonus et changement de round : bonus posé avant le classement, effet attendu au round suivant."
+      }
+    },
+    {
+      "id": "todo-verification-release-bonus-tester-les-collisions-entre-bonus-et-annulation-d-action-poser-un-bonu-b1b8a2839a54",
+      "title": "Bonus + annulation",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T13:47:55.890Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 80,
+        "section": "Vérification release / Bonus",
+        "taskText": "Tester les collisions entre bonus et annulation d'action : poser un bonus, annuler l'action en cours, puis vérifier que le bonus consomme ou attend comme prévu.",
+        "markdown": "- [ ] Tester les collisions entre bonus et annulation d'action : poser un bonus, annuler l'action en cours, puis vérifier que le bonus consomme ou attend comme prévu."
+      }
+    },
+    {
+      "id": "todo-verification-release-bonus-tester-les-collisions-entre-bonus-et-reconnexion-cible-ou-utilisateur--0947b0e99d08",
+      "title": "Bonus + reconnexion",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T13:50:24.722Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 81,
+        "section": "Vérification release / Bonus",
+        "taskText": "Tester les collisions entre bonus et reconnexion : cible ou utilisateur du bonus déconnecté / reconnecté avant que l'effet soit résolu.",
+        "markdown": "- [ ] Tester les collisions entre bonus et reconnexion : cible ou utilisateur du bonus déconnecté / reconnecté avant que l'effet soit résolu."
+      }
+    },
+    {
+      "id": "todo-verification-release-va-faire-le-cafe-du-boss-tester-quand-la-cible-est-le-joueur-actif-au-moment-de-l-utilisation-l-beee94aaf68e",
+      "title": "Coffee boss sur joueur actif",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T13:51:24.595Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 96,
+        "section": "Vérification release / Va faire le café du boss",
+        "taskText": "Tester quand la cible est le joueur actif au moment de l'utilisation : le skip doit attendre son prochain tour, même si un classement et un nouveau round passent entre temps.",
+        "markdown": "- [ ] Tester quand la cible est le joueur actif au moment de l'utilisation : le skip doit attendre son prochain tour, même si un classement et un nouveau round passent entre temps."
+      }
+    },
+    {
+      "id": "todo-verification-release-va-faire-le-cafe-du-boss-tester-quand-la-cible-joue-plus-tard-dans-le-meme-tour-de-table-f035ec62cc03",
+      "title": "Coffee boss plus tard",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T14:03:07.454Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 97,
+        "section": "Vérification release / Va faire le café du boss",
+        "taskText": "Tester quand la cible joue plus tard dans le même tour de table.",
+        "markdown": "- [ ] Tester quand la cible joue plus tard dans le même tour de table."
+      }
+    },
+    {
+      "id": "todo-verification-release-va-faire-le-cafe-du-boss-tester-avec-annulation-d-action-et-changement-de-round-5df78a3e5f9f",
+      "title": "Coffee boss annulation + round",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T14:07:54.155Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 98,
+        "section": "Vérification release / Va faire le café du boss",
+        "taskText": "Tester avec annulation d'action et changement de round.",
+        "markdown": "- [ ] Tester avec annulation d'action et changement de round."
+      }
+    },
+    {
+      "id": "todo-verification-release-va-faire-le-cafe-du-boss-tester-les-reconnects-avant-le-tour-saute-la-cible-doit-garder-son-sta-d0f6a903beb8",
+      "title": "Coffee boss reconnexion",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T14:08:12.934Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 99,
+        "section": "Vérification release / Va faire le café du boss",
+        "taskText": "Tester les reconnects avant le tour sauté : la cible doit garder son statut de tour à passer.",
+        "markdown": "- [ ] Tester les reconnects avant le tour sauté : la cible doit garder son statut de tour à passer."
+      }
+    },
+    {
+      "id": "todo-verification-release-va-faire-le-cafe-du-boss-verifier-que-le-joueur-cible-ne-peut-pas-lancer-le-de-quand-son-tour-d-fb50ad2d996f",
+      "title": "Coffee boss bloque le de",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T14:08:34.003Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 100,
+        "section": "Vérification release / Va faire le café du boss",
+        "taskText": "Vérifier que le joueur cible ne peut pas lancer le dé quand son tour doit être sauté.",
+        "markdown": "- [ ] Vérifier que le joueur cible ne peut pas lancer le dé quand son tour doit être sauté."
+      }
+    },
+    {
+      "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-qu-un-joueur-ne-peut-pas-recevoir-ce-bonus-deux-fois-tant-que-33a8f498a573",
+      "title": "Double sabotage quiz",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T14:08:59.692Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 107,
+        "section": "Vérification release / C'est moi qui choisis !",
+        "taskText": "Vérifier qu'un joueur ne peut pas recevoir ce bonus deux fois tant que le premier sabotage est en attente.",
+        "markdown": "- [ ] Vérifier qu'un joueur ne peut pas recevoir ce bonus deux fois tant que le premier sabotage est en attente."
+      }
+    },
+    {
+      "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-qu-on-ne-peut-pas-ecraser-un-sabotage-quizz-deja-en-attente-a-6ffaa286d7eb",
+      "title": "Sabotage quiz deja pose",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T14:18:12.251Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 108,
+        "section": "Vérification release / C'est moi qui choisis !",
+        "taskText": "Vérifier qu'on ne peut pas écraser un sabotage Quizz déjà en attente avec un autre.",
+        "markdown": "- [ ] Vérifier qu'on ne peut pas écraser un sabotage Quizz déjà en attente avec un autre."
+      }
+    },
+    {
+      "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-que-la-cible-voit-d-abord-l-ecran-explicatif-et-doit-cliquer--c2c4d4205384",
+      "title": "Explication cible sabotage",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T14:18:33.473Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 109,
+        "section": "Vérification release / C'est moi qui choisis !",
+        "taskText": "Vérifier que la cible voit d'abord l'écran explicatif et doit cliquer sur Suivant.",
+        "markdown": "- [ ] Vérifier que la cible voit d'abord l'écran explicatif et doit cliquer sur `Suivant`."
+      }
+    },
+    {
+      "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-que-le-joueur-qui-a-pose-le-bonus-est-le-seul-a-pouvoir-chois-5a41a0085293",
+      "title": "Poseur choisit seul",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T14:18:50.259Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 110,
+        "section": "Vérification release / C'est moi qui choisis !",
+        "taskText": "Vérifier que le joueur qui a posé le bonus est le seul à pouvoir choisir la difficulté.",
+        "markdown": "- [ ] Vérifier que le joueur qui a posé le bonus est le seul à pouvoir choisir la difficulté."
+      }
+    },
+    {
+      "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-que-les-spectateurs-voient-le-theme-les-cinq-difficultes-la-d-86370d293b62",
+      "title": "Vue spectateurs sabotage",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T14:19:18.295Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 111,
+        "section": "Vérification release / C'est moi qui choisis !",
+        "taskText": "Vérifier que les spectateurs voient le thème, les cinq difficultés, la difficulté choisie en live, et le tag \"X choisit\".",
+        "markdown": "- [ ] Vérifier que les spectateurs voient le thème, les cinq difficultés, la difficulté choisie en live, et le tag \"X choisit\"."
+      }
+    },
+    {
+      "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-que-le-theme-du-quiz-reste-aleatoire-comme-dans-un-quiz-norma-fef909e0ab4c",
+      "title": "Theme quiz aleatoire",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T14:19:45.336Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 112,
+        "section": "Vérification release / C'est moi qui choisis !",
+        "taskText": "Vérifier que le thème du quiz reste aléatoire comme dans un quiz normal.",
+        "markdown": "- [ ] Vérifier que le thème du quiz reste aléatoire comme dans un quiz normal."
+      }
+    },
+    {
+      "id": "todo-verification-release-c-est-moi-qui-choisis-verifier-que-la-question-finale-utilise-bien-la-difficulte-choisie-par-41713d77204d",
+      "title": "Difficulte choisie appliquee",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "A verifier humainement",
+      "validatedAt": "2026-06-07T14:20:03.231Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 113,
+        "section": "Vérification release / C'est moi qui choisis !",
+        "taskText": "Vérifier que la question finale utilise bien la difficulté choisie par le joueur qui a posé le bonus.",
+        "markdown": "- [ ] Vérifier que la question finale utilise bien la difficulté choisie par le joueur qui a posé le bonus."
+      }
+    },
+    {
+      "id": "todo-presence-messages-room-etendre-cette-distinction-au-lobby-et-a-la-character-select-si-besoin-6450cf42ebb5",
+      "title": "cette distinction au lobby et à la character select s...",
+      "source": "TODO.md",
+      "sourceType": "todo",
+      "status": "done",
+      "cardStatus": "En attente",
+      "validatedAt": "2026-06-07T14:25:13.087Z",
+      "todoReference": {
+        "file": "TODO.md",
+        "line": 184,
+        "section": "Présence / Messages room",
+        "taskText": "Étendre cette distinction au lobby et à la character select si besoin.",
+        "markdown": "- [ ] Étendre cette distinction au lobby et à la character select si besoin."
       }
     }
   ]

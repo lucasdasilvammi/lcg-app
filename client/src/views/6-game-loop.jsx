@@ -471,7 +471,7 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
     return (
  <div className="relative w-full overflow-hidden bg-bg">
         <style>{ctrlZReminderStyles}</style>
- <div className="relative z-10 flex h-dvh w-full flex-col justify-center gap-8 overflow-y-auto px-10 py-8 text-center [@media(max-height:760px)]:gap-4">
+ <div className="relative z-10 flex h-dvh w-full flex-col justify-center gap-8 overflow-y-hidden px-10 py-8 text-center [@media(max-height:760px)]:gap-4 [@media(max-height:760px)]:overflow-y-auto">
           {showCtrlZIndicator && (
             <div key={ctrlZTurnKey} className="absolute right-8 top-12 z-20">
               <button
@@ -493,7 +493,7 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
           </div>
 
  <div className="flex w-full flex-col justify-center overflow-hidden font-family-hakobi text-xl uppercase text-bg">
-            <div className="flex w-full flex-col gap-3 overflow-y-auto overflow-x-hidden">
+            <div className="flex w-full flex-col gap-3">
             {canDeclareFinish && (
               <BigButton
                 onClick={handleDeclareFinish}

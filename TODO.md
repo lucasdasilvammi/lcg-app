@@ -24,7 +24,7 @@ Une V1 est jouable quand un groupe peut créer une room, rejoindre à 3 ou 4, ch
 - [x] Classement fonctionnel en fin de round.
 - [x] Fin de partie naturelle via logique de plateau, estimation de position et classement final.
 - [x] Documenter les impacts à vérifier avant d'ajouter un bonus, un event, un personnage, une case, un défi ou une activité.
-- [ ] Gros passage de test bout en bout à 3 et 4 joueurs.
+- [x] Gros passage de test bout en bout à 3 et 4 joueurs.
 - [x] Stabilisation mobile des popups.
 - [x] Corrections textes / accents sur les écrans encore touchés par l'ancien encodage.
 - [x] Reconnexion depuis un autre appareil ou code de secours.
@@ -32,8 +32,8 @@ Une V1 est jouable quand un groupe peut créer une room, rejoindre à 3 ou 4, ch
 
 ## Priorité avant V1 jouable
 
-- [ ] Faire une session test complète à 3 joueurs : création, lobby, personnages, ordre, 1 round complet, classement, nouveau round.
-- [ ] Faire une session test complète à 4 joueurs.
+- [x] Faire une session test complète à 3 joueurs : création, lobby, personnages, ordre, 1 round complet, classement, nouveau round.
+- [x] Faire une session test complète à 4 joueurs.
 - [x] Tester tous les types de cases depuis la boucle de jeu : Quizz, Défi, Bonus, Activité, Évènement.
 - [x] Tester tous les défis : Buzzer, Vrai ou faux, Chiffres, Pick, Zoom.
 - [x] Tester les trois bonus de bout en bout.
@@ -46,7 +46,7 @@ Une V1 est jouable quand un groupe peut créer une room, rejoindre à 3 ou 4, ch
 
 Contexte : retours issus d'un test en mode hébergé sur Render, pas en local.
 
-- [ ] Importer les 8 nouveaux logos préparés pour le défi Zoom.
+- [x] Importer les 8 nouveaux logos préparés pour le défi Zoom.
 - [x] Revoir la répartition des défis tirés automatiquement : répartition ajoutée par type de défi.
 - [x] Ajouter ou ajuster la pondération des défis pour faire sortir plus souvent `chiffres` si c'est le comportement voulu.
 - [x] Vérifier que `pick` peut tomber naturellement dans le tirage automatique des défis.
@@ -60,10 +60,10 @@ Contexte : retours issus d'un test en mode hébergé sur Render, pas en local.
 - [x] Quand un joueur termine, laisser finir la rotation en cours puis arrêter définitivement la partie au moment où son tour devrait revenir.
 - [x] Modéliser les événements de déplacement actuellement présents pour qu'ils recalculent aussi les positions estimées.
 - [x] Pour l'événement d'échange de place, demander explicitement avec quel joueur l'échange a été fait afin de conserver une estimation fiable des deux positions.
-- [ ] Étendre le moteur si de nouveaux événements de déplacement sont ajoutés plus tard.
+- [x] Étendre le moteur si de nouveaux événements de déplacement sont ajoutés plus tard.
 - [x] Corriger l'affichage `/6` dans la room select : il doit afficher `/4` et la room doit refuser au-delà de 4 joueurs.
 - [ ] Plus tard - Au premier bonus obtenu, expliquer où retrouver ses bonus pour les joueurs qui n'ont pas vu l'onboarding menu.
-- [ ] Vérifier et corriger le fullscreen double tap : il ne fonctionne pas toujours, notamment depuis le menu, sauf après fermeture / retour dans la fenêtre.
+- [x] Vérifier et corriger le fullscreen double tap : il ne fonctionne pas toujours, notamment depuis le menu, sauf après fermeture / retour dans la fenêtre.
 - [x] Enlever les guillemets au début et à la fin des questions et libellés de questions.
 - [x] Autoriser l'ouverture du menu bonus tout le temps, sauf sur les écrans où cela gêne réellement le déroulé.
 - [ ] Imprimer un nouveau livret de règles.
@@ -73,12 +73,12 @@ Contexte : retours issus d'un test en mode hébergé sur Render, pas en local.
 ### Bonus
 
 - [x] Retester les trois bonus de bout en bout : `CTRL + Z`, `Va faire le café du boss`, `C'est moi qui choisis !`.
-- [ ] Tester les bonus avec 3 joueurs puis avec 4 joueurs.
-- [ ] Tester les collisions entre bonus : bonus utilisés au même tour, bonus en attente, bonus déjà posé sur un joueur, annulation d'action après bonus.
-- [ ] Tester les collisions entre bonus et changement d'ordre : appliquer un nouvel ordre, poser un bonus, finir le tour de table, puis vérifier que la cible et le prochain joueur restent corrects.
-- [ ] Tester les collisions entre bonus et changement de round : bonus posé avant le classement, effet attendu au round suivant.
-- [ ] Tester les collisions entre bonus et annulation d'action : poser un bonus, annuler l'action en cours, puis vérifier que le bonus consomme ou attend comme prévu.
-- [ ] Tester les collisions entre bonus et reconnexion : cible ou utilisateur du bonus déconnecté / reconnecté avant que l'effet soit résolu.
+- [x] Tester les bonus avec 3 joueurs puis avec 4 joueurs.
+- [x] Tester les collisions entre bonus : bonus utilisés au même tour, bonus en attente, bonus déjà posé sur un joueur, annulation d'action après bonus.
+- [x] Tester les collisions entre bonus et changement d'ordre : appliquer un nouvel ordre, poser un bonus, finir le tour de table, puis vérifier que la cible et le prochain joueur restent corrects.
+- [x] Tester les collisions entre bonus et changement de round : bonus posé avant le classement, effet attendu au round suivant.
+- [x] Tester les collisions entre bonus et annulation d'action : poser un bonus, annuler l'action en cours, puis vérifier que le bonus consomme ou attend comme prévu.
+- [x] Tester les collisions entre bonus et reconnexion : cible ou utilisateur du bonus déconnecté / reconnecté avant que l'effet soit résolu.
 - [x] Vérifier que les bonus consomment bien l'inventaire du joueur qui les utilise, jamais celui de la cible.
 
 ### CTRL + Z
@@ -93,24 +93,25 @@ Contexte : retours issus d'un test en mode hébergé sur Render, pas en local.
 ### Va faire le café du boss
 
 - [x] Implémenter la sélection cible, la consommation, l'écran de confirmation et le tour sauté.
-- [ ] Tester quand la cible est le joueur actif au moment de l'utilisation : le skip doit attendre son prochain tour, même si un classement et un nouveau round passent entre temps.
-- [ ] Tester quand la cible joue plus tard dans le même tour de table.
-- [ ] Tester avec annulation d'action et changement de round.
-- [ ] Tester les reconnects avant le tour sauté : la cible doit garder son statut de tour à passer.
-- [ ] Vérifier que le joueur cible ne peut pas lancer le dé quand son tour doit être sauté.
+- [x] Tester quand la cible est le joueur actif au moment de l'utilisation : le skip doit attendre son prochain tour, même si un classement et un nouveau round passent entre temps.
+- [x] Tester quand la cible joue plus tard dans le même tour de table.
+- [x] Tester avec annulation d'action et changement de round.
+- [x] Tester les reconnects avant le tour sauté : la cible doit garder son statut de tour à passer.
+- [x] Vérifier que le joueur cible ne peut pas lancer le dé quand son tour doit être sauté.
+- [ ] Plus tard - Améliorer les collisions de cible pour `Va faire le café du boss` : retirer immédiatement de la liste tout joueur qui doit déjà passer son prochain tour. Si un second joueur avait ouvert la popup avant cette mise à jour, afficher le toast « Joueur déjà victime », fermer la popup, puis reproposer la liste actualisée sans la cible déjà affectée.
 
 ### C'est moi qui choisis !
 
 - [x] Implémenter la sélection cible, l'attente du Quizz cible, le choix de difficulté par le joueur qui a posé le bonus et la vue spectateurs.
 - [x] Vérifier que le bonus ne s'active que quand la cible exacte tombe sur une case Quizz.
 - [x] Vérifier que le bonus n'interfère pas avec les tours Quizz des autres joueurs.
-- [ ] Vérifier qu'un joueur ne peut pas recevoir ce bonus deux fois tant que le premier sabotage est en attente.
-- [ ] Vérifier qu'on ne peut pas écraser un sabotage Quizz déjà en attente avec un autre.
-- [ ] Vérifier que la cible voit d'abord l'écran explicatif et doit cliquer sur `Suivant`.
-- [ ] Vérifier que le joueur qui a posé le bonus est le seul à pouvoir choisir la difficulté.
-- [ ] Vérifier que les spectateurs voient le thème, les cinq difficultés, la difficulté choisie en live, et le tag "X choisit".
-- [ ] Vérifier que le thème du quiz reste aléatoire comme dans un quiz normal.
-- [ ] Vérifier que la question finale utilise bien la difficulté choisie par le joueur qui a posé le bonus.
+- [x] Vérifier qu'un joueur ne peut pas recevoir ce bonus deux fois tant que le premier sabotage est en attente.
+- [x] Vérifier qu'on ne peut pas écraser un sabotage Quizz déjà en attente avec un autre.
+- [x] Vérifier que la cible voit d'abord l'écran explicatif et doit cliquer sur `Suivant`.
+- [x] Vérifier que le joueur qui a posé le bonus est le seul à pouvoir choisir la difficulté.
+- [x] Vérifier que les spectateurs voient le thème, les cinq difficultés, la difficulté choisie en live, et le tag "X choisit".
+- [x] Vérifier que le thème du quiz reste aléatoire comme dans un quiz normal.
+- [x] Vérifier que la question finale utilise bien la difficulté choisie par le joueur qui a posé le bonus.
 
 ### Menu / popups / mobile
 
@@ -181,7 +182,7 @@ Prompt implementation :
 
 - [x] Distinguer joueurs réservés dans la partie vs joueurs actuellement connectés dans le menu settings.
 - [x] Ajouter des messages de statut room pour tous les cas de figure leave / crash / reco.
-- [ ] Étendre cette distinction au lobby et à la character select si besoin.
+- [x] Étendre cette distinction au lobby et à la character select si besoin.
 - [x] Harmoniser le design des messages d'erreur avec les messages système de room.
 
 Prompt implementation :
@@ -267,6 +268,8 @@ Prompt implementation :
 - [x] Lancer `npm run build` après stabilisation des changements en cours.
 - [x] Lancer les tests serveur quand le serveur n'est pas déjà occupé sur les ports utilisés.
 - [ ] Faire un test manuel mobile, idéalement sur iPhone/Android réel.
-- [ ] Tester l'activité commune, surtout l'import / prise de photo, sur Chrome mobile.
-- [ ] Faire un test de reconnexion : refresh, fermeture onglet, crash simulé, retour dans la room.
+- [ ] À vérifier manuellement - Activité commune : contrôler le bouton `J'ai fini` et déterminer pourquoi son conteneur `flex min-h-14 w-full justify-center pb-1` utilise un `pb-1`; vérifier si ce padding inférieur est nécessaire ou provoque un décalage visuel.
+- [ ] À faire manuellement - Activité commune : définir et intégrer le SVG ainsi que la couleur du boss sur l'écran de feedback affiché en cas d'égalité.
+- [x] Tester l'activité commune, surtout l'import / prise de photo, sur Chrome mobile.
+- [x] Faire un test de reconnexion : refresh, fermeture onglet, crash simulé, retour dans la room.
 

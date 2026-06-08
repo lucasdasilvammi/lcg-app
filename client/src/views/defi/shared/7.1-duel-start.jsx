@@ -1,5 +1,6 @@
 import React from 'react'
 import DuelVersusIntro from './DuelVersusIntro'
+import { getOrderedDuelPlayers } from './duelPlayers'
 import { getDuelRewardPoints } from './duelReward'
 
 export default function DuelStart({ roomData, startDuel }) {
@@ -7,9 +8,7 @@ export default function DuelStart({ roomData, startDuel }) {
 
   const { type, duelists } = roomData.currentInteraction
   const rewardPoints = getDuelRewardPoints(roomData.currentInteraction)
-  const duelPlayers = duelists
-    .map((duelistId) => roomData.players.find((player) => player.id === duelistId))
-    .filter(Boolean)
+  const duelPlayers = getOrderedDuelPlayers(roomData.players, duelists)
 
   return (
     <DuelVersusIntro 

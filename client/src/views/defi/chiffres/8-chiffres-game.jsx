@@ -1,6 +1,7 @@
 ﻿import React, { useState, useEffect } from 'react'
 import { useSocket } from '../../../contexts/SocketContext'
 import DuelNavbar from '../shared/DuelNavbar'
+import { getOrderedDuelPlayers } from '../shared/duelPlayers'
 import CharacterCard from '../../../components/CharacterCard'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import ScoreBar from '../../../components/ScoreBar'
@@ -12,7 +13,7 @@ export default function ChiffresGame({ roomData, currentUserId }) {
   const interaction = roomData?.currentInteraction
   const { type, data, duelists = [], readerId } = interaction || {}
   const roomPlayers = roomData?.players || []
-  const duelPlayers = roomPlayers.filter(p => duelists.includes(p.id))
+  const duelPlayers = getOrderedDuelPlayers(roomPlayers, duelists)
   const isMeReader = currentUserId === readerId
   const isDuelist = duelists.includes(currentUserId)
   const isSpectator = !isMeReader && !isDuelist

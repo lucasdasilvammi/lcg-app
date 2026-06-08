@@ -56,7 +56,10 @@ export default function TurnStart({ roomData, rollDice, nextTurn, currentUserId 
             )}
 
             {activePlayer && (
-              <CharacterCard charId={activePlayer?.character} size="big" />
+              <CharacterCard
+                charId={activePlayer?.character}
+                size={skipBonus ? 'vertical-small' : 'big'}
+              />
             )}
 
             {skipBonus && (

@@ -65,7 +65,7 @@ const getCameraIssue = (error) => {
   if (error?.name === 'NotAllowedError' || error?.name === 'SecurityError') {
     return {
       type: 'permission',
-      message: "L'accès à la caméra est bloqué. Autorise-la dans les réglages du site, puis réessaie. Tu peux aussi importer une image pour continuer."
+      message: "L'accès à la caméra est bloqué. Autorise-la, puis réessaie."
     }
   }
   if (error?.name === 'NotFoundError' || error?.name === 'OverconstrainedError') {
@@ -439,7 +439,7 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
                     onClick={openIntegratedCamera}
                     className="font-funnel text-sm font-semibold text-light underline decoration-light/50 underline-offset-4"
                   >
-                    Réessayer la caméra
+                    Réessayer
                   </button>
                 )}
                 {cameraIssue && (

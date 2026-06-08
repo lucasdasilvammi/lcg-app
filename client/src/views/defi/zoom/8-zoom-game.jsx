@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DuelNavbar from '../shared/DuelNavbar'
+import { getOrderedDuelPlayers } from '../shared/duelPlayers'
+import { getDuelRewardPoints } from '../shared/duelReward'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import CharacterTag from '../../../components/CharacterTag'
 import QuizAnswerButton from '../../../components/QuizAnswerButton'
@@ -63,7 +65,8 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
   } = interaction
 
   const roomPlayers = roomData?.players || []
-  const duelPlayers = roomPlayers.filter((p) => duelists.includes(p.id))
+  const duelPlayers = getOrderedDuelPlayers(roomPlayers, duelists)
+  const rewardPoints = getDuelRewardPoints(interaction)
   const isDuelist = duelists.includes(currentUserId)
   const isMeReader = readerId === currentUserId
   const isSpectator = !isDuelist && !isMeReader
@@ -279,7 +282,7 @@ export default function ZoomGame({ roomData, currentUserId, playerBuzz, zoomRead
     <div className="relative w-full overflow-hidden bg-bg">
       <div className={`relative mx-auto flex h-dvh app-screen-y defi-screen-y w-full max-w-full flex-col items-center ${isDuelist ? 'justify-start' : 'justify-between'} gap-8 px-8 text-center`}>
         <div className={`flex w-full min-h-0 flex-col ${isDuelist ? 'flex-1 gap-6' : 'flex-1 gap-5'}`}>
-          <DuelNavbar duelPlayers={duelPlayers} type={type} diff={2} />
+          <DuelNavbar duelPlayers={duelPlayers} type={type} diff={rewardPoints} />
 
           {isDuelist ? (
             <div className="relative flex min-h-0 flex-1 flex-col items-center justify-center gap-4">

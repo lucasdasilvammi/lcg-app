@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import DuelNavbar from '../shared/DuelNavbar'
+import { getOrderedDuelPlayers } from '../shared/duelPlayers'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import CharacterCard from '../../../components/CharacterCard'
 
@@ -72,7 +73,7 @@ export default function PickReveal({ roomData, continueToFeedback, currentUserId
   const result = roomData?.lastResult || {}
   const { type, duelists = [] } = result
   const roomPlayers = roomData?.players || []
-  const duelPlayers = roomPlayers.filter(p => duelists.includes(p.id))
+  const duelPlayers = getOrderedDuelPlayers(roomPlayers, duelists)
   const submittedColors = result.submittedColors || {}
   const targetColor = result.targetColor
 

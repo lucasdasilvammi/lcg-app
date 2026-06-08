@@ -1,5 +1,7 @@
 import React from 'react'
 import DuelNavbar from '../shared/DuelNavbar'
+import { getOrderedDuelPlayers } from '../shared/duelPlayers'
+import { getDuelRewardPoints } from '../shared/duelReward'
 import ButtonWithIcon from '../../../components/ButtonWithIcon'
 import QuizAnswerButton from '../../../components/QuizAnswerButton'
 
@@ -7,7 +9,8 @@ export default function ZoomReveal({ roomData, continueToFeedback, currentUserId
   if (!roomData || !roomData.lastResult || roomData.lastResult.type !== 'zoom') return null
 
   const result = roomData.lastResult
-  const duelPlayers = roomData.players.filter((p) => (result.duelists || []).includes(p.id))
+  const duelPlayers = getOrderedDuelPlayers(roomData.players, result.duelists)
+  const rewardPoints = getDuelRewardPoints(result)
   const isMeReader = result.readerId === currentUserId
   const options = Array.isArray(result.options) ? result.options : []
   const correctIndex = result.correctIndex ?? null
@@ -17,7 +20,7 @@ export default function ZoomReveal({ roomData, continueToFeedback, currentUserId
     <div className="relative w-full overflow-hidden bg-bg">
       <div className="relative mx-auto flex h-dvh app-screen-y defi-screen-y w-full max-w-full flex-col items-center justify-between gap-6 px-8 text-center">
         <div className="flex w-full min-h-0 flex-1 flex-col gap-8">
-          <DuelNavbar duelPlayers={duelPlayers} type="zoom" diff={2} />
+          <DuelNavbar duelPlayers={duelPlayers} type="zoom" diff={rewardPoints} />
 
           <div className="flex w-full flex-1 flex-col items-center justify-center gap-8">
             <div className="flex flex-col items-center gap-1 text-light">
