@@ -133,13 +133,13 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
     if (clearError) setUploadError(null)
   }
 
-  const restoreFullscreen = async (source) => {
+  const restoreFullscreen = async (source, { notifyUnavailable = true } = {}) => {
     if (!isMobileViewport() || isFullscreenActive()) {
       setFullscreenRecoveryNeeded(false)
       return true
     }
 
-    const restored = await requestAppFullscreen({ source })
+    const restored = await requestAppFullscreen({ source, notifyUnavailable })
     setFullscreenRecoveryNeeded(!restored)
     return restored
   }
@@ -253,7 +253,7 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
       writePhotoDraft(draftKey, resized)
       setPhotoPreview(resized)
       setCameraIssue(null)
-      void restoreFullscreen('activity-photo-imported')
+      void restoreFullscreen('activity-photo-imported', { notifyUnavailable: false })
     } catch (error) {
       console.error(error)
       setUploadError(error?.message || "Impossible d'importer cette image.")
@@ -328,7 +328,7 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
       writePhotoDraft(draftKey, captured)
       setPhotoPreview(captured)
       closeIntegratedCamera({ clearError: true })
-      void restoreFullscreen('activity-photo-captured')
+      void restoreFullscreen('activity-photo-captured', { notifyUnavailable: false })
     } catch (error) {
       console.error(error)
       setUploadError(error?.message || 'Impossible de capturer la photo.')
@@ -359,7 +359,7 @@ export default function ActiviteUpload({ roomData, currentUserId, submitPhoto })
   }
 
   const handleSubmit = () => {
-    void restoreFullscreen('activity-photo-submit')
+    void restoreFullscreen('activity-photo-submit', { notifyUnavailable: false })
     uploadPhoto(photoPreview)
   }
 

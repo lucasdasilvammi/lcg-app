@@ -38,7 +38,7 @@ import GameEnd from './views/12-game-end'
 import Toasts from './components/Toasts'
 import SettingsMenu from './menu/SettingsMenu'
 import MenuOnboarding from './menu/MenuOnboarding'
-import { isFullscreenActive, requestAppFullscreen } from './utils/fullscreen'
+import { isFullscreenActive, isIosDevice, requestAppFullscreen } from './utils/fullscreen'
 
 const CODE_CHARACTERS = [
   { id: 0, name: "Donatien" },
@@ -60,6 +60,7 @@ const PLAYABLE_CHARACTERS = [
 
 const PLAYER_MENU_ONBOARDING_STORAGE_KEY = 'lcg-player-menu-onboarding-seen-v3'
 const ADMIN_MENU_ONBOARDING_STORAGE_KEY = 'lcg-admin-menu-onboarding-seen-v2'
+const IOS_FULLSCREEN_HELP_STORAGE_KEY = 'lcg-ios-fullscreen-help-seen-v1'
 const APP_DESIGN_WIDTH = 390
 const FULLSCREEN_SCREEN_PADDING_TOP = '5rem'
 const FULLSCREEN_SCREEN_PADDING_BOTTOM = '3.5rem'
@@ -207,6 +208,50 @@ function PauseOverlay({ isAdmin, resumeGame }) {
   )
 }
 
+function IosFullscreenHelp({ reason, onClose }) {
+  const isIos = isIosDevice()
+  const ua = typeof navigator !== 'undefined' ? navigator.userAgent : ''
+  const isChromeIos = /CriOS/.test(ua)
+  const details = isIos
+    ? [
+        'Sur iPhone, Safari et Chrome ne peuvent pas lancer le vrai plein écran depuis un bouton.',
+        'Ouvre le menu Partager puis choisis Ajouter à l’écran d’accueil.',
+        'Relance ensuite Le Cube Graphique depuis l’icône ajoutée.'
+      ]
+    : [
+        'Ton navigateur a refusé la demande de plein écran.',
+        'Touche l’écran puis réessaie depuis le menu.'
+      ]
+
+  return (
+    <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/80 px-7 text-center backdrop-blur-xs" data-no-longpress>
+      <div className="relative flex w-full max-w-86 flex-col items-center gap-5 bg-bg px-7 py-8 text-light">
+        <div className="pointer-events-none absolute inset-0 border border-light/15" />
+        <img src="/game/categorie/logo.png" alt="" aria-hidden="true" className="h-12 w-12 object-contain" />
+        <div className="flex flex-col gap-3">
+          <h2 className="font-hakobi text-4xl uppercase leading-none text-light">
+            {isIos ? 'Plein écran iPhone' : 'Plein écran indisponible'}
+          </h2>
+          {details.map((line) => (
+            <p key={line} className="font-funnel text-base leading-snug text-light/75">{line}</p>
+          ))}
+          {isChromeIos && (
+            <p className="font-funnel text-sm leading-snug text-orange-primary">
+              Si l’option n’apparaît pas dans Chrome, ouvre d’abord la partie dans Safari.
+            </p>
+          )}
+          {reason === 'request-failed' && !isIos && (
+            <p className="font-funnel text-sm leading-snug text-light/55">
+              Certains navigateurs refusent le plein écran si l’action n’est pas déclenchée directement par un tap.
+            </p>
+          )}
+        </div>
+        <ButtonWithIcon onClick={onClose} text="J’ai compris" className="w-fit" />
+      </div>
+    </div>
+  )
+}
+
 function ResponsiveViewport({ children }) {
   useLayoutEffect(() => {
     const updateViewportMetrics = () => {
@@ -326,6 +371,10 @@ function AppContent() {
   const [adminMenuOnboardingSeen, setAdminMenuOnboardingSeen] = useState(() => hasSeenMenuOnboarding(ADMIN_MENU_ONBOARDING_STORAGE_KEY))
   const [isMenuOnboardingOpen, setIsMenuOnboardingOpen] = useState(false)
   const [menuOnboardingVariant, setMenuOnboardingVariant] = useState('player')
+  const [fullscreenHelpReason, setFullscreenHelpReason] = useState(null)
+  const [hasSeenIosFullscreenHelp, setHasSeenIosFullscreenHelp] = useState(() => (
+    hasSeenMenuOnboarding(IOS_FULLSCREEN_HELP_STORAGE_KEY)
+  ))
   const longPressTimerRef = useRef(null)
   const pointerOriginRef = useRef(null)
   const lastTapRef = useRef({ time: 0, x: 0, y: 0 })
@@ -359,7 +408,20 @@ function AppContent() {
 
   const requestMobileFullscreen = (source = 'mobile') => {
     if (!isMobileViewport()) return
-    requestAppFullscreen({ source })
+    const shouldExplainIosInstall = isIosDevice()
+      && !hasSeenIosFullscreenHelp
+      && (source === 'home-create' || source === 'home-join')
+    requestAppFullscreen({ source, notifyUnavailable: shouldExplainIosInstall })
+  }
+
+  const closeFullscreenHelp = () => {
+    setFullscreenHelpReason(null)
+    setHasSeenIosFullscreenHelp(true)
+    try {
+      window.localStorage.setItem(IOS_FULLSCREEN_HELP_STORAGE_KEY, 'true')
+    } catch {
+      // The help can still be dismissed when storage is unavailable.
+    }
   }
 
   const closeMenuOnboarding = () => {
@@ -523,6 +585,15 @@ function AppContent() {
   }, [canOpenSettings, isSettingsOpen, isMenuOnboardingOpen])
 
   useEffect(() => {
+    const handleFullscreenUnavailable = (event) => {
+      setFullscreenHelpReason(event.detail?.reason || 'api-unavailable')
+    }
+
+    window.addEventListener('lcg:fullscreen-unavailable', handleFullscreenUnavailable)
+    return () => window.removeEventListener('lcg:fullscreen-unavailable', handleFullscreenUnavailable)
+  }, [])
+
+  useEffect(() => {
     const zoomImage = roomData?.currentInteraction?.type === 'zoom'
       ? roomData.currentInteraction.data?.image
       : null
@@ -619,6 +690,13 @@ function AppContent() {
 
       {isMenuOnboardingOpen && (
         <MenuOnboarding variant={menuOnboardingVariant} onClose={closeMenuOnboarding} onDone={markMenuOnboardingDone} />
+      )}
+
+      {fullscreenHelpReason && (
+        <IosFullscreenHelp
+          reason={fullscreenHelpReason}
+          onClose={closeFullscreenHelp}
+        />
       )}
 
       {view === "HOME" && (

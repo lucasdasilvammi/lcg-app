@@ -4,6 +4,15 @@
 
 ---
 
+## Lundi 8 Juin 2026 - Workshop 8.5 iOS
+
+### Plein écran iPhone
+- Ajout des métadonnées Web App iOS pour permettre le mode sans barre navigateur depuis l'écran d'accueil.
+- Ajout d'un manifest web `standalone` pour documenter le comportement d'installation.
+- Détection du mode Web App installé comme équivalent plein écran pour éviter le layout compact inutile.
+- Ajout d'un fallback iOS sur les demandes de plein écran : double tap, bouton du menu et récupération activité affichent une aide dédiée au lieu d'échouer silencieusement.
+- Les tentatives automatiques de retour plein écran après photo restent silencieuses pour ne pas interrompre le parcours.
+
 ## Dimanche 7 Juin 2026 - Ajustements workshop 8.4
 
 ### Choix de case et navigateur
