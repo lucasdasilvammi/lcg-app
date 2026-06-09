@@ -1,5 +1,5 @@
 {
-  "_comment": "Questions importées depuis Export questions lcg.xlsx le 2026-05-31. Facile -> diff 2, Difficile -> diff 4. Diff 1/3/5 = placeholders à remplacer.",
+  "_comment": "110 questions de quiz validées importées depuis questions-validees-2026-06-09.csv. Les questions du fichier questions-a-reviser-2026-06-09.csv sont exclues.",
   "Culture graphique": [
     {
       "q": "Quelle est la traduction anglaise de l’acronyme français « CMJN » utilisé en impression ?",
@@ -440,39 +440,6 @@
       "correct": 0,
       "diff": 4,
       "category": "Culture graphique"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Pour les nuls - Culture graphique",
-      "options": [
-        "Pour les nuls - réponse temporaire B",
-        "Pour les nuls - réponse temporaire C",
-        "Pour les nuls - réponse temporaire A"
-      ],
-      "correct": 2,
-      "diff": 1,
-      "category": "Culture graphique"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Moyen - Culture graphique",
-      "options": [
-        "Moyen - réponse temporaire B",
-        "Moyen - réponse temporaire C",
-        "Moyen - réponse temporaire A"
-      ],
-      "correct": 2,
-      "diff": 3,
-      "category": "Culture graphique"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Expert - Culture graphique",
-      "options": [
-        "Expert - réponse temporaire C",
-        "Expert - réponse temporaire A",
-        "Expert - réponse temporaire B"
-      ],
-      "correct": 1,
-      "diff": 5,
-      "category": "Culture graphique"
     }
   ],
   "Typographie": [
@@ -794,39 +761,6 @@
       "correct": 1,
       "diff": 4,
       "category": "Typographie"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Pour les nuls - Typographie",
-      "options": [
-        "Pour les nuls - réponse temporaire B",
-        "Pour les nuls - réponse temporaire C",
-        "Pour les nuls - réponse temporaire A"
-      ],
-      "correct": 2,
-      "diff": 1,
-      "category": "Typographie"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Moyen - Typographie",
-      "options": [
-        "Moyen - réponse temporaire B",
-        "Moyen - réponse temporaire C",
-        "Moyen - réponse temporaire A"
-      ],
-      "correct": 2,
-      "diff": 3,
-      "category": "Typographie"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Expert - Typographie",
-      "options": [
-        "Expert - réponse temporaire C",
-        "Expert - réponse temporaire B",
-        "Expert - réponse temporaire A"
-      ],
-      "correct": 2,
-      "diff": 5,
-      "category": "Typographie"
     }
   ],
   "Signe et couleur": [
@@ -939,39 +873,6 @@
       "correct": 0,
       "diff": 4,
       "category": "Signe et couleur"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Pour les nuls - Signe et couleur",
-      "options": [
-        "Pour les nuls - réponse temporaire A",
-        "Pour les nuls - réponse temporaire B",
-        "Pour les nuls - réponse temporaire C"
-      ],
-      "correct": 0,
-      "diff": 1,
-      "category": "Signe et couleur"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Moyen - Signe et couleur",
-      "options": [
-        "Moyen - réponse temporaire A",
-        "Moyen - réponse temporaire C",
-        "Moyen - réponse temporaire B"
-      ],
-      "correct": 0,
-      "diff": 3,
-      "category": "Signe et couleur"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Expert - Signe et couleur",
-      "options": [
-        "Expert - réponse temporaire B",
-        "Expert - réponse temporaire A",
-        "Expert - réponse temporaire C"
-      ],
-      "correct": 1,
-      "diff": 5,
-      "category": "Signe et couleur"
     }
   ],
   "Logo": [
@@ -1083,39 +984,6 @@
       ],
       "correct": 0,
       "diff": 4,
-      "category": "Logo"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Pour les nuls - Logo",
-      "options": [
-        "Pour les nuls - réponse temporaire B",
-        "Pour les nuls - réponse temporaire C",
-        "Pour les nuls - réponse temporaire A"
-      ],
-      "correct": 2,
-      "diff": 1,
-      "category": "Logo"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Moyen - Logo",
-      "options": [
-        "Moyen - réponse temporaire A",
-        "Moyen - réponse temporaire C",
-        "Moyen - réponse temporaire B"
-      ],
-      "correct": 0,
-      "diff": 3,
-      "category": "Logo"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Expert - Logo",
-      "options": [
-        "Expert - réponse temporaire B",
-        "Expert - réponse temporaire A",
-        "Expert - réponse temporaire C"
-      ],
-      "correct": 1,
-      "diff": 5,
       "category": "Logo"
     }
   ],
@@ -1240,39 +1108,6 @@
       "correct": 0,
       "diff": 4,
       "category": "Production"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Pour les nuls - Production",
-      "options": [
-        "Pour les nuls - réponse temporaire C",
-        "Pour les nuls - réponse temporaire B",
-        "Pour les nuls - réponse temporaire A"
-      ],
-      "correct": 2,
-      "diff": 1,
-      "category": "Production"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Moyen - Production",
-      "options": [
-        "Moyen - réponse temporaire C",
-        "Moyen - réponse temporaire A",
-        "Moyen - réponse temporaire B"
-      ],
-      "correct": 1,
-      "diff": 3,
-      "category": "Production"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Expert - Production",
-      "options": [
-        "Expert - réponse temporaire A",
-        "Expert - réponse temporaire C",
-        "Expert - réponse temporaire B"
-      ],
-      "correct": 0,
-      "diff": 5,
-      "category": "Production"
     }
   ],
   "Composition": [
@@ -1384,39 +1219,6 @@
       ],
       "correct": 2,
       "diff": 4,
-      "category": "Composition"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Pour les nuls - Composition",
-      "options": [
-        "Pour les nuls - réponse temporaire A",
-        "Pour les nuls - réponse temporaire B",
-        "Pour les nuls - réponse temporaire C"
-      ],
-      "correct": 0,
-      "diff": 1,
-      "category": "Composition"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Moyen - Composition",
-      "options": [
-        "Moyen - réponse temporaire B",
-        "Moyen - réponse temporaire A",
-        "Moyen - réponse temporaire C"
-      ],
-      "correct": 1,
-      "diff": 3,
-      "category": "Composition"
-    },
-    {
-      "q": "[À REMPLACER] Question de substitution - Expert - Composition",
-      "options": [
-        "Expert - réponse temporaire A",
-        "Expert - réponse temporaire C",
-        "Expert - réponse temporaire B"
-      ],
-      "correct": 0,
-      "diff": 5,
       "category": "Composition"
     }
   ]
