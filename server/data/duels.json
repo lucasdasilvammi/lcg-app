@@ -6,42 +6,31 @@
       "type": "buzzer",
       "question": "Qu'est-ce que le gris typographique ?",
       "options": [
-        "L'équilibre d'opacité entre noir et gris pour hiérarchiser les informations",
-        "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition",
-        "La répartition du texte et des images pour créer un contraste visuel"
-      ],
-      "correct": 1,
-      "explanation": "Le gris typographique désigne l'équilibre visuel créé par la densité du texte sur une page."
-    },
-    {
-      "type": "buzzer",
-      "question": "Citez 3 formats d'image",
-      "options": [
-        "JPG, PNG, GIF",
-        "DOC, PDF, TXT",
-        "MP3, WAV, FLAC"
+        "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition.",
+        "L'équilibre d'opacité entre noir et gris pour hiérarchiser les informations.",
+        "La répartition du texte et des images pour créer un contraste visuel."
       ],
       "correct": 0,
-      "explanation": "Il existe de nombreux formats d'images adaptés à différents usages."
+      "explanation": "Le gris typographique désigne l'équilibre visuel créé par la densité du texte sur une page."
     },
     {
       "type": "buzzer",
       "question": "Quelle est la couleur complémentaire du rouge ?",
       "options": [
-        "Le jaune",
-        "Le vert",
-        "Le violet"
+        "Le vert.",
+        "Le jaune.",
+        "Le violet."
       ],
-      "correct": 1,
-      "explanation": "Dans le cercle chromatique, les couleurs complémentaires sont opposées."
+      "correct": 0,
+      "explanation": "Dans le cercle chromatique, les couleurs complémentaires sont placées à l'opposé l'une de l'autre."
     },
     {
       "type": "buzzer",
       "question": "Quel raccourci clavier permet de tout sélectionner ?",
       "options": [
-        "Ctrl + A (Cmd + A)",
-        "Ctrl + C (Cmd + C)",
-        "Ctrl + Z (Cmd + Z)"
+        "Ctrl + A (Cmd + A).",
+        "Ctrl + C (Cmd + C).",
+        "Ctrl + Z (Cmd + Z)."
       ],
       "correct": 0,
       "explanation": "Ce raccourci universel fonctionne dans la plupart des logiciels."
@@ -50,12 +39,12 @@
       "type": "buzzer",
       "question": "Qu'est-ce qu'une typographie serif ?",
       "options": [
-        "Une typographie avec empattements",
-        "Une typographie uniquement en capitales",
-        "Une typographie sans contraste de pleins et déliés"
+        "Une typographie avec empattements.",
+        "Une typographie uniquement en capitales.",
+        "Une typographie sans contraste de pleins et déliés."
       ],
       "correct": 0,
-      "explanation": "Les serif sont souvent utilisées pour les textes longs car elles facilitent la lecture."
+      "explanation": "Une typographie serif possède des empattements aux extrémités des lettres."
     }
   ],
 
@@ -68,11 +57,11 @@
         "Faux"
       ],
       "correct": 0,
-      "explanation": "Le RGB (Rouge, Vert, Bleu) est effectivement un modèle additif utilisé pour les écrans."
+      "explanation": "Le RGB, ou RVB, combine des lumières rouge, verte et bleue."
     },
     {
       "type": "vraioufaux",
-      "question": "Le CMJN est un mode colorimétrique généralement destiné à l’impression.",
+      "question": "Le CMJN est un mode colorimétrique généralement destiné à l'impression.",
       "options": [
         "Vrai",
         "Faux"
@@ -82,17 +71,7 @@
     },
     {
       "type": "vraioufaux",
-      "question": "Une typographie sans serif possède des empattements.",
-      "options": [
-        "Vrai",
-        "Faux"
-      ],
-      "correct": 1,
-      "explanation": "Une typographie sans serif est justement une typographie sans empattements."
-    },
-    {
-      "type": "vraioufaux",
-      "question": "Le fond perdu sert à éviter un liseré blanc après la coupe d’un document imprimé.",
+      "question": "Le fond perdu sert à éviter un liseré blanc après la coupe d'un document imprimé.",
       "options": [
         "Vrai",
         "Faux"
@@ -102,33 +81,33 @@
     },
     {
       "type": "vraioufaux",
-      "question": "Une image destinée à l’impression est souvent préparée autour de 300 DPI.",
+      "question": "Le crénage désigne l'ajustement de l'espace entre deux lettres précises.",
       "options": [
         "Vrai",
         "Faux"
       ],
       "correct": 0,
-      "explanation": "300 DPI est une résolution de référence courante pour une impression de qualité."
+      "explanation": "Le crénage agit sur une paire de lettres, contrairement à l'interlettrage qui concerne un ensemble plus large."
     },
     {
       "type": "vraioufaux",
-      "question": "Le crénage désigne l’ajustement de l’espace entre deux lettres précises.",
+      "question": "La loi de proximité de Gestalt indique que des éléments proches sont perçus comme liés.",
       "options": [
         "Vrai",
         "Faux"
       ],
       "correct": 0,
-      "explanation": "Le crénage agit sur des paires de lettres, contrairement à l’interlettrage qui concerne un ensemble plus large."
+      "explanation": "La proximité conduit le regard à regrouper les éléments situés près les uns des autres."
     },
     {
       "type": "vraioufaux",
-      "question": "La loi de proximité en Gestalt indique que des éléments proches sont perçus comme liés.",
+      "question": "Une image destinée à l'impression est souvent préparée autour de 300 DPI.",
       "options": [
         "Vrai",
         "Faux"
       ],
       "correct": 0,
-      "explanation": "La proximité fait partie des principes de Gestalt qui organisent notre perception visuelle."
+      "explanation": "Une résolution de 300 DPI est une référence courante pour une impression de qualité."
     },
     {
       "type": "vraioufaux",
@@ -138,7 +117,7 @@
         "Faux"
       ],
       "correct": 1,
-      "explanation": "La pérennité vise au contraire une identité capable de durer au-delà des modes passagères."
+      "explanation": "Un logo pérenne doit pouvoir durer au-delà des tendances graphiques passagères."
     },
     {
       "type": "vraioufaux",
@@ -148,43 +127,59 @@
         "Faux"
       ],
       "correct": 1,
-      "explanation": "Deux couleurs complémentaires sont placées à l’opposé l’une de l’autre sur le cercle chromatique."
-    },
-    {
-      "type": "vraioufaux",
-      "question": "Le format A3 est plus grand que le format A4.",
-      "options": [
-        "Vrai",
-        "Faux"
-      ],
-      "correct": 0,
-      "explanation": "Dans la série A, plus le chiffre est petit, plus le format est grand : A3 est donc plus grand qu’A4."
+      "explanation": "Deux couleurs complémentaires se trouvent à l'opposé l'une de l'autre sur le cercle chromatique."
     }
   ],
 
   "chiffres": [
     {
       "type": "chiffres",
-      "question": "Donnez la valeur précise du nombre d'or ?",
+      "question": "Donnez la valeur précise du nombre d'or.",
       "correct": 1618,
       "digits": 4,
       "decimalPosition": 1,
-      "explanation": "Le nombre d'or (phi) vaut 1,618... soit 1618 pour 4 chiffres significatifs."
+      "explanation": "Le nombre d'or, aussi appelé phi, vaut environ 1,618.",
+      "source": "Le design graphique — savoirs & savoir-faire, page 80."
     },
     {
       "type": "chiffres",
-      "question": "Combien de centimètres ?",
-      "correct": 1564,
+      "question": "En quelle année la typographie Futura a-t-elle été créée ?",
+      "correct": 1927,
       "digits": 4,
-      "decimalPosition": 2,
-      "explanation": "15,64 cm."
+      "explanation": "Paul Renner a créé Futura en 1927.",
+      "source": "Le design graphique — savoirs & savoir-faire, page 68."
     },
     {
       "type": "chiffres",
-      "question": "Nombre de points DPI standard pour l'impression offset ?",
-      "correct": 300,
-      "digits": 3,
-      "explanation": "300 DPI est le standard pour l'impression de qualité."
+      "question": "En quelle année la typographie Helvetica a-t-elle été créée ?",
+      "correct": 1957,
+      "digits": 4,
+      "explanation": "Max Miedinger a créé Neue Haas Grotesk, ensuite renommée Helvetica, en 1957.",
+      "source": "Le design graphique — savoirs & savoir-faire, page 69."
+    },
+    {
+      "type": "chiffres",
+      "question": "Combien de couleurs le cercle chromatique présenté dans le livre contient-il au total ?",
+      "correct": 12,
+      "digits": 2,
+      "explanation": "Il contient 3 couleurs primaires, 3 secondaires et 6 tertiaires, soit 12 couleurs.",
+      "source": "Le design graphique — savoirs & savoir-faire, page 32."
+    },
+    {
+      "type": "chiffres",
+      "question": "Combien de bits composent un octet ?",
+      "correct": 8,
+      "digits": 1,
+      "explanation": "Un octet est composé de 8 bits.",
+      "source": "Le design graphique — savoirs & savoir-faire, page 92."
+    },
+    {
+      "type": "chiffres",
+      "question": "Combien de grandes phases composent la chaîne graphique présentée dans le livre ?",
+      "correct": 5,
+      "digits": 1,
+      "explanation": "Les cinq phases sont la stratégie, la création, la réalisation, la finition, puis la distribution et la diffusion.",
+      "source": "Le design graphique — savoirs & savoir-faire, page 22."
     }
   ],
 
