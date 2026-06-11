@@ -15,3 +15,13 @@ export const getPlayerCharacter = (player) => player?.character || player?.charI
 export const getCharacterColor = (charId) => CHAR_COLORS[charId] || '#FFF6EF'
 export const getCharacterName = (charId) => formatCharacterName(charId) || 'Joueur'
 export const getBrandMask = (brandName) => '*'.repeat(Array.from(String(brandName || '')).length)
+export const getBrandAnswerImage = (brandName) => {
+  const slug = String(brandName || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+
+  return slug ? `/activite/reponses/logo-${slug}.png` : null
+}

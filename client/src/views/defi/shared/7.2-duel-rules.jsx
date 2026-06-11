@@ -106,7 +106,7 @@ export default function DuelRules({ roomData, currentUserId, acknowledgeRules })
 
  <div className='flex w-full flex-col gap-4'>
             <div className="flex w-full flex-col items-center gap-3">
-              {readerPlayer && <CharacterTag charId={readerPlayer.character} className="mt-0 mb-0 self-center" />}
+              {readerPlayer && type !== 'pick' && <CharacterTag charId={readerPlayer.character} className="mt-0 mb-0 self-center" />}
               <p className="font-funnel text-sm text-light opacity-70 uppercase">Lecture des règles : {ackCount}/{totalDuelists}</p>
             {isDuelist && (
               <ButtonWithIcon

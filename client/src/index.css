@@ -69,6 +69,8 @@
   --color-darkblue-secondary: #0C173C;
   --color-pink-primary: #FF37A5;
   --color-pink-secondary: #4C1A35;
+  --color-toxic-primary: #99E316;
+  --color-toxic-secondary: #2D3D11;
   
   --color-alan: #06C0F9;
   --color-donatien: #FF37A5;
@@ -78,6 +80,7 @@
   --color-alex: #FFC400;
   --color-lucie: #1C51FF;
   --color-tanguy: #FF8A04;
+  --color-boss: #99E316;
 
   --font-family-funnel: funnel, system-ui, sans-serif;
   --font-family-hakobi: hakobi, system-ui, sans-serif;
@@ -106,6 +109,9 @@
   --color-alex: #FFC400;
   --color-lucie: #1C51FF;
   --color-tanguy: #FF8A04;
+  --color-boss: #99E316;
+  --color-toxic-primary: #99E316;
+  --color-toxic-secondary: #2D3D11;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;

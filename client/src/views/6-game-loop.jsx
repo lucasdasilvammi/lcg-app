@@ -8,6 +8,7 @@ import ScoreBar from '../components/ScoreBar'
 import { BONUS_CATALOG } from '../data/bonusCatalog'
 import { pronoun } from '../utils/frenchGrammar'
 
+const DEBUG_TOOLS_ENABLED = import.meta.env.VITE_ENABLE_DEBUG_TOOLS === 'true'
 const CTRL_Z_BONUS = BONUS_CATALOG.find((bonus) => bonus.id === 'ctrl-z')
 const CTRL_Z_REMINDER_DURATION = 3000
 const FINISH_REMINDER_DURATION = 4500
@@ -457,7 +458,12 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
   }
 
   const handleDefiClick = () => {
-    setIsDebugDuelSelectorOpen(true)
+    if (DEBUG_TOOLS_ENABLED) {
+      setIsDebugDuelSelectorOpen(true)
+      return
+    }
+
+    triggerAction('DEFI')
   }
 
   const handleDebugDuelSelect = (duelType) => {
@@ -469,75 +475,77 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
 
   if (isMyTurn) {
     return (
- <div className="relative w-full overflow-hidden bg-bg">
+      <div className="relative w-full overflow-hidden bg-bg">
         <style>{ctrlZReminderStyles}</style>
- <div className="relative z-10 flex h-dvh w-full flex-col justify-center gap-8 overflow-y-hidden px-10 py-8 text-center [@media(max-height:760px)]:gap-4 [@media(max-height:760px)]:overflow-y-auto">
-          {showCtrlZIndicator && (
-            <div key={ctrlZTurnKey} className="absolute right-8 top-12 z-20">
-              <button
-                type="button"
-                aria-label="Utiliser le bonus CTRL + Z"
-                onClick={openCtrlZUsePopup}
-                className="transition active:scale-95"
-              >
-                <CtrlZBonusIcon quantity={ctrlZQuantity} className="h-13 w-13" quantityVariant="dark" animated />
-              </button>
-            </div>
-          )}
-
-          <div className="flex flex-col gap-2 items-center">
-            <CharacterCard charId={activePlayer.character} size="low" />
- <p className="font-family-funnel text-2xl text-light [@media(max-height:760px)]:text-xl">
-              {hasUsedCtrlZThisTurn ? <>Maintenant que tu as relancé, sur quelle case<br/>es-tu tombé ?</> : <>Sur quelle case<br/>es-tu tombé ?</>}
-            </p>
-          </div>
-
- <div className="flex w-full flex-col justify-center overflow-hidden font-family-hakobi text-xl uppercase text-bg">
-            <div className="flex w-full flex-col gap-3">
-            {canDeclareFinish && (
-              <BigButton
-                onClick={handleDeclareFinish}
-                text="Terminer"
-                responsiveCompact
-                icon={<img src="/menu/icon/crown.svg" alt="arrivée" className="w-8 h-8" />}
-                className="bg-light text-bg"
-              />
+        <div className="activity-scroll h-dvh w-full overflow-y-auto">
+          <div className="relative z-10 flex min-h-full w-full flex-col justify-center gap-8 px-10 py-8 text-center [@media(max-height:760px)]:gap-4">
+            {showCtrlZIndicator && (
+              <div key={ctrlZTurnKey} className="absolute right-8 top-12 z-20">
+                <button
+                  type="button"
+                  aria-label="Utiliser le bonus CTRL + Z"
+                  onClick={openCtrlZUsePopup}
+                  className="transition active:scale-95"
+                >
+                  <CtrlZBonusIcon quantity={ctrlZQuantity} className="h-13 w-13" quantityVariant="dark" animated />
+                </button>
+              </div>
             )}
-            <BigButton
-              onClick={() => triggerAction("QUIZ")}
-              text="Quizz"
-              responsiveCompact
- icon={<img src="/game/icons/cases/quizz.svg" alt="jalon" className="w-8 h-8" />}
-              className="bg-yellow-primary"
-            />
-            <BigButton
-              onClick={handleDefiClick}
-              text="Défi"
-              responsiveCompact
- icon={<img src="/game/icons/cases/defi.svg" alt="jalon" className="w-8 h-8" />}
-              className="bg-blue-primary"
-            />
-            <BigButton
-              onClick={() => triggerAction("ACTIVITE")}
-              text="Activité"
-              responsiveCompact
- icon={<img src="/game/icons/cases/activite.svg" alt="jalon" className="w-8 h-8" />}
-              className="bg-orange-primary"
-            />
-            <BigButton
-              onClick={() => triggerAction("BONUS")}
-              text="Bonus"
-              responsiveCompact
- icon={<img src="/game/icons/cases/bonus.svg" alt="jalon" className="w-8 h-8" />}
-              className="bg-green-primary"
-            />
-            <BigButton
-              onClick={() => triggerAction("EVENT")}
-              text="Évènement"
-              responsiveCompact
- icon={<img src="/game/icons/cases/evenement.svg" alt="jalon" className="w-8 h-8" />}
-              className="bg-pink-primary"
-            />
+
+            <div className="flex shrink-0 flex-col items-center gap-2">
+              <CharacterCard charId={activePlayer.character} size="low" />
+              <p className="font-family-funnel text-2xl text-light [@media(max-height:760px)]:text-xl">
+                {hasUsedCtrlZThisTurn ? <>Maintenant que tu as relancé, sur quelle case<br/>es-tu tombé ?</> : <>Sur quelle case<br/>es-tu tombé ?</>}
+              </p>
+            </div>
+
+            <div className="flex w-full shrink-0 flex-col justify-center font-family-hakobi text-xl uppercase text-bg">
+              <div className="flex w-full flex-col gap-3">
+                {canDeclareFinish && (
+                  <BigButton
+                    onClick={handleDeclareFinish}
+                    text="Terminer"
+                    responsiveCompact
+                    icon={<img src="/menu/icon/crown.svg" alt="arrivée" className="h-8 w-8" />}
+                    className="bg-light text-bg"
+                  />
+                )}
+                <BigButton
+                  onClick={() => triggerAction("QUIZ")}
+                  text="Quizz"
+                  responsiveCompact
+                  icon={<img src="/game/icons/cases/quizz.svg" alt="jalon" className="h-8 w-8" />}
+                  className="bg-yellow-primary"
+                />
+                <BigButton
+                  onClick={handleDefiClick}
+                  text="Défi"
+                  responsiveCompact
+                  icon={<img src="/game/icons/cases/defi.svg" alt="jalon" className="h-8 w-8" />}
+                  className="bg-blue-primary"
+                />
+                <BigButton
+                  onClick={() => triggerAction("ACTIVITE")}
+                  text="Activité"
+                  responsiveCompact
+                  icon={<img src="/game/icons/cases/activite.svg" alt="jalon" className="h-8 w-8" />}
+                  className="bg-orange-primary"
+                />
+                <BigButton
+                  onClick={() => triggerAction("BONUS")}
+                  text="Bonus"
+                  responsiveCompact
+                  icon={<img src="/game/icons/cases/bonus.svg" alt="jalon" className="h-8 w-8" />}
+                  className="bg-green-primary"
+                />
+                <BigButton
+                  onClick={() => triggerAction("EVENT")}
+                  text="Évènement"
+                  responsiveCompact
+                  icon={<img src="/game/icons/cases/evenement.svg" alt="jalon" className="h-8 w-8" />}
+                  className="bg-pink-primary"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -564,7 +572,7 @@ export default function GameLoop({ roomData, triggerAction, consumeBonus, declar
             isClosing={isFinishReminderClosing}
           />
         )}
-        {isDebugDuelSelectorOpen && (
+        {DEBUG_TOOLS_ENABLED && isDebugDuelSelectorOpen && (
           <DebugDuelSelector
             onSelect={handleDebugDuelSelect}
             onClose={() => setIsDebugDuelSelectorOpen(false)}

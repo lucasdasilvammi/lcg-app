@@ -6,13 +6,18 @@ import {
   PhotoFrame,
   VoteIcon
 } from './ActivityShared'
-import { getCharacterColor, getCharacterName, getPlayerCharacter } from './ActivityData'
+import {
+  getBrandAnswerImage,
+  getCharacterColor,
+  getCharacterName,
+  getPlayerCharacter
+} from './ActivityData'
 import { deCharacter } from '../../utils/frenchGrammar'
 
 export default function ActiviteReveal({ roomData, currentUserId, continueToFeedback }) {
   if (!roomData || !roomData.lastResult) return null
 
-  const { rankings = [] } = roomData.lastResult
+  const { rankings = [], brandName = '' } = roomData.lastResult
   const nextPlayerIndex = (roomData.turnIndex + 1) % roomData.players.length
   const nextPlayer = roomData.players[nextPlayerIndex]
   const canAdvance = nextPlayer?.id === currentUserId
@@ -50,7 +55,7 @@ export default function ActiviteReveal({ roomData, currentUserId, continueToFeed
           ))}
         </div>
 
-        <WorksHeading />
+        <BrandAnswer brandName={brandName} />
 
         <div className="flex w-full flex-col items-center gap-8">
           {rankedItems.map((rank) => (
@@ -109,12 +114,36 @@ function RankingRow({ rank, position, isCurrentUser }) {
   )
 }
 
-function WorksHeading() {
+function SectionHeading({ children }) {
   return (
     <div className="flex w-full items-center justify-center gap-4 text-light  opacity-50">
       <img src="/activite/deco-gauche.svg" alt="" aria-hidden="true" className="h-2.5 w-24 object-fill" />
-      <p className="whitespace-nowrap font-funnel text-base font-semibold">Vos oeuvres</p>
+      <p className="whitespace-nowrap font-funnel text-base font-semibold">{children}</p>
       <img src="/activite/deco-droite.svg" alt="" aria-hidden="true" className="h-2.5 w-24 object-fill" />
+    </div>
+  )
+}
+
+function WorksHeading() {
+  return <SectionHeading>Vos oeuvres</SectionHeading>
+}
+
+function BrandAnswer({ brandName }) {
+  const imageSrc = getBrandAnswerImage(brandName)
+  if (!imageSrc) return <WorksHeading />
+
+  return (
+    <div className="flex w-full flex-col items-center gap-7">
+      <div className="flex w-full flex-col items-center gap-3">
+        <SectionHeading>Logo</SectionHeading>
+        <PhotoFrame
+          src={imageSrc}
+          alt={`Logo officiel ${brandName}`}
+          className="h-[17rem] w-full max-w-72"
+          imageClassName="object-contain p-5"
+        />
+      </div>
+      <WorksHeading />
     </div>
   )
 }

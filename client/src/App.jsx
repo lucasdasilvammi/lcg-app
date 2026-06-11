@@ -227,7 +227,6 @@ function IosFullscreenHelp({ reason, onClose }) {
     <div className="fixed inset-0 z-[90] flex items-center justify-center bg-black/80 px-7 text-center backdrop-blur-xs" data-no-longpress>
       <div className="relative flex w-full max-w-86 flex-col items-center gap-5 bg-bg px-7 py-8 text-light">
         <div className="pointer-events-none absolute inset-0 border border-light/15" />
-        <img src="/game/categorie/logo.png" alt="" aria-hidden="true" className="h-12 w-12 object-contain" />
         <div className="flex flex-col gap-3">
           <h2 className="font-hakobi text-4xl uppercase leading-none text-light">
             {isIos ? 'Plein écran iPhone' : 'Plein écran indisponible'}

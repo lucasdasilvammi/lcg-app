@@ -166,7 +166,7 @@ export default function ChiffresGame({ roomData, currentUserId }) {
           </div>
         )}
         {isMeReader && (
-          <div className='flex flex-col items-center justify-between gap-8 w-full h-full pt-20'>
+          <div className='flex flex-col items-center gap-10 w-full'>
             <h2 className='text-2xl font-medium font-family-funnel'>{data?.question}</h2>
             
             <div className='flex flex-col items-center gap-8'>
@@ -214,7 +214,7 @@ export default function ChiffresGame({ roomData, currentUserId }) {
             </div>
 
             {/* Bouton Suivant */}
-            <div className='mt-6'>
+            <div className='mt-4'>
               <ButtonWithIcon
                 text='Suivant'
                 onClick={() => console.log('Passer à la suite')}

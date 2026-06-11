@@ -24,7 +24,7 @@ export default function TurnStart({ roomData, rollDice, nextTurn, currentUserId 
                 <h2 className="text-light font-hakobi text-5xl uppercase">
                   Va faire le café du boss
                 </h2>
- <p className="font-family-funnel text-lg text-light/80">
+                <p className="font-family-funnel text-lg text-light/80">
                   {skipAuthor?.character ? (
                     <>
                       <span

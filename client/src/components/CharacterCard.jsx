@@ -43,8 +43,8 @@ const SIZE_CONFIG = {
     title: 'text-3xl'
   },
   'vertical-small': {
-    image: 'h-16 w-16',
-    title: 'text-2xl'
+    image: 'h-32 w-32',
+    title: 'text-[42px]'
   }
 }
 

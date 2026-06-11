@@ -68,19 +68,24 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
     || ['buzzer', 'vraioufaux', 'chiffres', 'pick', 'zoom'].includes(lastResult.interactionType)
 
   const isPickChallenge = lastResult.type === 'pick'
+  const isPickTie = isPickChallenge && lastResult.isTie
   const nextPlayerIndex = (roomData.turnIndex + 1) % roomData.players.length
   const nextPlayer = roomData.players[nextPlayerIndex]
   const isNextPlayer = nextPlayer && nextPlayer.id === currentUserId
   const canAdvance = isLogoActivity ? isNextPlayer : ((isPickChallenge && isNextPlayer) || isQuestioner)
 
   const getCharacterColor = (charId) => `var(--color-${charId})`
-  const borderCharacterId = isLogoActivity
+  const borderCharacterId = isPickTie
+    ? 'boss'
+    : isLogoActivity
     ? (isLogoFailure ? null : winner?.character)
     : (lastResult.type === 'pick'
       ? winner?.character
       : (isDefi ? winner?.character : (lastResult.success ? winner?.character : answeringPlayer?.character)))
 
-  const titleText = isLogoActivity
+  const titleText = isPickTie
+    ? 'Boss'
+    : isLogoActivity
     ? (isLogoFailure ? 'DOMMAGE...' : 'Felicitation')
     : (lastResult.type === 'pick'
       ? 'Felicitation'
@@ -106,7 +111,9 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
     lastResult.correctAnswer
   ])
 
-  const subtitleText = isLogoActivity
+  const subtitleText = isPickTie
+    ? "Vous avez trouvé une couleur exactement aussi proche. Personne ne remporte de jalons sur ce défi."
+    : isLogoActivity
     ? (isLogoFailure
       ? (lastResult.bossFeedback || NO_ACTIVITY_WINNER_MESSAGE)
       : `${formatCharacterName(winner?.character || '')} remporte le brief logo ! ${successFeedbackText}`)
@@ -123,7 +130,13 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
       <CharacterBorder characterId={borderCharacterId}>
  <div className="w-full h-dvh app-screen-y px-10 flex flex-col justify-between items-center text-center bg-bg">
           <div className="flex flex-col gap-0 items-center">
-            {isLogoFailure ? (
+            {isPickTie ? (
+              <div
+                className="flex items-center justify-center"
+              >
+                <img src="/game/boss.svg" alt="Le Boss" className="h-42 w-42" />
+              </div>
+            ) : isLogoFailure ? (
               <BossAvatar className="h-20 w-20" />
             ) : borderCharacterId && (
               <CharacterCard
@@ -134,7 +147,9 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
 
             <h2
               className="text-[42px] font-family-hakobi uppercase -mb-2"
-              style={borderCharacterId ? { color: getCharacterColor(borderCharacterId) } : undefined}
+              style={isPickTie
+                ? { color: 'var(--color-toxic-primary)' }
+                : (borderCharacterId ? { color: getCharacterColor(borderCharacterId) } : undefined)}
             >
               {titleText}
             </h2>

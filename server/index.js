@@ -59,6 +59,7 @@ const { getLogoActivityOutcome } = require('./activityResult');
 const { DUEL_REWARD_POINTS, getDuelRewardPoints } = require('./duelReward');
 const { isPauseAllowed, isUndoAllowed } = require('./phaseGuards');
 const { createPickDeadline, tightenPickDeadline } = require('./pickTiming');
+const { resolvePickWinner } = require('./pickResult');
 const {
   getAvailableQuizCategories,
   getAvailableQuizDifficulties,
@@ -1732,16 +1733,12 @@ io.on('connection', (socket) => {
       const distance1 = colorDistance(player1Color, targetColor);
       const distance2 = colorDistance(player2Color, targetColor);
       
-      let winnerId = null;
-      if (distance1 !== null && distance2 !== null) {
-        if (distance1 < distance2) {
-          winnerId = player1Id;
-        } else if (distance2 < distance1) {
-          winnerId = player2Id;
-        } else {
-          winnerId = room.currentInteraction.submissionOrder[0];
-        }
-      }
+      const { winnerId, isTie } = resolvePickWinner(
+        player1Id,
+        player2Id,
+        distance1,
+        distance2
+      );
       
       room.lastResult = {
         type: 'pick',
@@ -1750,8 +1747,9 @@ io.on('connection', (socket) => {
         submittedColors: room.currentInteraction.submittedColors,
         readerId: room.currentInteraction.readerId,
         winnerId,
-        points: 3,
-        success: true
+        points: isTie ? 0 : 3,
+        success: !isTie,
+        isTie
       };
       
       // Award points

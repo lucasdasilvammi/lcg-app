@@ -83,7 +83,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, cur
             </div>
           </div>
         ) : isMeReader ? (
-          <div className="activity-scroll flex min-h-0 w-full max-w-3xl flex-1 flex-col items-center justify-center gap-5 overflow-y-auto py-2">
+          <div className="flex min-h-0 w-full max-w-3xl flex-1 flex-col items-center justify-between gap-5">
             <p className="text-2xl font-medium font-family-funnel text-light">{data.question}</p>
             <div className="flex flex-col gap-3 w-full">
               {(data.options || []).map((option, index) => (

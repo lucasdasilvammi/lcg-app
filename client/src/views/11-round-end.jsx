@@ -114,7 +114,7 @@ export default function RoundEnd({ roomData, startNewRound, currentUserId }) {
   const pendingEndPlayer = roomData.pendingGameEnd?.playerId
     ? roomData.players.find((player) => player.id === roomData.pendingGameEnd.playerId)
     : null
-  const nextActionLabel = pendingEndPlayer?.id === roomData.players?.[0]?.id ? 'Voir le classement final' : 'Round suivant'
+  const nextActionLabel = pendingEndPlayer?.id === roomData.players?.[0]?.id ? 'Voir le classement' : 'Round suivant'
 
   return (
  <div className="relative w-full overflow-hidden bg-bg">
