@@ -1,62 +1,63 @@
 {
-  "_comment": "110 questions de quiz validées importées depuis questions-validees-2026-06-09.csv. Les questions du fichier questions-a-reviser-2026-06-09.csv sont exclues.",
+  "_comment": "162 questions de quiz importées depuis questions-validees-2026-06-09.csv et questions-a-reviser-2026-06-09.csv. Le champ milestones définit la difficulté réelle de 1 à 5.",
   "Culture graphique": [
     {
+      "id": "SOCLE-QUIZ-001",
       "q": "Quelle est la traduction anglaise de l’acronyme français « CMJN » utilisé en impression ?",
-      "options": [
-        "CMYK",
-        "RGBK",
-        "CYMK"
-      ],
-      "correct": 0,
+      "options": ["RGBK", "CYMK", "CMYK"],
+      "correct": 2,
       "diff": 4,
-      "category": "Culture graphique"
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-002",
       "q": "En typographie, à quoi correspond le terme anglais « leading » ?",
-      "options": [
-        "L’interlignage",
-        "L'interlettrage",
-        "L’approche"
-      ],
+      "options": ["L’interlignage", "L\u0027interlettrage", "L’approche"],
       "correct": 0,
       "diff": 4,
-      "category": "Culture graphique"
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-003",
       "q": "Comment traduit-on « traits de coupe » en anglais dans le vocabulaire d’impression ?",
-      "options": [
-        "Trimming guides",
-        "Cut points",
-        "crop marks"
-      ],
-      "correct": 2,
-      "diff": 4,
-      "category": "Culture graphique"
-    },
-    {
-      "q": "Comment traduit-on le mot « échelle » (dans le sens de redimensionnement) en anglais dans les logiciels de design ?",
-      "options": [
-        "Resize",
-        "Scale",
-        "Stretch"
-      ],
+      "options": ["Trimming guides", "crop marks", "Cut points"],
       "correct": 1,
-      "diff": 2,
-      "category": "Culture graphique"
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Comment traduit-on le terme « dégradé » en anglais dans le domaine du design graphique ?",
-      "options": [
-        "Blend",
-        "Overlay",
-        "Gradient"
-      ],
+      "id": "SOCLE-QUIZ-004",
+      "q": "Comment traduit-on le mot « échelle » (dans le sens de redimensionnement) en anglais dans les logiciels de design ?",
+      "options": ["Resize", "Stretch", "Scale"],
       "correct": 2,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-005",
+      "q": "Comment traduit-on le terme « dégradé » en anglais dans le domaine du design graphique ?",
+      "options": ["Gradient", "Blend", "Overlay"],
+      "correct": 0,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-006",
       "q": "En typographie, que signifie le terme anglais « serif » ?",
       "options": [
         "Une variation de graisse",
@@ -65,328 +66,348 @@
       ],
       "correct": 1,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-007",
       "q": "Comment traduit-on le mot « interlettrage » en anglais, dans un logiciel de design ?",
-      "options": [
-        "Letter Spacing",
-        "Kerning",
-        "Tracking"
-      ],
-      "correct": 0,
+      "options": ["Kerning", "Tracking", "Letter Spacing"],
+      "correct": 2,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-008",
       "q": "Quel mot anglais correspond à la notion de « teinte » en théorie des couleurs ?",
-      "options": [
-        "Hue",
-        "Saturation",
-        "Tint"
-      ],
+      "options": ["Hue", "Saturation", "Tint"],
       "correct": 0,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-009",
       "q": "Quel est le terme anglais pour désigner un masque utilisé pour limiter la visibilité d’un calque à la forme d’un autre ?",
-      "options": [
-        "Layer mask",
-        "Clipping mask",
-        "Crop mask"
-      ],
+      "options": ["Layer mask", "Clipping mask", "Crop mask"],
       "correct": 1,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-010",
       "q": "Quel terme anglais désigne le système standardisé de couleurs utilisé dans l’impression ?",
-      "options": [
-        "Pantone",
-        "RGB swatch",
-        "CMYK palette"
-      ],
-      "correct": 0,
+      "options": ["RGB swatch", "CMYK palette", "Pantone"],
+      "correct": 2,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-011",
       "q": "Quel est le terme anglais correspondant à la propriété qui définit la transparence d’un calque ou d’un objet ?",
-      "options": [
-        "Fill",
-        "Opacity",
-        "Transparency"
-      ],
-      "correct": 1,
+      "options": ["Opacity", "Fill", "Transparency"],
+      "correct": 0,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-012",
       "q": "Comment s’appelle l’espace entre deux colonnes de texte au sein d’une mise en page ?",
-      "options": [
-        "Intercolonne",
-        "Gouttière",
-        "Marges"
-      ],
+      "options": ["Intercolonne", "Gouttière", "Marges"],
       "correct": 1,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-013",
       "q": "Comment appelle-t-on la première lettre d’un paragraphe qui a une forme particulière et s’étend sur au moins deux lignes ?",
-      "options": [
-        "Capitale",
-        "Lettrine",
-        "Cesure"
-      ],
-      "correct": 1,
+      "options": ["Capitale", "Cesure", "Lettrine"],
+      "correct": 2,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-014",
       "q": "Quel mot désigne l’organisation visuelle des éléments dans une mise en page pour guider le lecteur sur l’importance de chaque partie ?",
-      "options": [
-        "Contraste",
-        "Composition",
-        "Hiérarchie"
-      ],
-      "correct": 2,
+      "options": ["Hiérarchie", "Contraste", "Composition"],
+      "correct": 0,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-015",
       "q": "Quel mouvement artistique et pédagogique s’étend de 1919 à 1933 ?",
-      "options": [
-        "Bauhaus",
-        "Le Stijl",
-        "Arts & Crafts"
-      ],
-      "correct": 0,
+      "options": ["Le Stijl", "Bauhaus", "Arts \u0026 Crafts"],
+      "correct": 1,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-016",
       "q": "À quel mouvement appartient Andy Warhol ?",
-      "options": [
-        "Minimalisme",
-        "Pop art",
-        "Surréalisme"
-      ],
-      "correct": 1,
-      "diff": 2,
-      "category": "Culture graphique"
-    },
-    {
-      "q": "Piet Mondrian appartient à quel mouvement artistique ?",
-      "options": [
-        "Cubisme",
-        "Constructivisme",
-        "Le Stijl"
-      ],
+      "options": ["Minimalisme", "Surréalisme", "Pop art"],
       "correct": 2,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Quel mouvement est célèbre pour ses formes organiques, ses courbes inspirées de la nature et son esthétique décorative autour de 1900 ?",
-      "options": [
-        "Art nouveau",
-        "Constructivisme",
-        "Bauhaus"
-      ],
+      "id": "SOCLE-QUIZ-017",
+      "q": "Piet Mondrian appartient à quel mouvement artistique ?",
+      "options": ["Le Stijl", "Cubisme", "Constructivisme"],
       "correct": 0,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Quel mouvement graphique est notamment caractérisé par l’usage de grilles strictes, de typographies sans serif et d’une mise en page objective ?",
-      "options": [
-        "Postmodernisme",
-        "Style international",
-        "Dadaïsme"
-      ],
+      "id": "SOCLE-QUIZ-018",
+      "q": "Quel mouvement est célèbre pour ses formes organiques, ses courbes inspirées de la nature et son esthétique décorative autour de 1900 ?",
+      "options": ["Constructivisme", "Art nouveau", "Bauhaus"],
       "correct": 1,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-019",
+      "q": "Quel mouvement graphique est notamment caractérisé par l’usage de grilles strictes, de typographies sans serif et d’une mise en page objective ?",
+      "options": ["Postmodernisme", "Dadaïsme", "Style international"],
+      "correct": 2,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-020",
       "q": "En quelle année débute officiellement le mouvement du Bauhaus ?",
-      "options": [
-        "1930",
-        "1914",
-        "1919"
-      ],
+      "options": ["1919", "1930", "1914"],
+      "correct": 0,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-021",
+      "q": "Quel mouvement artistique et architectural précède l’émergence du Bauhaus ?",
+      "options": ["Art déco", "Modernisme", "Style international"],
+      "correct": 1,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-022",
+      "q": "Quel mouvement graphique domine entre les années 1950 et 1970 ?",
+      "options": ["Pop Art", "Futurisme", "Style international / Suisse"],
       "correct": 2,
       "diff": 4,
-      "category": "Culture graphique"
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Quel mouvement artistique et architectural précède l’émergence du Bauhaus ?",
-      "options": [
-        "Art déco",
-        "Modernisme",
-        "Style international"
-      ],
-      "correct": 1,
-      "diff": 4,
-      "category": "Culture graphique"
-    },
-    {
-      "q": "Quel mouvement graphique domine entre les années 1950 et 1970 ?",
-      "options": [
-        "Pop Art",
-        "Style international / Suisse",
-        "Futurisme"
-      ],
-      "correct": 1,
-      "diff": 4,
-      "category": "Culture graphique"
-    },
-    {
+      "id": "SOCLE-QUIZ-023",
       "q": "Quelles caractéristiques définissent le style graphique du Bauhaus ?",
       "options": [
+        "Typographies sans serif, Compositions géométriques, Grilles",
         "Motifs floraux, couleurs pastel, inspiration artisanale",
-        "Illustrations baroques, textures chargées, ombres complexes",
-        "Typographies sans serif, Compositions géométriques, Grilles"
+        "Illustrations baroques, textures chargées, ombres complexes"
       ],
-      "correct": 2,
+      "correct": 0,
       "diff": 4,
-      "category": "Culture graphique"
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-024",
       "q": "Dans quel contexte est né le mouvement Pop Art ?",
       "options": [
-        "Explosion de la culture pop, consommation, médias de masse",
         "Crise économique et rejet de la culture populaire",
+        "Explosion de la culture pop, consommation, médias de masse",
         "Volonté de revenir à des représentations religieuses classiques"
       ],
-      "correct": 0,
+      "correct": 1,
       "diff": 4,
-      "category": "Culture graphique"
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Quelle est la période du mouvement Arts & Crafts ?",
-      "options": [
-        "1880-1910",
-        "1850-1880",
-        "1910-1930"
-      ],
-      "correct": 0,
-      "diff": 4,
-      "category": "Culture graphique"
-    },
-    {
-      "q": "Quel mouvement succède historiquement à Arts & Crafts ?",
-      "options": [
-        "Psychédélisme",
-        "Postmodernisme",
-        "Art nouveau"
-      ],
+      "id": "SOCLE-QUIZ-025",
+      "q": "Quelle est la période du mouvement Arts \u0026 Crafts ?",
+      "options": ["1850-1880", "1910-1930", "1880-1910"],
       "correct": 2,
       "diff": 4,
-      "category": "Culture graphique"
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-026",
+      "q": "Quel mouvement succède historiquement à Arts \u0026 Crafts ?",
+      "options": ["Art nouveau", "Psychédélisme", "Postmodernisme"],
+      "correct": 0,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-027",
       "q": "Dans quel ordre ces mouvements sont-ils apparus ?",
       "options": [
-        "Art nouveau → Modernisme → Bauhaus",
         "Bauhaus → Modernisme → Art nouveau",
+        "Art nouveau → Modernisme → Bauhaus",
         "Art nouveau → Bauhaus → Modernisme"
       ],
-      "correct": 0,
+      "correct": 1,
       "diff": 4,
-      "category": "Culture graphique"
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-028",
       "q": "Avec quel mouvement Max Bill est-il associé ?",
-      "options": [
-        "Futurisme",
-        "Bauhaus",
-        "Style international"
-      ],
+      "options": ["Futurisme", "Bauhaus", "Style international"],
       "correct": 2,
       "diff": 4,
-      "category": "Culture graphique"
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-029",
       "q": "Qu’est-ce que le « graphisme d’auteur » ?",
       "options": [
-        "Un style de graphisme spécialisé dans le cinéma",
         "Un style de graphisme personnel et identifiable",
+        "Un style de graphisme spécialisé dans le cinéma",
         "Un style de graphisme destiné aux écrivains"
       ],
-      "correct": 1,
+      "correct": 0,
       "diff": 4,
-      "category": "Culture graphique"
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-030",
       "q": "En quelle année Adobe crée-t-il le langage PostScript ?",
-      "options": [
-        "2005",
-        "1982",
-        "2010"
-      ],
+      "options": ["2005", "1982", "2010"],
       "correct": 1,
       "diff": 4,
-      "category": "Culture graphique"
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-031",
       "q": "Quelle pop star Andy Warhol a-t-il représentée dans sa célèbre sérigraphie de 1962 ?",
-      "options": [
-        "Audrey Hepburn",
-        "Marilyn Monroe",
-        "Elvis Presley"
-      ],
-      "correct": 1,
-      "diff": 2,
-      "category": "Culture graphique"
-    },
-    {
-      "q": "Quel designer est à l’origine de la célèbre typographie Helvetica ?",
-      "options": [
-        "Jan Tschichold",
-        "Max Miedinger",
-        "Adrian Frutiger"
-      ],
-      "correct": 1,
-      "diff": 2,
-      "category": "Culture graphique"
-    },
-    {
-      "q": "Quel designer est célèbre pour avoir créé le logo IBM et celui d’ABC ?",
-      "options": [
-        "Max Bill",
-        "Paul Rand",
-        "Massimo Vignelli"
-      ],
-      "correct": 1,
-      "diff": 2,
-      "category": "Culture graphique"
-    },
-    {
-      "q": "Quel affichiste américain est célèbre pour le logo « I ❤️ NY » ?",
-      "options": [
-        "David Carson",
-        "Michel Bouvet",
-        "Milton Glaser"
-      ],
+      "options": ["Audrey Hepburn", "Elvis Presley", "Marilyn Monroe"],
       "correct": 2,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Quel designer est connu pour son travail sur le métro de New York et le style minimaliste des identités visuelles ?",
-      "options": [
-        "Massimo Vignelli",
-        "Philippe Apeloig",
-        "Max Bill"
-      ],
+      "id": "SOCLE-QUIZ-032",
+      "q": "Quel designer est à l’origine de la célèbre typographie Helvetica ?",
+      "options": ["Max Miedinger", "Jan Tschichold", "Adrian Frutiger"],
       "correct": 0,
       "diff": 2,
-      "category": "Culture graphique"
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-033",
+      "q": "Quel designer est célèbre pour avoir créé le logo IBM et celui d’ABC ?",
+      "options": ["Max Bill", "Paul Rand", "Massimo Vignelli"],
+      "correct": 1,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-034",
+      "q": "Quel affichiste américain est célèbre pour le logo « I ❤️ NY » ?",
+      "options": ["David Carson", "Michel Bouvet", "Milton Glaser"],
+      "correct": 2,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-035",
+      "q": "Quel designer est connu pour son travail sur le métro de New York et le style minimaliste des identités visuelles ?",
+      "options": ["Massimo Vignelli", "Philippe Apeloig", "Max Bill"],
+      "correct": 0,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-036",
       "q": "Pourquoi Paula Scher est-elle particulièrement reconnue dans l’histoire du graphisme ?",
       "options": [
         "Pour ses affiches politiques illustrées",
@@ -395,297 +416,470 @@
       ],
       "correct": 1,
       "diff": 4,
-      "category": "Culture graphique"
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-037",
       "q": "Quel affichiste français est célèbre pour ses affiches publicitaires Art Déco comme celles pour les trains PLM ?",
-      "options": [
-        "Cassandre",
-        "Roman Cieslewicz",
-        "Charles Loupot"
-      ],
-      "correct": 0,
-      "diff": 4,
-      "category": "Culture graphique"
-    },
-    {
-      "q": "Qui est ce graphiste français emblématique du 20ᵉ siècle connu pour ses affiches pour Citroën et Parfums Bourjois ?",
-      "options": [
-        "Charles Loupot",
-        "Michel Bouvet",
-        "Alain Le Quernec"
-      ],
-      "correct": 0,
-      "diff": 4,
-      "category": "Culture graphique"
-    },
-    {
-      "q": "Quel typographe allemand a théorisé la « nouvelle typographie » et modernisé la mise en page dans les années 1920–1930 ?",
-      "options": [
-        "Stanley Morison",
-        "Roger Excoffon",
-        "Jan Tschichold"
-      ],
+      "options": ["Roman Cieslewicz", "Charles Loupot", "Cassandre"],
       "correct": 2,
       "diff": 4,
-      "category": "Culture graphique"
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Quel artiste américain est connu pour son affiche « Hope » de Barack Obama et son travail street-art ?",
-      "options": [
-        "Shepard Fairey",
-        "David Carson",
-        "Max Bill"
-      ],
+      "id": "SOCLE-QUIZ-038",
+      "q": "Qui est ce graphiste français emblématique du 20ᵉ siècle connu pour ses affiches pour Citroën et Parfums Bourjois ?",
+      "options": ["Charles Loupot", "Michel Bouvet", "Alain Le Quernec"],
       "correct": 0,
       "diff": 4,
-      "category": "Culture graphique"
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-039",
+      "q": "Quel typographe allemand a théorisé la « nouvelle typographie » et modernisé la mise en page dans les années 1920–1930 ?",
+      "options": ["Stanley Morison", "Jan Tschichold", "Roger Excoffon"],
+      "correct": 1,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-040",
+      "q": "Quel artiste américain est connu pour son affiche « Hope » de Barack Obama et son travail street-art ?",
+      "options": ["David Carson", "Max Bill", "Shepard Fairey"],
+      "correct": 2,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Culture graphique",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "LIVRE-CULTURE-NULS-01",
+      "q": "Quel domaine du design graphique s\u0027occupe de la mise en page de livres, magazines et autres supports de lecture ?",
+      "options": [
+        "Le design éditorial",
+        "Le design d’information",
+        "Le design publicitaire"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "difficultyLabel": "Pour les nuls",
+      "category": "Culture graphique",
+      "status": "review",
+      "explanation": "Le design éditorial organise les contenus d\u0027un support de lecture afin de les rendre lisibles et cohérents.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "20"
+    },
+    {
+      "id": "LIVRE-CULTURE-NULS-02",
+      "q": "À quels supports le design UX/UI est-il principalement destiné ?",
+      "options": [
+        "Aux emballages imprimés",
+        "Aux sites, applications et logiciels",
+        "Aux reliures de livres"
+      ],
+      "correct": 1,
+      "diff": 1,
+      "difficultyLabel": "Pour les nuls",
+      "category": "Culture graphique",
+      "status": "review",
+      "explanation": "Le design UX/UI conçoit des interfaces numériques et l\u0027expérience globale de leur utilisation.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "20"
+    },
+    {
+      "id": "LIVRE-CULTURE-NULS-03",
+      "q": "Qu\u0027est-ce qu\u0027un moodboard ?",
+      "options": [
+        "Un devis détaillé d\u0027impression",
+        "Une grille de mise en page définitive",
+        "Un collage visuel qui traduit une ambiance et un style"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "difficultyLabel": "Pour les nuls",
+      "category": "Culture graphique",
+      "status": "review",
+      "explanation": "Le moodboard rassemble notamment images, couleurs, textures et éléments graphiques pour orienter l\u0027esthétique d\u0027un projet.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "25"
+    },
+    {
+      "id": "LIVRE-CULTURE-MOYEN-01",
+      "q": "Dans la chaîne graphique, quelle phase vient immédiatement après la stratégie ?",
+      "options": [
+        "Le phase de brief",
+        "La phase de création",
+        "La phase de diffusion"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Culture graphique",
+      "status": "review",
+      "explanation": "L\u0027ordre exact est : stratégie, création, réalisation, finition, puis distribution et diffusion.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "22",
+      "revisionNotes": "fausse réponses trop simple ou revoir la difficulté de la question"
+    },
+    {
+      "id": "LIVRE-CULTURE-MOYEN-02",
+      "q": "Pendant la première phase d\u0027un brainstorming, quelle attitude favorise la production d\u0027idées ?",
+      "options": [
+        "Écarter immédiatement les idées irréalistes",
+        "Ne conserver que l\u0027avis du commanditaire",
+        "Exprimer un maximum d\u0027idées sans les juger"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Culture graphique",
+      "status": "review",
+      "explanation": "Le jugement et l\u0027évaluation viennent après la phase d\u0027expression libre.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "24"
+    },
+    {
+      "id": "LIVRE-CULTURE-MOYEN-03",
+      "q": "Quel est l\u0027objectif principal d\u0027un benchmark dans un projet graphique ?",
+      "options": [
+        "Comparer des références pour repérer les bonnes pratiques",
+        "Choisir définitivement une police",
+        "Calculer le coût exact du papier"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Culture graphique",
+      "status": "review",
+      "explanation": "Le benchmark aide à apprendre de références comparables et à dégager des pistes d\u0027amélioration ou d\u0027innovation.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "25"
+    },
+    {
+      "id": "LIVRE-CULTURE-EXPERT-01",
+      "q": "Quel enchaînement respecte l\u0027ordre complet des cinq phases de la chaîne graphique présenté dans le livre ?",
+      "options": [
+        "Stratégie, création, réalisation, finition, distribution et diffusion",
+        "Brief, création, impression, façonnage, livraison",
+        "Stratégie, réalisation, création, diffusion, finitionStratégie, création, validation, impression, distribution"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "difficultyLabel": "Expert",
+      "category": "Culture graphique",
+      "status": "review",
+      "explanation": "Cet ordre accompagne le projet depuis sa définition jusqu\u0027à sa mise à disposition du public.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "22",
+      "revisionNotes": "revoir la question, \"quel sont les bonnes étapes d\u0027un projet graphique\""
+    },
+    {
+      "id": "LIVRE-CULTURE-EXPERT-02",
+      "q": "Qu’est-ce qui caractérise principalement le motion design ?",
+      "options": [
+        "L’animation de personnages en 3D",
+        "L’animation d’éléments graphiques",
+        "La création d’effets spéciaux vidéo"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Culture graphique",
+      "status": "review",
+      "explanation": "Le motion design construit des animations dynamiques en combinant le graphisme, le mouvement et souvent le son.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "21",
+      "revisionNotes": "expert pour ça ? revoir la difficulté, c\u0027est facile au maxium"
+    },
+    {
+      "id": "LIVRE-CULTURE-EXPERT-03",
+      "q": "Dans une carte mentale, pourquoi relie-t-on visuellement mots-clés, champs sémantiques et concepts ?",
+      "options": [
+        "Pour choisir directement la solution finale",
+        "Pour présenter le projet sous une autres forme",
+        "Pour faire apparaître des connexions utiles au début du projet"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Culture graphique",
+      "status": "review",
+      "explanation": "La carte mentale organise visuellement l\u0027information afin de favoriser les associations et l\u0027exploration.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "24",
+      "revisionNotes": "fausses réponse trop simple ou incompréhensible"
     }
   ],
   "Typographie": [
     {
+      "id": "SOCLE-QUIZ-041",
       "q": "Comment s’appelle la coupure d’un mot en fin de ligne avec un tiret ?",
-      "options": [
-        "Lettrine",
-        "Interligne",
-        "Césure"
-      ],
-      "correct": 2,
+      "options": ["Césure", "Lettrine", "Interligne"],
+      "correct": 0,
       "diff": 2,
-      "category": "Typographie"
+      "difficultyLabel": "Facile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-042",
       "q": "Quel terme désigne l’espace entre les lettres dans un texte ?",
-      "options": [
-        "Chasse",
-        "Crénage",
-        "Interlettrage"
-      ],
-      "correct": 2,
+      "options": ["Chasse", "Interlettrage", "Crénage"],
+      "correct": 1,
       "diff": 2,
-      "category": "Typographie"
+      "difficultyLabel": "Facile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-043",
       "q": "Comment appelle-t-on l’ajustement de l’espace entre les lettres pour créer un rythme visuel ?",
-      "options": [
-        "Crénage",
-        "Interlettrage",
-        "Approche"
-      ],
-      "correct": 0,
+      "options": ["Interlettrage", "Approche", "Crénage"],
+      "correct": 2,
       "diff": 4,
-      "category": "Typographie"
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-044",
       "q": "Quel terme désigne la taille d’un caractère en typographie ?",
-      "options": [
-        "Point",
-        "Chasse",
-        "Corps"
-      ],
-      "correct": 2,
+      "options": ["Corps", "Point", "Chasse"],
+      "correct": 0,
       "diff": 2,
-      "category": "Typographie"
+      "difficultyLabel": "Facile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-045",
       "q": "Quel terme désigne la longueur d’un caractère, incluant l’espace avant et après la lettre ?",
-      "options": [
-        "Crénage",
-        "Approche",
-        "Chasse"
-      ],
-      "correct": 2,
+      "options": ["Crénage", "Chasse", "Approche"],
+      "correct": 1,
       "diff": 4,
-      "category": "Typographie"
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-046",
       "q": "Quel terme désigne l’espace entre deux lettres spécifique dans un mot pour améliorer la lisibilité ?",
-      "options": [
-        "Approche",
-        "Crénage",
-        "Interlignage"
-      ],
-      "correct": 0,
+      "options": ["Crénage", "Interlignage", "Approche"],
+      "correct": 2,
       "diff": 4,
-      "category": "Typographie"
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-047",
       "q": "Quel terme désigne la fusion de deux lettres pour former un seul glyphe ?",
-      "options": [
-        "Crénage",
-        "Lettrine",
-        "Ligature"
-      ],
-      "correct": 2,
+      "options": ["Ligature", "Crénage", "Lettrine"],
+      "correct": 0,
       "diff": 4,
-      "category": "Typographie"
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-048",
       "q": "Comment s’appelle la représentation graphique d’un caractère ou symbole dans une police de caractères ?",
-      "options": [
-        "Emoji",
-        "Glyphe",
-        "Caractère"
-      ],
+      "options": ["Emoji", "Glyphe", "Caractère"],
       "correct": 1,
       "diff": 2,
-      "category": "Typographie"
+      "difficultyLabel": "Facile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-049",
       "q": "Comment appelle-t-on une lettre majuscule en typographie ?",
-      "options": [
-        "Grande casse",
-        "Grande lettre",
-        "Capitale"
-      ],
+      "options": ["Grande casse", "Grande lettre", "Capitale"],
       "correct": 2,
       "diff": 2,
-      "category": "Typographie"
+      "difficultyLabel": "Facile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-050",
       "q": "Quel terme désigne le trait principal d’une lettre ?",
-      "options": [
-        "Haste",
-        "Chasse",
-        "Traverse"
-      ],
+      "options": ["Haste", "Chasse", "Traverse"],
       "correct": 0,
       "diff": 4,
-      "category": "Typographie"
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-051",
       "q": "Quel terme désigne l’épaisseur du trait d’une lettre ?",
-      "options": [
-        "Délié",
-        "Chasse",
-        "Graisse"
-      ],
-      "correct": 2,
+      "options": ["Délié", "Graisse", "Chasse"],
+      "correct": 1,
       "diff": 2,
-      "category": "Typographie"
+      "difficultyLabel": "Facile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-052",
       "q": "Quel mot désigne la largeur d’un caractère, incluant l’espace avant et après ?",
-      "options": [
-        "Corps",
-        "Approche",
-        "Chasse"
-      ],
+      "options": ["Corps", "Approche", "Chasse"],
       "correct": 2,
       "diff": 4,
-      "category": "Typographie"
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-053",
       "q": "Quel terme désigne le trait fin d’un caractère ?",
-      "options": [
-        "Empattement",
-        "Graisse",
-        "Délié"
-      ],
+      "options": ["Délié", "Empattement", "Graisse"],
+      "correct": 0,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-054",
+      "q": "Quel terme désigne le trait horizontal d’une lettre, comme dans le “A” ou le “H” ?",
+      "options": ["Haste", "Traverse", "Bâton"],
+      "correct": 1,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-055",
+      "q": "Comment appelle-t-on l’espace intérieur fermé d’une lettre, comme dans le “O” ou le “P” ?",
+      "options": ["Chasse", "Haste", "Contre-poinçon"],
+      "correct": 2,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-056",
+      "q": "Quel terme désigne la hauteur apparente d’une police ?",
+      "options": ["Hauteur d’œil", "Hauteur de ligne", "Hauteur de trait"],
+      "correct": 0,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-057",
+      "q": "Comment s’appelle la ligne sur laquelle reposent les lettres dans une mise en page typographique ?",
+      "options": ["Ligne de fond", "Ligne de pied", "Ligne de base"],
+      "correct": 1,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-058",
+      "q": "Quel terme désigne la courbe centrale d’un “S” dans une police de caractères ?",
+      "options": ["Spline", "Sine", "Spine"],
       "correct": 2,
       "diff": 4,
-      "category": "Typographie"
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Quel terme désigne le trait horizontal d’une lettre, comme dans le “A” ou le “H” ?",
-      "options": [
-        "Haste",
-        "Traverse",
-        "Bâton"
-      ],
-      "correct": 1,
-      "diff": 4,
-      "category": "Typographie"
-    },
-    {
-      "q": "Comment appelle-t-on l’espace intérieur fermé d’une lettre, comme dans le “O” ou le “P” ?",
-      "options": [
-        "Contre-poinçon",
-        "Chasse",
-        "Haste"
-      ],
-      "correct": 0,
-      "diff": 2,
-      "category": "Typographie"
-    },
-    {
-      "q": "Quel terme désigne la hauteur apparente d’une police ?",
-      "options": [
-        "Hauteur d’œil",
-        "Hauteur de ligne",
-        "Hauteur de trait"
-      ],
-      "correct": 0,
-      "diff": 2,
-      "category": "Typographie"
-    },
-    {
-      "q": "Comment s’appelle la ligne sur laquelle reposent les lettres dans une mise en page typographique ?",
-      "options": [
-        "Ligne de pied",
-        "Ligne de fond",
-        "Ligne de base"
-      ],
-      "correct": 0,
-      "diff": 2,
-      "category": "Typographie"
-    },
-    {
-      "q": "Quel terme désigne la courbe centrale d’un “S” dans une police de caractères ?",
-      "options": [
-        "Spine",
-        "Spline",
-        "Sine"
-      ],
-      "correct": 0,
-      "diff": 4,
-      "category": "Typographie"
-    },
-    {
+      "id": "SOCLE-QUIZ-059",
       "q": "Comment appelle-t-on l’espace entre deux caractères pour ajuster le rythme visuel d’un mot ?",
-      "options": [
-        "Chasse",
-        "Approche",
-        "Crénage"
-      ],
-      "correct": 1,
+      "options": ["Approche", "Chasse", "Crénage"],
+      "correct": 0,
       "diff": 2,
-      "category": "Typographie"
+      "difficultyLabel": "Facile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-060",
       "q": "Qu’est-ce qu’une typographie scriptes ?",
       "options": [
-        "Écriture manuscrite, lettres connectées",
         "Empattements rectangulaires",
+        "Écriture manuscrite, lettres connectées",
         "Lettres géométriques et rigides"
       ],
-      "correct": 0,
+      "correct": 1,
       "diff": 2,
-      "category": "Typographie"
+      "difficultyLabel": "Facile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-061",
       "q": "Qu’est-ce qu’une typographie décorative ?",
       "options": [
-        "Créative, pas de catégorie fixe",
         "Sans empattements",
-        "Lettres reliées comme une écriture manuscrite"
-      ],
-      "correct": 0,
-      "diff": 2,
-      "category": "Typographie"
-    },
-    {
-      "q": "Qu’est-ce qu’une typographie mécane ?",
-      "options": [
-        "Lettres très fines",
-        "Sans empattements",
-        "Empattements rectangulaires"
+        "Lettres reliées comme une écriture manuscrite",
+        "Créative, pas de catégorie fixe"
       ],
       "correct": 2,
-      "diff": 4,
-      "category": "Typographie"
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-062",
+      "q": "Qu’est-ce qu’une typographie mécane ?",
+      "options": [
+        "Empattements rectangulaires",
+        "Lettres très fines",
+        "Sans empattements"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-063",
       "q": "Qu’est-ce qu’une typographie serif ?",
       "options": [
         "Sans empattements",
@@ -694,64 +888,88 @@
       ],
       "correct": 1,
       "diff": 2,
-      "category": "Typographie"
+      "difficultyLabel": "Facile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-064",
       "q": "Qu’est-ce qu’une typographie sans-serif ?",
       "options": [
         "Sans les caractères spéciaux",
-        "Sans empattements",
-        "Sans chiffres"
+        "Sans chiffres",
+        "Sans empattements"
       ],
-      "correct": 1,
+      "correct": 2,
       "diff": 2,
-      "category": "Typographie"
+      "difficultyLabel": "Facile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-065",
       "q": "Que suggère une typographie scriptes ?",
       "options": [
+        "Authenticité, humanité",
         "Modernité et minimalisme",
-        "Solidité et confiance",
-        "Authenticité, humanité"
+        "Solidité et confiance"
       ],
-      "correct": 2,
+      "correct": 0,
       "diff": 4,
-      "category": "Typographie"
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-066",
       "q": "Que suggère une typographie décorative ?",
       "options": [
-        "Créativité, excentricité",
         "Authenticité, humanité",
+        "Créativité, excentricité",
         "Élégance, héritage"
       ],
-      "correct": 0,
+      "correct": 1,
       "diff": 4,
-      "category": "Typographie"
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-067",
       "q": "Que suggère une typographie mécane ?",
       "options": [
-        "Solidité, confiance",
         "Créativité, excentricité",
-        "Modernité, minimalisme"
-      ],
-      "correct": 0,
-      "diff": 4,
-      "category": "Typographie"
-    },
-    {
-      "q": "Que suggère une typographie serif ?",
-      "options": [
         "Modernité, minimalisme",
-        "Authenticité, humanité",
-        "Élégance, héritage"
+        "Solidité, confiance"
       ],
       "correct": 2,
       "diff": 4,
-      "category": "Typographie"
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-068",
+      "q": "Que suggère une typographie serif ?",
+      "options": [
+        "Élégance, héritage",
+        "Modernité, minimalisme",
+        "Authenticité, humanité"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-069",
       "q": "Que suggère une typographie sans-serif ?",
       "options": [
         "Élégance, héritage",
@@ -760,89 +978,274 @@
       ],
       "correct": 1,
       "diff": 4,
-      "category": "Typographie"
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "LIVRE-TYPO-NULS-01",
+      "q": "Quel détail caractérise une typographie serif ?",
+      "options": [
+        "Elle possède des empattements",
+        "Elle est toujours écrite en capitales",
+        "Elle ne contient aucun signe de ponctuation"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "difficultyLabel": "Pour les nuls",
+      "category": "Typographie",
+      "status": "review",
+      "explanation": "Les serif se reconnaissent à leurs empattements, ces petites extensions placées aux extrémités des lettres.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "53"
+    },
+    {
+      "id": "LIVRE-TYPO-NULS-02",
+      "q": "Comment reconnaît-on généralement une typographie sans serif ?",
+      "options": [
+        "Elle imite obligatoirement l\u0027écriture manuscrite",
+        "Elle ne possède pas d\u0027empattements",
+        "Elle utilise uniquement des chiffres"
+      ],
+      "correct": 1,
+      "diff": 1,
+      "difficultyLabel": "Pour les nuls",
+      "category": "Typographie",
+      "status": "review",
+      "explanation": "Les sans serif présentent des formes dépourvues d\u0027empattements et sont souvent associées à la clarté et à la modernité.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "49"
+    },
+    {
+      "id": "LIVRE-TYPO-NULS-03",
+      "q": "Que désigne une police de caractères ?",
+      "options": [
+        "La couleur de fond d\u0027un paragraphe",
+        "Le format physique d\u0027une feuille",
+        "Un ensemble cohérent de lettres, chiffres, signes et glyphes"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "difficultyLabel": "Pour les nuls",
+      "category": "Typographie",
+      "status": "review",
+      "explanation": "Une police réunit les caractères d\u0027un même dessin, avec éventuellement plusieurs graisses et inclinaisons.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "45"
+    },
+    {
+      "id": "LIVRE-TYPO-MOYEN-01",
+      "q": "À quoi servent principalement les contrastes typographiques dans une mise en page ?",
+      "options": [
+        "À rendre toutes les informations équivalentes",
+        "À créer une hiérarchie et guider le regard",
+        "À donner une identité plus marquée à la page"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Typographie",
+      "status": "review",
+      "explanation": "Les variations de taille, style, casse ou police structurent l\u0027information et rendent les niveaux de lecture visibles.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "65",
+      "revisionNotes": "revoir les fausses réponses"
+    },
+    {
+      "id": "LIVRE-TYPO-MOYEN-02",
+      "q": "Pourquoi les typographies scriptes doivent-elles être utilisées avec précaution ?",
+      "options": [
+        "Elles ne peuvent pas contenir de minuscules",
+        "Elles sont incompatibles avec l\u0027impression",
+        "Leur dessin cursif peut rendre la lecture difficile"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Typographie",
+      "status": "review",
+      "explanation": "Leur aspect manuscrit, connecté et fluide apporte de la personnalité, mais peut diminuer la lisibilité.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "63"
+    },
+    {
+      "id": "LIVRE-TYPO-MOYEN-03",
+      "q": "Quel était le nom d\u0027origine de la typographie Helvetica ?",
+      "options": ["Neue Haas Grotesk", "Times Modern", "Futura Helvetica"],
+      "correct": 0,
+      "diff": 3,
+      "difficultyLabel": "Difficile",
+      "category": "Typographie",
+      "status": "review",
+      "explanation": "Créée par Max Miedinger en 1957, elle a ensuite été renommée Helvetica en référence à la Suisse.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "69"
+    },
+    {
+      "id": "LIVRE-TYPO-EXPERT-01",
+      "q": "Quelle description correspond correctement à la typographie Futura ?",
+      "options": [
+        "Une typographie dessinée par Paul Renner en 1927",
+        "Une typographie dessinée par Stanley Morison en 1931",
+        "Une typographie créée par Max Miedinger en 1957"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "difficultyLabel": "Expert",
+      "category": "Typographie",
+      "status": "review",
+      "explanation": "Futura est dessinée par Paul Renner en 1927 et s\u0027inscrit dans une esthétique géométrique proche du Bauhaus.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "68",
+      "revisionNotes": "pas compris la question revoir l\u0027utilisation du terme association"
+    },
+    {
+      "id": "LIVRE-TYPO-EXPERT-02",
+      "q": "Quel besoin éditorial a orienté la création de Times New Roman ?",
+      "options": [
+        "Créer une police décorative destinée aux affiches publicitaires.",
+        "Économiser de l\u0027encre tout en restant confortable à lire",
+        "Concevoir une typographie très expressive pour les couvertures de livres"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "difficultyLabel": "Expert",
+      "category": "Typographie",
+      "status": "review",
+      "explanation": "Stanley Morison travaille sur une serif compacte, lisible et adaptée aux longs articles du journal.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "70",
+      "revisionNotes": "revoir les fausses réponses"
+    },
+    {
+      "id": "LIVRE-TYPO-EXPERT-03",
+      "q": "Quel type de police peut devenir difficile à lire sur écran, surtout en petit corps ?",
+      "options": [
+        "Une police avec des espacements trop ouverts entre les lettres",
+        "Un contraste suffisant entre le texte et le fondUne police conçue avec une hauteur d’x assez généreuse",
+        "Une police avec des parties épaisses et d’autres fines."
+      ],
+      "correct": 2,
+      "diff": 5,
+      "difficultyLabel": "Expert",
+      "category": "Typographie",
+      "status": "review",
+      "explanation": "Les traits très fins de caractères à fort contraste peuvent mal résister à l\u0027affichage en pixels.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "71",
+      "revisionNotes": "revoir les fausses réponses dans des propositions qui réduisent la lisibilité"
     }
   ],
   "Signe et couleur": [
     {
+      "id": "SOCLE-QUIZ-070",
       "q": "Parmi les propositions suivantes, quelle liste ne représente PAS une symbolique du rouge ?",
       "options": [
-        "Joie, positivité, maitrise",
         "Force, puissance, agressivité",
-        "Interdiction, danger, action"
+        "Interdiction, danger, action",
+        "Joie, positivité, maitrise"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Signe et couleur",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-071",
+      "q": "Parmi les propositions suivantes, quelle liste ne représente PAS une symbolique du bleu?",
+      "options": [
+        "Questionnement, protection, adaptation",
+        "Fraîcheur, eau, ciel",
+        "Rêve, fidélité, loyauté"
       ],
       "correct": 0,
       "diff": 2,
-      "category": "Signe et couleur"
+      "difficultyLabel": "Facile",
+      "category": "Signe et couleur",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Parmi les propositions suivantes, quelle liste ne représente PAS une symbolique du bleu?",
-      "options": [
-        "Fraîcheur, eau, ciel",
-        "Questionnement, protection, adaptation",
-        "Rêve, fidélité, loyauté"
-      ],
-      "correct": 1,
-      "diff": 2,
-      "category": "Signe et couleur"
-    },
-    {
+      "id": "SOCLE-QUIZ-072",
       "q": "Parmi les propositions suivantes, quelle liste ne représente PAS une symbolique du vert?",
       "options": [
         "Croissance, jeunesse, repos",
-        "Nature, écologie, renouveau",
-        "Maitrise, contrôle, amitié"
-      ],
-      "correct": 2,
-      "diff": 2,
-      "category": "Signe et couleur"
-    },
-    {
-      "q": "Parmi les propositions suivantes, quelle liste ne représente PAS une symbolique du orange ?",
-      "options": [
-        "Peur, rivalité, domination",
-        "Optimisme, énergie, dynamisme",
-        "Joie, créativité, communication"
-      ],
-      "correct": 0,
-      "diff": 2,
-      "category": "Signe et couleur"
-    },
-    {
-      "q": "Sur le cercle chromatique, comment appelle-t-on deux couleurs placées diamétralement opposées ?",
-      "options": [
-        "Couleurs analogues",
-        "Couleurs complémentaire",
-        "Couleurs tertiaires"
+        "Maitrise, contrôle, amitié",
+        "Nature, écologie, renouveau"
       ],
       "correct": 1,
       "diff": 2,
-      "category": "Signe et couleur"
+      "difficultyLabel": "Facile",
+      "category": "Signe et couleur",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-073",
+      "q": "Parmi les propositions suivantes, quelle liste ne représente PAS une symbolique du orange ?",
+      "options": [
+        "Optimisme, énergie, dynamisme",
+        "Joie, créativité, communication",
+        "Peur, rivalité, domination"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Signe et couleur",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-074",
+      "q": "Sur le cercle chromatique, comment appelle-t-on deux couleurs placées diamétralement opposées ?",
+      "options": [
+        "Couleurs complémentaire",
+        "Couleurs analogues",
+        "Couleurs tertiaires"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Signe et couleur",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-075",
       "q": "Sur le cercle chromatique, que désigne une harmonie de couleurs analogues ?",
       "options": [
         "Des couleurs réparties en triangle parfait",
-        "Des teintes opposées créant une tension visuelle",
-        "Des couleurs adjacentes sur le cercle chromatique"
+        "Des couleurs adjacentes sur le cercle chromatique",
+        "Des teintes opposées créant une tension visuelle"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Signe et couleur",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-076",
+      "q": "Dans le système Pantone, quelle est la particularité principale qui le distingue d’un système comme le CMYK ?",
+      "options": [
+        "Il est réservé exclusivement à l’impression",
+        "Il repose uniquement sur les trois primaires soustractives",
+        "Il utilise des encres prédéfinies permettant une reproduction exacte et standardisée"
       ],
       "correct": 2,
       "diff": 4,
-      "category": "Signe et couleur"
+      "difficultyLabel": "Difficile",
+      "category": "Signe et couleur",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Dans le système Pantone, quelle est la particularité principale qui le distingue d’un système comme le CMYK ?",
-      "options": [
-        "Il utilise des encres prédéfinies permettant une reproduction exacte et standardisée",
-        "Il est réservé exclusivement à l’impression",
-        "Il repose uniquement sur les trois primaires soustractives"
-      ],
-      "correct": 0,
-      "diff": 4,
-      "category": "Signe et couleur"
-    },
-    {
-      "q": "Quel est le signifiant (c'est quoi ?) du contraste de couleurs complémentaires ? (Théorie des 7 contrastes de couleurs d'Itten)",
+      "id": "SOCLE-QUIZ-077",
+      "q": "Quel est le signifiant (c\u0027est quoi ?) du contraste de couleurs complémentaires ? (Théorie des 7 contrastes de couleurs d\u0027Itten)",
       "options": [
         "Associations opposées dans le cercle chromatique",
         "Trois couleurs équidistantes sur le cercle",
@@ -850,88 +1253,248 @@
       ],
       "correct": 0,
       "diff": 4,
-      "category": "Signe et couleur"
+      "difficultyLabel": "Difficile",
+      "category": "Signe et couleur",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Quel est le signifié (ça évoque quoi ?) du contraste de quantité selon Itten ? (Théorie des 7 contrastes de couleurs d'Itten)",
+      "id": "SOCLE-QUIZ-078",
+      "q": "Quel est le signifié (ça évoque quoi ?) du contraste de quantité selon Itten ? (Théorie des 7 contrastes de couleurs d\u0027Itten)",
       "options": [
         "Une association de couleurs exclusivement basée sur la saturation",
-        "Un rapport dominant/dominé qui permet de mettre en lumière ou d'isoler",
+        "Un rapport dominant/dominé qui permet de mettre en lumière ou d\u0027isoler",
         "Une parfaite égalité visuelle entre les teintes"
       ],
       "correct": 1,
       "diff": 4,
-      "category": "Signe et couleur"
+      "difficultyLabel": "Difficile",
+      "category": "Signe et couleur",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Quel est le signifiant (c'est quoi ?) du contraste de couleurs “en soi” ? (Théorie des 7 contrastes de couleurs d'Itten)",
+      "id": "SOCLE-QUIZ-079",
+      "q": "Quel est le signifiant (c\u0027est quoi ?) du contraste de couleurs “en soi” ? (Théorie des 7 contrastes de couleurs d\u0027Itten)",
       "options": [
-        "Les couleurs primaires offrent le contraste le plus fort",
         "Les couleurs vives sont plus facilement perceptibles de loin",
-        "Les couleurs chaudes sont en opposition avec les couleurs froides"
+        "Les couleurs chaudes sont en opposition avec les couleurs froides",
+        "Les couleurs primaires offrent le contraste le plus fort"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Signe et couleur",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "LIVRE-SIGNE-NULS-01",
+      "q": "Quel mode colorimétrique est principalement utilisé pour les écrans ?",
+      "options": ["RVB", "CMJN", "Pantone métallique"],
+      "correct": 0,
+      "diff": 1,
+      "difficultyLabel": "Pour les nuls",
+      "category": "Signe et couleur",
+      "status": "review",
+      "explanation": "Les écrans produisent les couleurs par synthèse additive à partir du rouge, du vert et du bleu.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "31"
+    },
+    {
+      "id": "LIVRE-SIGNE-NULS-02",
+      "q": "Quel mode colorimétrique est couramment utilisé pour l\u0027impression en quadrichromie ?",
+      "options": ["RVB", "CMJN", "TSL écran"],
+      "correct": 1,
+      "diff": 1,
+      "difficultyLabel": "Pour les nuls",
+      "category": "Signe et couleur",
+      "status": "review",
+      "explanation": "La quadrichromie combine les encres cyan, magenta, jaune et noir.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "31"
+    },
+    {
+      "id": "LIVRE-SIGNE-NULS-03",
+      "q": "Où se trouvent deux couleurs complémentaires sur le cercle chromatique ?",
+      "options": [
+        "Toujours côte à côte",
+        "Toujours au centre du cercle",
+        "À l\u0027opposé l\u0027une de l\u0027autre"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "difficultyLabel": "Pour les nuls",
+      "category": "Signe et couleur",
+      "status": "review",
+      "explanation": "Les couleurs opposées sur le cercle forment un contraste complémentaire.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "32"
+    },
+    {
+      "id": "LIVRE-SIGNE-MOYEN-01",
+      "q": "Dans la théorie du signe de Saussure, qu\u0027est-ce que le signifiant ?",
+      "options": [
+        "Le concept abstrait associé au signe",
+        "La forme matérielle et perceptible du signe",
+        "La personne qui commande le projet"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Signe et couleur",
+      "status": "review",
+      "explanation": "Le signifiant peut être un mot, un son ou une image ; le signifié correspond au contenu conceptuel.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "27"
+    },
+    {
+      "id": "LIVRE-SIGNE-MOYEN-02",
+      "q": "Comment obtient-on une teinte plus claire à partir d\u0027une couleur ?",
+      "options": [
+        "En lui ajoutant du gris pour obtenir un ton plus neutre",
+        "En la mélangeant avec sa couleur complémentaire",
+        "En lui ajoutant du blanc"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Signe et couleur",
+      "status": "review",
+      "explanation": "L\u0027ajout de blanc éclaircit la couleur et produit une teinte.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "33",
+      "revisionNotes": "revoir les fausses réponses"
+    },
+    {
+      "id": "LIVRE-SIGNE-MOYEN-03",
+      "q": "Comment obtient-on un ton plus subtil ou désaturé à partir d’une couleur ?",
+      "options": [
+        "En ajoutant du gris, donc du blanc et du noir",
+        "En mélangeant la couleur avec sa couleur complémentaire",
+        "En augmentant la saturation pour rendre la couleur plus vive"
       ],
       "correct": 0,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Signe et couleur",
+      "status": "review",
+      "explanation": "L\u0027ajout de gris assombrit et désature la couleur, ce qui la rend moins intense.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "33",
+      "revisionNotes": "revoir la questions et les réponses"
+    },
+    {
+      "id": "LIVRE-SIGNE-EXPERT-01",
+      "q": "Que mesure l\u0027échelle d\u0027iconicité proposée par Abraham Moles ?",
+      "options": [
+        "Le degré de ressemblance d\u0027un signe avec ce qu\u0027il représente",
+        "Le niveau de lisibilité d’un signe selon sa taille d’affichage",
+        "La capacité d’un symbole à être mémorisé rapidement."
+      ],
+      "correct": 0,
+      "diff": 5,
+      "difficultyLabel": "Expert",
+      "category": "Signe et couleur",
+      "status": "review",
+      "explanation": "L\u0027échelle va d\u0027une représentation très fidèle du réel vers des signes de plus en plus abstraits.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "30",
+      "revisionNotes": "les fausses réponses ne sont pas assez claire"
+    },
+    {
+      "id": "LIVRE-SIGNE-EXPERT-02",
+      "q": "En synthèse additive, quel résultat obtient-on lorsque le rouge, le vert et le bleu sont additionnés à leur intensité maximale ?",
+      "options": ["Du noir", "Du blanc", "Du brun"],
+      "correct": 1,
       "diff": 4,
-      "category": "Signe et couleur"
+      "difficultyLabel": "Difficile",
+      "category": "Signe et couleur",
+      "status": "review",
+      "explanation": "La synthèse additive additionne des lumières ; leur combinaison maximale produit le blanc.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "31"
+    },
+    {
+      "id": "LIVRE-SIGNE-EXPERT-03",
+      "q": "Combien le cercle chromatique présenté compte-t-il de couleurs primaires, secondaires et tertiaires au total ?",
+      "options": ["9", "18", "12"],
+      "correct": 2,
+      "diff": 5,
+      "difficultyLabel": "Expert",
+      "category": "Signe et couleur",
+      "status": "review",
+      "explanation": "Il réunit 3 couleurs primaires, 3 secondaires et 6 tertiaires, soit 12 couleurs.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "32"
     }
   ],
   "Logo": [
     {
+      "id": "SOCLE-QUIZ-080",
       "q": "Qui a designé le logo d’IBM en 1956 ?",
-      "options": [
-        "Pierre Faucheux",
-        "Max Bill",
-        "Paul Rand"
-      ],
-      "correct": 2,
+      "options": ["Paul Rand", "Pierre Faucheux", "Max Bill"],
+      "correct": 0,
       "diff": 2,
-      "category": "Logo"
+      "difficultyLabel": "Facile",
+      "category": "Logo",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-081",
       "q": "Qui a designé le logo d’UPS en 1961 ?",
-      "options": [
-        "Massimo Vignelli",
-        "Paul rand",
-        "Wim Crouwel"
-      ],
+      "options": ["Massimo Vignelli", "Paul rand", "Wim Crouwel"],
       "correct": 1,
       "diff": 2,
-      "category": "Logo"
+      "difficultyLabel": "Facile",
+      "category": "Logo",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-082",
       "q": "Quel est le principe de création graphique le plus associé à Saul Bass ?",
       "options": [
         "Les illustrations hyper-détaillées",
-        "La réduction à l’essentiel",
-        "Les superpositions colorées complexes"
-      ],
-      "correct": 1,
-      "diff": 2,
-      "category": "Logo"
-    },
-    {
-      "q": "Qui est le designer du logo Apple créé en 1977 ?",
-      "options": [
-        "Milton Glaser",
-        "Adrian Frutiger",
-        "Rob Janoff"
+        "Les superpositions colorées complexes",
+        "La réduction à l’essentiel"
       ],
       "correct": 2,
       "diff": 2,
-      "category": "Logo"
+      "difficultyLabel": "Facile",
+      "category": "Logo",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Qu’a apporté Wally Olins au brand design ?",
-      "options": [
-        "Une audace souvent radicale dans la construction d’identité de marque",
-        "L’introduction des couleurs fluorescentes dans le branding",
-        "La standardisation des typographies serif dans les logos"
-      ],
+      "id": "SOCLE-QUIZ-083",
+      "q": "Qui est le designer du logo Apple créé en 1977 ?",
+      "options": ["Rob Janoff", "Milton Glaser", "Adrian Frutiger"],
       "correct": 0,
       "diff": 2,
-      "category": "Logo"
+      "difficultyLabel": "Facile",
+      "category": "Logo",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-084",
+      "q": "Qu’a apporté Wally Olins au brand design ?",
+      "options": [
+        "L’introduction des couleurs fluorescentes dans le branding",
+        "Une audace souvent radicale dans la construction d’identité de marque",
+        "La standardisation des typographies serif dans les logos"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Logo",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-085",
       "q": "Qu’est-ce qu’un logo monogramme ?",
       "options": [
         "Un logo qui possède une illustration",
@@ -940,233 +1503,519 @@
       ],
       "correct": 2,
       "diff": 4,
-      "category": "Logo"
+      "difficultyLabel": "Difficile",
+      "category": "Logo",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-086",
       "q": "Qu’est-ce qu’un logo abstrait ?",
       "options": [
+        "Un élément graphique qui ne représente rien de connu",
         "Un élément graphique qui mélange forme et typographie",
-        "Un élément graphique basé sur une photographie",
-        "Un élément graphique qui ne représente rien de connu"
-      ],
-      "correct": 2,
-      "diff": 4,
-      "category": "Logo"
-    },
-    {
-      "q": "Qu’est-ce qu’un logo pictogramme ?",
-      "options": [
-        "Un élément visuel minimaliste",
-        "Une icône abstraite conçue pour évoquer une idée générale",
-        "Un élément visuel représentant une forme reconnaissable"
-      ],
-      "correct": 2,
-      "diff": 4,
-      "category": "Logo"
-    },
-    {
-      "q": "Que signifie la notion de “pérennité” dans la conception d’un logo ?",
-      "options": [
-        "Le fait que le logo puisse être animé facilement",
-        "Le fait qu'il reste pertinent visuellement sur plusieurs décennies",
-        "Le fait de souvent actualiser son logo pour réster à la page"
-      ],
-      "correct": 1,
-      "diff": 4,
-      "category": "Logo"
-    },
-    {
-      "q": "De quand date le dernier logo de la SNCF ?",
-      "options": [
-        "2011",
-        "2001",
-        "2005"
+        "Un élément graphique basé sur une photographie"
       ],
       "correct": 0,
       "diff": 4,
-      "category": "Logo"
+      "difficultyLabel": "Difficile",
+      "category": "Logo",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-087",
+      "q": "Qu’est-ce qu’un logo pictogramme ?",
+      "options": [
+        "Un élément visuel minimaliste",
+        "Un élément visuel représentant une forme reconnaissable",
+        "Une icône abstraite conçue pour évoquer une idée générale"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Logo",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-088",
+      "q": "Que signifie la notion de “pérennité” dans la conception d’un logo ?",
+      "options": [
+        "Le fait que le logo puisse être animé facilement",
+        "Le fait de souvent actualiser son logo pour réster à la page",
+        "Le fait qu\u0027il reste pertinent visuellement sur plusieurs décennies"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Logo",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-089",
+      "q": "De quand date le dernier logo de la SNCF ?",
+      "options": ["2011", "2001", "2005"],
+      "correct": 0,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Logo",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "LIVRE-LOGO-NULS-01",
+      "q": "De quoi est composé un logo typographique ?",
+      "options": [
+        "Uniquement de texte",
+        "Uniquement d\u0027une photographie",
+        "Uniquement d\u0027un dégradé abstrait"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "difficultyLabel": "Pour les nuls",
+      "category": "Logo",
+      "status": "review",
+      "explanation": "Le nom de la marque est dessiné ou stylisé sans symbole figuratif séparé.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "29"
+    },
+    {
+      "id": "LIVRE-LOGO-NULS-02",
+      "q": "Quel type de logo personnifie une marque sous la forme d\u0027un animal ou d\u0027un personnage ?",
+      "options": ["Un monogramme", "Une mascotte", "Un emblème abstrait"],
+      "correct": 1,
+      "diff": 1,
+      "difficultyLabel": "Pour les nuls",
+      "category": "Logo",
+      "status": "review",
+      "explanation": "La mascotte donne un visage ou un personnage reconnaissable à la marque.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "29"
+    },
+    {
+      "id": "LIVRE-LOGO-NULS-03",
+      "q": "Quel type de logo représente un élément visuel connu, comme une pomme ou un oiseau ?",
+      "options": ["Un logo abstrait", "Un vecteur", "Un pictogramme"],
+      "correct": 2,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Logo",
+      "status": "review",
+      "explanation": "Le pictogramme s\u0027appuie sur une forme identifiable issue du monde réel.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "29"
+    },
+    {
+      "id": "LIVRE-LOGO-MOYEN-01",
+      "q": "Qu\u0027est-ce qu\u0027un monogramme dans une identité visuelle ?",
+      "options": [
+        "Une photographie complète du produit",
+        "Un signe construit avec quelques lettres ou initiales",
+        "Une gamme de couleurs sans aucun caractère"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Logo",
+      "status": "review",
+      "explanation": "Le monogramme condense généralement le nom d\u0027une marque dans ses initiales.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "29"
+    },
+    {
+      "id": "LIVRE-LOGO-MOYEN-02",
+      "q": "À quelle forme traditionnelle un logo de type emblème fait-il souvent penser ?",
+      "options": [
+        "À une signature manuscrite stylisée",
+        "À un pictogramme très simplifié",
+        "À un sceau ou un blason"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Logo",
+      "status": "review",
+      "explanation": "L\u0027emblème rassemble généralement texte et symbole dans une forme fermée évoquant un sceau ou un blason.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "29",
+      "revisionNotes": "revoir les fautes réponses"
+    },
+    {
+      "id": "LIVRE-LOGO-MOYEN-03",
+      "q": "Quelle particularité définit un logo abstrait ?",
+      "options": [
+        "Sa forme ne représente rien de directement reconnaissable",
+        "Il reproduit fidèlement un objet réel",
+        "Il doit obligatoirement écrire le nom complet de la marque"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Logo",
+      "status": "review",
+      "explanation": "Le logo abstrait construit un signe distinctif sans représenter un élément connu.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "29"
+    },
+    {
+      "id": "LIVRE-LOGO-EXPERT-01",
+      "q": "Une identité n\u0027utilise que les lettres « LCG » dessinées comme un signe unique. De quel type de logo s\u0027agit-il ?",
+      "options": ["D\u0027un monogramme", "Typographique", "Pictogramme"],
+      "correct": 0,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Logo",
+      "status": "review",
+      "explanation": "L\u0027emploi de quelques initiales assemblées correspond au principe du monogramme.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "29"
+    },
+    {
+      "id": "LIVRE-LOGO-EXPERT-02",
+      "q": "Dans le design de marque, quelle fonction dépasse la simple reconnaissance visuelle du logo ?",
+      "options": [
+        "Déterminer le nom de la marque",
+        "Révéler la marque et ses valeurs",
+        "Remplacer la stratégie de communication"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "difficultyLabel": "Expert",
+      "category": "Logo",
+      "status": "review",
+      "explanation": "Le design de marque construit une identité visuelle capable d\u0027identifier les produits et d\u0027exprimer les valeurs de la marque.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "21"
+    },
+    {
+      "id": "LIVRE-LOGO-EXPERT-03",
+      "q": "Sur l’échelle d’iconicité, qu’est-ce qui rend un symbole de logo plus abstrait ?",
+      "options": [
+        "Le fait de simplifier ses formes pour améliorer sa lisibilité.",
+        "Le fait de réduire ses détails pour faciliter sa mémorisation",
+        "Le fait de l’éloigner de la ressemblance avec un objet réel."
+      ],
+      "correct": 2,
+      "diff": 5,
+      "difficultyLabel": "Expert",
+      "category": "Logo",
+      "status": "review",
+      "explanation": "Plus un signe s\u0027éloigne d\u0027une représentation fidèle du réel, plus il se rapproche de l\u0027abstraction.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "30",
+      "revisionNotes": "revoir les fausses réponses et la question"
     }
   ],
   "Production": [
     {
+      "id": "SOCLE-QUIZ-090",
       "q": "Quel est le format d’une feuille A4 ?",
+      "options": ["297 x 420 mm", "210 x 297 mm", "148 x 210 mm"],
+      "correct": 1,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Production",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-091",
+      "q": "C’est quoi la sérigraphie ?",
       "options": [
-        "297 x 420 mm",
-        "148 x 210 mm",
-        "210 x 297 mm"
+        "Une technique qui consiste à imprimer directement sur le tissu avec une presse rotative",
+        "Une méthode d’impression en relief sur tissu",
+        "Une technique d’imprimerie qui utilise des pochoirs interposés entre l’encre et le support"
       ],
       "correct": 2,
       "diff": 2,
-      "category": "Production"
+      "difficultyLabel": "Facile",
+      "category": "Production",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "C’est quoi la sérigraphie ?",
-      "options": [
-        "Une technique d’imprimerie qui utilise des pochoirs interposés entre l’encre et le support",
-        "Une technique qui consiste à imprimer directement sur le tissu avec une presse rotative",
-        "Une méthode d’impression en relief sur tissu"
-      ],
+      "id": "SOCLE-QUIZ-092",
+      "q": "Lequel de ces types d’impression n’existe pas ?",
+      "options": ["La lamographie", "La lithographie", "La risographie"],
       "correct": 0,
       "diff": 2,
-      "category": "Production"
+      "difficultyLabel": "Facile",
+      "category": "Production",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Lequel de ces types d’impression n’existe pas ?",
-      "options": [
-        "La lithographie",
-        "La lamographie",
-        "La risographie"
-      ],
-      "correct": 1,
-      "diff": 2,
-      "category": "Production"
-    },
-    {
+      "id": "SOCLE-QUIZ-093",
       "q": "Quel type d’impression utilise des plaques métalliques pour transférer l’encre sur un rouleau en caoutchouc, puis sur le support ?",
       "options": [
-        "Impression jet d'encre",
+        "Impression jet d\u0027encre",
         "Impression offset",
         "Impression laser"
       ],
       "correct": 1,
       "diff": 2,
-      "category": "Production"
+      "difficultyLabel": "Facile",
+      "category": "Production",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-094",
       "q": "Quel profil de couleur doit-on appliquer à son fichier pour l’impression ?",
-      "options": [
-        "CMJN",
-        "Hexadécimal",
-        "RGB"
-      ],
-      "correct": 0,
-      "diff": 2,
-      "category": "Production"
-    },
-    {
-      "q": "Quelle est la résolution minimum des images avant l’impression ?",
-      "options": [
-        "150 DPI",
-        "72 DPI",
-        "300 DPI"
-      ],
+      "options": ["Hexadécimal", "RGB", "CMJN"],
       "correct": 2,
       "diff": 2,
-      "category": "Production"
+      "difficultyLabel": "Facile",
+      "category": "Production",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-095",
+      "q": "Quelle est la résolution minimum des images avant l’impression ?",
+      "options": ["300 DPI", "150 DPI", "72 DPI"],
+      "correct": 0,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Production",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-096",
       "q": "Quel est le format d’une feuille A2 ?",
+      "options": ["148 x 210 mm", "420 x 594 mm", "594 x 841 mm"],
+      "correct": 1,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Production",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-097",
+      "q": "Quelle est la norme internationale qui définit la plupart des formats de papier depuis 1975 ?",
+      "options": ["ISO 9001", "ISO 269", "ISO 216"],
+      "correct": 2,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Production",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-098",
+      "q": "Quelle lettre précède un numéro de format d’enveloppes ?",
+      "options": ["C", "B", "D"],
+      "correct": 0,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Production",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-099",
+      "q": "Que signifie PNG ?",
       "options": [
-        "148 x 210 mm",
-        "420 x 594 mm",
-        "594 x 841 mm"
+        "Pixel Network Graphic",
+        "Portable Network Graphic",
+        "Pixel Native Graphic"
       ],
       "correct": 1,
       "diff": 4,
-      "category": "Production"
+      "difficultyLabel": "Difficile",
+      "category": "Production",
+      "status": "validated",
+      "source": "Socle"
     },
     {
-      "q": "Quelle est la norme internationale qui définit la plupart des formats de papier depuis 1975 ?",
-      "options": [
-        "ISO 9001",
-        "ISO 269",
-        "ISO 216"
-      ],
-      "correct": 2,
-      "diff": 4,
-      "category": "Production"
-    },
-    {
-      "q": "Quelle lettre précède un numéro de format d’enveloppes ?",
-      "options": [
-        "B",
-        "D",
-        "C"
-      ],
-      "correct": 2,
-      "diff": 4,
-      "category": "Production"
-    },
-    {
-      "q": "Que signifie PNG ?",
-      "options": [
-        "Portable Network Graphic",
-        "Pixel Network Graphic",
-        "Pixel Native Graphic"
-      ],
-      "correct": 0,
-      "diff": 4,
-      "category": "Production"
-    },
-    {
+      "id": "SOCLE-QUIZ-100",
       "q": "Qu’est-ce qu’un signet dans un livre ?",
       "options": [
-        "Un morceau de papier ou de tissu qui permet de marquer une page d’un livre",
         "Un rabat collé à la fin du livre pour protéger les pages",
-        "La signature de l’auteur en 4ème de couverture"
+        "La signature de l’auteur en 4ème de couverture",
+        "Un morceau de papier ou de tissu qui permet de marquer une page d’un livre"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Production",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "LIVRE-PROD-NULS-01",
+      "q": "Dans la série de formats A, quel format est le plus grand ?",
+      "options": ["A3", "A0", "A10"],
+      "correct": 1,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Production",
+      "status": "review",
+      "explanation": "Dans la série A, plus le numéro diminue, plus la feuille est grande.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "87"
+    },
+    {
+      "id": "LIVRE-PROD-NULS-02",
+      "q": "Quel format d’image est le plus utilisé sur le web pour compresser des photographies avec perte ?",
+      "options": ["SVG", "PNG", "JPEG"],
+      "correct": 2,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Production",
+      "status": "review",
+      "explanation": "Le JPEG permet d’alléger fortement les photographies, mais entraîne une perte de qualité, tandis que le PNG conserve toutes les informations de l’image grâce à une compression sans perte.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "90",
+      "revisionNotes": "revoir la question car tout les formats compressent dans les fausses réponses"
+    },
+    {
+      "id": "LIVRE-PROD-NULS-03",
+      "q": "Quel format vectoriel permet de redimensionner une image sans perte de qualité ?",
+      "options": ["SVG", "JPEG", "MP3"],
+      "correct": 0,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Production",
+      "status": "review",
+      "explanation": "Le SVG décrit les formes par des données vectorielles, particulièrement adaptées aux logos et icônes.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "91"
+    },
+    {
+      "id": "LIVRE-PROD-MOYEN-02",
+      "q": "Pourquoi l\u0027impression numérique convient-elle bien aux petites séries personnalisées ?",
+      "options": [
+        "Parce qu’elle imprime directement depuis les fichiers numériques",
+        "Parce qu’elle regroupe automatiquement plusieurs commandes différentes sur une même plaque",
+        "Parce qu’elle utilise des encres spéciales qui coûtent moins cher"
       ],
       "correct": 0,
-      "diff": 4,
-      "category": "Production"
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Production",
+      "status": "review",
+      "explanation": "L\u0027absence de plaques réduit la préparation et facilite les faibles tirages ou les contenus variables.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "95",
+      "revisionNotes": "revoir fausses réponses"
+    },
+    {
+      "id": "LIVRE-PROD-MOYEN-03",
+      "q": "Quelle largeur de fond perdu le livre recommande-t-il généralement autour d\u0027un document imprimé ?",
+      "options": ["Entre 1 et 2 mm", "Entre 3 et 5 mm", "Entre 10 et 15 mm"],
+      "correct": 1,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Production",
+      "status": "review",
+      "explanation": "Le fond perdu prolonge les éléments au-delà du format fini afin d\u0027éviter des bordures blanches après la coupe.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "96"
+    },
+    {
+      "id": "LIVRE-PROD-EXPERT-01",
+      "q": "Pourquoi un papier couché restitue-t-il généralement les couleurs avec précision ?",
+      "options": [
+        "Parce qu’il absorbe fortement l’encre en profondeur.",
+        "Son traitement limite la pénétration et l\u0027étalement de l\u0027encre",
+        "Parce qu’il transforme les encres CMJN en encres RVB."
+      ],
+      "correct": 1,
+      "diff": 5,
+      "difficultyLabel": "Expert",
+      "category": "Production",
+      "status": "review",
+      "explanation": "Sa surface peu poreuse conserve mieux la forme des points de trame et évite que l\u0027encre ne se diffuse dans les fibres.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "97",
+      "revisionNotes": "revoir fausses réponses"
+    },
+    {
+      "id": "LIVRE-PROD-EXPERT-02",
+      "q": "Quel trajet décrit correctement le transfert de l\u0027encre en impression offset ?",
+      "options": [
+        "Du rouleau en caoutchouc au réservoir d’encre, puis au support",
+        "Du rouleau en caoutchouc à la plaque métallique, puis au support",
+        "De la plaque métallique au rouleau en caoutchouc, puis au support"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "difficultyLabel": "Expert",
+      "category": "Production",
+      "status": "review",
+      "explanation": "L\u0027offset utilise un blanchet en caoutchouc entre la plaque et le support d\u0027impression.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "95",
+      "revisionNotes": "revoir fausses réponses"
     }
   ],
   "Composition": [
     {
+      "id": "SOCLE-QUIZ-101",
       "q": "Quelle lettre est associée à un type de lecture en composition ?",
-      "options": [
-        "Y",
-        "S",
-        "Z"
-      ],
-      "correct": 2,
+      "options": ["Z", "Y", "S"],
+      "correct": 0,
       "diff": 2,
-      "category": "Composition"
+      "difficultyLabel": "Facile",
+      "category": "Composition",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-102",
       "q": "Laquelle de ces affirmations décrit correctement la loi de Gestalt “figure / fond” ?",
       "options": [
-        "Notre perception distingue un objet principal (figure) de son arrière-plan (fond)",
         "Des éléments identiques sont automatiquement regroupés en un ensemble",
+        "Notre perception distingue un objet principal (figure) de son arrière-plan (fond)",
         "Les formes fermées sont perçues comme des unités complètes"
-      ],
-      "correct": 0,
-      "diff": 2,
-      "category": "Composition"
-    },
-    {
-      "q": "Combien vaut le nombre d’or ?",
-      "options": [
-        "1.618",
-        "1.816",
-        "1.168"
-      ],
-      "correct": 0,
-      "diff": 2,
-      "category": "Composition"
-    },
-    {
-      "q": "Comment s’appelle la zone de débordement qui sera découpée après impression ?",
-      "options": [
-        "Marge extérieure",
-        "Bordure extérieur",
-        "Fond perdu"
-      ],
-      "correct": 2,
-      "diff": 2,
-      "category": "Composition"
-    },
-    {
-      "q": "Comment s’appelle l’espace entre les colonnes dans une grille ?",
-      "options": [
-        "Intercol",
-        "Gouttière",
-        "Gap"
       ],
       "correct": 1,
       "diff": 2,
-      "category": "Composition"
+      "difficultyLabel": "Facile",
+      "category": "Composition",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-103",
+      "q": "Combien vaut le nombre d’or ?",
+      "options": ["1.816", "1.168", "1.618"],
+      "correct": 2,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Composition",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-104",
+      "q": "Comment s’appelle la zone de débordement qui sera découpée après impression ?",
+      "options": ["Fond perdu", "Marge extérieure", "Bordure extérieur"],
+      "correct": 0,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Composition",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-105",
+      "q": "Comment s’appelle l’espace entre les colonnes dans une grille ?",
+      "options": ["Intercol", "Gouttière", "Gap"],
+      "correct": 1,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Composition",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-106",
       "q": "Qu’est-ce que le gris typographique, dans une composition ?",
       "options": [
         "La répartition du texte et des images pour créer un contraste visuel",
@@ -1175,51 +2024,216 @@
       ],
       "correct": 2,
       "diff": 4,
-      "category": "Composition"
+      "difficultyLabel": "Difficile",
+      "category": "Composition",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-107",
       "q": "Quelle est la loi de Gestalt qui fait que des éléments proches sont perçus comme un groupe ?",
-      "options": [
-        "Proximité",
-        "Similarité",
-        "Similitude"
-      ],
+      "options": ["Proximité", "Similarité", "Similitude"],
       "correct": 0,
       "diff": 4,
-      "category": "Composition"
+      "difficultyLabel": "Difficile",
+      "category": "Composition",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-108",
       "q": "Quel type de grille se divise dans sa largeur en colonnes (de 2 à 6 pour les plus simples) ?",
       "options": [
         "Grille à colonnes",
-        "Grille modulaire",
-        "Grille multicolonne"
+        "Grille multicolonne",
+        "Grille modulaire"
       ],
-      "correct": 2,
+      "correct": 1,
       "diff": 4,
-      "category": "Composition"
+      "difficultyLabel": "Difficile",
+      "category": "Composition",
+      "status": "validated",
+      "source": "Socle"
     },
     {
+      "id": "SOCLE-QUIZ-109",
       "q": "Qu’est-ce qu’une grille modulaire ?",
       "options": [
-        "Une grille composée de colonnes verticales et horizontales",
         "Une grille asymétrique",
-        "Une grille qui propose plusieurs variantes pour des doubles pages"
-      ],
-      "correct": 0,
-      "diff": 4,
-      "category": "Composition"
-    },
-    {
-      "q": "Comment s’appelle la marge intérieure d’une double page ?",
-      "options": [
-        "Le fond de tête",
-        "Le fond interne",
-        "Le petit fond"
+        "Une grille qui propose plusieurs variantes pour des doubles pages",
+        "Une grille composée de colonnes verticales et horizontales"
       ],
       "correct": 2,
       "diff": 4,
-      "category": "Composition"
+      "difficultyLabel": "Difficile",
+      "category": "Composition",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "SOCLE-QUIZ-110",
+      "q": "Comment s’appelle la marge intérieure d’une double page ?",
+      "options": ["Le petit fond", "Le fond de tête", "Le fond interne"],
+      "correct": 0,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Composition",
+      "status": "validated",
+      "source": "Socle"
+    },
+    {
+      "id": "LIVRE-COMPO-NULS-01",
+      "q": "Comment appelle-t-on traditionnellement un format vertical en mise en page ?",
+      "options": [
+        "Un format à l\u0027italienne",
+        "Un format en accordéon",
+        "Un format à la française"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "difficultyLabel": "Difficile",
+      "category": "Composition",
+      "status": "review",
+      "explanation": "Le format vertical est dit « à la française », tandis que l\u0027horizontal est dit « à l\u0027italienne ».",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "76"
+    },
+    {
+      "id": "LIVRE-COMPO-NULS-02",
+      "q": "À quoi sert principalement une grille de mise en page ?",
+      "options": [
+        "À organiser et hiérarchiser les éléments",
+        "À choisir le style typographique le plus adapté au projet.",
+        "À préparer les fichiers pour l\u0027export"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "difficultyLabel": "Facile",
+      "category": "Composition",
+      "status": "review",
+      "explanation": "La grille fournit une structure commune pour placer textes, images et autres éléments.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "82",
+      "revisionNotes": "revoir les fausses réponses"
+    },
+    {
+      "id": "LIVRE-COMPO-NULS-03",
+      "q": "Dans l\u0027anatomie d\u0027une page, qu\u0027est-ce que le folio ?",
+      "options": [
+        "Le titre principal du livre",
+        "Le numéro de page",
+        "La légende d\u0027une image"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Composition",
+      "status": "review",
+      "explanation": "Le folio permet d\u0027identifier la page dans le document.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "77"
+    },
+    {
+      "id": "LIVRE-COMPO-MOYEN-01",
+      "q": "Qu\u0027ajoute une grille modulaire à une simple grille multicolonne ?",
+      "options": [
+        "Des divisions horizontales qui créent des modules",
+        "Des marges pour encadrer la zone de composition",
+        "Des colonnes verticales pour organiser les contenus"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Composition",
+      "status": "review",
+      "explanation": "La grille modulaire croise des divisions verticales et horizontales pour offrir des zones de placement plus précises.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "82",
+      "revisionNotes": "revoir les fausses réponses"
+    },
+    {
+      "id": "LIVRE-COMPO-MOYEN-02",
+      "q": "Quel principe de Gestalt permet de distinguer un élément principal de son arrière-plan ?",
+      "options": [
+        "La proximité entre plusieurs éléments visuels",
+        "La relation entre la figure et le fond",
+        "La similarité de forme ou de couleur entre des éléments"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Composition",
+      "status": "review",
+      "explanation": "La relation figure-fond organise la perception entre la forme observée et l\u0027espace qui l\u0027entoure.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "84",
+      "revisionNotes": "revoir les fausses réponses"
+    },
+    {
+      "id": "LIVRE-COMPO-MOYEN-03",
+      "q": "Quelle valeur approchée correspond au nombre d\u0027or ?",
+      "options": ["1,414", "2,718", "1,618"],
+      "correct": 2,
+      "diff": 3,
+      "difficultyLabel": "Moyen",
+      "category": "Composition",
+      "status": "review",
+      "explanation": "Le nombre d\u0027or, aussi appelé phi, exprime un rapport d\u0027environ 1,618 entre deux longueurs.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "80"
+    },
+    {
+      "id": "LIVRE-COMPO-EXPERT-01",
+      "q": "Qu\u0027est-ce qu\u0027un gris typographique ?",
+      "options": [
+        "Le contraste entre la couleur du texte et celle du fond",
+        "La hiérarchie visuelle créée par les variations de graisse, de taille et de style",
+        "L’impression visuelle globale produite par un bloc de texte"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "difficultyLabel": "Expert",
+      "category": "Composition",
+      "status": "review",
+      "explanation": "Le gris typographique résulte de la densité visuelle produite par le dessin des caractères et les réglages de composition.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "85",
+      "revisionNotes": "réécrire la questions et les fausses questions"
+    },
+    {
+      "id": "LIVRE-COMPO-EXPERT-02",
+      "q": "Quelle différence fondamentale oppose le format d\u0027une page papier à celui d\u0027une page web ?",
+      "options": [
+        "Le papier a une hauteur fixe, tandis que la page web peut s\u0027allonger avec le contenu",
+        "Une page imprimée demande de prévoir des marges, des fonds perdus et des contraintes de découpe.",
+        "Une page web peut intégrer des interactions comme des liens, des boutons ou des animations"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "difficultyLabel": "Expert",
+      "category": "Composition",
+      "status": "review",
+      "explanation": "Un support imprimé possède un format physique déterminé ; une interface web conserve une largeur de référence mais se parcourt verticalement.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "76",
+      "revisionNotes": "revoir fausses réponses"
+    },
+    {
+      "id": "LIVRE-COMPO-EXPERT-03",
+      "q": "Pour placer précisément textes, icônes et illustrations selon des axes verticaux et horizontaux, quelle grille est la plus adaptée ?",
+      "options": [
+        "Une grille multicolonne",
+        "Une grille modulaire",
+        "Une composition avec fond perdu"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "difficultyLabel": "Expert",
+      "category": "Composition",
+      "status": "review",
+      "explanation": "Ses modules résultent du croisement de colonnes et de rangées, ce qui facilite des alignements précis dans les deux directions.",
+      "source": "Le design graphique — savoirs \u0026 savoir-faire",
+      "sourcePage": "82"
     }
   ]
 }

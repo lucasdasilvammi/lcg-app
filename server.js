@@ -72,12 +72,20 @@ const { getLogoActivityOutcome } = require('./server/activityResult');
 const { DUEL_REWARD_POINTS, getDuelRewardPoints } = require('./server/duelReward');
 const { isPauseAllowed, isUndoAllowed } = require('./server/phaseGuards');
 const { createPickDeadline, tightenPickDeadline } = require('./server/pickTiming');
+const {
+  getAvailableQuizCategories,
+  getAvailableQuizDifficulties,
+  getUnusedQuestions,
+  markQuestionUsed,
+  takeQuizQuestion,
+  takeRandomUnusedActivity,
+  takeRandomUnusedQuestion
+} = require('./server/contentSelection');
 
 // Flatten quiz database
 const QUIZ_DB = Object.keys(quizData)
   .filter(key => key !== '_comment')
   .flatMap(category => quizData[category]);
-const CATEGORIES = Object.keys(quizData).filter(key => key !== '_comment');
 
 // Flatten duel database
 const STATIC_DUEL_TYPES = Object.keys(duelsData).filter(key => !key.startsWith('_'));
@@ -85,14 +93,15 @@ const STATIC_DUELS_BY_TYPE = STATIC_DUEL_TYPES.reduce((accumulator, type) => {
   accumulator[type] = Array.isArray(duelsData[type]) ? duelsData[type] : [];
   return accumulator;
 }, {});
-const HARD_QUIZ_DB = QUIZ_DB.filter(question =>
-  question.diff === 4 && !question.q?.startsWith('[À REMPLACER]')
-);
 
 // Flatten events database
 const EVENTS_DB = eventsData.events || [];
 const BONUS_IDS = Array.from(VALID_BONUS_IDS);
 const DUEL_TYPES = ['buzzer', 'vraioufaux', 'chiffres', 'zoom', 'pick'];
+const ACTIVITY_BRANDS = [
+  'BMW', 'Adobe', 'Figma', 'Apple', 'Nike', 'Carrefour',
+  'Renault', 'Instagram'
+];
 const ZOOM_ASSETS_DIR = path.join(__dirname, 'client', 'public', 'defis', 'zoom');
 const ZOOM_ASSET_ROUTE = '/defis/zoom';
 const ZOOM_DISTRACTORS_FILE = path.join(__dirname, 'server', 'data', 'zoom-distractors.json');
@@ -235,36 +244,32 @@ const getDuelsByType = (type) => {
   return STATIC_DUELS_BY_TYPE[type] || [];
 };
 const getAllDuels = () => STATIC_DUEL_TYPES.flatMap(type => getDuelsByType(type));
-const createBuzzerDuelFromQuiz = () => {
-  const quizQuestion = getRandomItem(HARD_QUIZ_DB);
-  if (!quizQuestion) return null;
-
-  return {
-    type: 'buzzer',
-    question: quizQuestion.q,
-    options: quizQuestion.options,
-    correct: quizQuestion.correct,
-    category: quizQuestion.category,
-    diff: quizQuestion.diff,
-    explanation: `Question difficile issue de la catégorie ${quizQuestion.category}.`
-  };
-};
 const getRandomHexColor = () => {
   const value = Math.floor(Math.random() * 0xFFFFFF);
   return `#${value.toString(16).padStart(6, '0')}`.toUpperCase();
 };
-const getAvailableDuelTypes = () => DUEL_TYPES.filter(type => {
+const getAvailableDuelTypes = (room) => DUEL_TYPES.filter(type => {
   if (type === 'pick') return true;
-  if (type === 'buzzer' && HARD_QUIZ_DB.length > 0) return true;
-  return getDuelsByType(type).length > 0;
+  return getUnusedQuestions(room, getDuelsByType(type)).length > 0;
 });
 
-const createPickDuel = () => ({
-  type: 'pick',
-  question: 'Pick la couleur cible',
-  targetColor: getRandomHexColor(),
-  explanation: 'Trouve la couleur la plus proche possible.'
-});
+const createPickDuel = (room) => {
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    const targetColor = getRandomHexColor();
+    const duel = {
+      type: 'pick',
+      contentId: `pick:${targetColor}`,
+      question: 'Pick la couleur cible',
+      targetColor,
+      explanation: 'Trouve la couleur la plus proche possible.'
+    };
+    if (getUnusedQuestions(room, [duel]).length === 0) continue;
+    markQuestionUsed(room, duel);
+    return duel;
+  }
+
+  return null;
+};
 
 const getRoomDuelTypeBag = (room) => {
   if (!room) return [];
@@ -279,7 +284,7 @@ const getRoomDuelTypeBag = (room) => {
 };
 
 const getNextDuelTypeForRoom = (room) => {
-  const availableTypes = getAvailableDuelTypes();
+  const availableTypes = getAvailableDuelTypes(room);
   if (availableTypes.length === 0) return null;
 
   const bag = getRoomDuelTypeBag(room);
@@ -296,19 +301,17 @@ const getNextDuelTypeForRoom = (room) => {
   return nextType;
 };
 
-const getRandomDuel = (type = null, { fallback = true } = {}) => {
-  const selectedType = type || getRandomItem(getAvailableDuelTypes());
-  if (!selectedType) return getRandomItem(getAllDuels());
+const getRandomDuel = (room, type = null, { fallback = true } = {}) => {
+  const selectedType = type || getRandomItem(getAvailableDuelTypes(room));
+  if (!selectedType) return takeRandomUnusedQuestion(room, getAllDuels());
 
-  if (selectedType === 'pick') return createPickDuel();
-  if (selectedType === 'buzzer') {
-    return createBuzzerDuelFromQuiz() || getRandomItem(getDuelsByType(selectedType));
-  }
+  if (selectedType === 'pick') return createPickDuel(room);
 
   const filtered = getDuelsByType(selectedType);
-  if (filtered.length > 0) return getRandomItem(filtered);
+  const selectedDuel = takeRandomUnusedQuestion(room, filtered);
+  if (selectedDuel) return selectedDuel;
 
-  return type && fallback ? getRandomDuel() : null;
+  return type && fallback ? getRandomDuel(room) : null;
 };
 
 const createRandomDuelInteraction = (room, initiatingPlayerId = null, forcedDuelType = null) => {
@@ -319,7 +322,7 @@ const createRandomDuelInteraction = (room, initiatingPlayerId = null, forcedDuel
   if (opponentCandidates.length === 0) return null;
 
   const selectedDuelType = forcedDuelType || getNextDuelTypeForRoom(room);
-  const randomDuel = getRandomDuel(selectedDuelType, { fallback: !forcedDuelType });
+  const randomDuel = getRandomDuel(room, selectedDuelType, { fallback: !forcedDuelType });
   if (!randomDuel) return null;
   const opponent = getRandomItem(opponentCandidates);
   const readerCandidates = room.players.filter(player => player.id !== activePlayer.id && player.id !== opponent.id);
@@ -1796,12 +1799,18 @@ io.on('connection', (socket) => {
     applyTileSelectionToPlayer(currentPlayer, actionType);
 
     if (actionType === 'QUIZ') {
-      const randomCat = CATEGORIES[Math.floor(Math.random() * CATEGORIES.length)];
+      const availableCategories = getAvailableQuizCategories(room, QUIZ_DB);
+      if (availableCategories.length === 0) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'content_exhausted' });
+        return;
+      }
+      const randomCat = getRandomItem(availableCategories);
       const chooseQuizBonus = room.pendingChooseQuizBonus?.targetPlayerId === socket.id
         ? room.pendingChooseQuizBonus
         : null;
       if (chooseQuizBonus) chooseQuizBonus.awaitingTargetAck = true;
       room.pendingCategory = randomCat;
+      room.availableQuizDifficulties = getAvailableQuizDifficulties(room, QUIZ_DB, randomCat);
       delete room.pendingQuizDifficulty;
       room.pendingQuestionerId = chooseQuizBonus?.byPlayerId || socket.id;
       room.status = 'QUIZ_OPTIONS';
@@ -1865,11 +1874,11 @@ io.on('connection', (socket) => {
         });
       }
     } else if (actionType === 'ACTIVITE') {
-      const brandNames = [
-        'BMW', 'Adobe', 'Figma', 'Apple', 'Nike', 'Carrefour',
-        'Renault', 'Instagram'
-      ];
-      const randomBrand = brandNames[Math.floor(Math.random() * brandNames.length)];
+      const randomBrand = takeRandomUnusedActivity(room, ACTIVITY_BRANDS);
+      if (!randomBrand) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'content_exhausted' });
+        return;
+      }
 
       const participants = room.players.map(p => p.id);
       cleanupActivitePhotoStore(room.id);
@@ -2505,15 +2514,22 @@ io.on('connection', (socket) => {
       if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
       return;
     }
+    if (!room.availableQuizDifficulties?.includes(selectedDifficulty)) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'difficulty_exhausted' });
+      return;
+    }
 
     room.pendingQuizDifficulty = selectedDifficulty;
     syncRoom(room);
     if (typeof ack === 'function') ack({ ok: true, difficulty: selectedDifficulty });
   });
 
-  socket.on('start_specific_quiz', ({ difficulty }) => {
+  socket.on('start_specific_quiz', ({ difficulty } = {}, ack) => {
     const room = findRoom();
-    if (!room) return;
+    if (!room || room.status !== 'QUIZ_OPTIONS') {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'quiz_not_pending' });
+      return;
+    }
     console.log('start_specific_quiz called by', socket.id, 'difficulty', difficulty);
     if (room.pendingChooseQuizBonus) {
       const activePlayer = room.players[room.turnIndex];
@@ -2524,12 +2540,18 @@ io.on('connection', (socket) => {
       if (activeChooseQuizBonus && activeChooseQuizBonus.byPlayerId !== socket.id) return;
     }
     const selectedDifficulty = Number(difficulty || room.pendingQuizDifficulty);
-    if (![1, 2, 3, 4, 5].includes(selectedDifficulty)) return;
+    if (![1, 2, 3, 4, 5].includes(selectedDifficulty)) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_difficulty' });
+      return;
+    }
     const category = room.pendingCategory || 'Culture graphique';
-    let matching = QUIZ_DB.filter(q => q.diff === selectedDifficulty && q.category === category);
-    if (matching.length === 0) matching = QUIZ_DB;
-
-    const selectedQuestion = matching[Math.floor(Math.random() * matching.length)];
+    const selectedQuestion = takeQuizQuestion(room, QUIZ_DB, category, selectedDifficulty);
+    if (!selectedQuestion) {
+      room.availableQuizDifficulties = getAvailableQuizDifficulties(room, QUIZ_DB, category);
+      syncRoom(room);
+      if (typeof ack === 'function') ack({ ok: false, reason: 'difficulty_exhausted' });
+      return;
+    }
     const nextPlayer = room.players[(room.turnIndex + 1) % room.players.length];
     const questionerId = nextPlayer?.id || room.pendingQuestionerId || socket.id;
     const chosenByBonus = room.pendingChooseQuizBonus?.targetPlayerId === room.players[room.turnIndex]?.id
@@ -2539,16 +2561,18 @@ io.on('connection', (socket) => {
       data: selectedQuestion,
       readerId: questionerId,
       questionerId,
-      potentialPoints: selectedDifficulty,
+      potentialPoints: selectedQuestion.diff,
       chosenByBonus: chosenByBonus ? room.pendingChooseQuizBonus : null
     };
     delete room.pendingQuestionerId;
     if (chosenByBonus) delete room.pendingChooseQuizBonus;
     delete room.pendingQuizDifficulty;
+    delete room.availableQuizDifficulties;
     room.pendingCategory = null;
 
     room.status = 'INTERACTION';
     syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true });
   });
 
   socket.on('player_buzz', () => {

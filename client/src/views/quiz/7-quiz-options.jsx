@@ -97,12 +97,16 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
   const isChooseQuizTarget = chooseQuizTarget?.id === currentUserId
   const isChooseQuizChooser = chooseQuizUser?.id === currentUserId
   const isWaitingForChooseQuizAck = Boolean(isChooseQuizActive && chooseQuizBonus.awaitingTargetAck)
+  const availableQuizDifficulties = Array.isArray(roomData.availableQuizDifficulties)
+    ? roomData.availableQuizDifficulties.map(Number)
+    : [1, 2, 3, 4, 5]
+  const isDifficultyAvailable = (difficulty) => availableQuizDifficulties.includes(difficulty)
   const visibleSelectedDiff = isChooseQuizActive
     ? (Number(roomData.pendingQuizDifficulty || selectedDiff) || null)
     : selectedDiff
 
   const handleDifficultySelect = (difficulty) => {
-    if (!isQuestioner) return
+    if (!isQuestioner || !isDifficultyAvailable(difficulty)) return
     setSelectedDiff(difficulty)
     if (isChooseQuizActive) {
       selectQuizDifficulty?.(difficulty)
@@ -184,6 +188,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
               <BigButton
                 onClick={() => handleDifficultySelect(1)}
                 text="Pour les nuls"
+                disabled={!isDifficultyAvailable(1)}
                 className={`bg-green-primary w-full ${visibleSelectedDiff !== null && visibleSelectedDiff !== 1 ? 'opacity-50' : ''}`}
               />
             </div>
@@ -192,6 +197,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
               <BigButton
                 onClick={() => handleDifficultySelect(2)}
                 text="Facile"
+                disabled={!isDifficultyAvailable(2)}
                 className={`bg-blue-primary w-full ${visibleSelectedDiff !== null && visibleSelectedDiff !== 2 ? 'opacity-50' : ''}`}
               />
             </div>
@@ -200,6 +206,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
               <BigButton
                 onClick={() => handleDifficultySelect(3)}
                 text="Moyen"
+                disabled={!isDifficultyAvailable(3)}
                 className={`bg-yellow-primary w-full ${visibleSelectedDiff !== null && visibleSelectedDiff !== 3 ? 'opacity-50' : ''}`}
               />
             </div>
@@ -208,6 +215,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
               <BigButton
                 onClick={() => handleDifficultySelect(4)}
                 text="Difficile"
+                disabled={!isDifficultyAvailable(4)}
                 className={`bg-orange-primary w-full ${visibleSelectedDiff !== null && visibleSelectedDiff !== 4 ? 'opacity-50' : ''}`}
               />
             </div>
@@ -216,6 +224,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
               <BigButton
                 onClick={() => handleDifficultySelect(5)}
                 text="Expert"
+                disabled={!isDifficultyAvailable(5)}
                 className={`bg-red-primary w-full ${visibleSelectedDiff !== null && visibleSelectedDiff !== 5 ? 'opacity-50' : ''}`}
               />
             </div>
