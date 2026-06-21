@@ -1,84 +1,64 @@
-﻿{
-  "_comment": "Défis - Support buzzer, vraioufaux, chiffres et zoom",
-  
+{
+  "_comment": "Défis validés exportés depuis Question Studio le 2026-06-21.",
   "buzzer": [
     {
       "type": "buzzer",
-      "question": "Qu'est-ce que le gris typographique ?",
+      "question": "Quel raccourci clavier permet de tout sélectionner ?",
       "options": [
-        "Un concept qui englobe plusieurs éléments définis pour donner un bon équilibre à une composition.",
-        "L'équilibre d'opacité entre noir et gris pour hiérarchiser les informations.",
-        "La répartition du texte et des images pour créer un contraste visuel."
+        "Ctrl + A (Cmd + A)",
+        "Ctrl + C (Cmd + C)",
+        "Ctrl + Z (Cmd + Z)"
       ],
       "correct": 0,
-      "explanation": "Le gris typographique désigne l'équilibre visuel créé par la densité du texte sur une page."
+      "diff": 3,
+      "category": "Production",
+      "difficulty": "Moyen",
+      "explanation": "Ce raccourci universel fonctionne dans la plupart des logiciels."
     },
     {
       "type": "buzzer",
       "question": "Quelle est la couleur complémentaire du rouge ?",
       "options": [
-        "Le vert.",
-        "Le jaune.",
-        "Le violet."
+        "Le jaune",
+        "Le violet",
+        "Le vert"
       ],
-      "correct": 0,
+      "correct": 2,
+      "diff": 3,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
       "explanation": "Dans le cercle chromatique, les couleurs complémentaires sont placées à l'opposé l'une de l'autre."
-    },
-    {
-      "type": "buzzer",
-      "question": "Quel raccourci clavier permet de tout sélectionner ?",
-      "options": [
-        "Ctrl + A (Cmd + A).",
-        "Ctrl + C (Cmd + C).",
-        "Ctrl + Z (Cmd + Z)."
-      ],
-      "correct": 0,
-      "explanation": "Ce raccourci universel fonctionne dans la plupart des logiciels."
     },
     {
       "type": "buzzer",
       "question": "Qu'est-ce qu'une typographie serif ?",
       "options": [
-        "Une typographie avec empattements.",
-        "Une typographie uniquement en capitales.",
-        "Une typographie sans contraste de pleins et déliés."
+        "Une typographie uniquement en capitales",
+        "Une typographie sans contraste de pleins et déliés",
+        "Une typographie avec empattements"
       ],
-      "correct": 0,
+      "correct": 2,
+      "diff": 3,
+      "category": "Typographie",
+      "difficulty": "Moyen",
       "explanation": "Une typographie serif possède des empattements aux extrémités des lettres."
+    },
+    {
+      "type": "buzzer",
+      "question": "Qu'est-ce que le gris typographique ?",
+      "options": [
+        "L'équilibre d'opacité entre noir et gris pour hiérarchiser les informations",
+        "La répartition du texte et des images pour créer un contraste visuel",
+        "Un ensemble de paramètres typographiques qui contribuent à l’équilibre visuel d’une composition"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Composition",
+      "difficulty": "Moyen",
+      "explanation": "Le gris typographique désigne l'équilibre visuel créé par la densité du texte sur une page."
     }
   ],
-
   "vraioufaux": [
-    {
-      "type": "vraioufaux",
-      "question": "Le RGB est un modèle de couleur additif utilisé principalement pour les écrans.",
-      "options": [
-        "Vrai",
-        "Faux"
-      ],
-      "correct": 0,
-      "explanation": "Le RGB, ou RVB, combine des lumières rouge, verte et bleue."
-    },
-    {
-      "type": "vraioufaux",
-      "question": "Le CMJN est un mode colorimétrique généralement destiné à l'impression.",
-      "options": [
-        "Vrai",
-        "Faux"
-      ],
-      "correct": 0,
-      "explanation": "Le CMJN correspond aux encres cyan, magenta, jaune et noir utilisées en impression."
-    },
-    {
-      "type": "vraioufaux",
-      "question": "Le fond perdu sert à éviter un liseré blanc après la coupe d'un document imprimé.",
-      "options": [
-        "Vrai",
-        "Faux"
-      ],
-      "correct": 0,
-      "explanation": "Le fond perdu prolonge les éléments graphiques au-delà du format final pour sécuriser la découpe."
-    },
     {
       "type": "vraioufaux",
       "question": "Le crénage désigne l'ajustement de l'espace entre deux lettres précises.",
@@ -87,37 +67,10 @@
         "Faux"
       ],
       "correct": 0,
-      "explanation": "Le crénage agit sur une paire de lettres, contrairement à l'interlettrage qui concerne un ensemble plus large."
-    },
-    {
-      "type": "vraioufaux",
-      "question": "La loi de proximité de Gestalt indique que des éléments proches sont perçus comme liés.",
-      "options": [
-        "Vrai",
-        "Faux"
-      ],
-      "correct": 0,
-      "explanation": "La proximité conduit le regard à regrouper les éléments situés près les uns des autres."
-    },
-    {
-      "type": "vraioufaux",
-      "question": "Une image destinée à l'impression est souvent préparée autour de 300 DPI.",
-      "options": [
-        "Vrai",
-        "Faux"
-      ],
-      "correct": 0,
-      "explanation": "Une résolution de 300 DPI est une référence courante pour une impression de qualité."
-    },
-    {
-      "type": "vraioufaux",
-      "question": "Un logo pérenne est un logo qui suit toujours la dernière tendance graphique.",
-      "options": [
-        "Vrai",
-        "Faux"
-      ],
-      "correct": 1,
-      "explanation": "Un logo pérenne doit pouvoir durer au-delà des tendances graphiques passagères."
+      "explanation": "Le crénage agit sur une paire de lettres, contrairement à l'interlettrage qui concerne un ensemble plus large.",
+      "category": "Typographie",
+      "diff": 3,
+      "difficulty": "Moyen"
     },
     {
       "type": "vraioufaux",
@@ -127,19 +80,100 @@
         "Faux"
       ],
       "correct": 1,
-      "explanation": "Deux couleurs complémentaires se trouvent à l'opposé l'une de l'autre sur le cercle chromatique."
+      "explanation": "Deux couleurs complémentaires se trouvent à l'opposé l'une de l'autre sur le cercle chromatique.",
+      "category": "Signe et couleur",
+      "diff": 3,
+      "difficulty": "Moyen"
+    },
+    {
+      "type": "vraioufaux",
+      "question": "Le RGB est un modèle de couleur additif utilisé principalement pour les écrans.",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 0,
+      "explanation": "Le RGB, ou RVB, combine des lumières rouge, verte et bleue.",
+      "category": "Signe et couleur",
+      "diff": 3,
+      "difficulty": "Moyen"
+    },
+    {
+      "type": "vraioufaux",
+      "question": "Un logo pérenne est un logo qui suit toujours la dernière tendance graphique.",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 1,
+      "explanation": "Un logo pérenne doit pouvoir durer au-delà des tendances graphiques passagères.",
+      "category": "Logo",
+      "diff": 3,
+      "difficulty": "Moyen"
+    },
+    {
+      "type": "vraioufaux",
+      "question": "La loi de proximité de Gestalt indique que des éléments proches sont perçus comme liés.",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 0,
+      "explanation": "La proximité conduit le regard à regrouper les éléments situés près les uns des autres.",
+      "category": "Composition",
+      "diff": 3,
+      "difficulty": "Moyen"
+    },
+    {
+      "type": "vraioufaux",
+      "question": "Une image destinée à l'impression est souvent préparée autour de 300 DPI.",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 0,
+      "explanation": "Une résolution de 300 DPI est une référence courante pour une impression de qualité.",
+      "category": "Production",
+      "diff": 3,
+      "difficulty": "Moyen"
+    },
+    {
+      "type": "vraioufaux",
+      "question": "Le CMJN est un mode colorimétrique généralement destiné à l'impression.",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 0,
+      "explanation": "Le CMJN correspond aux encres cyan, magenta, jaune et noir utilisées en impression.",
+      "category": "Production",
+      "diff": 3,
+      "difficulty": "Moyen"
+    },
+    {
+      "type": "vraioufaux",
+      "question": "Le fond perdu sert à éviter un liseré blanc après la coupe d'un document imprimé.",
+      "options": [
+        "Vrai",
+        "Faux"
+      ],
+      "correct": 0,
+      "explanation": "Le fond perdu prolonge les éléments graphiques au-delà du format final pour sécuriser la découpe.",
+      "category": "Production",
+      "diff": 3,
+      "difficulty": "Moyen"
     }
   ],
-
   "chiffres": [
     {
       "type": "chiffres",
-      "question": "Donnez la valeur précise du nombre d'or.",
-      "correct": 1618,
-      "digits": 4,
-      "decimalPosition": 1,
-      "explanation": "Le nombre d'or, aussi appelé phi, vaut environ 1,618.",
-      "source": "Le design graphique — savoirs & savoir-faire, page 80."
+      "question": "Combien de couleurs le cercle chromatique contient-il au total ?",
+      "correct": 12,
+      "digits": 2,
+      "explanation": "Il contient 3 couleurs primaires, 3 secondaires et 6 tertiaires, soit 12 couleurs.",
+      "category": "Signe et couleur",
+      "diff": 3,
+      "difficulty": "Moyen"
     },
     {
       "type": "chiffres",
@@ -147,7 +181,9 @@
       "correct": 1927,
       "digits": 4,
       "explanation": "Paul Renner a créé Futura en 1927.",
-      "source": "Le design graphique — savoirs & savoir-faire, page 68."
+      "category": "Typographie",
+      "diff": 3,
+      "difficulty": "Moyen"
     },
     {
       "type": "chiffres",
@@ -155,41 +191,43 @@
       "correct": 1957,
       "digits": 4,
       "explanation": "Max Miedinger a créé Neue Haas Grotesk, ensuite renommée Helvetica, en 1957.",
-      "source": "Le design graphique — savoirs & savoir-faire, page 69."
+      "category": "Typographie",
+      "diff": 3,
+      "difficulty": "Moyen"
     },
     {
       "type": "chiffres",
-      "question": "Combien de couleurs le cercle chromatique présenté dans le livre contient-il au total ?",
-      "correct": 12,
-      "digits": 2,
-      "explanation": "Il contient 3 couleurs primaires, 3 secondaires et 6 tertiaires, soit 12 couleurs.",
-      "source": "Le design graphique — savoirs & savoir-faire, page 32."
+      "question": "Donnez la valeur précise du nombre d'or.",
+      "correct": 1618,
+      "digits": 4,
+      "explanation": "Le nombre d'or, aussi appelé phi, vaut environ 1,618.",
+      "category": "Composition",
+      "diff": 3,
+      "difficulty": "Moyen",
+      "decimalPosition": 1
     },
     {
       "type": "chiffres",
-      "question": "Combien de bits composent un octet ?",
-      "correct": 8,
-      "digits": 1,
-      "explanation": "Un octet est composé de 8 bits.",
-      "source": "Le design graphique — savoirs & savoir-faire, page 92."
-    },
-    {
-      "type": "chiffres",
-      "question": "Combien de grandes phases composent la chaîne graphique présentée dans le livre ?",
+      "question": "Combien de grandes phases composent la chaîne graphique ?",
       "correct": 5,
       "digits": 1,
       "explanation": "Les cinq phases sont la stratégie, la création, la réalisation, la finition, puis la distribution et la diffusion.",
-      "source": "Le design graphique — savoirs & savoir-faire, page 22."
+      "category": "Production",
+      "diff": 3,
+      "difficulty": "Moyen"
     }
   ],
-
   "zoom": [
     {
       "type": "zoom",
       "question": "Quel est ce logo ?",
       "image": "/game/defi-logo/logo-starbucks.png",
       "answer": "Starbucks",
-      "options": ["Starbucks", "Shell", "Sony"],
+      "options": [
+        "Starbucks",
+        "Shell",
+        "Sony"
+      ],
       "correct": 0,
       "explanation": "Logo Starbucks pour test du zoom linéaire."
     }
