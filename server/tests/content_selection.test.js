@@ -40,6 +40,34 @@ test('quiz selection keeps the requested category and difficulty without repeats
   expect(getAvailableQuizCategories(room, questions)).toEqual(['Logo']);
 });
 
+test('quiz category selection excludes recent categories when alternatives exist', () => {
+  const room = {};
+  const questions = [
+    { id: 'culture-1', q: 'A', category: 'Culture graphique', diff: 1 },
+    { id: 'logo-1', q: 'B', category: 'Logo', diff: 1 },
+    { id: 'production-1', q: 'C', category: 'Production', diff: 1 },
+    { id: 'typo-1', q: 'D', category: 'Typographie', diff: 1 }
+  ];
+
+  expect(getAvailableQuizCategories(room, questions, ['Logo', 'Production'])).toEqual([
+    'Culture graphique',
+    'Typographie'
+  ]);
+});
+
+test('quiz category selection falls back if every available category is excluded', () => {
+  const room = {};
+  const questions = [
+    { id: 'logo-1', q: 'A', category: 'Logo', diff: 1 },
+    { id: 'production-1', q: 'B', category: 'Production', diff: 1 }
+  ];
+
+  expect(getAvailableQuizCategories(room, questions, ['Logo', 'Production'])).toEqual([
+    'Logo',
+    'Production'
+  ]);
+});
+
 test('challenge questions are removed from the room pool after being seen', () => {
   const room = {};
   const challenges = [

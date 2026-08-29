@@ -216,6 +216,7 @@ Prompt implementation :
 ### Buzzer
 
 - [x] Premier écran de duel branché sur l'intro VS commune.
+- [ ] V2 - Corriger le décalage vertical de l'écran lecteur au moment de valider / analyser les réponses.
 
 ### Vrai ou faux
 
@@ -253,6 +254,7 @@ Prompt implementation :
 - [x] Commencer la partie bonus.
 - [x] Implémenter le parcours activité commune photo / vote / résultat.
 - [x] Optimiser le stockage et l'envoi des photos d'activité commune : sortir les base64 de `room.currentInteraction`, garder une room légère, envoyer uniquement les photos nécessaires au vote / résultat, puis nettoyer les photos à la fin de l'épreuve.
+- [x] Enlever le fond blanc sur le reveal des logos de l'activité.
 - [x] Créer les derniers évènements qui n'ont pas encore été intégrés.
 - [x] Ajouter les 2 évènements liés aux bonus une fois le système bonus intégré.
 - [x] Ajouter de nouvelles activités communes pour enrichir la variété des manches.

@@ -140,7 +140,6 @@ function BrandAnswer({ brandName }) {
           src={imageSrc}
           alt={`Logo officiel ${brandName}`}
           className="h-[17rem] w-full max-w-72"
-          imageClassName="object-contain p-5"
         />
       </div>
       <WorksHeading />

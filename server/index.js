@@ -44,6 +44,7 @@ const CODE_CHARACTER_COUNT = 4;
 const MAX_PLAYERS = 4;
 const VALID_BONUS_IDS = new Set(['ctrl-z', 'coffee-boss', 'choose-quiz']);
 const DUEL_TYPES = ['buzzer', 'vraioufaux', 'chiffres', 'zoom', 'pick'];
+const QUIZ_CATEGORY_MEMORY_SIZE = 2;
 const DEBUG_TOOLS_ENABLED = process.env.LCG_ENABLE_DEBUG_TOOLS === 'true';
 const USE_FIXED_DEBUG_ROOM_CODE = process.env.LCG_USE_FIXED_ROOM_CODE === 'true';
 const DEBUG_ROOM_CODE = [2, 2, 2, 2, 2];
@@ -157,6 +158,25 @@ const getRandomDuel = (room, type = null) => {
 };
 
 const getRandomItem = (items) => items[Math.floor(Math.random() * items.length)];
+const getRecentQuizCategories = (room, playerId) => {
+  if (!playerId) return [];
+  const histories = room?.quizCategoryHistoryByPlayer;
+  const recentCategories = histories && Array.isArray(histories[playerId])
+    ? histories[playerId]
+    : [];
+
+  return recentCategories.filter(Boolean).slice(-QUIZ_CATEGORY_MEMORY_SIZE);
+};
+const rememberQuizCategory = (room, playerId, category) => {
+  if (!room || !playerId || !category) return;
+  if (!room.quizCategoryHistoryByPlayer || typeof room.quizCategoryHistoryByPlayer !== 'object' || Array.isArray(room.quizCategoryHistoryByPlayer)) {
+    room.quizCategoryHistoryByPlayer = {};
+  }
+  room.quizCategoryHistoryByPlayer[playerId] = [
+    ...getRecentQuizCategories(room, playerId),
+    category
+  ].slice(-QUIZ_CATEGORY_MEMORY_SIZE);
+};
 
 const createRandomDuelInteraction = (room, initiatingPlayerId = null) => {
   const activePlayer = room.players.find(player => player.id === initiatingPlayerId) || room.players[room.turnIndex];
@@ -320,9 +340,14 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
 
   if (room.adminId === oldId) room.adminId = newId;
   if (room.pendingQuestionerId === oldId) room.pendingQuestionerId = newId;
+  if (room.pendingQuizPlayerId === oldId) room.pendingQuizPlayerId = newId;
   if (room.currentTurnBonusUse?.playerId === oldId) room.currentTurnBonusUse.playerId = newId;
   if (room.pendingChooseQuizBonus?.byPlayerId === oldId) room.pendingChooseQuizBonus.byPlayerId = newId;
   if (room.pendingChooseQuizBonus?.targetPlayerId === oldId) room.pendingChooseQuizBonus.targetPlayerId = newId;
+  if (room.quizCategoryHistoryByPlayer?.[oldId]) {
+    room.quizCategoryHistoryByPlayer[newId] = room.quizCategoryHistoryByPlayer[oldId];
+    delete room.quizCategoryHistoryByPlayer[oldId];
+  }
   for (const player of room.players) {
     if (player.skipNextTurn?.byPlayerId === oldId) player.skipNextTurn.byPlayerId = newId;
   }
@@ -525,7 +550,7 @@ io.on('connection', (socket) => {
     normalizeLogoActivityState(room.currentInteraction);
     return {
       ...room,
-      canUndo: undoSnapshotsByRoomId.has(room.id)
+      canUndo: undoSnapshotsByRoomId.has(room.id) && isUndoAllowed(room.status)
     };
   };
   const syncRoom = (room) => io.to(room.id).emit("update_room_state", createRoomStatePayload(room));
@@ -1323,7 +1348,8 @@ io.on('connection', (socket) => {
     captureUndoSnapshot(room);
 
     if (actionType === "QUIZ") {
-      const availableCategories = getAvailableQuizCategories(room, QUIZ_DB);
+      const activePlayer = room.players[room.turnIndex];
+      const availableCategories = getAvailableQuizCategories(room, QUIZ_DB, getRecentQuizCategories(room, activePlayer?.id || socket.id));
       if (availableCategories.length === 0) {
         if (typeof ack === 'function') ack({ ok: false, reason: 'content_exhausted' });
         return;
@@ -1334,6 +1360,7 @@ io.on('connection', (socket) => {
         : null;
       if (chooseQuizBonus) chooseQuizBonus.awaitingTargetAck = true;
       room.pendingCategory = randomCat;
+      room.pendingQuizPlayerId = activePlayer?.id || socket.id;
       room.availableQuizDifficulties = getAvailableQuizDifficulties(room, QUIZ_DB, randomCat);
       delete room.pendingQuizDifficulty;
       room.pendingQuestionerId = chooseQuizBonus?.byPlayerId || socket.id; // who chooses the quiz configuration
@@ -1863,6 +1890,7 @@ io.on('connection', (socket) => {
       return;
     }
     const category = room.pendingCategory || "Culture graphique";
+    const quizPlayerId = room.pendingQuizPlayerId || room.players[room.turnIndex]?.id || socket.id;
     const selectedQuestion = takeQuizQuestion(room, QUIZ_DB, category, selectedDifficulty);
     if (!selectedQuestion) {
       room.availableQuizDifficulties = getAvailableQuizDifficulties(room, QUIZ_DB, category);
@@ -1888,6 +1916,8 @@ io.on('connection', (socket) => {
     if (chosenByBonus) delete room.pendingChooseQuizBonus;
     delete room.pendingQuizDifficulty;
     delete room.availableQuizDifficulties;
+    rememberQuizCategory(room, quizPlayerId, category);
+    delete room.pendingQuizPlayerId;
     room.pendingCategory = null;
 
     room.status = "INTERACTION";
@@ -1948,6 +1978,7 @@ io.on('connection', (socket) => {
         if (winner) winner.score += points;
       }
 
+      const buzzedPlayer = room.players.find(p => p.id === buzzedPlayerId);
       const options = Array.isArray(room.currentInteraction.data?.options)
         ? room.currentInteraction.data.options
         : [];
@@ -1961,6 +1992,7 @@ io.on('connection', (socket) => {
         readerId: room.currentInteraction.readerId,
         questionerId: room.currentInteraction.readerId,
         buzzedPlayerId,
+        buzzedPlayerCharacter: buzzedPlayer?.character,
         selectedIndex,
         correctIndex: room.currentInteraction.data?.correct,
         options,

@@ -4,6 +4,56 @@
 
 ---
 
+## Samedi 29 Août 2026 - Dernières corrections POC avant publication
+
+### Reprise projet et suivi
+- Confirmation de la version de travail : le serveur actif de la demo se lance depuis la racine avec `node server.js`, tandis que `server/index.js` reste seulement maintenu en miroir.
+- Creation de `docs/final-trial-checklist-2026-08-29.md` pour regrouper les derniers retours de test, les points POC a corriger et les points repousses en V2.
+- Verification du branchement Git et du dernier etat source avant modifications.
+
+### Classement final
+- Correction du cas d'egalite en fin de partie : si plusieurs joueurs terminent avec le meilleur score, le bandeau de victoire affiche maintenant tous les gagnants ex aequo.
+- Le classement conserve son ordre visuel, mais le texte `Victoire de` ne designe plus un seul joueur quand plusieurs ont le meme nombre de jalons.
+
+### Defi Zoom
+- Correction du feedback quand un joueur buzz, repond mal, et fait gagner l'autre joueur sans que celui-ci ait besoin de repondre.
+- Nouveau wording dedie : le message explique que le joueur qui a buzzé s'est trompe et que l'autre remporte les jalons sans avoir eu a agir.
+- Ajout des informations du joueur ayant buzzé dans le resultat serveur pour permettre un message clair cote client.
+- Retrait du tag `pose la question` sur les ecrans du Defi Zoom, car ce defi ne fonctionne pas comme un quiz classique.
+
+### Rotation des categories de quiz
+- Verification par simulation de la logique de tirage des categories avec 10 parties, 4 joueurs et 6 quiz par joueur.
+- Correction de la rotation pour qu'elle soit personnelle a chaque joueur, et non globale a toute la partie.
+- Pour un meme joueur, les deux dernieres categories de quiz sont exclues de son prochain tirage quand des alternatives existent.
+- La categorie jouee il y a trois quiz par ce joueur revient bien dans sa boucle.
+- Deux joueurs differents peuvent toujours tomber sur la meme categorie l'un apres l'autre.
+- Resultat apres correction : 0 repetition interdite par joueur, 0 categorie bloquee trop longtemps, 0 difficulte grisee au depart.
+- Ajout de tests cibles pour verifier l'exclusion des categories recentes et le fallback quand toutes les categories disponibles sont exclues.
+
+### Evenements
+- Correction du wording de l'evenement `Valide par le boss` dans `server/data/events.json`.
+- Suppression de l'ancienne mention de pioche d'une carte bonus physique.
+- Nouveau texte centre sur l'action reelle : deplacer son pion jusqu'a la prochaine case Bonus disponible.
+- Verification que l'application attribue bien le bonus automatiquement via la logique serveur existante.
+
+### Points verifies sans modification POC
+- Bureau du boss a portee : faux tests rejoues avec le vrai plateau et des lancers aleatoires, aucune incoherence reproduite. La logique reste en surveillance mais sans correction pour cette version.
+- Defi Buzzer : decalage vertical confirme sur l'ecran lecteur au moment de valider/analyser les reponses, accepte pour le POC et note en V2 dans `TODO.md`.
+- Defi Chiffres : le reveal score reste note comme point a rechecker humainement.
+
+### Build et validation technique
+- Verification syntaxe serveur OK sur `server.js` et `server/index.js`.
+- Build client production regeneree apres les corrections client.
+- Tests cibles de selection de categories quiz OK.
+- Note technique restante : un ancien test global attend encore 162 questions alors que `server/data/quiz.json` en contient actuellement 158.
+
+### Ajustements supplementaires du 29 aout
+- Validation manuelle du classement final sur le cas Alan 16 / Lucien 16.
+- Reveal de l'activite logo corrige : le logo officiel remplit maintenant son conteneur sans padding blanc visible.
+- Bouton de selection personnage renomme de `Verrouiller` vers `Selectionner`.
+- Collision rare `CTRL + Z` / annulation admin securisee : l'annulation est desormais bloquee sur `TURN_START` et `GAME_LOOP`, donc elle ne peut plus restaurer une ancienne action avant qu'une nouvelle action soit vraiment lancee.
+- Tests de garde-fous de phase mis a jour pour couvrir cette regle.
+
 ## Lundi 8 Juin 2026 - Workshop 8.5 iOS
 
 ### Plein écran iPhone

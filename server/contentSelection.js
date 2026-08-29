@@ -72,9 +72,13 @@ const getAvailableQuizDifficulties = (room, quizQuestions, category) => {
     .sort((left, right) => left - right);
 };
 
-const getAvailableQuizCategories = (room, quizQuestions) => {
+const getAvailableQuizCategories = (room, quizQuestions, excludedCategories = []) => {
   const available = getUnusedQuestions(room, quizQuestions);
-  return [...new Set(available.map((question) => question.category).filter(Boolean))];
+  const categories = [...new Set(available.map((question) => question.category).filter(Boolean))];
+  const excluded = new Set(excludedCategories.filter(Boolean));
+  const filteredCategories = categories.filter((category) => !excluded.has(category));
+
+  return filteredCategories.length > 0 ? filteredCategories : categories;
 };
 
 const takeQuizQuestion = (room, quizQuestions, category, difficulty, random = Math.random) => (

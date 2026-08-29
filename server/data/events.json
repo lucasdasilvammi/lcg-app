@@ -6,7 +6,7 @@
       "effectType": "grant-random-bonus",
       "boardEffectType": "move-self-to-next-bonus",
       "title": "Validé par le boss",
-      "description": "Wouhou ! Ton travail a tapé dans l'œil du boss. Ton efficacité paie, tu fais gagner au patron du temps et des ressources.\n\nDéplaces ton pion directement jusqu'à la prochaine case Bonus disponible sur le plateau. Une fois dessus, pioches une carte Bonus et tu l'ajoutes à ta main.",
+      "description": "Wouhou ! Ton travail a tapé dans l'œil du boss. Ton efficacité paie, tu fais gagner au patron du temps et des ressources.\n\nDéplace ton pion directement jusqu'à la prochaine case Bonus disponible sur le plateau.",
       "effect": "Tu ne relances pas le dé."
     },
     {

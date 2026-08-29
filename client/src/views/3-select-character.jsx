@@ -209,7 +209,7 @@ export default function SelectCharacter({ roomData, pickCharacter, currentUserId
               <div className="mt-8 flex w-full max-w-md flex-col items-center gap-4">
                 <ButtonWithIcon
                   onClick={handleLockCharacter}
-                  text="Verrouiller"
+                  text="Sélectionner"
                   icon={<img src="/game/icons/lock.svg" alt="lock" className="h-8 w-8" />}
                   className="text-bg"
                   style={{

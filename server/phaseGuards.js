@@ -5,7 +5,12 @@ const isPauseAllowed = (status) => (
   && !status.startsWith('ACTIVITE_')
 );
 
-const isUndoAllowed = (status) => status !== 'GAME_END';
+const isUndoAllowed = (status) => (
+  typeof status === 'string'
+  && status !== 'GAME_END'
+  && status !== 'TURN_START'
+  && status !== 'GAME_LOOP'
+);
 
 module.exports = {
   isPauseAllowed,

@@ -31,17 +31,32 @@ function CornerDecorations() {
   )
 }
 
-function WinnerBanner({ player }) {
-  if (!player) return null
+function WinnerName({ player }) {
+  return (
+    <span className="font-semibold" style={{ color: `var(--color-${player.character})` }}>
+      {formatCharacterName(player.character)}
+    </span>
+  )
+}
+
+function WinnerBanner({ winners }) {
+  if (!Array.isArray(winners) || winners.length === 0) return null
 
   return (
     <div className="relative flex w-full items-center justify-center overflow-visible bg-light5 px-4 py-5 text-center">
       <CornerDecorations />
-      <p className="relative z-10 font-family-funnel text-lg text-light">
+      <p className="relative z-10 font-family-funnel text-lg leading-snug text-light">
         <span className="opacity-70">Victoire de : </span>
-        <span className="font-semibold" style={{ color: `var(--color-${player.character})` }}>
-          {formatCharacterName(player.character)}
-        </span>
+        {winners.map((player, index) => (
+          <React.Fragment key={player.id || player.character}>
+            {index > 0 && (
+              <span className="opacity-70">
+                {index === winners.length - 1 ? ' et ' : ', '}
+              </span>
+            )}
+            <WinnerName player={player} />
+          </React.Fragment>
+        ))}
       </p>
     </div>
   )
@@ -78,7 +93,12 @@ export default function GameEnd({ roomData, onGoHome }) {
   const players = Array.isArray(roomData.finalRankings) && roomData.finalRankings.length > 0
     ? roomData.finalRankings
     : [...roomData.players].sort((a, b) => (b.score || 0) - (a.score || 0))
-  const winner = players[0] || null
+  const highestScore = players.length > 0
+    ? Math.max(...players.map((player) => Number(player.score || 0)))
+    : null
+  const winners = highestScore === null
+    ? []
+    : players.filter((player) => Number(player.score || 0) === highestScore)
 
   return (
     <div className="relative w-full overflow-hidden bg-bg">
@@ -109,7 +129,7 @@ export default function GameEnd({ roomData, onGoHome }) {
           </h2>
         </header>
 
-        <WinnerBanner player={winner} />
+        <WinnerBanner winners={winners} />
 
         <ol className="flex min-h-0 w-full flex-1 flex-col gap-2 overflow-y-auto px-1 py-1">
           {players.map((player, index) => (

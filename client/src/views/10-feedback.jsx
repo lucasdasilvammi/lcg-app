@@ -59,7 +59,9 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
   const answeringPlayer = roomData.players[roomData.turnIndex]
 
   const buzzedPlayerCharacter = roomData.lastResult?.buzzedPlayerCharacter
-  const buzzedPlayer = buzzedPlayerCharacter ? { character: buzzedPlayerCharacter } : null
+  const buzzedPlayer = buzzedPlayerCharacter
+    ? { character: buzzedPlayerCharacter }
+    : (lastResult.buzzedPlayerId ? roomData.players.find(p => p.id === lastResult.buzzedPlayerId) : null)
 
   const questionerId = lastResult.questionerId || roomData.currentInteraction?.questionerId || roomData.currentInteraction?.readerId
   const isQuestioner = questionerId === currentUserId
@@ -69,6 +71,11 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
 
   const isPickChallenge = lastResult.type === 'pick'
   const isPickTie = isPickChallenge && lastResult.isTie
+  const isZoomWrongProposalWin = lastResult.type === 'zoom'
+    && lastResult.success === false
+    && lastResult.winnerId
+    && lastResult.buzzedPlayerId
+    && lastResult.winnerId !== lastResult.buzzedPlayerId
   const nextPlayerIndex = (roomData.turnIndex + 1) % roomData.players.length
   const nextPlayer = roomData.players[nextPlayerIndex]
   const isNextPlayer = nextPlayer && nextPlayer.id === currentUserId
@@ -119,11 +126,13 @@ export default function Feedback({ roomData, nextTurn, currentUserId }) {
       : `${formatCharacterName(winner?.character || '')} remporte le brief logo ! ${successFeedbackText}`)
     : (lastResult.type === 'pick'
       ? `${formatCharacterName(winner?.character || '')} avait l'oeil le plus aiguise ! ${successFeedbackText}`
-      : (isDefi && !lastResult.success
+      : (isZoomWrongProposalWin && winner && buzzedPlayer
+        ? `${formatCharacterName(buzzedPlayer.character)} ${agree(buzzedPlayer.character, "s'est trompé", "s'est trompée")}. ${winner.id === currentUserId ? "Tu n'as rien eu à faire et tu remportes les jalons" : `${formatCharacterName(winner.character)} n'a rien eu à faire et remporte les jalons`}. C'est formidable !`
+        : (isDefi && !lastResult.success
         ? `${buzzedPlayer ? `Dommage ${formatCharacterName(buzzedPlayer.character)}. ` : ''}${failureFeedbackText}`
         : (isDefi && lastResult.success
           ? successFeedbackText
-          : (lastResult.success ? successFeedbackText : failureFeedbackText))))
+          : (lastResult.success ? successFeedbackText : failureFeedbackText)))))
 
   return (
     <div className="w-full max-w-full mx-auto">
