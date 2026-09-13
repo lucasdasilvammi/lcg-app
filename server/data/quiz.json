@@ -1,6 +1,668 @@
 {
-  "_comment": "Questions validées exportées depuis Question Studio le 2026-06-21.",
+  "_comment": "Questions validées exportées depuis Question Studio le 2026-09-13.",
   "Culture graphique": [
+    {
+      "q": "La première œuvre du ready-made était...",
+      "options": [
+        "un urinoir",
+        "une fontaine",
+        "un bidet"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Culture graphique",
+      "difficulty": "Moyen"
+    },
+    {
+      "q": "Giovanni Pintori marqua de son style les productions de...",
+      "options": [
+        "Olivetti",
+        "Gucci",
+        "Panzani"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Comment la femme de Joseph Albers se prénomme-t-elle ?",
+      "options": [
+        "Sonia",
+        "Frida",
+        "Anni"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Élisabeth Vigée-Lebrun excellait dans l'art...",
+      "options": [
+        "du paysage",
+        "du portrait",
+        "de la nature morte"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Culture graphique",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Quel est l'autre nom du style typographique international ?",
+      "options": [
+        "Le style allemand",
+        "Le style belge",
+        "Le style suisse"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Culture graphique",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Le Quattrocento italien correspond au...",
+      "options": [
+        "XIVe siècle",
+        "XVe siècle",
+        "XIIIe siècle"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Culture graphique",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Edvard Munch a atteint la notoriété avec...",
+      "options": [
+        "ses pleurs",
+        "son rire",
+        "son cri"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Culture graphique",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Gutenberg est sans doute le premier à avoir utilisé...",
+      "options": [
+        "de l'encre de Chine",
+        "du papier recyclé",
+        "des caractères typographiques métalliques"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Culture graphique",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Une célèbre fresque de Michel-Ange orne le plafond de...",
+      "options": [
+        "la chapelle Sixtine",
+        "la basilique Saint-Pierre",
+        "la villa Borghèse"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Culture graphique",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Au Bauhaus, Marcel Breuer a créé...",
+      "options": [
+        "des bâtiments",
+        "du mobilier",
+        "de la tapisserie"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Culture graphique",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Comment le style d'affiche publicitaire dont Lucian Bernhard est le chef de file se nomme-t-il ?",
+      "options": [
+        "Le MenschPlakat",
+        "Le LandschaftPlakat",
+        "Le SachPlakat"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Edgar Degas aimait...",
+      "options": [
+        "les danseuses",
+        "les comédiennes",
+        "les chanteuses"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Culture graphique",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Stefan Sagmeister a collaboré avec...",
+      "options": [
+        "David Bowie",
+        "Prince",
+        "Lou Reed"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Le grand concept de Le Corbusier était...",
+      "options": [
+        "l'unité de construction",
+        "l'unité d'élévation",
+        "l'unité d'habitation"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Rudy VanderLans et Zuzana Licko ont fondé en 1984 la revue...",
+      "options": [
+        "Exile",
+        "Emigre",
+        "Resist"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Culture graphique",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Jackson Pollock est devenu célèbre grâce...",
+      "options": [
+        "au pointillisme",
+        "à l'action painting",
+        "à l'op art"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Culture graphique",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Wes Wilson, Bonnie MacLean et Victor Moscoso sont connus pour...",
+      "options": [
+        "leurs packagings minimalistes",
+        "leurs affiches psychédéliques",
+        "leurs fanzines érotiques"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Le système de pictogrammes développé par Otto et Marie Neurath s'appelle...",
+      "options": [
+        "l'ICONOTYPE",
+        "l'ISOTYPE",
+        "le PICTUS"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Culture graphique",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Qui a créé les logos du National Geographic, de Mobil et de la Chase Manhattan Bank ?",
+      "options": [
+        "Paul Rand",
+        "Massimo Vignelli",
+        "Chermayeff & Geismar"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Culture graphique",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Henri Cartier-Bresson est réputé pour...",
+      "options": [
+        "ses paysages",
+        "ses photos de rue",
+        "ses photos en couleurs"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Culture graphique",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "La présentation graphique de données chiffrées s'appelle...",
+      "options": [
+        "le chiffrographisme",
+        "la datavisualisation",
+        "le datagraphisme"
+      ],
+      "correct": 1,
+      "diff": 1,
+      "category": "Culture graphique",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "En 2023, Creative Cloud d'Adobe permet d'accéder à combien de services et applications ?",
+      "options": [
+        "Entre 15 et 20",
+        "Plus de 20",
+        "Entre 10 et 15"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Culture graphique",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Picasso a exposé Guernica pour la première fois...",
+      "options": [
+        "au V&A Museum de Londres",
+        "au MoMA de New York",
+        "à l'Exposition universelle de Paris"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Quel magazine mis en page par Herb Lubalin a valu un emprisonnement de huit mois à son fondateur ?",
+      "options": [
+        "Fact",
+        "Avant-Garde",
+        "Eros"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Quand le manifeste First Things First de Garland a-t-il été écrit ?",
+      "options": [
+        "En 1993",
+        "En 1963",
+        "En 1933"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Quelle était la nationalité de l'imprimeur vénitien Nicolas Jenson ?",
+      "options": [
+        "Française",
+        "Italienne",
+        "Canadienne"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Culture graphique",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "L'identité et la signalétique des Jeux olympiques d'été de Munich (1972) ont été créées par...",
+      "options": [
+        "Herb Lubalin",
+        "Paul Rand",
+        "Otl Aicher"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Culture graphique",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Le peintre Wassily Kandinsky est mort...",
+      "options": [
+        "en 1954",
+        "en 1944",
+        "en 1949"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Qui fut la première femme à intégrer l'Art Directors Club ?",
+      "options": [
+        "Paula Scher",
+        "Linda Hinrichs",
+        "Cipe Pineles"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "La Vénus de Botticelli naît dans...",
+      "options": [
+        "un coquillage",
+        "un char",
+        "un temple"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Culture graphique",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Qui est considéré comme le fondateur du land art ?",
+      "options": [
+        "Robert Smithson",
+        "Jackson Pollock",
+        "Christo"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "« I love New York » est un logo créé par...",
+      "options": [
+        "David Hasselhoff",
+        "Milton Glaser",
+        "Paul Rand"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Culture graphique",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Saul Bass est connu pour...",
+      "options": [
+        "ses livres de poche",
+        "ses typographies manuscrites",
+        "ses génériques et affiches de films"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Culture graphique",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Le collectif Grapus se sépare en...",
+      "options": [
+        "1990",
+        "1985",
+        "1988"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Josef Albers a rendu hommage...",
+      "options": [
+        "au triangle",
+        "au carré",
+        "au rond"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Où Armin Hofmann a-t-il enseigné le graphisme ?",
+      "options": [
+        "À la Hochschule für Gestaltung d'Ulm",
+        "Au Bauhaus",
+        "À la Schule für Gestaltung Basel"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Alexey Brodovitch a été le DA de...",
+      "options": [
+        "Harper's Bazaar",
+        "Vanity Fair",
+        "Penguin"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Le studio Pentagram a été fondé en...",
+      "options": [
+        "1972",
+        "1952",
+        "1962"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Culture graphique",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Le constructivisme est né...",
+      "options": [
+        "en Suisse",
+        "en Russie",
+        "en Allemagne"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Culture graphique",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "En peinture, l'invention de la perspective date du...",
+      "options": [
+        "XVIe siècle",
+        "XVe siècle",
+        "XIVe siècle"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Culture graphique",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Bart Van der Leck est l'un des fondateurs...",
+      "options": [
+        "de De Stijl",
+        "du Bauhaus",
+        "de la Sécession"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Qui a conçu au début des années 2000 l'identité de la collection « Great Ideas » de Penguin ?",
+      "options": [
+        "Jan Tschichold",
+        "Neville Brody",
+        "David Pearson"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Qu'est-ce que le graphisme n'est pas ?",
+      "options": [
+        "Un art appliqué",
+        "Une spécificité française",
+        "Un métier créatif"
+      ],
+      "correct": 1,
+      "diff": 1,
+      "category": "Culture graphique",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Quel graphiste a été surnommé « Monsieur Couverture » par Jacques Chancel ?",
+      "options": [
+        "Pierre Faucheux",
+        "Massin",
+        "Pierre di Sciullo"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Culture graphique",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Comment nomme-t-on le graphisme des emballages de biens de consommation ?",
+      "options": [
+        "Le packaging",
+        "Le graphisme éditorial",
+        "Le graphisme d'utilisation"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "category": "Culture graphique",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Quelle revue fondée en 1994 par Michel Chanaud et Patrick Morin offre un panorama de l'actualité du graphisme ?",
+      "options": [
+        "Baseline",
+        "Idea",
+        "étapes:"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Culture graphique",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Qui a peint L'Homme au chapeau melon ?",
+      "options": [
+        "John Steed",
+        "Salvador Dalí",
+        "René Magritte"
+      ],
+      "correct": 2,
+      "diff": 2,
+      "category": "Culture graphique",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Quel site web propose une banque de pictogrammes et autres symboles graphiques ?",
+      "options": [
+        "The Design Project",
+        "The Form Project",
+        "The Noun Project"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Culture graphique",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Paul Klee a produit...",
+      "options": [
+        "1 000 tableaux",
+        "9 000 tableaux",
+        "500 tableaux"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Culture graphique",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Les œuvres de Robert Doisneau relèvent de...",
+      "options": [
+        "la photographie militante",
+        "la photographie humaniste",
+        "la photographie nostalgique"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Culture graphique",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Hokusai est célèbre pour...",
+      "options": [
+        "sa maîtrise de l'espéranto",
+        "sa vague",
+        "son trombone"
+      ],
+      "correct": 1,
+      "diff": 1,
+      "category": "Culture graphique",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
     {
       "q": "Quel mouvement graphique est notamment caractérisé par l’usage de grilles strictes, de typographies sans serif et d’une mise en page objective ?",
       "options": [
@@ -11,7 +673,8 @@
       "correct": 1,
       "diff": 2,
       "category": "Culture graphique",
-      "difficulty": "Facile"
+      "difficulty": "Facile",
+      "explanation": ""
     },
     {
       "q": "Quel mouvement graphique domine entre les années 1950 et 1970 ?",
@@ -640,6 +1303,538 @@
   ],
   "Typographie": [
     {
+      "q": "La chasse est...",
+      "options": [
+        "l'activité favorite de tonton Jean",
+        "l'espacement entre les lettres",
+        "l'encombrement des lettres d'un mot"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Typographie",
+      "difficulty": "Moyen"
+    },
+    {
+      "q": "Dans Photoshop, comment appelle-t-on l'outil se situant entre le remplissage et la gomme ?",
+      "options": [
+        "L'aéronautique",
+        "L'aéroplane",
+        "L'aérographe"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Typographie",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Laquelle de ces affirmations est vraie ?",
+      "options": [
+        "Une police de caractères regroupe plusieurs fontes",
+        "Une fonte regroupe plusieurs polices de caractères",
+        "La fonte est l'équivalent d'une police de caractères"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Typographie",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Combien d'encre la variante Ecofont d'Arial permet-elle d'économiser ?",
+      "options": [
+        "52 %",
+        "28 %",
+        "35 %"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Typographie",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Sous InDesign, pour accéder aux caractères spéciaux, on ouvre le menu...",
+      "options": [
+        "Caractère",
+        "Article",
+        "Glyphes"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Typographie",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Un blanc de pied, c'est...",
+      "options": [
+        "La marge en bas de la page",
+        "Une lettre sans empattement en bas",
+        "Une ligne blanche entre deux paragraphes"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Typographie",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Lorsque l'on agrandit la taille d'une photographie, celle-ci perd-elle en qualité ?",
+      "options": [
+        "Non",
+        "Ça dépend",
+        "Oui"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Typographie",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Une phrase comportant les 26 lettres de l'alphabet s'appelle...",
+      "options": [
+        "un programme",
+        "une pandémie",
+        "un pangramme"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Typographie",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Le terme correct pour désigner une minuscule est...",
+      "options": [
+        "bas-de-casse",
+        "approche",
+        "hampe"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "category": "Typographie",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "L'American Type Founders a été fondée en 1892 par...",
+      "options": [
+        "Linn Boyd Benton",
+        "Morris Fuller Benton",
+        "Jack Larry Benton"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Typographie",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Lequel de ces caractères a beaucoup orné les emballages de produits alimentaires bio ?",
+      "options": [
+        "Comic Sans",
+        "Fajitas",
+        "Papyrus"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Typographie",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "La règle des tiers désigne...",
+      "options": [
+        "une règle qui permet d'équilibrer une composition",
+        "une méthode de calcul pour choisir le corps d'un texte",
+        "une manière de calculer la pagination d'un livre"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Typographie",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Qu'est-ce que l'« anticrénelage » ?",
+      "options": [
+        "Un procédé permettant de réduire l'effet de pixélisation d'un élément graphique",
+        "Un procédé de mise en page spécifique",
+        "Un procédé de gestion des créneaux"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Typographie",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Qu'est-ce qu'un « em » ?",
+      "options": [
+        "Un outil After Effects pour couper des vidéos",
+        "Une unité de mesure utilisée pour la typographie sur le Web",
+        "Une fonctionnalité de retouche rapide sur Photoshop"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Typographie",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Comment nomme-t-on une image animée ?",
+      "options": [
+        "Un GIF",
+        "Un dessin animé",
+        "Une image accélérée"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "category": "Typographie",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Ed Benguiat a conçu plus de...",
+      "options": [
+        "900 polices de caractères",
+        "600 polices de caractères",
+        "300 polices de caractères"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Typographie",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Un caractère bâton désigne...",
+      "options": [
+        "un caractère avec empattements",
+        "un caractère neutre",
+        "un caractère sans empattements"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Typographie",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Les caractères de labeur sont utilisés...",
+      "options": [
+        "pour les textes",
+        "pour les titres",
+        "pour les tableaux"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Typographie",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Quel est l'intérêt de renommer une image ?",
+      "options": [
+        "Le fait de réduire son poids",
+        "La possibilité de ne pas écraser l'image d'origine",
+        "Le plaisir de changer de nom"
+      ],
+      "correct": 1,
+      "diff": 1,
+      "category": "Typographie",
+      "difficulty": "Pour les nuls",
+      "explanation": ""
+    },
+    {
+      "q": "Lequel de ces patronymes est celui d'une grande famille d'imprimeurs et typographes ?",
+      "options": [
+        "Dondin",
+        "Didot",
+        "Dadou"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Typographie",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Le caractère Antique Olive a été créé par...",
+      "options": [
+        "Jean-François Porchez",
+        "Roger Excoffon",
+        "Paul Renner"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Typographie",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Où placer une espace insécable ?",
+      "options": [
+        "Entre deux mots que l'on ne souhaite pas voir séparés",
+        "Après des guillemets anglais",
+        "En début de paragraphe"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Typographie",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Que signifie le sigle DPI ?",
+      "options": [
+        "Draw per inch",
+        "Dots per inch",
+        "Don't push it"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Typographie",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Le trait vertical principal d'une lettre est...",
+      "options": [
+        "une lampe",
+        "une hampe",
+        "une jambe"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Typographie",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Lesquelles de ces polices ont été créées par Roger Excoffon ?",
+      "options": [
+        "Billy, Crakis et Bébé",
+        "Festival, Zut et Zéphyr",
+        "Banco, Mistral et Calypso"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Typographie",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Où doit-on généralement mettre des espaces pour les parenthèses ?",
+      "options": [
+        "À l'extérieur, mais pas à l'intérieur",
+        "À l'intérieur, mais pas à l'extérieur",
+        "À l'intérieur et à l'extérieur"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Typographie",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Le caractère Fairplex a été créé par...",
+      "options": [
+        "Matthew Carter",
+        "Zuzana Licko",
+        "Jan Tschichold"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Typographie",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Qui a créé la première police italique ?",
+      "options": [
+        "Nicolas Jenson",
+        "Francesco Griffo de Bologne",
+        "Claude Garamont"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Typographie",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "En quelle année Giambattista Bodoni a-t-il conçu la police Bodoni ?",
+      "options": [
+        "En 1717",
+        "En 1889",
+        "En 1798"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Typographie",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "« Colombelle » est synonyme de...",
+      "options": [
+        "gouttière",
+        "têtière",
+        "folio"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Typographie",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Parmi ces formats de fichiers, lequel est le seul à supporter la compression ?",
+      "options": [
+        "GIF",
+        "PNG",
+        "JPEG"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Typographie",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "La ligature permet de...",
+      "options": [
+        "coller 2 lettres",
+        "rapprocher 2 lignes",
+        "fusionner 2 paragraphes"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Typographie",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Comment appelle-t-on la liste des divisions d'un livre placée en fin d'ouvrage ?",
+      "options": [
+        "Le sommaire",
+        "La table des matières",
+        "L'index"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Typographie",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Comment appelle-t-on la structure sous-jacente d'une mise en page ?",
+      "options": [
+        "La grille",
+        "La formule",
+        "Le tableur"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "category": "Typographie",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Le synonyme de « fût », c'est...",
+      "options": [
+        "descendant",
+        "tonneau",
+        "montant"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Typographie",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Le nombre d'or correspond à environ...",
+      "options": [
+        "3,4518",
+        "212,85",
+        "1,618"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Typographie",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Laquelle de ces graisses de caractères n'existe pas ?",
+      "options": [
+        "Hyper Bold",
+        "Black",
+        "Extra Bold"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Typographie",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Lorsque la dernière phrase d'un paragraphe commence une colonne ou une page, on parle...",
+      "options": [
+        "d'orpheline",
+        "de veuve",
+        "de divorcée"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Typographie",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Où faut-il placer l'espace avec une virgule ?",
+      "options": [
+        "Après",
+        "Avant",
+        "Avant et après"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "category": "Typographie",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Que signifie le sigle « RVB » ?",
+      "options": [
+        "Rouge, vert, bleu",
+        "Responsive, vite, bien",
+        "Résolution, vecteur, bandeau"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "category": "Typographie",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Les typographies scriptes imitent...",
+      "options": [
+        "l'écriture informatique",
+        "l'écriture des moines",
+        "l'écriture manuscrite"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Typographie",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
       "q": "Comment s’appelle la coupure d’un mot en fin de ligne avec un tiret ?",
       "options": [
         "Interligne",
@@ -649,7 +1844,8 @@
       "correct": 1,
       "diff": 2,
       "category": "Typographie",
-      "difficulty": "Facile"
+      "difficulty": "Facile",
+      "explanation": ""
     },
     {
       "q": "Quel terme désigne l’espace entre les lettres dans un texte ?",
@@ -1135,6 +2331,603 @@
   ],
   "Signe et couleur": [
     {
+      "q": "Le violet héliotrope tient son nom...",
+      "options": [
+        "d'une fleur",
+        "d'un coquillage",
+        "d'un papillon"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Signe et couleur",
+      "difficulty": "Difficile"
+    },
+    {
+      "q": "Si je veux signifier la vérité et la loyauté, j'utilise du...",
+      "options": [
+        "rouge",
+        "bleu",
+        "noir"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Le vert est une couleur...",
+      "options": [
+        "froide",
+        "chaude",
+        "mitigée"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "category": "Signe et couleur",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Le système Pantone a été créé en...",
+      "options": [
+        "1953",
+        "1963",
+        "1943"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Signe et couleur",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Une tétrade désigne...",
+      "options": [
+        "une combinaison de quatre couleurs",
+        "une combinaison de deux couleurs",
+        "une combinaison de dix couleurs"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Signe et couleur",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Pour une référence Pantone, que signifie le C ?",
+      "options": [
+        "Coated",
+        "Cartonné",
+        "Customisé"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Un accord isocèle est composé de...",
+      "options": [
+        "6 couleurs",
+        "3 couleurs",
+        "5 couleurs"
+      ],
+      "correct": 1,
+      "diff": 1,
+      "category": "Signe et couleur",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Le cercle chromatique de Johannes Itten comporte...",
+      "options": [
+        "9 contrastes",
+        "7 contrastes",
+        "8 contrastes"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "« Zinzolin » est une nuance de...",
+      "options": [
+        "violet",
+        "bleu",
+        "jaune"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Signe et couleur",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "« Chartreuse » est une teinte de...",
+      "options": [
+        "vert",
+        "bleu",
+        "rouge"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "À quelle couleur l'adjectif « sarcelle » correspond-il ?",
+      "options": [
+        "Au bleu",
+        "Au jaune",
+        "Au rouge"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Signe et couleur",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Sous quel nom un peu plus joli peut-on présenter la couleur « caca d'oie » ?",
+      "options": [
+        "Vert menthe",
+        "Vert olive",
+        "Jaune crasseux"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Signe et couleur",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Quelle est la couleur complémentaire du jaune ?",
+      "options": [
+        "L'orange",
+        "Le vert",
+        "Le violet"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Laquelle de ces associations n'existe pas ?",
+      "options": [
+        "Couleurs complémentaires",
+        "Couleurs complémentaires rompues",
+        "Couleurs complémentaires perdues"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Signe et couleur",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Le tableau de Picasso intitulé Mère et Enfant (1901) arbore...",
+      "options": [
+        "des teintes de rose",
+        "des teintes de bleu",
+        "des teintes de rouge"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Signe et couleur",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Qu'est-ce qu'un « camaïeu » ?",
+      "options": [
+        "Une teinte entre le rose et l'orange",
+        "Un dégradé plus ou moins foncé de la même couleur",
+        "L'association de deux couleurs contrastées"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Le pigment de carthame est...",
+      "options": [
+        "jaune",
+        "bleu",
+        "rouge"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Le Pantone Reflex Blue est un...",
+      "options": [
+        "bleu profond",
+        "bleu métallique",
+        "bleu fluorescent"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "category": "Signe et couleur",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Quelles sont les couleurs utilisées en quadrichromie ?",
+      "options": [
+        "Rouge, vert, bleu",
+        "Bleu, jaune, rouge",
+        "Cyan, magenta, jaune, noir"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Signe et couleur",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "« Citron », « soleil » ou « indien » définissent...",
+      "options": [
+        "des ocres",
+        "des ors",
+        "des jaunes"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Signe et couleur",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Un ton est...",
+      "options": [
+        "le mélange d'une couleur avec du gris ou du noir",
+        "le mélange d'une couleur avec du blanc",
+        "le mélange de trois couleurs"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Signe et couleur",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Le sépia est la couleur d'un pigment produit par...",
+      "options": [
+        "les épicéas",
+        "un champignon",
+        "la seiche"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Signe et couleur",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Regarder du rouge peut...",
+      "options": [
+        "augmenter la tension artérielle",
+        "déclencher un fou rire",
+        "troubler la vision de loin"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Signe et couleur",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Quelle est la meilleure astuce pour rendre lisible le blanc sur un fond jaune ?",
+      "options": [
+        "Passer le texte en italique",
+        "Utiliser un nuancier Pantone",
+        "Ajouter au moins 20 % de magenta dans le jaune"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Signe et couleur",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Lequel de ces roses existe ?",
+      "options": [
+        "Le rose « shocking »",
+        "Le rose « amazing »",
+        "Le rose « troubling »"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Le violet a une longueur d'onde...",
+      "options": [
+        "plus longue que le rouge",
+        "identique au rouge",
+        "plus courte que le rouge"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Signe et couleur",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Le système de couleurs RVB est utilisé...",
+      "options": [
+        "à l'écran",
+        "en impression",
+        "en peinture"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "category": "Signe et couleur",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Le vert de flambe est obtenu à partir...",
+      "options": [
+        "de lichens séchés",
+        "de sécrétions de chenilles",
+        "de fleurs pilées et d'oxyde de plomb"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Signe et couleur",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Une teinte est...",
+      "options": [
+        "le mélange d'une couleur avec du blanc",
+        "le mélange d'une couleur avec du gris ou du noir",
+        "le mélange d'une couleur avec du bleu"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "L'aplat est...",
+      "options": [
+        "une tache de couleur",
+        "une surface de couleur uniforme",
+        "l'association de deux couleurs similaires"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Signe et couleur",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Qui a dit : « Quand je n'ai pas de bleu, je mets du rouge » ?",
+      "options": [
+        "Piet Mondrian",
+        "Pablo Picasso",
+        "Salvador Dalí"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Signe et couleur",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Quel outil colorimétrique est encore utilisé dans certaines industries ?",
+      "options": [
+        "Le nuancier de Punsell",
+        "Le nuancier de Munsell",
+        "Le nuancier de Funsell"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Signe et couleur",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Le « Gofun Shirayuki » est un pigment blanc japonais produit à partir de...",
+      "options": [
+        "coquilles d'huîtres",
+        "plâtre pilé",
+        "calcaire"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Signe et couleur",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Le vert avocat a beaucoup été utilisé...",
+      "options": [
+        "sur les plateaux télé des années 2000",
+        "sur les appareils électroménagers des années 1970",
+        "dans les tribunaux du début du XXe siècle"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Quelle couleur obtient-on avec le lapis-lazuli ?",
+      "options": [
+        "Du jaune",
+        "Du violet",
+        "Du bleu"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Signe et couleur",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "L'incarnat a une dominante...",
+      "options": [
+        "rouge",
+        "jaune",
+        "verte"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Lequel de ces logos n'est pas rouge ?",
+      "options": [
+        "Coca-Cola",
+        "Starbucks",
+        "H&M"
+      ],
+      "correct": 1,
+      "diff": 1,
+      "category": "Signe et couleur",
+      "difficulty": "Pour les nuls",
+      "explanation": ""
+    },
+    {
+      "q": "Comment le livre culte de Josef Albers se nomme-t-il ?",
+      "options": [
+        "L'Interaction des couleurs",
+        "La Symphonie des couleurs",
+        "L'Harmonie des couleurs"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Signe et couleur",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Quel est le nom du noir absolu déposé par l'artiste Anish Kapoor ?",
+      "options": [
+        "Blackissime",
+        "Vantablack",
+        "Absoluteblack"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Signe et couleur",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Quelle est la couleur Pantone de l'année 2023 ?",
+      "options": [
+        "Pirate Black",
+        "Viva Magenta",
+        "Ultimate Grey"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Signe et couleur",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Qui a déclaré : « L'air frais est violet » ?",
+      "options": [
+        "Paul Cézanne",
+        "Claude Monet",
+        "Vincent Van Gogh"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Le pigment indigo était obtenu à partir...",
+      "options": [
+        "d'aluminium",
+        "de graines",
+        "de terre"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Sous quel nom plus vendeur les designers évoquent-ils la couleur « chair » ?",
+      "options": [
+        "pêche",
+        "pommette",
+        "rosette"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "category": "Signe et couleur",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Quelle artiste française contemporaine recrée et explore dans ses œuvres le spectre de la lumière ?",
+      "options": [
+        "Martine Aballéa",
+        "Nathalie Junod Ponsard",
+        "Camille Henrot"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Signe et couleur",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Lequel de ces savants n'a pas travaillé sur la couleur ?",
+      "options": [
+        "Albert Einstein",
+        "Johann Wolfgang von Goethe",
+        "Isaac Newton"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Signe et couleur",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "« Cinabre » est une nuance de...",
+      "options": [
+        "vert",
+        "bleu",
+        "rouge"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Signe et couleur",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
       "q": "Quel mode colorimétrique est principalement utilisé pour les écrans ?",
       "options": [
         "RVB",
@@ -1331,6 +3124,18 @@
     }
   ],
   "Logo": [
+    {
+      "q": "Le pictogramme est...",
+      "options": [
+        "une mesure",
+        "une photo",
+        "un dessin"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Logo",
+      "difficulty": "Pour les nuls"
+    },
     {
       "q": "Quelle particularité définit un logo abstrait ?",
       "options": [
@@ -1581,6 +3386,577 @@
   ],
   "Production": [
     {
+      "q": "Quelles encres doivent être privilégiées dans une démarche d'écoconception ?",
+      "options": [
+        "Les encres animales",
+        "Les encres végétales",
+        "Les encres minérales"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Production",
+      "difficulty": "Facile"
+    },
+    {
+      "q": "L'encre utilisée dans les presses numériques se présente sous forme...",
+      "options": [
+        "de poudre",
+        "liquide",
+        "de cubes"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Production",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "La gravure en taille douce implique...",
+      "options": [
+        "de graver la surface d'une plaque de marbre",
+        "de plonger la plaque gravée dans un bain d'eau tiède",
+        "de graver la surface d'une plaque métallique"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Production",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Qu'est-ce qu'un « repiquage au noir » ?",
+      "options": [
+        "Une photocopie",
+        "La réalisation d'une impression sur un document déjà imprimé",
+        "Une impression en bichromie"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Production",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Quel est l'ordre logique de ces différentes étapes ?",
+      "options": [
+        "Traceurs - maquette en blanc - bonnes feuilles",
+        "Maquette en blanc - bonnes feuilles - traceurs",
+        "Maquette en blanc - traceurs - bonnes feuilles"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Production",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Qui a introduit la première rotative aux États-Unis ?",
+      "options": [
+        "William Bullock",
+        "Stephen Daye",
+        "Friedrich Koenig"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Production",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "L'embossage est un marquage...",
+      "options": [
+        "en creux",
+        "en bosse",
+        "en zigzag"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Production",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Le format rogné est obtenu après...",
+      "options": [
+        "reliure",
+        "façonnage",
+        "impression"
+      ],
+      "correct": 1,
+      "diff": 1,
+      "category": "Production",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Au Moyen Âge, à partir de quoi le vélin était-il fabriqué ?",
+      "options": [
+        "De copeaux de bois",
+        "De peau d'un veau mort-né",
+        "De velours recyclé"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Production",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Un leporello est...",
+      "options": [
+        "une couverture en cuir",
+        "une découpe biseautée",
+        "un dépliant accordéon"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Production",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Quel outil permet de vérifier les trames d'impression sur les bonnes feuilles ?",
+      "options": [
+        "Un compte-points",
+        "Un compte-fils",
+        "Un compte-trames"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Production",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Que signifie le sigle « BAT » ?",
+      "options": [
+        "Bon à tirer",
+        "Bon à tracer",
+        "Broché à toile"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Production",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Dans un A3, combien y a-t-il de A5 ?",
+      "options": [
+        "8",
+        "4",
+        "6"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Production",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "L'« integra » est...",
+      "options": [
+        "une couverture souple rembordée",
+        "une unité dans le domaine de l'impression",
+        "un livre lorsqu'il est imprimé"
+      ],
+      "correct": 0,
+      "diff": 4,
+      "category": "Production",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "En offset, comment le rouleau qui transfère l'encre sur le papier se nomme-t-il ?",
+      "options": [
+        "Le blancheur",
+        "Le blanchet",
+        "Le blanchon"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Production",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Que signifie le sigle « PAO » ?",
+      "options": [
+        "Persistance à l'obsolescence",
+        "Publication assistée par ordinateur",
+        "Participation assistée par ordinateur"
+      ],
+      "correct": 1,
+      "diff": 1,
+      "category": "Production",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Le « roulage » consiste à...",
+      "options": [
+        "pratiquer un palper-rouler sur le conducteur de la machine",
+        "mettre en marche une machine d'impression",
+        "faire rouler les rouleaux encreurs"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Production",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Un papier qui laisse entrevoir par transparence de fines lignes horizontales et parallèles dans son épaisseur est...",
+      "options": [
+        "un papier bible",
+        "un papier vergé",
+        "un papier washi"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Production",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Lequel de ces papiers est aplati et lissé ?",
+      "options": [
+        "Le papier calandré",
+        "Le papier offset",
+        "Le papier mat à main"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Production",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Avant Gutenberg, quelle technique était utilisée pour reproduire un livre ?",
+      "options": [
+        "La xylographie",
+        "La reprographie",
+        "La sérigraphie"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Production",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Un papier qui a de la « main » est un papier qui...",
+      "options": [
+        "a été fabriqué avec des chiffons",
+        "garde les traces de doigts quand on le manipule",
+        "semble plus épais qu'il ne l'est réellement"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Production",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "L'imposition est une étape...",
+      "options": [
+        "du prépresse",
+        "de l'impression",
+        "de la photogravure"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Production",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Comment nomme-t-on les premiers livres imprimés ?",
+      "options": [
+        "Les impliables",
+        "Les insolubles",
+        "Les incunables"
+      ],
+      "correct": 2,
+      "diff": 4,
+      "category": "Production",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Un document imprimé ne peut comporter...",
+      "options": [
+        "un nombre impair de pages",
+        "moins de 12 pages",
+        "un nombre impair de feuilles"
+      ],
+      "correct": 0,
+      "diff": 1,
+      "category": "Production",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Qui a mis au point la fabrication du papier vélin en France ?",
+      "options": [
+        "Nicolas Robert",
+        "François-Ambroise Didot",
+        "Johannes Gutenberg"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Production",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Comment appelle-t-on le paragraphe qui fournit les informations d'impression d'un ouvrage ?",
+      "options": [
+        "L'incipit",
+        "Le cabochon",
+        "Le colophon"
+      ],
+      "correct": 2,
+      "diff": 5,
+      "category": "Production",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Qu'est-ce que l'amalgame ?",
+      "options": [
+        "Un tirage simultané, sur une même feuille, d'impressions différentes",
+        "Un test d'impression",
+        "Un réglage du niveau d'encre"
+      ],
+      "correct": 0,
+      "diff": 5,
+      "category": "Production",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Quand on parle de « gâche », on évoque...",
+      "options": [
+        "l'écologie",
+        "le papier",
+        "l'encre"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Production",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Le format A0 est...",
+      "options": [
+        "la moitié de A1",
+        "le double de A3",
+        "le double de A1"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Production",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "L'hexachromie est une impression en...",
+      "options": [
+        "6 couleurs",
+        "3 couleurs",
+        "10 couleurs"
+      ],
+      "correct": 0,
+      "diff": 2,
+      "category": "Production",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Une découpe au laser suppose de...",
+      "options": [
+        "écraser le papier",
+        "brûler le papier",
+        "humidifier le papier"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Production",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Qu'est-ce que le maculage ?",
+      "options": [
+        "Des traces d'encre sur les feuilles d'impression",
+        "Des structures géométriques qui apparaissent lors de la reproduction d'une image déjà tramée",
+        "Des défauts du papier"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Production",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Quel est le premier livre imprimé en série par Gutenberg ?",
+      "options": [
+        "Un traité d'orfèvrerie",
+        "La Bible latine à 42 lignes",
+        "Les 95 Thèses, de Martin Luther"
+      ],
+      "correct": 1,
+      "diff": 3,
+      "category": "Production",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Comment nomme-t-on une reliure faite de deux fils de métal se refermant sur des trous et rappelant le principe de la spirale ?",
+      "options": [
+        "Un leporello",
+        "Une reliure japonaise",
+        "Une wire-o"
+      ],
+      "correct": 2,
+      "diff": 3,
+      "category": "Production",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "La flexographie fait appel à des plaques...",
+      "options": [
+        "en bois tendre",
+        "en caoutchouc ou plastique souple",
+        "en métal souple"
+      ],
+      "correct": 1,
+      "diff": 5,
+      "category": "Production",
+      "difficulty": "Expert",
+      "explanation": ""
+    },
+    {
+      "q": "Les livres « souples » sont dits...",
+      "options": [
+        "reliés",
+        "pliés",
+        "brochés"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Production",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Un papier bouffant est un papier...",
+      "options": [
+        "rugueux et lourd",
+        "léger et épais",
+        "lourd et fin"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Production",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Andy Warhol a très largement fait usage de...",
+      "options": [
+        "la risographie",
+        "la flexographie",
+        "la sérigraphie"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Production",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Quel terme ne peut pas s'appliquer à la finition d'un imprimé ?",
+      "options": [
+        "Le modelage",
+        "La découpe",
+        "Le gaufrage"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Production",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "Quelle piqûre n'existe pas ?",
+      "options": [
+        "La piqûre cousue",
+        "La piqûre à plat",
+        "La piqûre à cheval"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Production",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
+      "q": "« Je fais plutôt du print » signifie...",
+      "options": [
+        "« Mes créations graphiques sont destinées à un usage digital »",
+        "« Mes créations graphiques sont destinées à être imprimées »",
+        "« Je cours tous les dimanches »"
+      ],
+      "correct": 1,
+      "diff": 1,
+      "category": "Production",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "Quelle reliure n'existe pas ?",
+      "options": [
+        "La reliure japonaise",
+        "La reliure italienne",
+        "La reliure suisse"
+      ],
+      "correct": 1,
+      "diff": 4,
+      "category": "Production",
+      "difficulty": "Difficile",
+      "explanation": ""
+    },
+    {
+      "q": "Quelle information est indispensable pour une photogravure réussie ?",
+      "options": [
+        "Le nom de l'imprimeur",
+        "Le nombre d'exemplaires imprimés",
+        "Le profil ICC de l'impression"
+      ],
+      "correct": 2,
+      "diff": 1,
+      "category": "Production",
+      "difficulty": "Facile",
+      "explanation": ""
+    },
+    {
+      "q": "En impression, les encres métalliques...",
+      "options": [
+        "sont plus chères",
+        "sont moins chères",
+        "n'existent pas"
+      ],
+      "correct": 0,
+      "diff": 3,
+      "category": "Production",
+      "difficulty": "Moyen",
+      "explanation": ""
+    },
+    {
       "q": "Quelle lettre précède un numéro de format d’enveloppes ?",
       "options": [
         "D",
@@ -1590,7 +3966,8 @@
       "correct": 1,
       "diff": 4,
       "category": "Production",
-      "difficulty": "Difficile"
+      "difficulty": "Difficile",
+      "explanation": ""
     },
     {
       "q": "Quel est le format d’une feuille A4 ?",
@@ -1815,6 +4192,18 @@
     }
   ],
   "Composition": [
+    {
+      "q": "Avec quel procédé peut-on lancer son processus créatif ?",
+      "options": [
+        "Une maquette en blanc",
+        "Une carte mentale",
+        "Une vectorisation de caractères typographiques"
+      ],
+      "correct": 1,
+      "diff": 2,
+      "category": "Composition",
+      "difficulty": "Facile"
+    },
     {
       "q": "Quelle valeur approchée correspond au nombre d'or ?",
       "options": [
