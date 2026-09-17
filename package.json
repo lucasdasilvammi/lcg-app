@@ -13,7 +13,9 @@
     "client:dev": "cd client && npm run dev",
     "test:swarm": "node scripts/agent-swarm/run-four-player-simulation.js --spawn-server --scenario scripts/agent-swarm/scenarios/default-four-player.json",
     "worklog": "node docs/worklog-site/server.js",
-    "test:worklog": "node --test docs/worklog-site/server.test.js"
+    "test:worklog": "node --test docs/worklog-site/server.test.js",
+    "studio:dev": "cd question-studio && npm run dev",
+    "studio:build": "cd question-studio && npm run build"
   },
   "keywords": [
     "game",

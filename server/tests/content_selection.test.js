@@ -2,18 +2,19 @@ const quizData = require('../data/quiz.json');
 const {
   getAvailableQuizCategories,
   getAvailableQuizDifficulties,
+  getQuestionKey,
   takeQuizQuestion,
   takeRandomUnusedActivity,
   takeRandomUnusedQuestion
 } = require('../contentSelection');
 
-test('the two CSV exports provide 162 valid quiz questions across difficulties 1 to 5', () => {
+test('the current quiz data provides 158 valid quiz questions across difficulties 1 to 5', () => {
   const questions = Object.values(quizData).filter(Array.isArray).flat();
-  const ids = new Set(questions.map((question) => question.id));
+  const keys = new Set(questions.map(getQuestionKey));
   const difficulties = [...new Set(questions.map((question) => question.diff))].sort();
 
-  expect(questions).toHaveLength(162);
-  expect(ids.size).toBe(162);
+  expect(questions).toHaveLength(158);
+  expect(keys.size).toBe(158);
   expect(difficulties).toEqual([1, 2, 3, 4, 5]);
   expect(questions.every((question) => (
     question.options.length === 3

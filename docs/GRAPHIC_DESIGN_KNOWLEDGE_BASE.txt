@@ -1,0 +1,1504 @@
+GRAPHIC DESIGN KNOWLEDGE BASE
+Derived from the supplied book photos and the structured book-question extraction already present in the project.
+
+Purpose
+This document is not a human-facing summary. It is a structured knowledge base intended to train an AI specialized in graphic design, visual communication, branding, typography, layout, production, UI/UX, image generation, and design critique.
+
+Important limitation
+The local environment does not contain a working OCR engine. The knowledge below is therefore a transformed, expanded, and formalized extraction based on the previously structured book data, the visible organization of the photographed book, and targeted inspection of the book images. It avoids verbatim reproduction and expresses concepts as reusable design knowledge, rules, workflows, examples, counterexamples, and decision heuristics.
+
+
+1. FUNDAMENTAL DEFINITION OF GRAPHIC DESIGN
+
+Graphic design is the organized production of visual forms in order to communicate information, identity, emotion, hierarchy, orientation, and meaning.
+
+Graphic design is not merely decoration. It is the intentional relationship between:
+content,
+audience,
+context,
+medium,
+visual language,
+technical constraints,
+and communication objective.
+
+A design is successful when its form serves the communication objective. Beauty alone is insufficient if the message is unclear, the hierarchy is weak, the medium is unsuitable, or the audience cannot decode the intended signs.
+
+Universal principle:
+Every graphic decision should be explainable by a function. If a color, typeface, alignment, image, texture, grid, or visual effect has no communicative, structural, emotional, or production purpose, it should be questioned.
+
+Rule for AI design reasoning:
+Before generating a visual composition, infer:
+What must be communicated?
+Who must understand it?
+What action, emotion, or interpretation is expected?
+Where will the design be seen?
+What technical constraints shape the final output?
+
+Counterexample:
+A poster using many trendy effects but no readable title fails as communication design.
+
+Example:
+A clean typographic poster with strong contrast, clear hierarchy, and one striking image can be more effective than a visually complex layout because it guides perception faster.
+
+
+2. MAIN DOMAINS OF GRAPHIC DESIGN
+
+2.1 Editorial design
+Editorial design organizes reading experiences: books, magazines, brochures, reports, catalogs, newspapers, manuals, zines, and other text-image supports.
+
+Core goals:
+make information readable,
+structure long content,
+create rhythm across pages,
+define hierarchy,
+balance text and image,
+support navigation,
+maintain coherence across multiple pages.
+
+Design reasoning:
+Editorial design depends heavily on grids, margins, columns, typographic hierarchy, folios, captions, running heads, and image placement.
+
+Good editorial design:
+uses recurring layout rules,
+keeps enough white space,
+makes headings, subtitles, captions, and body text immediately distinguishable,
+ensures reading comfort,
+uses a grid without making every page monotonous.
+
+Bad editorial design:
+changes alignment rules randomly,
+uses inconsistent type sizes,
+places captions ambiguously,
+uses line lengths too long or too short,
+ignores margins and binding constraints.
+
+2.2 Brand design and visual identity
+Brand design builds a visual system that allows a brand, institution, product, or service to be recognized and remembered.
+
+It goes beyond the logo. It includes:
+logo,
+wordmark,
+symbol,
+colors,
+typography,
+image style,
+composition principles,
+graphic motifs,
+tone,
+usage rules,
+applications,
+and emotional positioning.
+
+A logo identifies. A brand system expresses.
+
+Rule:
+Do not judge a logo only as an isolated mark. Judge it as part of a system and across use cases: small size, large size, monochrome, screen, print, signage, motion, social media, packaging.
+
+Good brand identity:
+is coherent,
+recognizable,
+adaptable,
+durable,
+distinctive,
+aligned with values,
+and technically reproducible.
+
+Counterexample:
+A logo that works only in full color at large size but collapses in black and white or at favicon size is weak.
+
+2.3 UX/UI design
+UX/UI design concerns digital interfaces: websites, applications, software, interactive systems.
+
+UX refers to user experience:
+flows,
+tasks,
+friction,
+clarity,
+feedback,
+accessibility,
+mental model,
+information architecture.
+
+UI refers to user interface:
+buttons,
+forms,
+menus,
+layout,
+visual hierarchy,
+states,
+microcopy,
+spacing,
+typography,
+icons,
+components.
+
+Rule:
+Interface beauty must not reduce usability. A stylish interface that hides actions, weakens contrast, or makes states ambiguous is defective.
+
+Example:
+A disabled button must be visually distinguishable from an enabled button. A selected filter must differ from hover and default states.
+
+2.4 Motion design
+Motion design combines graphic elements, movement, timing, transitions, rhythm, and often sound.
+
+Motion is not random animation. It guides attention, clarifies change, establishes mood, and supports narrative.
+
+Good motion:
+has readable timing,
+supports state change,
+avoids unnecessary distraction,
+uses easing to imply physical or emotional quality,
+coordinates image, type, and sound.
+
+Counterexample:
+Animating every element independently without hierarchy creates visual noise.
+
+2.5 Packaging, advertising, signage, and information design
+Packaging must identify, persuade, inform, protect, and respect production constraints.
+Advertising must attract attention quickly and deliver a memorable message.
+Signage must orient users in space with maximum clarity.
+Information design converts complex data or processes into understandable visual structures.
+
+Universal rule:
+The more urgent or functional the context, the less ambiguity the design can tolerate.
+
+
+3. GRAPHIC CHAIN AND PROJECT WORKFLOW
+
+The book presents the graphic chain as a process moving from strategy to delivery.
+
+Core sequence:
+1. Strategy
+2. Creation
+3. Realization
+4. Finishing
+5. Distribution and diffusion
+
+3.1 Strategy
+Strategy defines the problem before forms are produced.
+
+Inputs:
+brief,
+audience,
+message,
+constraints,
+objectives,
+brand context,
+budget,
+timeline,
+medium,
+competition,
+success criteria.
+
+AI rule:
+Do not generate visual directions before identifying the strategic variables. If the target audience is unknown, the design cannot be reliably optimized.
+
+3.2 Creation
+Creation explores possible visual solutions.
+
+Methods:
+brainstorming,
+mind mapping,
+benchmarking,
+moodboards,
+sketches,
+concept boards,
+rough layouts,
+visual metaphors,
+typographic tests,
+color explorations.
+
+Good creation phase:
+diverges first,
+then converges.
+
+Bad creation phase:
+judges too early,
+copies competitors directly,
+chooses a style before defining the message,
+confuses personal taste with project relevance.
+
+3.3 Realization
+Realization translates concept into final assets.
+
+Tasks:
+layout construction,
+typographic styling,
+image editing,
+vector drawing,
+export preparation,
+responsive adaptation,
+file organization,
+proofing.
+
+Rule:
+At realization stage, decisions must become precise: sizes, margins, grid units, color values, file formats, resolution, naming conventions.
+
+3.4 Finishing
+Finishing prepares the design for production.
+
+Print finishing includes:
+cutting,
+folding,
+binding,
+lamination,
+varnish,
+embossing,
+debossing,
+foil stamping,
+paper choice,
+bleed verification,
+crop marks,
+preflight.
+
+Digital finishing includes:
+asset compression,
+responsive variants,
+accessibility checks,
+state checks,
+performance optimization,
+metadata,
+export formats.
+
+3.5 Distribution and diffusion
+Distribution means putting the design in front of the audience.
+
+Examples:
+printing and delivery,
+posting online,
+uploading assets,
+publishing a website,
+deploying an interface,
+social distribution,
+campaign rollout.
+
+Rule:
+A design is not complete until it survives its real distribution context.
+
+
+4. CREATIVE METHODS AND RESEARCH
+
+4.1 Brainstorming
+Brainstorming generates ideas without immediate judgment.
+
+Phase 1:
+produce many ideas,
+delay criticism,
+allow improbable associations,
+encourage quantity,
+accept roughness.
+
+Phase 2:
+sort,
+evaluate,
+combine,
+select,
+test against objectives.
+
+Machine rule:
+Separate generative mode from evaluative mode. Do not optimize too early.
+
+Counterexample:
+Rejecting an idea because it seems unrealistic before exploring its underlying metaphor may block useful directions.
+
+4.2 Mind mapping
+Mind mapping organizes ideas around a central concept.
+
+It links:
+keywords,
+semantic fields,
+visual associations,
+materials,
+emotions,
+audiences,
+constraints,
+cultural references,
+possible metaphors.
+
+Use:
+generate connections,
+reveal clusters,
+avoid linear thinking,
+discover unexpected angles.
+
+AI heuristic:
+When asked for a concept, build a semantic network before generating form. Visual concepts often emerge from relationships between words.
+
+4.3 Benchmark
+Benchmarking compares existing references.
+
+It is not copying. It identifies:
+conventions,
+good practices,
+category codes,
+visual opportunities,
+overused tropes,
+competitor positioning,
+gaps,
+ways to differentiate.
+
+Good benchmark:
+records why each reference works,
+separates surface style from functional principle,
+compares multiple examples,
+notes context.
+
+Bad benchmark:
+copies one reference,
+ignores audience differences,
+mistakes popularity for relevance.
+
+4.4 Moodboard
+A moodboard is a visual collage that expresses atmosphere, style, tone, and direction.
+
+It can include:
+images,
+textures,
+colors,
+typographic references,
+patterns,
+materials,
+lighting,
+composition references,
+motion references,
+interface references.
+
+Function:
+align stakeholders,
+make abstract tone visible,
+guide later visual decisions,
+prevent incoherent style drift.
+
+Rule:
+A moodboard should not be random decoration. Each element should represent a design variable: color mood, texture, type personality, composition rhythm, image treatment, or emotional register.
+
+Counterexample:
+A board mixing luxury serif typography, comic icons, neon gradients, and corporate photography without explaining the intended relation produces confusion.
+
+
+5. SEMIOTICS AND VISUAL SIGNS
+
+5.1 Signifier and signified
+In Saussurean semiology:
+The signifier is the perceptible form of the sign: word, image, sound, shape, mark, color, texture.
+The signified is the concept or meaning associated with that form.
+
+Graphic design manipulates signifiers to produce intended signifieds.
+
+Example:
+A red cross signifier may signify emergency, medicine, aid, prohibition, danger, or healthcare depending on context.
+
+Rule:
+Meaning is not contained in form alone. It emerges from form plus context plus cultural code plus audience knowledge.
+
+5.2 Iconicity
+Iconicity is the degree of resemblance between a sign and what it represents.
+
+High iconicity:
+photograph,
+realistic illustration,
+detailed pictogram.
+
+Medium iconicity:
+simplified icon,
+schematic drawing,
+flat illustration.
+
+Low iconicity:
+abstract mark,
+geometric symbol,
+monogram.
+
+Abraham Moles' scale of iconicity can be used as a reasoning axis: from faithful representation toward abstraction.
+
+AI rule:
+When designing a symbol, choose iconicity level according to goal:
+high iconicity for immediate recognition,
+medium iconicity for clarity plus style,
+low iconicity for uniqueness, memorability, and conceptual abstraction.
+
+Counterexample:
+A highly abstract icon may fail in wayfinding if users need instant recognition.
+
+5.3 Visual code
+A visual code is a learned association.
+
+Examples:
+green may signify nature, validation, ecology, or financial growth.
+black may signify luxury, seriousness, mourning, elegance, or darkness.
+serif typography may signify tradition, editorial authority, literature, or elegance.
+geometric sans serif may signify modernity, neutrality, technology, or rationality.
+
+Rule:
+Never assume a sign has one universal meaning. Test its likely interpretation in cultural and contextual frame.
+
+
+6. COLOR THEORY
+
+6.1 RGB / RVB
+RGB is an additive color model for screens.
+It uses red, green, and blue light.
+When maximum red, green, and blue light are added, the result is white.
+Black is absence of emitted light.
+
+Use RGB for:
+screens,
+websites,
+apps,
+video,
+digital image generation,
+motion graphics.
+
+6.2 CMYK / CMJN
+CMYK is a subtractive print model using cyan, magenta, yellow, and black inks.
+Printed color is produced by ink absorbing light reflected by paper.
+
+Use CMYK for:
+offset print,
+digital print,
+flyers,
+posters,
+books,
+packaging,
+physical supports.
+
+Rule:
+RGB colors can be brighter than CMYK print can reproduce. Always anticipate gamut differences.
+
+Counterexample:
+A neon blue that looks luminous on screen may print dull if not adapted.
+
+6.3 Color wheel
+The color wheel described in the book includes:
+3 primary colors,
+3 secondary colors,
+6 tertiary colors,
+for a total of 12 colors.
+
+Primary colors are base colors from which others are mixed in the model.
+Secondary colors result from mixing two primaries.
+Tertiary colors result from mixing primary and secondary neighbors.
+
+6.4 Complementary colors
+Complementary colors are opposite each other on the color wheel.
+
+Function:
+create strong contrast,
+increase visual energy,
+separate elements,
+produce tension or vibration.
+
+Rule:
+Use complementary contrast carefully. Full saturation complements can be aggressive. Adjust value, saturation, and proportions to maintain harmony.
+
+Example:
+Red and green can create strong contrast, but equal quantities at full saturation may feel unstable.
+
+Counterexample:
+Using complementary colors for long body text and background can reduce readability.
+
+6.5 Analogous colors
+Analogous colors are adjacent on the color wheel.
+
+Function:
+create harmony,
+produce unity,
+support calm or coherent atmospheres.
+
+Risk:
+weak contrast if values are too similar.
+
+6.6 Hue, tint, shade, tone, nuance
+Hue is the base color family.
+Adding white creates a lighter tint.
+Adding black creates a darker shade.
+Adding gray, or black and white together, creates a muted tone or nuance.
+
+Design reasoning:
+Adjusting hue changes identity.
+Adjusting value changes hierarchy and contrast.
+Adjusting saturation changes intensity and emotional temperature.
+
+AI rule:
+Do not choose colors only by hue. Evaluate hue, value, saturation, contrast, proportion, and medium.
+
+6.7 Color and meaning
+Color meanings are contextual.
+
+Color variables:
+hue,
+value,
+saturation,
+temperature,
+contrast,
+quantity,
+placement,
+cultural association,
+medium.
+
+Example:
+Blue can feel corporate, calm, technological, cold, trustworthy, or distant.
+
+Counterexample:
+A palette chosen because it is "beautiful" may fail if it contradicts brand values or accessibility contrast.
+
+
+7. TYPOGRAPHY
+
+7.1 Typeface, font, glyph, character
+A typeface is the design of a family of characters.
+A font is a specific file or style instance within a type family.
+A character is an abstract unit such as "A".
+A glyph is the drawn visual representation of a character.
+
+A complete type system includes:
+letters,
+numbers,
+punctuation,
+symbols,
+diacritics,
+weights,
+styles,
+spacing,
+kerning,
+OpenType features.
+
+7.2 Serif
+Serif typefaces have small finishing strokes called serifs or empattements.
+
+Common associations:
+tradition,
+literature,
+authority,
+heritage,
+editorial seriousness,
+elegance.
+
+Potential use:
+books,
+magazines,
+luxury branding,
+institutions,
+long-form text,
+historical identity.
+
+Risk:
+some high-contrast serifs can be fragile on low-resolution screens.
+
+7.3 Sans serif
+Sans serif typefaces have no serifs.
+
+Common associations:
+modernity,
+clarity,
+neutrality,
+efficiency,
+technology,
+minimalism.
+
+Potential use:
+interfaces,
+signage,
+corporate systems,
+contemporary brands,
+legibility-driven layouts.
+
+Risk:
+overly neutral sans serif typography can feel generic if not supported by a distinct system.
+
+7.4 Script typefaces
+Script typefaces imitate handwriting, calligraphy, brush, or cursive forms.
+
+Function:
+express personality,
+human warmth,
+gesture,
+elegance,
+informality,
+craft.
+
+Risk:
+reduced readability, especially in long texts, small sizes, all caps, or low contrast.
+
+Rule:
+Use scripts sparingly for titles, logotypes, accents, or short expressions; avoid them for dense body text unless readability is proven.
+
+7.5 Decorative typefaces
+Decorative typefaces are expressive display faces with strong stylistic identity.
+
+Use:
+short headlines,
+posters,
+event identity,
+thematic branding.
+
+Risk:
+visual fatigue,
+dated appearance,
+low readability,
+limited versatility.
+
+7.6 Mécane / slab serif
+Slab serif typefaces have heavy, block-like serifs.
+
+Associations:
+industrial strength,
+stability,
+mechanical construction,
+robustness,
+poster impact.
+
+7.7 Typographic contrast
+Typographic contrast creates hierarchy and rhythm.
+
+Contrast variables:
+size,
+weight,
+style,
+case,
+width,
+family,
+color,
+spacing,
+alignment,
+position.
+
+Rule:
+Use contrast to express hierarchy. Avoid using too many contrast variables at once.
+
+Good:
+large bold title, medium subtitle, regular body, small caption.
+
+Bad:
+five typefaces, many colors, inconsistent sizes, random uppercase, no hierarchy.
+
+7.8 Readability and legibility
+Legibility concerns recognizing letters.
+Readability concerns comfortable reading over time.
+
+Factors:
+typeface choice,
+body size,
+line length,
+line spacing,
+letter spacing,
+word spacing,
+contrast,
+background,
+column width,
+screen resolution,
+paper quality.
+
+Rule:
+For body text, prioritize stable forms, adequate size, comfortable line length, and sufficient contrast.
+
+7.9 Helvetica
+Helvetica was created in 1957 by Max Miedinger and originated as Neue Haas Grotesk.
+It is associated with Swiss modernism, neutrality, clarity, and corporate communication.
+
+Design implication:
+Helvetica can create a neutral, clean voice, but excessive dependence on it may feel anonymous.
+
+7.10 Futura
+Futura was created by Paul Renner in 1927.
+It is geometrically constructed and often associated with modernism and Bauhaus-related rationality.
+
+Design implication:
+Futura signals geometry, modernity, constructed clarity, and sometimes retro-futurism.
+
+7.11 Times New Roman
+Times New Roman was designed for The Times under Stanley Morison.
+It responds to editorial constraints: compactness, readability, and efficient use of newspaper space and ink.
+
+Design implication:
+Some typefaces are born from production constraints. Typography is technical as much as stylistic.
+
+7.12 Screen typography
+On screens, extreme contrast between thick and thin strokes can reduce legibility because thin details may render poorly.
+
+Rule:
+For interface and small text, prefer fonts with robust strokes, large x-height, clear differentiation of characters, and adequate spacing.
+
+Counterexample:
+An elegant Didone-style high-contrast serif may work in a large fashion headline but fail as 12px UI body text.
+
+
+8. LOGO AND BRAND IDENTITY
+
+8.1 Logo typographique
+A typographic logo is composed only of text or a stylized wordmark.
+
+Strength:
+directly communicates name,
+works well when the name is distinctive,
+can build personality through lettering.
+
+Risk:
+may lack symbolic memorability if typography is generic.
+
+8.2 Monogram
+A monogram combines initials or a small set of letters into a sign.
+
+Use:
+long names,
+institutional identities,
+luxury,
+personal brands,
+compact marks.
+
+Rule:
+Letters must remain distinguishable enough unless abstraction is intentional.
+
+8.3 Pictogram logo
+A pictogram represents a recognizable object, being, or visual referent.
+
+Strength:
+immediate recognition,
+cross-language readability,
+fast memorization.
+
+Risk:
+generic if the object is common and not stylized distinctively.
+
+8.4 Mascot
+A mascot personifies the brand as an animal, character, or figure.
+
+Strength:
+emotional bond,
+narrative potential,
+friendly identity,
+animation potential.
+
+Risk:
+can feel childish or dated if not aligned with brand positioning.
+
+8.5 Emblem
+An emblem combines text and symbol inside a closed or badge-like form, often evoking seals, crests, or blasons.
+
+Strength:
+heritage,
+authority,
+cohesion,
+institutional presence.
+
+Risk:
+complexity at small sizes.
+
+8.6 Abstract logo
+An abstract logo does not directly represent a recognizable object.
+
+Strength:
+distinctive,
+conceptual,
+flexible,
+ownable.
+
+Risk:
+requires brand exposure to acquire meaning.
+
+8.7 Logo durability
+A durable logo avoids relying entirely on short-lived trends.
+
+Durability criteria:
+simple enough to remember,
+distinctive enough to identify,
+balanced proportions,
+works in black and white,
+works small and large,
+does not depend on temporary effects,
+can adapt to media changes.
+
+Counterexample:
+A logo built entirely from a fashionable gradient effect may age quickly and lose recognition when reproduced in one color.
+
+8.8 Logo evaluation checklist
+Can it be recognized at small size?
+Can it work in one color?
+Is the silhouette distinctive?
+Is it aligned with brand values?
+Is it too close to competitors?
+Can it be animated?
+Can it be embroidered, printed, engraved, or displayed on screen?
+Does it remain clear on dark and light backgrounds?
+Does it avoid unnecessary detail?
+
+
+9. COMPOSITION AND LAYOUT
+
+9.1 Format
+A vertical format is called "à la française".
+A horizontal format is called "à l'italienne".
+
+Format affects reading direction, image scale, rhythm, and hierarchy.
+
+Print formats are fixed physical surfaces.
+Web pages may have a fixed width reference but can extend vertically with content.
+
+Rule:
+Design for the behavior of the medium, not only its visible frame.
+
+9.2 Page anatomy
+Common page elements:
+margin,
+column,
+gutter,
+folio,
+running head,
+title,
+subtitle,
+body text,
+caption,
+image,
+footnote,
+baseline grid.
+
+Folio means page number.
+
+Rule:
+Navigation elements such as folios must be consistent enough to support orientation but subtle enough not to compete with primary content.
+
+9.3 Grid
+A grid is a structural system for placing elements.
+
+Functions:
+organize,
+align,
+create hierarchy,
+ensure consistency,
+manage repetition,
+support multi-page systems,
+speed layout decisions.
+
+Rule:
+A grid is a tool, not a cage. It should structure variation.
+
+9.4 Column grid
+A column grid divides width into vertical columns.
+
+Use:
+text columns,
+magazines,
+web layouts,
+responsive systems.
+
+Key variables:
+number of columns,
+gutter,
+margins,
+column width,
+span rules.
+
+9.5 Modular grid
+A modular grid combines vertical columns and horizontal divisions, creating modules.
+
+Use:
+precise placement,
+complex editorial layouts,
+interfaces,
+catalogs,
+icon systems,
+data-heavy pages.
+
+Rule:
+Use modular grids when both vertical and horizontal relationships matter.
+
+9.6 Hierarchy
+Hierarchy tells the viewer what to look at first, second, and third.
+
+Hierarchy tools:
+scale,
+weight,
+contrast,
+position,
+spacing,
+color,
+isolation,
+image scale,
+typographic level,
+alignment.
+
+AI rule:
+Every composition should have an intended reading path. If all elements compete equally, hierarchy fails.
+
+9.7 White space
+White space is active space. It separates, groups, emphasizes, and gives rhythm.
+
+Counterexample:
+Filling every gap with content reduces clarity.
+
+9.8 Alignment
+Alignment creates visual relationships.
+
+Elements aligned to the same axis are perceived as related.
+Broken alignment can create emphasis if intentional.
+
+Rule:
+Do not mix many alignment systems without purpose.
+
+9.9 Proportion and golden ratio
+The golden ratio is approximately 1.618.
+
+It is a proportional relationship that can guide division of space, but it is not a guarantee of beauty.
+
+Rule:
+Use proportional systems as tools, not mystical formulas. A ratio must serve content and context.
+
+9.10 Gestalt principles
+Gestalt principles describe how humans organize visual perception.
+
+Figure-ground:
+viewers separate main form from background.
+
+Proximity:
+near elements are perceived as related.
+
+Similarity:
+similar elements are perceived as belonging together.
+
+Continuity:
+the eye follows lines, curves, and directional flow.
+
+Closure:
+the mind completes incomplete forms.
+
+Common fate:
+elements moving or oriented in the same direction feel grouped.
+
+Rule:
+Use Gestalt to control grouping before adding labels. Good composition makes relationships visible.
+
+Counterexample:
+If a caption is closer to the wrong image than the correct image, users may associate it incorrectly.
+
+9.11 Typographic gray
+Typographic gray is the visual density of a block of text.
+
+It depends on:
+typeface design,
+font size,
+weight,
+line spacing,
+column width,
+tracking,
+word spacing,
+paragraph spacing,
+ink density,
+screen rendering.
+
+Good typographic gray:
+feels even,
+supports sustained reading,
+avoids rivers,
+avoids overly dark blocks,
+avoids excessive looseness.
+
+Rule:
+Evaluate a text block not only letter by letter, but as a texture.
+
+
+10. PRODUCTION AND TECHNICAL GRAPHIC KNOWLEDGE
+
+10.1 Paper formats
+The ISO A series includes A0, A1, A2, A3, A4, A5, etc.
+As the number increases, the format becomes smaller.
+A3 is larger than A4; A4 is larger than A5.
+
+Rule:
+Always confirm final format before layout. Changing format late can break hierarchy, image crops, and grid logic.
+
+10.2 Image formats
+JPEG:
+compressed with loss,
+suited to photographs,
+common for web,
+not ideal for logos or flat graphics with sharp edges.
+
+PNG:
+lossless raster format,
+supports transparency,
+suited to UI assets, screenshots, simple graphics.
+
+SVG:
+vector format,
+scales without quality loss,
+ideal for logos, icons, simple illustrations, interface symbols.
+
+TIFF:
+often used in professional print workflows,
+can preserve high-quality raster data.
+
+Rule:
+Choose file format according to image type and use case. Do not rename an extension to convert a file; the internal data structure must be converted.
+
+10.3 Raster vs vector
+Raster images are made of pixels.
+Vector images are made of mathematical shapes.
+
+Raster is suited to photographs, textures, and pixel-based image editing.
+Vector is suited to logos, icons, diagrams, type outlines, scalable graphics.
+
+Counterexample:
+Exporting a logo only as a low-resolution JPEG creates scaling and reproduction problems.
+
+10.4 Bit and byte
+One byte equals 8 bits.
+File size matters for storage, web performance, and production transfer.
+
+10.5 Resolution
+For print, images are often prepared around 300 DPI depending on output context.
+For screen, pixel dimensions and responsive density matter more than print DPI.
+
+Rule:
+Do not judge image quality only by file size. Check pixel dimensions, compression, resolution, and intended output scale.
+
+10.6 Bleed
+Bleed extends graphic elements beyond the final trim edge.
+The book recommends roughly 3 to 5 mm around printed documents.
+
+Purpose:
+avoid white edges after cutting,
+secure background colors,
+secure images that touch page edges.
+
+Rule:
+Any element intended to reach the trim edge must extend into the bleed area.
+
+Counterexample:
+A full-page colored background ending exactly at trim size may reveal a white line after cutting.
+
+10.7 Printing processes
+Digital printing:
+prints directly from data,
+good for small runs,
+supports personalization,
+requires less setup.
+
+Offset printing:
+uses a plate, a rubber blanket, then the support,
+efficient for large runs,
+high quality,
+requires setup and plates.
+
+Rule:
+Choose print process according to quantity, cost, substrate, color accuracy, personalization, and quality requirement.
+
+10.8 Paper coated vs uncoated
+Coated paper has a treated surface that limits ink penetration.
+It generally preserves sharper dots and more precise colors.
+
+Uncoated paper absorbs more ink, producing softer colors and more tactile texture.
+
+Design implication:
+The same color file can look different depending on paper. Production material is part of visual design.
+
+10.9 Preflight
+Before sending to print:
+check format,
+bleed,
+crop marks,
+CMYK conversion,
+image resolution,
+embedded fonts or outlined text,
+safe margins,
+overprint,
+black values,
+linked images,
+file naming.
+
+AI rule:
+A print-ready design must include production constraints, not only visual appearance.
+
+
+11. AESTHETIC JUDGMENT FORMALIZED FOR AI
+
+11.1 Coherence
+A design is coherent when its parts appear to belong to the same system.
+
+Signals:
+consistent spacing,
+limited type palette,
+repeated alignment,
+controlled color palette,
+consistent image treatment,
+clear rules.
+
+Counterexample:
+A layout using one rounded icon style, one sharp geometric icon style, three unrelated typefaces, and mismatched image filters lacks system coherence.
+
+11.2 Contrast
+Contrast creates distinction and hierarchy.
+
+Contrast can be:
+large vs small,
+dark vs light,
+warm vs cool,
+dense vs empty,
+regular vs bold,
+geometric vs organic,
+sharp vs soft,
+static vs dynamic.
+
+Rule:
+If two elements are meant to be different, make them clearly different. If they are meant to belong together, make them clearly related.
+
+11.3 Balance
+Balance is the distribution of visual weight.
+
+Visual weight depends on:
+size,
+darkness,
+saturation,
+complexity,
+position,
+isolation,
+texture,
+recognizable subject.
+
+Symmetrical balance:
+stable,
+formal,
+calm.
+
+Asymmetrical balance:
+dynamic,
+modern,
+active.
+
+11.4 Rhythm
+Rhythm is repetition with variation.
+
+Examples:
+repeated modules,
+alternating image sizes,
+consistent heading spacing,
+recurring color accents,
+page-to-page variation.
+
+Bad rhythm:
+every page identical,
+or every page unrelated.
+
+11.5 Tension
+Tension can make a composition active.
+
+Sources:
+asymmetry,
+cropping,
+diagonal movement,
+scale contrast,
+color opposition,
+compressed spacing,
+unexpected alignment.
+
+Rule:
+Tension must be controlled. Too little is boring; too much is chaotic.
+
+11.6 Simplicity
+Simplicity is not emptiness. It is the removal of unnecessary complexity.
+
+Good simplicity:
+few elements,
+clear relations,
+strong hierarchy,
+precise details.
+
+Bad simplicity:
+lack of information,
+generic identity,
+no personality.
+
+11.7 Style vs principle
+Universal principles:
+legibility,
+hierarchy,
+contrast,
+alignment,
+coherence,
+appropriate medium,
+audience awareness,
+technical reproducibility.
+
+Style-specific conventions:
+minimalism,
+Swiss grids,
+brutalism,
+retro palettes,
+luxury serif typography,
+neon cyber aesthetics,
+handmade textures,
+flat design,
+skeuomorphism.
+
+Rule:
+Do not treat style conventions as universal laws. A brutalist layout may intentionally break polish conventions but still needs hierarchy and communicative intent.
+
+
+12. DESIGN GENERATION RULES FOR AN AI
+
+12.1 Before generating
+Identify:
+domain,
+message,
+audience,
+medium,
+format,
+tone,
+constraints,
+brand values,
+technical output,
+required hierarchy.
+
+12.2 During generation
+Define:
+primary element,
+secondary elements,
+grid,
+alignment,
+typographic scale,
+color system,
+image style,
+spacing system,
+logo/sign treatment,
+production format.
+
+12.3 After generation
+Evaluate:
+Can the message be understood in 3 seconds?
+Is the hierarchy clear?
+Is the type legible?
+Do colors support meaning and contrast?
+Are elements aligned?
+Is the composition balanced?
+Does the style match the audience?
+Would it work in the intended medium?
+Are there technical issues?
+
+12.4 Common failure modes
+Too many typefaces.
+Too many colors.
+Decorative choices without function.
+Weak contrast.
+Ambiguous grouping.
+Unclear reading path.
+Logo too complex.
+Color mode mismatch.
+No bleed for print.
+Image format unsuitable.
+Text too small.
+No visual system.
+Moodboard treated as final design.
+Benchmark copied instead of analyzed.
+
+
+13. CATEGORY-SPECIFIC KNOWLEDGE MAP
+
+Culture graphique:
+graphic design fields,
+chain of production,
+strategy,
+creation,
+realization,
+finishing,
+distribution,
+brainstorming,
+mind mapping,
+benchmark,
+moodboard,
+motion design,
+editorial design,
+UX/UI.
+
+Typographie:
+typeface,
+font,
+glyph,
+serif,
+sans serif,
+script,
+decorative,
+slab serif,
+contrast,
+hierarchy,
+legibility,
+readability,
+Helvetica,
+Futura,
+Times New Roman,
+screen constraints.
+
+Signe et couleur:
+signifier,
+signified,
+semiology,
+iconicity,
+Abraham Moles,
+RGB,
+CMYK,
+additive synthesis,
+color wheel,
+complementary colors,
+tints,
+tones,
+nuances,
+color meaning.
+
+Logo:
+typographic logo,
+monogram,
+pictogram,
+mascot,
+emblem,
+abstract logo,
+brand system,
+iconicity,
+durability,
+adaptability.
+
+Composition:
+format,
+page anatomy,
+folio,
+grid,
+column grid,
+modular grid,
+alignment,
+hierarchy,
+Gestalt,
+figure-ground,
+proximity,
+golden ratio,
+typographic gray.
+
+Production:
+ISO paper formats,
+JPEG,
+PNG,
+SVG,
+vector,
+raster,
+bit,
+byte,
+resolution,
+bleed,
+digital printing,
+offset printing,
+coated paper,
+preflight.
+
+
+14. EXAMPLE REASONING PATTERNS
+
+Prompt:
+Create a poster for a serious cultural conference.
+
+Reasoning:
+Audience expects credibility and clarity.
+Use restrained palette.
+Use typographic hierarchy.
+Use grid to organize date, title, location, speakers.
+Avoid overly playful decorative typography unless the conference topic supports it.
+If print, include bleed and high-resolution imagery.
+
+Prompt:
+Create a logo for a friendly educational game.
+
+Reasoning:
+Logo should be memorable, scalable, playful, and readable.
+Mascot or rounded typography may support friendliness.
+Avoid excessive detail.
+Test small size.
+Prepare monochrome version.
+
+Prompt:
+Create a UI dashboard.
+
+Reasoning:
+Primary goal is comprehension and action.
+Use grid, spacing, consistent components, clear states.
+Use color semantically, not only decoratively.
+Ensure contrast and hierarchy.
+
+Prompt:
+Create a book layout.
+
+Reasoning:
+Long reading requires readability.
+Use columns, margins, folios, headings, captions.
+Establish typographic scale.
+Control typographic gray.
+Use recurring structure with rhythmic variation.
+
+
+15. PRACTICAL DESIGN CHECKLIST
+
+Message:
+Is the main message identifiable?
+Is secondary information ordered?
+Is there unnecessary text or visual clutter?
+
+Audience:
+Does the visual language match expectations?
+Is the cultural code appropriate?
+Is the complexity suitable?
+
+Typography:
+Is the body text readable?
+Are headings distinct?
+Are line lengths comfortable?
+Are typefaces coherent?
+
+Color:
+Is the mode correct for medium?
+Is contrast sufficient?
+Does the palette support meaning?
+Are colors overused?
+
+Composition:
+Is there a clear reading path?
+Are related elements grouped?
+Are alignments intentional?
+Is there enough white space?
+Is visual weight balanced?
+
+Logo/identity:
+Is it distinctive?
+Does it scale?
+Does it work in one color?
+Does it express the brand?
+
+Production:
+Is the file format correct?
+Is resolution sufficient?
+Is bleed included?
+Are fonts/images prepared?
+Is the output medium respected?
+
+
+16. COMPACT MACHINE-READABLE PRINCIPLES
+
+IF medium = screen THEN use RGB, pixel dimensions, responsive behavior, accessibility contrast, robust screen typography.
+IF medium = print THEN use CMYK, bleed, trim, paper choice, image resolution, production file checks.
+IF text = long-form THEN prioritize readability over expressive typography.
+IF typeface = script OR decorative THEN use for short emphasis, not body text.
+IF logo must scale THEN reduce detail and test silhouette.
+IF sign must be instantly recognized THEN increase iconicity.
+IF sign must be distinctive and ownable THEN controlled abstraction may help.
+IF composition feels chaotic THEN reduce variables, strengthen grid, clarify hierarchy.
+IF composition feels dull THEN add controlled contrast, rhythm, scale variation, or tension.
+IF color contrast is weak THEN adjust value before changing hue.
+IF elements should be grouped THEN use proximity, similarity, alignment, or enclosure.
+IF elements should be separated THEN increase distance, contrast, or difference in form.
+IF a design follows a trend but lacks function THEN it is stylistically fragile.
+IF a visual choice cannot be justified by message, audience, hierarchy, emotion, or production THEN reconsider it.
+
+
+17. FINAL SYNTHESIS
+
+Graphic design is a system of decisions. Each decision transforms meaning, perception, usability, production, and emotion.
+
+The designer's task is to translate abstract intention into visible structure.
+
+The AI designer's task is to infer intention, choose appropriate visual variables, generate coherent form, and evaluate the result against communication goals and technical constraints.
+
+Good design is not a collection of effects.
+Good design is organized meaning.
