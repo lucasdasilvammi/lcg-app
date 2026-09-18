@@ -2758,12 +2758,36 @@ io.on('connection', (socket) => {
   });
 
   // --- RESOLUTION ---
-  socket.on('resolve_interaction', (data) => {
+  socket.on('resolve_interaction', (data, ack) => {
     const room = findRoom();
-    if (!room) return;
+    const reject = (reason) => {
+      if (typeof ack === 'function') ack({ ok: false, reason });
+    };
+    const interaction = room?.currentInteraction;
+    const isQuiz = interaction?.type === 'QUIZ';
+    const isDuel = ['buzzer', 'vraioufaux'].includes(interaction?.type);
+    if (!room || !interaction || (!isQuiz && !isDuel)
+      || room.status !== (isQuiz ? 'INTERACTION' : 'DUEL_GAME') || room.isPaused
+      || interaction.resolved) return reject('invalid_state');
+    if (interaction.readerId !== socket.id) return reject('forbidden');
+    if (isDuel && (!Array.isArray(interaction.duelists)
+      || !interaction.duelists.includes(interaction.buzzedPlayerId))) return reject('invalid_state');
 
-    const result = typeof data === 'boolean' ? data : data.correct;
-    const selectedIndex = typeof data === 'boolean' ? null : data.selectedIndex;
+    const isObject = data !== null && typeof data === 'object' && !Array.isArray(data);
+    const selectedIndex = isObject ? data.selectedIndex : null;
+    let result;
+    if (Array.isArray(interaction.data?.options)) {
+      if (!isObject || !Number.isInteger(selectedIndex) || selectedIndex < 0
+        || selectedIndex >= interaction.data.options.length) return reject('invalid_payload');
+      // The reader records the spoken choice; only the server computes its verdict.
+      result = selectedIndex === interaction.data.correct;
+    } else {
+      result = typeof data === 'boolean' ? data : isObject ? data.correct : undefined;
+      if (typeof result !== 'boolean') return reject('invalid_payload');
+    }
+    const participantIds = isQuiz ? [room.players[room.turnIndex]?.id] : interaction.duelists;
+    if (!participantIds.every(id => room.players.some(player => player.id === id))) return reject('invalid_state');
+    interaction.resolved = true;
 
     let winnerId = null;
     let points = 0;
@@ -2805,6 +2829,7 @@ io.on('connection', (socket) => {
 
     room.status = room.currentInteraction.type === 'QUIZ' ? 'REVEAL' : 'DUEL_REVEAL';
     syncRoom(room);
+    if (typeof ack === 'function') ack({ ok: true });
   });
 
   socket.on('continue_to_feedback', () => {
