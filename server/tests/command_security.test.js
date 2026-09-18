@@ -25,6 +25,11 @@ test('setup requires the host, legal phases and locked characters', async () => 
   expect(await roomState(host)).toEqual(before)
   await emitWithAck(host, 'pause_game', {})
   expect(await emitWithAck(host, 'trigger_action', 'QUIZ')).toMatchObject({ ok: false })
+  const paused = await roomState(host)
+  for (const event of ['use_bonus', 'claim_case_bonus', 'event_steal_bonus', 'event_preview_steal_target', 'event_swap_positions', 'ack_choose_quiz_bonus', 'select_quiz_difficulty']) {
+    expect(await emitWithAck(host, event, {})).toEqual({ ok: false, reason: 'invalid_state' })
+  }
+  expect(await roomState(host)).toEqual(paused)
 })
 
 test('all object commands reject malformed payloads before handler destructuring', async () => {

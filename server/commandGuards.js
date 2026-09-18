@@ -27,9 +27,14 @@ const phases = {
 };
 const hostCommands = new Set(['start_game', 'confirm_selection', 'start_game_loop', 'update_turn_order']);
 const activeCommands = new Set(['roll_dice', 'trigger_action', 'declare_finish']);
+const pausedCommands = new Set([
+  'use_bonus', 'claim_case_bonus', 'event_steal_bonus', 'event_preview_steal_target',
+  'event_swap_positions', 'ack_choose_quiz_bonus', 'select_quiz_difficulty'
+]);
 
 const getCommandRejection = (event, payload, room, playerId) => {
   if (objectCommands.has(event) && (!payload || typeof payload !== 'object' || Array.isArray(payload))) return 'invalid_payload';
+  if (room?.isPaused && pausedCommands.has(event)) return 'invalid_state';
   if (!phases[event] && !hostCommands.has(event)) return null;
   if (!room) return 'room_not_found';
   if (phases[event] && (!phases[event].includes(room.status) || room.isPaused)) return 'invalid_state';

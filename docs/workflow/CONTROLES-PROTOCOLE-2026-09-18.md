@@ -29,3 +29,17 @@ pendant la pause, unicité Zoom, identifiants contre les messages retardés,
 réponses privées, échéance serveur Pick, aucune mutation sur action refusée.
 Les snapshots d’annulation contenant des identités anciennes après reconnexion
 restent également à sécuriser. Ne pas supprimer les mécanismes de relais d’hôte.
+
+## Avancement après poursuite
+
+Désormais couverts : transitions lecteur/joueur suivant, résultat Zoom unique,
+refus d’action sans mouvement/snapshot parasite, échéance serveur Pick et
+annulation de ses timers, réponses réservées au lecteur avant révélation,
+snapshots invalidés lors de changements d’identité/hôte. Pendant la pause,
+bonus/vol/échange et choix de difficulté sont également refusés.
+
+Restent notamment : identifiants d’interaction pour les messages retardés entre
+deux questions, répétitions des sous-actions d’événement (dont vol de bonus),
+validation exhaustive des champs imbriqués, cas de retrait de participant au
+milieu d’un duel/activité, tests de partie complète et validation mobile.
+Les tests des scénarios existants ne suffisent pas à déclarer l’étape 2 terminée.
