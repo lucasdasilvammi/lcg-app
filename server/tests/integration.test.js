@@ -203,6 +203,9 @@ test('four-player activity keeps photo counters and vote timing synchronized', a
   clients.forEach((client) => client.emit('activite_submit_drawing'))
   await uploadStatePromise
 
+  for (const payload of [null, undefined, [], 'photo', { photoData: 42 }]) {
+    expect(await emitWithAck(admin, 'activite_submit_photo', payload)).toEqual({ ok: false, reason: 'invalid_photo' })
+  }
   for (const client of clients.slice(0, -1)) {
     const response = await emitWithAck(client, 'activite_submit_photo', {
       photoData: `data:image/jpeg;base64,photo-${client.id}`
@@ -257,6 +260,16 @@ test('four-player activity keeps photo counters and vote timing synchronized', a
 
   const tightenedStates = await Promise.all(tightenedStatePromises)
   const tightenedVote = tightenedStates[0].currentInteraction
+  expect(await emitWithAck(admin, 'activite_submit_photo', {
+    photoData: 'data:image/jpeg;base64,late-photo'
+  })).toEqual({ ok: false, reason: 'invalid_state' })
+  const unchangedPromise = waitForRoomState(admin, room => room.status === 'ACTIVITE_VOTE')
+  admin.emit('request_room_state')
+  const unchanged = (await unchangedPromise).currentInteraction
+  expect(unchanged.photos).toEqual(tightenedVote.photos)
+  expect(unchanged.votes).toEqual(tightenedVote.votes)
+  expect(unchanged.voteRoundId).toBe(tightenedVote.voteRoundId)
+  expect(unchanged.voteEndsAt).toBe(tightenedVote.voteEndsAt)
   expect(tightenedVote.voteEndsAt - tightenedVote.voteStartedAt).toBe(3000)
   tightenedStates.forEach((room) => {
     expect(room.currentInteraction.voteRoundId).toBe(tightenedVote.voteRoundId)

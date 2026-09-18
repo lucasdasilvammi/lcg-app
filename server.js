@@ -2213,13 +2213,19 @@ io.on('connection', (socket) => {
     syncRoom(room);
   });
 
-  socket.on('activite_submit_photo', ({ photoData }, ack) => {
+  socket.on('activite_submit_photo', (payload, ack) => {
     const room = findRoom();
     if (!room || !room.currentInteraction || room.currentInteraction.type !== 'logo') {
       if (typeof ack === 'function') ack({ ok: false, reason: 'activity_not_active' });
       return;
     }
 
+    if (room.status !== 'ACTIVITE_UPLOAD' || room.isPaused) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_state' });
+      return;
+    }
+    const photoData = payload && typeof payload === 'object' && !Array.isArray(payload)
+      ? payload.photoData : undefined;
     const interaction = room.currentInteraction;
     normalizeLogoActivityState(interaction);
     if (!interaction.participants.includes(socket.id)) {
