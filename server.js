@@ -555,6 +555,7 @@ const DEFAULT_BONUSES = DEBUG_TOOLS_ENABLED ? TEST_DEFAULT_BONUSES : {};
 // Timers (ne doivent JAMAIS être stockés dans l'état room envoyé au client)
 const activiteTimersByRoomId = new Map();
 const activiteVoteTimersByRoomId = new Map();
+const pickTimersByRoomId = new Map();
 const activitePhotoStoresByRoomId = new Map();
 
 // Libellés des toasts système de room. À raccourcir / retoucher ici.
@@ -890,6 +891,10 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
       ci.submittedColors[newId] = ci.submittedColors[oldId];
       delete ci.submittedColors[oldId];
     }
+    if (ci.draftColors && ci.draftColors[oldId] !== undefined) {
+      ci.draftColors[newId] = ci.draftColors[oldId];
+      delete ci.draftColors[oldId];
+    }
     if (ci.blockedUntil && ci.blockedUntil[oldId] !== undefined) {
       ci.blockedUntil[newId] = ci.blockedUntil[oldId];
       delete ci.blockedUntil[oldId];
@@ -1029,7 +1034,7 @@ io.on('connection', (socket) => {
     if (!snapshot) return false;
 
     // The snapshot predates the action; none of its later activity timers survives undo.
-    for (const timers of [activiteTimersByRoomId, activiteVoteTimersByRoomId]) {
+    for (const timers of [activiteTimersByRoomId, activiteVoteTimersByRoomId, pickTimersByRoomId]) {
       const timer = timers.get(room.id);
       if (timer) clearTimeout(timer);
       timers.delete(room.id);
@@ -1070,6 +1075,8 @@ io.on('connection', (socket) => {
     room.players = room.players.filter((p) => !removedPlayers.includes(p));
 
     if (room.players.length === 0) {
+      clearTimeout(pickTimersByRoomId.get(room.id));
+      pickTimersByRoomId.delete(room.id);
       removedPlayers.forEach((removedPlayer) => {
         clearPendingDisconnectTracking(removedPlayer.sessionToken);
       });
@@ -2364,6 +2371,7 @@ io.on('connection', (socket) => {
         room.currentInteraction.pickEndsAt = createPickDeadline();
       }
       room.status = 'DUEL_GAME';
+      if (room.currentInteraction.type === 'pick') schedulePickTimer(room);
     }
 
     syncRoom(room);
@@ -2457,12 +2465,30 @@ io.on('connection', (socket) => {
   });
 
   // --- PICK DUEL ---
-  socket.on('pick_color_submit', ({ color }) => {
-    const room = findRoom();
-    if (!room || !room.currentInteraction) return;
+  const finishPickAtDeadline = (room) => {
+    const interaction = room.currentInteraction;
+    if (room.status !== 'DUEL_GAME' || interaction?.type !== 'pick') return;
+    for (const playerId of interaction.duelists) {
+      if (!interaction.submittedColors?.[playerId]) {
+        submitPickColor(room, playerId, interaction.draftColors?.[playerId] || '#00FFFF');
+      }
+    }
+  };
+  const schedulePickTimer = (room) => {
+    clearTimeout(pickTimersByRoomId.get(room.id));
+    const interaction = room.currentInteraction;
+    const timer = setTimeout(() => {
+      if (rooms[room.id] !== room || room.currentInteraction !== interaction
+        || pickTimersByRoomId.get(room.id) !== timer) return;
+      pickTimersByRoomId.delete(room.id);
+      finishPickAtDeadline(room);
+    }, Math.max(0, interaction.pickEndsAt - Date.now()));
+    pickTimersByRoomId.set(room.id, timer);
+  };
+  const submitPickColor = (room, playerId, color) => {
+    if (!room || room.status !== 'DUEL_GAME' || room.currentInteraction?.type !== 'pick') return;
     if (typeof color !== 'string' || !/^#[0-9a-f]{6}$/i.test(color)) return;
 
-    const playerId = socket.id;
     const duelists = room.currentInteraction.duelists || [];
     if (!duelists.includes(playerId)) return;
 
@@ -2538,9 +2564,19 @@ io.on('connection', (socket) => {
       }
 
       room.status = 'DUEL_REVEAL';
+      clearTimeout(pickTimersByRoomId.get(room.id));
+      pickTimersByRoomId.delete(room.id);
+    } else {
+      schedulePickTimer(room);
     }
 
     syncRoom(room);
+  };
+  socket.on('pick_color_submit', ({ color }) => {
+    const room = findRoom();
+    if (!room) return;
+    if (Date.now() >= room.currentInteraction?.pickEndsAt) return finishPickAtDeadline(room);
+    submitPickColor(room, socket.id, color);
   });
 
   socket.on('pick_color_update', ({ hue, saturation, lightness }) => {
@@ -2552,6 +2588,16 @@ io.on('connection', (socket) => {
     const playerId = socket.id;
     const duelists = room.currentInteraction.duelists || [];
     if (!duelists.includes(playerId)) return;
+    if (room.currentInteraction.submittedColors?.[playerId]) return;
+    if (Date.now() >= room.currentInteraction.pickEndsAt) return finishPickAtDeadline(room);
+    const l = lightness / 100;
+    const a = (saturation / 100) * Math.min(l, 1 - l);
+    const rgb = [0, 8, 4].map(n => {
+      const k = (n + hue / 30) % 12;
+      return Math.round(255 * (l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)));
+    });
+    room.currentInteraction.draftColors = room.currentInteraction.draftColors || {};
+    room.currentInteraction.draftColors[playerId] = `#${rgb.map(value => value.toString(16).padStart(2, '0')).join('')}`.toUpperCase();
 
     socket.to(room.id).emit('pick_color_update', {
       playerId,

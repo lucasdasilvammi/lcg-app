@@ -1,0 +1,53 @@
+const { createHarness, waitForEvent, emitWithAck } = require('./helpers/mainServer')
+const { createPlayers, enterGameLoop, roomState, startDuel } = require('./helpers/game')
+const harness = createHarness()
+jest.setTimeout(25000)
+beforeEach(harness.start)
+afterEach(harness.stop)
+
+test('Pick finishes after 15 seconds without any client submission, with the screen default color', async () => {
+  const clients = await createPlayers(harness)
+  await enterGameLoop(clients)
+  const { reader, room } = await startDuel(clients, 'pick')
+  const result = await waitForEvent(reader, 'update_room_state', value => value.status === 'DUEL_REVEAL', 17000)
+  expect(Date.now()).toBeGreaterThanOrEqual(room.currentInteraction.pickEndsAt)
+  expect(Object.values(result.lastResult.submittedColors)).toEqual(['#00FFFF', '#00FFFF'])
+  expect(result.lastResult.isTie).toBe(true)
+  expect(result.players.every(player => player.score === 0)).toBe(true)
+})
+
+test('the 5-second pressure deadline submits the disconnected opponent latest color once', async () => {
+  const clients = await createPlayers(harness)
+  await enterGameLoop(clients)
+  const { reader, duelists } = await startDuel(clients, 'pick')
+  duelists[1].emit('pick_color_update', { hue: 120, saturation: 100, lightness: 50 })
+  await roomState(duelists[1])
+  const absentId = duelists[1].id
+  const reveal = waitForEvent(reader, 'update_room_state', room => room.status === 'DUEL_REVEAL', 7000)
+  duelists[0].emit('pick_color_submit', { color: '#FF0000' })
+  const submitted = await roomState(duelists[0])
+  expect(submitted.currentInteraction.pickEndsAt - Date.now()).toBeLessThanOrEqual(5000)
+  duelists[1].disconnect()
+  const result = await reveal
+  expect(result.lastResult.submittedColors[absentId]).toBe('#00FF00')
+  expect(result.lastResult.submittedColors[duelists[0].id]).toBe('#FF0000')
+  expect(await emitWithAck(duelists[0], 'pick_color_submit', { color: '#000000' })).toMatchObject({ ok: false })
+  expect((await roomState(reader)).players.map(player => player.score)).toEqual(result.players.map(player => player.score))
+})
+
+test('undo cancels the Pick pressure timer before a replacement quiz', async () => {
+  const clients = await createPlayers(harness)
+  const [host] = clients
+  await enterGameLoop(clients)
+  const { duelists } = await startDuel(clients, 'pick')
+  duelists[0].emit('pick_color_submit', { color: '#112233' })
+  await roomState(duelists[0])
+  expect((await emitWithAck(host, 'undo_last_action', {})).ok).toBe(true)
+  await emitWithAck(host, 'trigger_action', 'QUIZ')
+  const options = await roomState(host)
+  await emitWithAck(host, 'start_specific_quiz', { difficulty: options.availableQuizDifficulties[0] })
+  await new Promise(resolve => setTimeout(resolve, 5200))
+  const quiz = await roomState(host)
+  expect(quiz.status).toBe('INTERACTION')
+  expect(quiz.players.every(player => player.score === 0)).toBe(true)
+})
