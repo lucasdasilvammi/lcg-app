@@ -31,3 +31,5 @@ Garder les entrées courtes, pratiques et faciles à relire plus tard.
 - [2026-09-17 — Branche, reprise et reconnexion](decisions/2026-09-17-branche-reprise-et-reconnexion.md) — acceptée.
 
 - [2026-09-18 — Confidentialité et reconnexion](decisions/2026-09-18-confidentialite-reconnexion.md) — acceptée.
+
+- [2026-09-18 — Résolution autoritaire](decisions/2026-09-18-resolution-autoritaire.md) — acceptée.
