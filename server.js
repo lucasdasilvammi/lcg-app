@@ -1028,6 +1028,14 @@ io.on('connection', (socket) => {
     const snapshot = undoSnapshotsByRoomId.get(room.id);
     if (!snapshot) return false;
 
+    // The snapshot predates the action; none of its later activity timers survives undo.
+    for (const timers of [activiteTimersByRoomId, activiteVoteTimersByRoomId]) {
+      const timer = timers.get(room.id);
+      if (timer) clearTimeout(timer);
+      timers.delete(room.id);
+    }
+    cleanupActivitePhotoStore(room.id);
+
     Object.keys(room).forEach((key) => {
       if (!Object.prototype.hasOwnProperty.call(snapshot, key)) {
         delete room[key];
@@ -1241,6 +1249,7 @@ io.on('connection', (socket) => {
     room.status = 'ACTIVITE_VOTE';
 
     const timer = setTimeout(() => {
+      if (rooms[room.id] !== room || room.currentInteraction !== ci) return;
       advanceActiviteVoteRound(room, photoIndex, voteRoundId);
     }, durationMs);
     activiteVoteTimersByRoomId.set(room.id, timer);
@@ -2184,8 +2193,12 @@ io.on('connection', (socket) => {
         activiteTimersByRoomId.delete(room.id);
       }
 
+      const interaction = room.currentInteraction;
       const timer = setTimeout(() => {
-        room.currentInteraction.timeUp = true;
+        if (rooms[room.id] !== room || room.currentInteraction !== interaction
+          || room.status !== 'ACTIVITE_CREATION' || activiteTimersByRoomId.get(room.id) !== timer) return;
+        activiteTimersByRoomId.delete(room.id);
+        interaction.timeUp = true;
         room.status = 'ACTIVITE_UPLOAD';
         syncRoom(room);
       }, 60000);
