@@ -376,11 +376,11 @@ async function testCoffeeBossSkipTurn(agents) {
   const useResponse = await emitAck(player2, 'use_bonus', { bonusId: 'coffee-boss', targetPlayerId: player3.socketId })
   if (!useResponse?.ok) throw new Error(`coffee-boss use failed: ${JSON.stringify(useResponse)}`)
 
-  emit(host, 'next_turn')
+  await finishWithBonus(host)
   await waitSharedRoom(agents, 'player-2 turn', (room) => room.status === 'TURN_START' && room.players[room.turnIndex]?.id === player2.socketId)
   emit(player2, 'roll_dice')
   await waitSharedRoom(agents, 'player-2 game loop', (room) => room.status === 'GAME_LOOP' && room.players[room.turnIndex]?.id === player2.socketId)
-  emit(player2, 'next_turn')
+  await finishWithBonus(player2)
 
   await waitSharedRoom(agents, 'player-3 skipped turn start', (room) => room.status === 'TURN_START' && room.players[room.turnIndex]?.id === player3.socketId && Boolean(findPlayer(room, player3)?.skipNextTurn))
   emit(player3, 'roll_dice')
@@ -480,6 +480,13 @@ async function testCtrlZNonActivePlayer(agents) {
   )
 }
 
+async function finishWithBonus(agent) {
+  const selected = await emitAck(agent, 'trigger_action', 'BONUS')
+  if (!selected?.ok) throw new Error(`Bonus tile rejected: ${JSON.stringify(selected)}`)
+  const claimed = await emitAck(agent, 'claim_case_bonus', {})
+  if (!claimed?.ok) throw new Error(`Bonus claim rejected: ${JSON.stringify(claimed)}`)
+}
+
 async function playOneTurn(agent, agents, expectedLabel) {
   await waitSharedRoom(agents, `${expectedLabel} TURN_START`, (room) => (
     room.status === 'TURN_START' && room.players[room.turnIndex]?.id === agent.socketId
@@ -488,7 +495,7 @@ async function playOneTurn(agent, agents, expectedLabel) {
   await waitSharedRoom(agents, `${expectedLabel} GAME_LOOP`, (room) => (
     room.status === 'GAME_LOOP' && room.players[room.turnIndex]?.id === agent.socketId
   ))
-  emit(agent, 'next_turn')
+  await finishWithBonus(agent)
 }
 
 async function testCoffeeBossActiveTargetNextRound(agents) {
@@ -501,7 +508,7 @@ async function testCoffeeBossActiveTargetNextRound(agents) {
   const useResponse = await emitAck(player2, 'use_bonus', { bonusId: 'coffee-boss', targetPlayerId: host.socketId })
   if (!useResponse?.ok) throw new Error(`coffee-boss active target use failed: ${JSON.stringify(useResponse)}`)
 
-  emit(host, 'next_turn')
+  await finishWithBonus(host)
   await playOneTurn(player2, agents, 'player-2')
   await playOneTurn(player3, agents, 'player-3')
   await playOneTurn(player4, agents, 'player-4')

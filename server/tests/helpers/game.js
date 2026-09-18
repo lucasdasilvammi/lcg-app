@@ -43,4 +43,18 @@ const enterGameLoop = async (clients) => {
   await act(host, 'roll_dice', undefined, 'GAME_LOOP')
 }
 
-module.exports = { enterGameLoop, createPlayers, roomState }
+const startDuel = async (clients, type) => {
+  const [host] = clients
+  await emitWithAck(host, 'trigger_action', { type: 'DEFI', duelType: type })
+  const start = await roomState(host)
+  const duelists = clients.filter(client => start.currentInteraction.duelists.includes(client.id))
+  host.emit('start_duel')
+  await roomState(host)
+  for (const duelist of duelists) {
+    duelist.emit('acknowledge_rules')
+    await roomState(duelist)
+  }
+  return { room: await roomState(host), duelists, reader: clients.find(client => client.id === start.currentInteraction.readerId) }
+}
+
+module.exports = { enterGameLoop, createPlayers, roomState, startDuel }

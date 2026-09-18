@@ -1,0 +1,58 @@
+const { createHarness, emitWithAck } = require('./helpers/mainServer')
+const { createPlayers, enterGameLoop, roomState, startDuel } = require('./helpers/game')
+const harness = createHarness()
+jest.setTimeout(20000)
+beforeEach(harness.start)
+afterEach(harness.stop)
+
+test('rejected actions preserve the board and do not create an undo snapshot', async () => {
+  const clients = await createPlayers(harness, 1)
+  const [host] = clients
+  await enterGameLoop(clients)
+  const before = await roomState(host)
+  for (const action of ['DEFI', 'not-an-action', null]) {
+    expect(await emitWithAck(host, 'trigger_action', action)).toMatchObject({ ok: false })
+    expect(await roomState(host)).toEqual(before)
+  }
+})
+
+test('only the quiz reader can advance reveal/feedback and cannot skip a subsequent turn', async () => {
+  const clients = await createPlayers(harness)
+  const [host, reader, spectator] = clients
+  await enterGameLoop(clients)
+  expect(await emitWithAck(host, 'next_turn', {})).toMatchObject({ ok: false })
+  expect(await emitWithAck(host, 'continue_to_feedback', {})).toMatchObject({ ok: false })
+  await emitWithAck(host, 'trigger_action', 'QUIZ')
+  const options = await roomState(host)
+  await emitWithAck(host, 'start_specific_quiz', { difficulty: options.availableQuizDifficulties[0] })
+  const quiz = await roomState(reader)
+  expect(await emitWithAck(reader, 'continue_to_feedback', {})).toMatchObject({ ok: false })
+  await emitWithAck(reader, 'resolve_interaction', { selectedIndex: quiz.currentInteraction.data.correct })
+  expect(await emitWithAck(spectator, 'continue_to_feedback', {})).toMatchObject({ ok: false })
+  reader.emit('continue_to_feedback')
+  expect((await roomState(reader)).status).toBe('FEEDBACK')
+  expect(await emitWithAck(spectator, 'next_turn', {})).toMatchObject({ ok: false })
+  reader.emit('next_turn')
+  const next = await roomState(reader)
+  expect(next.status).toBe('TURN_START')
+  expect(await emitWithAck(reader, 'next_turn', {})).toMatchObject({ ok: false })
+  expect(await roomState(reader)).toEqual(next)
+})
+
+test('Zoom rejects early timeout verdicts and awards a successful oral answer only once', async () => {
+  const clients = await createPlayers(harness)
+  await enterGameLoop(clients)
+  const { duelists, reader, room } = await startDuel(clients, 'zoom')
+  await new Promise(resolve => setTimeout(resolve, Math.max(0, room.currentInteraction.zoomStartAt - Date.now()) + 30))
+  duelists[0].emit('player_buzz')
+  await roomState(duelists[0])
+  reader.emit('zoom_reader_verdict', { correct: true, fromTimeoutOptions: true, selectedIndex: 0 })
+  expect((await roomState(reader)).players.every(player => player.score === 0)).toBe(true)
+  reader.emit('zoom_reader_verdict', { correct: true })
+  const resolved = await roomState(reader)
+  expect(resolved.players.find(player => player.id === duelists[0].id).score).toBe(3)
+  reader.emit('zoom_reader_verdict', { correct: true })
+  expect((await roomState(reader)).players).toEqual(resolved.players)
+  reader.emit('continue_to_feedback')
+  expect((await roomState(reader)).status).toBe('FEEDBACK')
+})

@@ -21,7 +21,9 @@ const phases = {
   zoom_reader_verdict: ['DUEL_GAME'],
   activite_acknowledge_ready: ['ACTIVITE_BRIEF'],
   activite_submit_drawing: ['ACTIVITE_CREATION'], activite_vote: ['ACTIVITE_VOTE'],
-  start_new_round: ['ROUND_END']
+  start_new_round: ['ROUND_END'],
+  continue_to_feedback: ['REVEAL', 'DUEL_REVEAL', 'ACTIVITE_REVEAL', 'EVENT_GAME', 'DUEL_GAME'],
+  next_turn: ['FEEDBACK', 'TURN_START']
 };
 const hostCommands = new Set(['start_game', 'confirm_selection', 'start_game_loop', 'update_turn_order']);
 const activeCommands = new Set(['roll_dice', 'trigger_action', 'declare_finish']);
@@ -42,6 +44,28 @@ const getCommandRejection = (event, payload, room, playerId) => {
   if (event === 'player_buzz' && (!['zoom', 'buzzer', 'vraioufaux'].includes(room.currentInteraction?.type)
     || !room.currentInteraction.duelists?.includes(playerId))) return 'forbidden';
   if (event === 'activite_submit_drawing' && !room.currentInteraction?.participants?.includes(playerId)) return 'forbidden';
+  if (event === 'continue_to_feedback') {
+    const interaction = room.currentInteraction;
+    if (room.status === 'DUEL_GAME' && !(interaction?.type === 'zoom' && interaction.zoomResolvedCorrect)) return 'invalid_state';
+    const owner = ['logo', 'pick'].includes(interaction?.type)
+      ? room.players[(room.turnIndex + 1) % room.players.length]?.id
+      : interaction?.questionerId || interaction?.readerId;
+    if (!owner || owner !== playerId) return 'forbidden';
+  }
+  if (event === 'next_turn') {
+    const activePlayer = room.players[room.turnIndex];
+    if (room.status === 'TURN_START') {
+      if (!activePlayer?.skipNextTurn) return 'invalid_state';
+      if (activePlayer.id !== playerId) return 'forbidden';
+    } else {
+      const nextId = room.players[(room.turnIndex + 1) % room.players.length]?.id;
+      const result = room.lastResult;
+      const readerId = result?.questionerId;
+      const allowed = result?.type === 'logo' ? playerId === nextId
+        : playerId === readerId || (result?.type === 'pick' && playerId === nextId);
+      if (!result || !allowed) return 'forbidden';
+    }
+  }
   return null;
 };
 

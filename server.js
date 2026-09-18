@@ -1855,8 +1855,10 @@ io.on('connection', (socket) => {
       return;
     }
 
-    captureUndoSnapshot(room);
-    applyTileSelectionToPlayer(currentPlayer, actionType);
+    const commitTileSelection = () => {
+      captureUndoSnapshot(room);
+      applyTileSelectionToPlayer(currentPlayer, actionType);
+    };
 
     if (actionType === 'QUIZ') {
       const availableCategories = getAvailableQuizCategories(room, QUIZ_DB, getRecentQuizCategories(room, currentPlayer.id));
@@ -1865,6 +1867,7 @@ io.on('connection', (socket) => {
         return;
       }
       const randomCat = getRandomItem(availableCategories);
+      commitTileSelection();
       const chooseQuizBonus = room.pendingChooseQuizBonus?.targetPlayerId === socket.id
         ? room.pendingChooseQuizBonus
         : null;
@@ -1887,6 +1890,7 @@ io.on('connection', (socket) => {
         return;
       }
 
+      commitTileSelection();
       room.currentInteraction = duelInteraction;
       delete room.duelAnswers;
       room.status = 'DUEL_START';
@@ -1896,6 +1900,11 @@ io.on('connection', (socket) => {
       const activePlayer = room.players[room.turnIndex];
       const availableEvents = EVENTS_DB.filter(event => canTriggerEvent(room, event, activePlayer));
       const randomEvent = availableEvents[Math.floor(Math.random() * availableEvents.length)];
+      if (!randomEvent) {
+        if (typeof ack === 'function') ack({ ok: false, reason: 'content_exhausted' });
+        return;
+      }
+      commitTileSelection();
       const awardedBonusId = randomEvent?.effectType === 'grant-random-bonus'
         ? grantRandomBonusToPlayer(activePlayer)
         : null;
@@ -1917,6 +1926,7 @@ io.on('connection', (socket) => {
         return;
       }
 
+      commitTileSelection();
       activePlayer.bonuses = activePlayer.bonuses || {};
       activePlayer.bonuses[randomBonusId] = Number(activePlayer.bonuses[randomBonusId] || 0) + 1;
       room.currentInteraction = {
@@ -1943,6 +1953,7 @@ io.on('connection', (socket) => {
       }
 
       const participants = room.players.map(p => p.id);
+      commitTileSelection();
       cleanupActivitePhotoStore(room.id);
 
       room.currentInteraction = {
@@ -2697,11 +2708,20 @@ io.on('connection', (socket) => {
     if (!room || !room.currentInteraction) return;
     if (room.currentInteraction.type !== 'zoom') return;
     if (socket.id !== room.currentInteraction.readerId) return;
+    if (room.currentInteraction.zoomResolvedCorrect || room.currentInteraction.resolved) return;
+    if (typeof correct !== 'boolean' || typeof fromTimeoutOptions !== 'boolean') return;
 
     const buzzedPlayerId = room.currentInteraction.buzzedPlayerId;
     if (!buzzedPlayerId) return;
 
     if (fromTimeoutOptions) {
+      const interaction = room.currentInteraction;
+      const elapsed = (interaction.pauseStartedAt || Date.now()) - interaction.zoomStartAt - (interaction.pausedDurationMs || 0);
+      if (elapsed < interaction.zoomDurationMs || !Number.isInteger(selectedIndex)
+        || !Array.isArray(interaction.data?.options) || selectedIndex < 0
+        || selectedIndex >= interaction.data.options.length) return;
+      correct = selectedIndex === interaction.data.correct;
+      interaction.resolved = true;
       const duelists = room.currentInteraction.duelists || [];
       const winnerId = correct === true
         ? buzzedPlayerId
@@ -2742,6 +2762,7 @@ io.on('connection', (socket) => {
     }
 
     if (correct === true) {
+      room.currentInteraction.resolved = true;
       const points = getDuelRewardPoints(room.currentInteraction);
       const winnerId = buzzedPlayerId;
       const winner = room.players.find(p => p.id === winnerId);
