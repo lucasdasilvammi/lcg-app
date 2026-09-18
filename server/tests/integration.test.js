@@ -1,45 +1,10 @@
-const { spawn } = require('child_process')
-const path = require('path')
-const io = require('socket.io-client')
-
+const { createHarness, waitForEvent, emitWithAck } = require('./helpers/mainServer')
 jest.setTimeout(20000)
-
-let serverProcess = null
-const serverPath = path.join(__dirname, '..', 'index.js')
-
-const startServer = () => new Promise((resolve, reject) => {
-  serverProcess = spawn('node', [serverPath], { stdio: ['ignore', 'pipe', 'pipe'] })
-  serverProcess.stdout.on('data', (d) => {
-    const s = d.toString()
-    if (s.includes('SERVEUR EN LIGNE SUR PORT 3001')) resolve()
-  })
-  serverProcess.stderr.on('data', (d) => console.error('server-stderr:', d.toString()))
-  serverProcess.on('error', reject)
-})
-
-const stopServer = () => new Promise((resolve) => {
-  if (!serverProcess) return resolve()
-  serverProcess.kill()
-  serverProcess.on('close', () => resolve())
-})
-
-const waitForRoomState = (client, predicate, timeoutMs = 4000) => new Promise((resolve, reject) => {
-  const timeout = setTimeout(() => {
-    client.off('update_room_state', handleState)
-    reject(new Error('Timed out waiting for matching room state'))
-  }, timeoutMs)
-  const handleState = (room) => {
-    if (!predicate(room)) return
-    clearTimeout(timeout)
-    client.off('update_room_state', handleState)
-    resolve(room)
-  }
-  client.on('update_room_state', handleState)
-})
-
-const emitWithAck = (client, event, payload) => new Promise((resolve) => {
-  client.emit(event, payload, resolve)
-})
+const harness = createHarness()
+const startServer = harness.start
+const stopServer = harness.stop
+const connectClient = () => { const client = harness.connect(); client.connect(); return client }
+const waitForRoomState = (client, predicate) => waitForEvent(client, 'update_room_state', predicate)
 
 const getMaxConsecutiveRun = (code) => {
   let maxRun = 0
@@ -67,7 +32,7 @@ afterEach(async () => {
 test('create room and join with correct code', async () => {
   await startServer()
 
-  const client1 = io.connect('http://localhost:3001')
+  const client1 = connectClient()
   await new Promise((res) => client1.on('connect', res))
 
   let roomCode = null
@@ -76,7 +41,7 @@ test('create room and join with correct code', async () => {
     client1.on('room_created', (data) => { roomCode = data.code; res() })
   })
 
-  const client2 = io.connect('http://localhost:3001')
+  const client2 = connectClient()
   await new Promise((res) => client2.on('connect', res))
 
   let joined = false
@@ -96,12 +61,12 @@ test('create room and join with correct code', async () => {
 test('pick_character rejects duplicates', async () => {
   await startServer()
 
-  const c1 = io.connect('http://localhost:3001')
+  const c1 = connectClient()
   await new Promise((res) => c1.on('connect', res))
   let roomCode = null
   await new Promise((res) => { c1.emit('create_room'); c1.on('room_created', (d) => { roomCode = d.code; res() }) })
 
-  const c2 = io.connect('http://localhost:3001')
+  const c2 = connectClient()
   await new Promise((res) => c2.on('connect', res))
   await new Promise((res) => { c2.emit('join_room_with_code', roomCode); c2.on('room_joined', res) })
 
@@ -136,7 +101,7 @@ test('public room codes stay simple and unique for concurrent rooms', async () =
 
   const clients = await Promise.all(
     Array.from({ length: 3 }, async () => {
-      const client = io.connect('http://localhost:3001')
+      const client = connectClient()
       await new Promise((res) => client.on('connect', res))
       return client
     })
@@ -167,7 +132,7 @@ test('public room codes stay simple and unique for concurrent rooms', async () =
 test('pause remains available normally but is rejected during a common activity', async () => {
   await startServer()
 
-  const admin = io.connect('http://localhost:3001')
+  const admin = connectClient()
   await new Promise((resolve) => admin.on('connect', resolve))
 
   await new Promise((resolve) => {
@@ -208,7 +173,7 @@ test('four-player activity keeps photo counters and vote timing synchronized', a
 
   const clients = await Promise.all(
     Array.from({ length: 4 }, async () => {
-      const client = io.connect('http://localhost:3001')
+      const client = connectClient()
       await new Promise((resolve) => client.on('connect', resolve))
       return client
     })
@@ -301,3 +266,4 @@ test('four-player activity keeps photo counters and vote timing synchronized', a
 
   clients.forEach((client) => client.disconnect())
 })
+

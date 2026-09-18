@@ -8,16 +8,19 @@ const {
   takeRandomUnusedQuestion
 } = require('../contentSelection');
 
-test('the current quiz data provides 158 valid quiz questions across difficulties 1 to 5', () => {
+test('the current quiz catalogue has unique valid questions across difficulties 1 to 5', () => {
   const questions = Object.values(quizData).filter(Array.isArray).flat();
   const keys = new Set(questions.map(getQuestionKey));
   const difficulties = [...new Set(questions.map((question) => question.diff))].sort();
 
-  expect(questions).toHaveLength(158);
-  expect(keys.size).toBe(158);
+  expect(questions.length).toBeGreaterThan(0);
+  expect(keys.size).toBe(questions.length);
   expect(difficulties).toEqual([1, 2, 3, 4, 5]);
   expect(questions.every((question) => (
-    question.options.length === 3
+    typeof question.q === 'string' && question.q.trim().length > 0
+    && Array.isArray(question.options) && question.options.length === 3
+    && question.options.every(option => typeof option === 'string' && option.trim().length > 0)
+    && Number.isInteger(question.correct) && question.correct >= 0 && question.correct < 3
     && question.options[question.correct]
     && question.category
   ))).toBe(true);
