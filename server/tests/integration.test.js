@@ -266,4 +266,3 @@ test('four-player activity keeps photo counters and vote timing synchronized', a
 
   clients.forEach((client) => client.disconnect())
 })
-

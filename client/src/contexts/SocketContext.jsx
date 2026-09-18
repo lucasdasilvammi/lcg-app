@@ -25,12 +25,6 @@ const getOrCreateSessionToken = () => {
   return generated
 }
 
-const resetSessionToken = () => {
-  if (typeof window === 'undefined') return null
-  window.localStorage.removeItem(SESSION_TOKEN_KEY)
-  return getOrCreateSessionToken()
-}
-
 const readRoomSnapshot = () => {
   if (typeof window === 'undefined') return null
   try {
@@ -231,7 +225,7 @@ export const SocketProvider = ({ children }) => {
       setIsAdmin(false)
       setErrorMsg("")
       clearRoomSnapshot()
-      resetSessionToken()
+      // Keep the device key aligned with this socket's handshake for the next game.
       console.log('left_room ack')
     })
     s.on("error_join", (msg) => { addToastRef.current?.(msg, 'error'); console.warn('error_join', msg) })
@@ -415,7 +409,6 @@ export const SocketProvider = ({ children }) => {
       setRoomData(null)
       setIsAdmin(false)
       setErrorMsg("")
-      resetSessionToken()
     })
   }
 

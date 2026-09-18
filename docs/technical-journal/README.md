@@ -29,3 +29,5 @@ Garder les entrées courtes, pratiques et faciles à relire plus tard.
 - [2026-09-17 — Nettoyage progressif du POC avant V1](decisions/2026-09-17-nettoyage-poc-avant-v1.md) — acceptée ; mise en œuvre progressive après explication et estimation.
 
 - [2026-09-17 — Branche, reprise et reconnexion](decisions/2026-09-17-branche-reprise-et-reconnexion.md) — acceptée.
+
+- [2026-09-18 — Confidentialité et reconnexion](decisions/2026-09-18-confidentialite-reconnexion.md) — acceptée.

@@ -945,8 +945,26 @@ io.on('connection', (socket) => {
   const createRoomStatePayload = (room) => {
     ensureRoomBoardState(room);
     normalizeLogoActivityState(room.currentInteraction);
+    // Explicit public contract: session keys, invites and content pools stay private.
+    const publicFields = [
+      'id', 'code', 'adminId', 'status', 'isPaused', 'pausedById', 'turnIndex',
+      'currentInteraction', 'lastResult', 'pendingCategory', 'boardConfig',
+      'finishedPlayerIds', 'finalRankings', 'finalizedAt', 'pendingGameEnd',
+      'currentTurnBonusUse', 'pendingChooseQuizBonus', 'pendingQuestionerId',
+      'pendingQuizPlayerId', 'pendingQuizDifficulty', 'availableQuizDifficulties',
+      'pendingTurnOrderIds', 'duelAnswers'
+    ];
+    const playerFields = [
+      'id', 'character', 'characterLocked', 'score', 'bonuses', 'presence',
+      'connected', 'isWaiting', 'isDisconnected', 'boardProgress', 'skipNextTurn',
+      'presenceUpdatedAt', 'disconnectDeadlineAt', 'status'
+    ];
+    const pickFields = (source, fields) => Object.fromEntries(
+      fields.filter(field => Object.hasOwn(source, field)).map(field => [field, source[field]])
+    );
     return {
-      ...room,
+      ...pickFields(room, publicFields),
+      players: room.players.map(player => pickFields(player, playerFields)),
       canUndo: undoSnapshotsByRoomId.has(room.id) && isUndoAllowed(room.status)
     };
   };
@@ -2947,7 +2965,7 @@ io.on('connection', (socket) => {
 
         pendingDisconnectRoles.delete(player.sessionToken);
         pendingDisconnectTimers.delete(player.sessionToken);
-        console.log('⏱️ player marked disconnected after grace timeout:', player.sessionToken);
+        console.log('⏱️ player marked disconnected after grace timeout:', player.id);
       }, DISCONNECT_GRACE_MS);
 
       pendingDisconnectTimers.set(player.sessionToken, timer);
