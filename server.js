@@ -3,6 +3,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const fs = require('fs');
 const path = require('path');
+const { getCommandRejection } = require('./server/commandGuards');
 
 const app = express();
 const server = http.createServer(app);
@@ -938,6 +939,12 @@ io.on('connection', (socket) => {
   console.log('🔌 socket connected:', socket.id);
   
   const findRoom = () => findRoomByPlayerId(socket.id);
+  socket.use(([event, ...args], next) => {
+    const reason = getCommandRejection(event, args[0], findRoom(), socket.id);
+    if (!reason) return next();
+    const ack = args.at(-1);
+    if (typeof ack === 'function') ack({ ok: false, reason });
+  });
   socket.on('sync_clock', (_payload, ack) => {
     if (typeof ack === 'function') ack({ serverNow: Date.now() });
   });
@@ -1872,6 +1879,7 @@ io.on('connection', (socket) => {
       }
 
       room.currentInteraction = duelInteraction;
+      delete room.duelAnswers;
       room.status = 'DUEL_START';
       syncRoom(room);
       if (typeof ack === 'function') ack({ ok: true, status: room.status, duelType: duelInteraction.type });
@@ -2338,17 +2346,28 @@ io.on('connection', (socket) => {
   });
 
   // --- CHIFFRES DUEL ---
+  const isValidChiffresAnswer = (room, { playerId, answer, roomId }, final = false) => {
+    const interaction = room?.currentInteraction;
+    if (!room || room.id !== roomId || playerId !== socket.id
+      || interaction?.type !== 'chiffres' || room.status !== 'DUEL_GAME'
+      || !interaction.duelists.includes(socket.id)
+      || interaction.submittedAnswers?.[socket.id] !== undefined) return false;
+    const digits = interaction.data?.digits || 4;
+    return Array.isArray(answer) && answer.length === digits && answer.every(digit => (
+      (!final && digit === '') || ((typeof digit === 'string' || typeof digit === 'number') && /^\d$/.test(String(digit)))
+    ));
+  };
   socket.on('chiffres_answer_update', ({ playerId, answer, roomId }) => {
-    const room = rooms[roomId];
-    if (!room) return;
+    const room = findRoom();
+    if (!isValidChiffresAnswer(room, { playerId, answer, roomId })) return;
     if (!room.duelAnswers) room.duelAnswers = {};
     room.duelAnswers[playerId] = answer;
     io.to(roomId).emit('chiffres_answer_update', { playerId, answer });
   });
 
   socket.on('chiffres_answer_submit', ({ playerId, answer, roomId }) => {
-    const room = rooms[roomId];
-    if (!room) return;
+    const room = findRoom();
+    if (!isValidChiffresAnswer(room, { playerId, answer, roomId }, true)) return;
     if (!room.duelAnswers) room.duelAnswers = {};
     room.duelAnswers[playerId] = answer;
 
@@ -2417,6 +2436,7 @@ io.on('connection', (socket) => {
   socket.on('pick_color_submit', ({ color }) => {
     const room = findRoom();
     if (!room || !room.currentInteraction) return;
+    if (typeof color !== 'string' || !/^#[0-9a-f]{6}$/i.test(color)) return;
 
     const playerId = socket.id;
     const duelists = room.currentInteraction.duelists || [];
@@ -2502,6 +2522,8 @@ io.on('connection', (socket) => {
   socket.on('pick_color_update', ({ hue, saturation, lightness }) => {
     const room = findRoom();
     if (!room || !room.currentInteraction) return;
+    if (![hue, saturation, lightness].every(Number.isFinite)
+      || hue < 0 || hue > 360 || saturation < 0 || saturation > 100 || lightness < 0 || lightness > 100) return;
 
     const playerId = socket.id;
     const duelists = room.currentInteraction.duelists || [];
@@ -2520,7 +2542,7 @@ io.on('connection', (socket) => {
     if (!room || !room.currentInteraction) return;
 
     const duelists = room.currentInteraction.duelists || [];
-    if (!duelists.includes(playerId) || !duelists.includes(socket.id)) return;
+    if (playerId !== socket.id || !duelists.includes(socket.id)) return;
 
     const opponentId = duelists.find(id => id !== playerId);
     if (!opponentId) return;

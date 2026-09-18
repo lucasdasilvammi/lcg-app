@@ -1,4 +1,5 @@
 const { createHarness, waitForEvent, emitWithAck } = require('./helpers/mainServer')
+const { enterGameLoop } = require('./helpers/game')
 jest.setTimeout(20000)
 const harness = createHarness()
 const startServer = harness.start
@@ -151,6 +152,7 @@ test('pause remains available normally but is rejected during a common activity'
   await resumedStatePromise
 
   const activityStatePromise = waitForRoomState(admin, (room) => room.status === 'ACTIVITE_BRIEF')
+  await enterGameLoop([admin])
   admin.emit('trigger_action', 'ACTIVITE')
   await activityStatePromise
 
@@ -192,6 +194,7 @@ test('four-player activity keeps photo counters and vote timing synchronized', a
   }
 
   const briefStatePromise = waitForRoomState(admin, (room) => room.status === 'ACTIVITE_BRIEF')
+  await enterGameLoop(clients)
   admin.emit('trigger_action', 'ACTIVITE')
   await briefStatePromise
 
