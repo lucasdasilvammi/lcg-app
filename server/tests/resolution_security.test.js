@@ -52,7 +52,7 @@ test('quiz resolution rejects invalid inputs, wrong role and pause, scores once 
   const [host, reader] = await setup()
   const options = await action(host, 'trigger_action', 'QUIZ', 'QUIZ_OPTIONS')
   const room = await action(host, 'start_specific_quiz', { difficulty: options.availableQuizDifficulties[0] }, 'INTERACTION')
-  const selectedIndex = room.currentInteraction.data.correct
+  const selectedIndex = (await state(reader)).currentInteraction.data.correct
   host.emit('resolve_interaction', { correct: true, selectedIndex })
   expect((await state(host)).status).toBe('INTERACTION')
   for (const payload of [null, undefined, [], 'yes', 1, {}, true, { selectedIndex: -1 }, { selectedIndex: 0.5 }, { selectedIndex: 99 }]) {
@@ -74,7 +74,7 @@ test('an incorrect selected option cannot be changed into a win by the client ve
   const [host, reader] = await setup()
   const options = await action(host, 'trigger_action', 'QUIZ', 'QUIZ_OPTIONS')
   const room = await action(host, 'start_specific_quiz', { difficulty: options.availableQuizDifficulties[0] }, 'INTERACTION')
-  const selectedIndex = (room.currentInteraction.data.correct + 1) % 3
+  const selectedIndex = ((await state(reader)).currentInteraction.data.correct + 1) % 3
   await emitWithAck(reader, 'resolve_interaction', { correct: true, selectedIndex })
   const result = await state(reader)
   expect(result.lastResult.success).toBe(false)
@@ -90,7 +90,7 @@ test.each(['buzzer', 'vraioufaux'])('%s requires a buzz and reader, then resolve
   await action(host, 'start_duel', undefined, 'DUEL_RULES')
   await action(duelists[0], 'acknowledge_rules', undefined, 'DUEL_RULES')
   const game = await action(duelists[1], 'acknowledge_rules', undefined, 'DUEL_GAME')
-  const payload = { correct: false, selectedIndex: game.currentInteraction.data.correct }
+  const payload = { correct: false, selectedIndex: (await state(reader)).currentInteraction.data.correct }
   expect(await emitWithAck(reader, 'resolve_interaction', payload)).toMatchObject({ ok: false })
   await action(duelists[0], 'player_buzz', undefined, 'DUEL_GAME')
   const nonReader = clients.find(client => client !== reader)

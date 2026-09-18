@@ -29,3 +29,12 @@ personnage conservés, ancienne clé inopérante, reconnexion avec la nouvelle c
 et quitter/créer/reconnecter. Vérifications navigateur/mobile restant à faire.
 La protection des réponses de jeu selon le rôle, les commandes, timers et entrées
 invalides sont des lots distincts de l’étape 2, pas couverts par cette décision.
+
+Complément du 18 septembre : les états sont individualisés selon le lecteur.
+Les réponses correctes et explications des Quiz/Buzzer/Vrai-Faux/Chiffres/Zoom
+restent privées pour les autres joueurs jusqu’à révélation. Le lecteur garde
+les données nécessaires à la validation orale et au parcours actuel.
+Les snapshots d’annulation sont invalidés lors d’un changement de connexion,
+de composition de salle ou d’hôte : un retour arrière ne doit jamais restaurer
+une socket ou une clé remplacée. Le joueur, ses scores et la partie restent
+conservés ; seule l’annulation d’une action antérieure à ce changement disparaît.

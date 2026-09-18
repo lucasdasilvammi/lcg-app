@@ -828,6 +828,7 @@ const applyEventBoardEffect = (room) => {
 
 const replacePlayerIdInRoom = (room, oldId, newId) => {
   if (!room || !oldId || !newId || oldId === newId) return;
+  undoSnapshotsByRoomId.delete(room.id);
 
   ensureRoomBoardState(room);
 
@@ -954,7 +955,7 @@ io.on('connection', (socket) => {
     if (typeof ack === 'function') ack({ serverNow: Date.now() });
   });
 
-  const createRoomStatePayload = (room) => {
+  const createRoomStatePayload = (room, viewerId) => {
     ensureRoomBoardState(room);
     normalizeLogoActivityState(room.currentInteraction);
     // Explicit public contract: session keys, invites and content pools stay private.
@@ -974,14 +975,25 @@ io.on('connection', (socket) => {
     const pickFields = (source, fields) => Object.fromEntries(
       fields.filter(field => Object.hasOwn(source, field)).map(field => [field, source[field]])
     );
-    return {
+    const payload = {
       ...pickFields(room, publicFields),
       players: room.players.map(player => pickFields(player, playerFields)),
       canUndo: undoSnapshotsByRoomId.has(room.id) && isUndoAllowed(room.status)
     };
+    const interaction = room.currentInteraction;
+    const revealed = ['REVEAL', 'DUEL_REVEAL'].includes(room.status) || interaction?.zoomResolvedCorrect;
+    if (interaction?.data && !revealed && viewerId !== interaction.readerId
+      && ['QUIZ', 'buzzer', 'vraioufaux', 'chiffres', 'zoom'].includes(interaction.type)) {
+      const data = { ...interaction.data };
+      for (const key of ['correct', 'answer', 'a', 'explanation']) delete data[key];
+      payload.currentInteraction = { ...interaction, data };
+    }
+    return payload;
   };
   const syncRoom = (room) => {
-    io.to(room.id).emit('update_room_state', createRoomStatePayload(room));
+    for (const player of room.players) {
+      io.to(player.id).emit('update_room_state', createRoomStatePayload(room, player.id));
+    }
   };
   socket.on('request_room_state', (_payload, ack) => {
     const room = findRoom();
@@ -990,7 +1002,7 @@ io.on('connection', (socket) => {
       return;
     }
 
-    socket.emit('update_room_state', createRoomStatePayload(room));
+    socket.emit('update_room_state', createRoomStatePayload(room, socket.id));
     if (typeof ack === 'function') ack({ ok: true, serverNow: Date.now() });
   });
   const getPublicPlayer = (player) => player
@@ -1070,6 +1082,7 @@ io.on('connection', (socket) => {
     });
 
     if (removedPlayers.length === 0) return;
+    clearRoomUndo(room.id);
 
     const beforeCount = room.players.length;
     room.players = room.players.filter((p) => !removedPlayers.includes(p));
@@ -1286,6 +1299,7 @@ io.on('connection', (socket) => {
 
   // --- LOBBY ---
   socket.on('create_room', () => {
+    if (findRoom()) return;
     const newRoomId = generateRoomId();
     const gameCode = generateGameCode();
     console.log('create_room requested by', socket.id, '->', newRoomId, gameCode);
@@ -1311,6 +1325,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('join_room_with_code', (inputCode) => {
+    if (findRoom()) return socket.emit('error_join', 'Tu es déjà dans une partie.');
     if (!Array.isArray(inputCode) || inputCode.length !== CODE_LENGTH || inputCode.some(i => typeof i !== 'number' || i < 0 || i > 3)) {
       console.warn('join_room_with_code: invalid code shape from', socket.id, inputCode);
       return socket.emit('error_join', 'Code invalide.');
@@ -1394,6 +1409,10 @@ io.on('connection', (socket) => {
   });
 
   socket.on('confirm_reconnect_invite', ({ code } = {}, ack) => {
+    if (findRoom()) {
+      if (typeof ack === 'function') ack({ ok: false, reason: 'already_in_room' });
+      return;
+    }
     if (!Array.isArray(code) || code.length !== CODE_LENGTH || code.some(i => typeof i !== 'number' || i < 0 || i > 3)) {
       if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_code' });
       return;
@@ -1695,6 +1714,7 @@ io.on('connection', (socket) => {
 
     const previousAdminId = room.adminId;
     room.adminId = targetPlayer.id;
+    clearRoomUndo(room.id);
     syncRoom(room);
     emitAdminReassignedMessage(room, previousAdminId, room.adminId);
     if (typeof ack === 'function') ack({ ok: true });
@@ -3059,6 +3079,7 @@ io.on('connection', (socket) => {
     }
 
     const wasAdmin = room.adminId === socket.id;
+    clearRoomUndo(room.id);
     const disconnectRole = wasAdmin ? 'admin' : 'player';
     if (player.sessionToken) {
       pendingDisconnectRoles.set(player.sessionToken, disconnectRole);

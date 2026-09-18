@@ -61,7 +61,7 @@ test('host handoff and one-use invitation preserve the former host, score and ne
   await act(host, 'roll_dice', undefined, room => room.status === 'GAME_LOOP')
   const options = await act(host, 'trigger_action', 'QUIZ', room => room.status === 'QUIZ_OPTIONS')
   const question = await act(host, 'start_specific_quiz', { difficulty: options.availableQuizDifficulties[0] }, room => room.status === 'INTERACTION')
-  const scored = await act(guest, 'resolve_interaction', { correct: true, selectedIndex: question.currentInteraction.data.correct }, room => room.status === 'REVEAL')
+  const scored = await act(guest, 'resolve_interaction', { correct: true, selectedIndex: (await state(guest)).currentInteraction.data.correct }, room => room.status === 'REVEAL')
   const expectedPlayer = scored.players[0]
   expect(expectedPlayer.score).toBeGreaterThan(0)
   const hostId = host.id
