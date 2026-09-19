@@ -91,6 +91,7 @@ const {
   createActivitePhotoId,
   getActivitePhotoStore
 } = require('./server/activityPhotoStore');
+const { TimerRegistry } = require('./server/timerRegistry');
 
 // Flatten quiz database
 const QUIZ_DB = Object.keys(quizData)
@@ -298,14 +299,14 @@ let rooms = {};
 // Sur mobile, l'ouverture de l'appareil photo peut couper temporairement la socket.
 // On garde une marge courte, sans bloquer longtemps la réinvitation.
 const DISCONNECT_GRACE_MS = Math.max(0, Number(process.env.LCG_DISCONNECT_GRACE_MS) || 30000);
-const pendingDisconnectTimers = new Map();
+const pendingDisconnectTimers = new TimerRegistry();
 const pendingDisconnectRoles = new Map();
 const undoSnapshotsByRoomId = new Map();
 const DEFAULT_BONUSES = DEBUG_TOOLS_ENABLED ? TEST_DEFAULT_BONUSES : {};
 // Timers (ne doivent JAMAIS être stockés dans l'état room envoyé au client)
-const activiteTimersByRoomId = new Map();
-const activiteVoteTimersByRoomId = new Map();
-const pickTimersByRoomId = new Map();
+const activiteTimersByRoomId = new TimerRegistry();
+const activiteVoteTimersByRoomId = new TimerRegistry();
+const pickTimersByRoomId = new TimerRegistry();
 
 // Libellés des toasts système de room. À raccourcir / retoucher ici.
 const CHARACTER_GENDERS = {
@@ -336,11 +337,7 @@ const ROOM_SYSTEM_MESSAGES = {
 
 const clearPendingDisconnect = (sessionToken) => {
   if (!sessionToken) return;
-  const timer = pendingDisconnectTimers.get(sessionToken);
-  if (timer) {
-    clearTimeout(timer);
-    pendingDisconnectTimers.delete(sessionToken);
-  }
+  pendingDisconnectTimers.clearTimer(sessionToken);
 };
 
 const clearPendingDisconnectTracking = (sessionToken) => {
@@ -651,9 +648,7 @@ io.on('connection', (socket) => {
 
     // The snapshot predates the action; none of its later activity timers survives undo.
     for (const timers of [activiteTimersByRoomId, activiteVoteTimersByRoomId, pickTimersByRoomId]) {
-      const timer = timers.get(room.id);
-      if (timer) clearTimeout(timer);
-      timers.delete(room.id);
+      timers.clearTimer(room.id);
     }
     cleanupActivitePhotoStore(room.id);
 
@@ -695,21 +690,12 @@ io.on('connection', (socket) => {
     room.players = room.players.filter((p) => !removedPlayers.includes(p));
 
     if (room.players.length === 0) {
-      clearTimeout(pickTimersByRoomId.get(room.id));
-      pickTimersByRoomId.delete(room.id);
+      pickTimersByRoomId.clearTimer(room.id);
       removedPlayers.forEach((removedPlayer) => {
         clearPendingDisconnectTracking(removedPlayer.sessionToken);
       });
-      const existingTimer = activiteTimersByRoomId.get(room.id);
-      if (existingTimer) {
-        clearTimeout(existingTimer);
-        activiteTimersByRoomId.delete(room.id);
-      }
-      const existingVoteTimer = activiteVoteTimersByRoomId.get(room.id);
-      if (existingVoteTimer) {
-        clearTimeout(existingVoteTimer);
-        activiteVoteTimersByRoomId.delete(room.id);
-      }
+      activiteTimersByRoomId.clearTimer(room.id);
+      activiteVoteTimersByRoomId.clearTimer(room.id);
       clearRoomUndo(room.id);
       cleanupActivitePhotoStore(room.id);
       delete rooms[room.id];
@@ -765,8 +751,7 @@ io.on('connection', (socket) => {
       const settled = ['REVEAL', 'DUEL_REVEAL', 'ACTIVITE_REVEAL', 'FEEDBACK'].includes(room.status)
         || ci?.resolved || ci?.claimed || ci?.stolenBonusId || ci?.awardedBonusId || ci?.boardEffectResolved;
       for (const timers of [activiteTimersByRoomId, activiteVoteTimersByRoomId, pickTimersByRoomId]) {
-        clearTimeout(timers.get(room.id));
-        timers.delete(room.id);
+        timers.clearTimer(room.id);
       }
       cleanupActivitePhotoStore(room.id);
       if (activeIndex >= 0 && !settled) {
@@ -837,11 +822,7 @@ io.on('connection', (socket) => {
   }
 
   const clearActiviteVoteTimer = (roomId) => {
-    const timer = activiteVoteTimersByRoomId.get(roomId);
-    if (timer) {
-      clearTimeout(timer);
-      activiteVoteTimersByRoomId.delete(roomId);
-    }
+    activiteVoteTimersByRoomId.clearTimer(roomId);
   };
 
   const getActiviteEligibleVoters = (ci, photoIndex = ci?.currentPhotoIndex || 0) => {
@@ -1889,11 +1870,7 @@ io.on('connection', (socket) => {
     if (allReady) {
       room.status = 'ACTIVITE_CREATION';
       // IMPORTANT: ne pas stocker d'objet Timer dans room.currentInteraction (sinon crash socket.io)
-      const existingTimer = activiteTimersByRoomId.get(room.id);
-      if (existingTimer) {
-        clearTimeout(existingTimer);
-        activiteTimersByRoomId.delete(room.id);
-      }
+      activiteTimersByRoomId.clearTimer(room.id);
 
       const interaction = room.currentInteraction;
       const timer = setTimeout(() => {
@@ -1925,11 +1902,7 @@ io.on('connection', (socket) => {
     );
 
     if (allFinished && !room.currentInteraction.timeUp) {
-      const timer = activiteTimersByRoomId.get(room.id);
-      if (timer) {
-        clearTimeout(timer);
-        activiteTimersByRoomId.delete(room.id);
-      }
+      activiteTimersByRoomId.clearTimer(room.id);
       room.status = 'ACTIVITE_UPLOAD';
     }
 
@@ -2161,7 +2134,7 @@ io.on('connection', (socket) => {
     }
   };
   const schedulePickTimer = (room) => {
-    clearTimeout(pickTimersByRoomId.get(room.id));
+    pickTimersByRoomId.clearTimer(room.id);
     const interaction = room.currentInteraction;
     const timer = setTimeout(() => {
       if (rooms[room.id] !== room || room.currentInteraction !== interaction
@@ -2250,8 +2223,7 @@ io.on('connection', (socket) => {
       }
 
       room.status = 'DUEL_REVEAL';
-      clearTimeout(pickTimersByRoomId.get(room.id));
-      pickTimersByRoomId.delete(room.id);
+      pickTimersByRoomId.clearTimer(room.id);
     } else {
       schedulePickTimer(room);
     }
