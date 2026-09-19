@@ -107,6 +107,7 @@ const {
 const { registerActivityHandlers } = require('./server/activityHandlers');
 const { registerChiffresHandlers } = require('./server/chiffresHandlers');
 const { registerPickHandlers } = require('./server/pickHandlers');
+const { registerZoomHandlers } = require('./server/zoomHandlers');
 
 // Flatten quiz database
 const QUIZ_DB = Object.keys(quizData)
@@ -1477,151 +1478,11 @@ io.on('connection', (socket) => {
     if (typeof ack === 'function') ack({ ok: true });
   });
 
-  socket.on('player_buzz', () => {
-    const room = findRoom();
-    if (!room || !room.currentInteraction) return;
-
-    if (room.currentInteraction.type === 'zoom') {
-      const duelists = room.currentInteraction.duelists || [];
-      if (!duelists.includes(socket.id)) return;
-      if (room.currentInteraction.buzzedPlayerId) return;
-
-      const now = Date.now();
-      if (room.currentInteraction.zoomStartAt && now < room.currentInteraction.zoomStartAt) return;
-
-      const blockedUntil = room.currentInteraction.blockedUntil || {};
-      if (blockedUntil[socket.id] && blockedUntil[socket.id] > now) {
-        socket.emit('error_zoom', 'Tu es temporairement bloque, attends 5 secondes.');
-        return;
-      }
-
-      room.currentInteraction.buzzedPlayerId = socket.id;
-      room.currentInteraction.lastBuzzAt = now;
-      room.currentInteraction.pauseStartedAt = now;
-      syncRoom(room);
-      return;
-    }
-
-    if (!room.currentInteraction.buzzedPlayerId) {
-      room.currentInteraction.buzzedPlayerId = socket.id;
-      syncRoom(room);
-    }
-  });
-
-  socket.on('zoom_reader_verdict', ({ correct, fromTimeoutOptions = false, selectedIndex = null }) => {
-    const room = findRoom();
-    if (!room || !room.currentInteraction) return;
-    if (room.currentInteraction.type !== 'zoom') return;
-    if (socket.id !== room.currentInteraction.readerId) return;
-    if (room.currentInteraction.zoomResolvedCorrect || room.currentInteraction.resolved) return;
-    if (typeof correct !== 'boolean' || typeof fromTimeoutOptions !== 'boolean') return;
-
-    const buzzedPlayerId = room.currentInteraction.buzzedPlayerId;
-    if (!buzzedPlayerId) return;
-
-    if (fromTimeoutOptions) {
-      const interaction = room.currentInteraction;
-      const elapsed = (interaction.pauseStartedAt || Date.now()) - interaction.zoomStartAt - (interaction.pausedDurationMs || 0);
-      if (elapsed < interaction.zoomDurationMs || !Number.isInteger(selectedIndex)
-        || !Array.isArray(interaction.data?.options) || selectedIndex < 0
-        || selectedIndex >= interaction.data.options.length) return;
-      correct = selectedIndex === interaction.data.correct;
-      interaction.resolved = true;
-      const duelists = room.currentInteraction.duelists || [];
-      const winnerId = correct === true
-        ? buzzedPlayerId
-        : (duelists.find(id => id !== buzzedPlayerId) || null);
-      const points = getDuelRewardPoints(room.currentInteraction);
-
-      if (winnerId) {
-        const winner = room.players.find(p => p.id === winnerId);
-        if (winner) winner.score += points;
-      }
-
-      const buzzedPlayer = room.players.find(p => p.id === buzzedPlayerId);
-      const options = Array.isArray(room.currentInteraction.data?.options)
-        ? room.currentInteraction.data.options
-        : [];
-
-      room.lastResult = {
-        success: correct === true,
-        type: 'zoom',
-        winnerId,
-        points,
-        duelists,
-        readerId: room.currentInteraction.readerId,
-        questionerId: room.currentInteraction.readerId,
-        buzzedPlayerId,
-        buzzedPlayerCharacter: buzzedPlayer?.character,
-        selectedIndex,
-        correctIndex: room.currentInteraction.data?.correct,
-        options,
-        image: room.currentInteraction.data?.image,
-        answer: room.currentInteraction.data?.answer,
-        explanation: room.currentInteraction.data?.explanation
-      };
-
-      room.status = 'DUEL_REVEAL';
-      syncRoom(room);
-      return;
-    }
-
-    if (correct === true) {
-      room.currentInteraction.resolved = true;
-      const points = getDuelRewardPoints(room.currentInteraction);
-      const winnerId = buzzedPlayerId;
-      const winner = room.players.find(p => p.id === winnerId);
-      if (winner) winner.score += points;
-
-      room.lastResult = {
-        success: true,
-        type: 'zoom',
-        winnerId,
-        points,
-        duelists: room.currentInteraction.duelists || [],
-        readerId: room.currentInteraction.readerId,
-        questionerId: room.currentInteraction.readerId,
-        buzzedPlayerId,
-        image: room.currentInteraction.data?.image,
-        answer: room.currentInteraction.data?.answer,
-        explanation: room.currentInteraction.data?.explanation
-      };
-
-      const now = Date.now();
-      const pauseStartedAt = room.currentInteraction.pauseStartedAt || now;
-      const pauseDurationMs = Math.max(0, now - pauseStartedAt);
-      room.currentInteraction.pausedDurationMs = (room.currentInteraction.pausedDurationMs || 0) + pauseDurationMs;
-      room.currentInteraction.zoomResolvedCorrect = true;
-      room.currentInteraction.zoomFastRevealStartAt = now;
-      room.currentInteraction.pauseStartedAt = null;
-      syncRoom(room);
-      return;
-    }
-
-    const now = Date.now();
-    const pauseStartedAt = room.currentInteraction.pauseStartedAt || now;
-    const pauseDurationMs = Math.max(0, now - pauseStartedAt);
-    room.currentInteraction.pausedDurationMs = (room.currentInteraction.pausedDurationMs || 0) + pauseDurationMs;
-    room.currentInteraction.pauseStartedAt = null;
-
-    // Freeze existing lock timers while a player is answering.
-    const currentBlockedUntil = room.currentInteraction.blockedUntil || {};
-    const adjustedBlockedUntil = {};
-    for (const [playerId, expiryTs] of Object.entries(currentBlockedUntil)) {
-      const expiry = typeof expiryTs === 'number' ? expiryTs : 0;
-      adjustedBlockedUntil[playerId] = expiry > pauseStartedAt ? expiry + pauseDurationMs : expiry;
-    }
-
-    const blockedUntilTs = now + 5000;
-    room.currentInteraction.blockedUntil = {
-      ...adjustedBlockedUntil,
-      [buzzedPlayerId]: blockedUntilTs
-    };
-    room.currentInteraction.lastWrongBuzzedId = buzzedPlayerId;
-    room.currentInteraction.lastWrongBuzzAt = now;
-    room.currentInteraction.lastWrongBlockedUntil = blockedUntilTs;
-    room.currentInteraction.buzzedPlayerId = null;
-    syncRoom(room);
+  registerZoomHandlers({
+    findRoom,
+    getDuelRewardPoints,
+    socket,
+    syncRoom
   });
 
   // --- RESOLUTION ---
