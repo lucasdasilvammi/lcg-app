@@ -1,6 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { SocketProvider, useSocket } from './contexts/SocketContext'
-import CodeDisplay from './components/CodeDisplay'
 import ButtonWithIcon from './components/ButtonWithIcon'
 import CharacterCard from './components/CharacterCard'
 import Home from './views/1-home'
@@ -45,17 +44,6 @@ const CODE_CHARACTERS = [
   { id: 1, name: "Lucien" },
   { id: 2, name: "Alan" },
   { id: 3, name: "Virginie" }
-];
-
-const PLAYABLE_CHARACTERS = [
-  { id: 'donatien', name: "Donatien" },
-  { id: 'barbara', name: "Barbara" },
-  { id: 'alan', name: "Alan" },
-  { id: 'alex', name: "Alex" },
-  { id: 'lucien', name: "Lucien" },
-  { id: 'lucie', name: "Lucie" },
-  { id: 'virginie', name: "Virginie" },
-  { id: 'tanguy', name: "Tanguy" }
 ];
 
 const PLAYER_MENU_ONBOARDING_STORAGE_KEY = 'lcg-player-menu-onboarding-seen-v3'

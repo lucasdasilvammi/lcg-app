@@ -50,27 +50,6 @@ export default function ChiffresReveal({ roomData, continueToFeedback, currentUs
   const correctStr = String(correctAnswer).padStart(digits, '0')
   const correctDigits = correctStr.split('')
   
-  // Fonction pour rendre les DigitBox avec virgule optionnelle
-  const RenderDigitsWithDecimal = (answer, digitState) => {
-    const answerStr = String(answer).padStart(digits, '0')
-    const answerArray = answerStr.split('')
-    const elements = []
-    
-    answerArray.forEach((digit, index) => {
-      elements.push(
-        <DigitBox key={`digit-${index}`} value={digit} state={digitState} size='small' />
-      )
-      if (decimalPosition && index === decimalPosition - 1) {
-        elements.push(
-          <span key={`decimal-${index}`} className="text-3xl font-bold text-light mb-3">
-            ,
-          </span>
-        )
-      }
-    })
-    return elements
-  }
-  
   // Déterminer le type de message
   const player1HasExact = player1Answer === correctAnswer
   const player2HasExact = player2Answer === correctAnswer
