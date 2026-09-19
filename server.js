@@ -85,6 +85,7 @@ const {
   createRandomDuelInteraction
 } = require('./server/duelContent');
 const { createPublicRoomStatePayload } = require('./server/publicRoomState');
+const { replacePlayerIdReferences } = require('./server/roomIdentity');
 
 // Flatten quiz database
 const QUIZ_DB = Object.keys(quizData)
@@ -577,115 +578,9 @@ const applyEventBoardEffect = (room) => {
 const replacePlayerIdInRoom = (room, oldId, newId) => {
   if (!room || !oldId || !newId || oldId === newId) return;
   undoSnapshotsByRoomId.delete(room.id);
-
   ensureRoomBoardState(room);
-
-  if (room.adminId === oldId) room.adminId = newId;
-  if (room.pendingQuestionerId === oldId) room.pendingQuestionerId = newId;
-  if (room.pendingQuizPlayerId === oldId) room.pendingQuizPlayerId = newId;
-  if (room.actionStart?.playerId === oldId) room.actionStart.playerId = newId;
-  if (room.currentTurnBonusUse?.playerId === oldId) room.currentTurnBonusUse.playerId = newId;
-  if (room.pendingChooseQuizBonus?.byPlayerId === oldId) room.pendingChooseQuizBonus.byPlayerId = newId;
-  if (room.pendingChooseQuizBonus?.targetPlayerId === oldId) room.pendingChooseQuizBonus.targetPlayerId = newId;
-  if (room.quizCategoryHistoryByPlayer?.[oldId]) {
-    room.quizCategoryHistoryByPlayer[newId] = room.quizCategoryHistoryByPlayer[oldId];
-    delete room.quizCategoryHistoryByPlayer[oldId];
-  }
-  if (room.pendingGameEnd?.playerId === oldId) room.pendingGameEnd.playerId = newId;
-  if (Array.isArray(room.finishedPlayerIds)) {
-    room.finishedPlayerIds = room.finishedPlayerIds.map((id) => (id === oldId ? newId : id));
-  }
-  if (Array.isArray(room.finalRankings)) {
-    room.finalRankings = room.finalRankings.map((rank) => (
-      rank?.playerId === oldId ? { ...rank, id: newId, playerId: newId } : rank
-    ));
-  }
-  for (const player of room.players) {
-    if (player.skipNextTurn?.byPlayerId === oldId) player.skipNextTurn.byPlayerId = newId;
-  }
-  if (Array.isArray(room.pendingTurnOrderIds)) {
-    room.pendingTurnOrderIds = room.pendingTurnOrderIds.map(id => id === oldId ? newId : id);
-  }
-
-  for (const player of room.players) {
-    if (player.id === oldId) {
-      player.id = newId;
-      markPlayerPresence(player, 'connected');
-    }
-  }
-
-  const ci = room.currentInteraction;
-  if (ci) {
-    if (ci.readerId === oldId) ci.readerId = newId;
-    if (ci.questionerId === oldId) ci.questionerId = newId;
-    if (ci.buzzedPlayerId === oldId) ci.buzzedPlayerId = newId;
-    if (ci.swapTargetPlayerId === oldId) ci.swapTargetPlayerId = newId;
-    if (ci.previewSwapTargetId === oldId) ci.previewSwapTargetId = newId;
-    if (Array.isArray(ci.duelists)) ci.duelists = ci.duelists.map(id => id === oldId ? newId : id);
-    if (Array.isArray(ci.acknowledgedRules)) ci.acknowledgedRules = ci.acknowledgedRules.map(id => id === oldId ? newId : id);
-    if (Array.isArray(ci.participants)) ci.participants = ci.participants.map(id => id === oldId ? newId : id);
-    if (Array.isArray(ci.readyPlayers)) ci.readyPlayers = ci.readyPlayers.map(id => id === oldId ? newId : id);
-    if (Array.isArray(ci.finishedPlayers)) ci.finishedPlayers = ci.finishedPlayers.map(id => id === oldId ? newId : id);
-    if (Array.isArray(ci.photos)) {
-      ci.photos = ci.photos.map(photo => photo?.playerId === oldId ? { ...photo, playerId: newId } : photo);
-    }
-
-    if (ci.submittedAnswers && ci.submittedAnswers[oldId] !== undefined) {
-      ci.submittedAnswers[newId] = ci.submittedAnswers[oldId];
-      delete ci.submittedAnswers[oldId];
-    }
-    if (Array.isArray(ci.submissionOrder)) {
-      ci.submissionOrder = ci.submissionOrder.map(id => id === oldId ? newId : id);
-    }
-    if (ci.submittedColors && ci.submittedColors[oldId] !== undefined) {
-      ci.submittedColors[newId] = ci.submittedColors[oldId];
-      delete ci.submittedColors[oldId];
-    }
-    if (ci.draftColors && ci.draftColors[oldId] !== undefined) {
-      ci.draftColors[newId] = ci.draftColors[oldId];
-      delete ci.draftColors[oldId];
-    }
-    if (ci.blockedUntil && ci.blockedUntil[oldId] !== undefined) {
-      ci.blockedUntil[newId] = ci.blockedUntil[oldId];
-      delete ci.blockedUntil[oldId];
-    }
-    if (ci.uploadedPhotos && ci.uploadedPhotos[oldId] !== undefined) {
-      ci.uploadedPhotos[newId] = ci.uploadedPhotos[oldId];
-      delete ci.uploadedPhotos[oldId];
-    }
-    if (ci.votes && typeof ci.votes === 'object') {
-      for (const photoVotes of Object.values(ci.votes)) {
-        if (photoVotes?.byPlayer?.[oldId] !== undefined) {
-          photoVotes.byPlayer[newId] = photoVotes.byPlayer[oldId];
-          delete photoVotes.byPlayer[oldId];
-        }
-      }
-    }
-  }
-
-  if (room.duelAnswers && room.duelAnswers[oldId] !== undefined) {
-    room.duelAnswers[newId] = room.duelAnswers[oldId];
-    delete room.duelAnswers[oldId];
-  }
-
-  const lr = room.lastResult;
-    if (lr) {
-      if (lr.winnerId === oldId) lr.winnerId = newId;
-      if (Array.isArray(lr.winnerIds)) lr.winnerIds = lr.winnerIds.map(id => id === oldId ? newId : id);
-      if (lr.buzzedPlayerId === oldId) lr.buzzedPlayerId = newId;
-    if (lr.questionerId === oldId) lr.questionerId = newId;
-    if (lr.readerId === oldId) lr.readerId = newId;
-    if (lr.verdictViewerId === oldId) lr.verdictViewerId = newId;
-    if (Array.isArray(lr.duelists)) lr.duelists = lr.duelists.map(id => id === oldId ? newId : id);
-    if (Array.isArray(lr.rankings)) {
-      lr.rankings = lr.rankings.map(rank => rank?.playerId === oldId ? { ...rank, playerId: newId } : rank);
-    }
-
-    if (lr.submittedColors && lr.submittedColors[oldId] !== undefined) {
-      lr.submittedColors[newId] = lr.submittedColors[oldId];
-      delete lr.submittedColors[oldId];
-    }
-  }
+  const reconnectedPlayer = replacePlayerIdReferences(room, oldId, newId);
+  markPlayerPresence(reconnectedPlayer, 'connected');
 };
 
 // --- SOCKET.IO GAME LOGIC ---
