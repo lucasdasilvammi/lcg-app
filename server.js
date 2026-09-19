@@ -666,12 +666,15 @@ const getPlayersInRequestedOrder = (room, orderedIds) => {
 const resolveTurnOrderPayload = (room, payload) => {
   const requestedPlayers = Array.isArray(payload) ? payload : payload?.players;
   if (!room || !Array.isArray(requestedPlayers)) return null;
+  if (!Array.isArray(payload) && payload.applyAfterCurrentTurn !== undefined
+    && typeof payload.applyAfterCurrentTurn !== 'boolean') return null;
+  if (requestedPlayers.length !== room.players.length) return null;
 
   const orderedIds = requestedPlayers
-    .map(player => typeof player === 'string' ? player : player?.id)
-    .filter(Boolean);
+    .map(player => typeof player === 'string' ? player : player?.id);
 
-  if (orderedIds.length === 0) return null;
+  if (orderedIds.length === 0 || new Set(orderedIds).size !== orderedIds.length
+    || !orderedIds.every(id => typeof id === 'string' && room.players.some(player => player.id === id))) return null;
 
   return {
     orderedIds,
@@ -1327,7 +1330,7 @@ io.on('connection', (socket) => {
 
   socket.on('join_room_with_code', (inputCode) => {
     if (findRoom()) return socket.emit('error_join', 'Tu es déjà dans une partie.');
-    if (!Array.isArray(inputCode) || inputCode.length !== CODE_LENGTH || inputCode.some(i => typeof i !== 'number' || i < 0 || i > 3)) {
+    if (!Array.isArray(inputCode) || inputCode.length !== CODE_LENGTH || inputCode.some(i => !Number.isInteger(i) || i < 0 || i > 3)) {
       console.warn('join_room_with_code: invalid code shape from', socket.id, inputCode);
       return socket.emit('error_join', 'Code invalide.');
     }
@@ -1414,7 +1417,7 @@ io.on('connection', (socket) => {
       if (typeof ack === 'function') ack({ ok: false, reason: 'already_in_room' });
       return;
     }
-    if (!Array.isArray(code) || code.length !== CODE_LENGTH || code.some(i => typeof i !== 'number' || i < 0 || i > 3)) {
+    if (!Array.isArray(code) || code.length !== CODE_LENGTH || code.some(i => !Number.isInteger(i) || i < 0 || i > 3)) {
       if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_code' });
       return;
     }
@@ -2294,7 +2297,9 @@ io.on('connection', (socket) => {
       if (typeof ack === 'function') ack({ ok: false, reason: 'player_not_participant' });
       return;
     }
-    if (typeof photoData !== 'string' || !photoData.startsWith('data:image/')) {
+    if (typeof photoData !== 'string' || photoData.length > 14e6
+      || !/^data:image\/(?:jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(photoData)
+      || (photoData.length - photoData.indexOf(',') - 1) % 4 !== 0) {
       if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_photo' });
       return;
     }

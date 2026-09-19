@@ -64,11 +64,47 @@ const pausedCommands = new Set([
   'event_swap_positions', 'ack_choose_quiz_bonus', 'select_quiz_difficulty'
 ]);
 
+const isId = value => typeof value === 'string' && value.length > 0 && value.length <= 128;
+const isDifficulty = value => (Number.isInteger(value) && value >= 1 && value <= 5)
+  || (typeof value === 'string' && /^[1-5]$/.test(value));
+const invalidFields = (event, payload) => {
+  if (!payload || typeof payload !== 'object' || Array.isArray(payload)) return false;
+  for (const field of ['targetPlayerId', 'playerId', 'roomId']) {
+    if (Object.hasOwn(payload, field) && !isId(payload[field])) return true;
+  }
+  if (['start_specific_quiz', 'select_quiz_difficulty'].includes(event)
+    && Object.hasOwn(payload, 'difficulty') && !isDifficulty(payload.difficulty)) return true;
+  if (event === 'debug_give_bonus' && Object.hasOwn(payload, 'quantity')
+    && (!Number.isSafeInteger(payload.quantity) || Math.abs(payload.quantity) > 100)) return true;
+  if (event === 'trigger_action' && (typeof payload.type !== 'string'
+    || (payload.duelType !== undefined && !['buzzer', 'vraioufaux', 'chiffres', 'pick', 'zoom'].includes(payload.duelType)))) return true;
+  if (event === 'pick_color_submit'
+    && (typeof payload.color !== 'string' || !/^#[0-9a-f]{6}$/i.test(payload.color))) return true;
+  if (event === 'pick_color_update'
+    && (![payload.hue, payload.saturation, payload.lightness].every(Number.isFinite)
+      || payload.hue < 0 || payload.hue > 360 || payload.saturation < 0
+      || payload.saturation > 100 || payload.lightness < 0 || payload.lightness > 100)) return true;
+  if (event.startsWith('chiffres_answer_')
+    && (!Array.isArray(payload.answer) || payload.answer.length > 20
+      || !payload.answer.every(digit => digit === '' || (typeof digit === 'string' && /^\d$/.test(digit))
+        || (Number.isInteger(digit) && digit >= 0 && digit <= 9)))) return true;
+  if (event === 'activite_vote'
+    && (!Number.isInteger(payload.photoIndex) || payload.photoIndex < 0
+      || !['up', 'neutral', 'down'].includes(payload.voteType))) return true;
+  if (['resolve_interaction', 'zoom_reader_verdict'].includes(event)) {
+    if (payload.correct !== undefined && typeof payload.correct !== 'boolean') return true;
+    if (payload.selectedIndex != null && (!Number.isInteger(payload.selectedIndex) || payload.selectedIndex < 0)) return true;
+    if (payload.fromTimeoutOptions !== undefined && typeof payload.fromTimeoutOptions !== 'boolean') return true;
+  }
+  return false;
+};
+
 const getCommandRejection = (event, payload, room, playerId) => {
   if (objectCommands.has(event) && (!payload || typeof payload !== 'object' || Array.isArray(payload))) return 'invalid_payload';
   if (room?.isPaused && pausedCommands.has(event)) return 'invalid_state';
   if (room && scopedCommands.has(event)
     && (!payload || payload.commandContextId !== room.commandContextId)) return 'stale_command';
+  if (invalidFields(event, payload)) return 'invalid_payload';
   if (!phases[event] && !hostCommands.has(event)) return null;
   if (!room) return 'room_not_found';
   if (phases[event] && (!phases[event].includes(room.status) || room.isPaused)) return 'invalid_state';

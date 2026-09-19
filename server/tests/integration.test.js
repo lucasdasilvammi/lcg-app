@@ -214,7 +214,7 @@ test('four-player activity keeps photo counters and vote timing synchronized', a
   }
   for (const client of clients.slice(0, -1)) {
     const response = await emitWithAck(client, 'activite_submit_photo', {
-      photoData: `data:image/jpeg;base64,photo-${client.id}`
+      photoData: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII='
     })
     expect(response.ok).toBe(true)
   }
@@ -225,7 +225,7 @@ test('four-player activity keeps photo counters and vote timing synchronized', a
       && room.currentInteraction?.uploadedPhotoCount === 4
   ))
   const lastPhotoResponse = await emitWithAck(clients.at(-1), 'activite_submit_photo', {
-    photoData: `data:image/jpeg;base64,photo-${clients.at(-1).id}`
+    photoData: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII='
   })
   expect(lastPhotoResponse.ok).toBe(true)
 
