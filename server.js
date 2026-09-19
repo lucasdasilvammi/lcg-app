@@ -84,6 +84,7 @@ const {
   ZOOM_ASSET_ROUTE,
   createRandomDuelInteraction
 } = require('./server/duelContent');
+const { createPublicRoomStatePayload } = require('./server/publicRoomState');
 
 // Flatten quiz database
 const QUIZ_DB = Object.keys(quizData)
@@ -707,37 +708,9 @@ io.on('connection', (socket) => {
     refreshCommandContext(room);
     ensureRoomBoardState(room);
     normalizeLogoActivityState(room.currentInteraction);
-    // Explicit public contract: session keys, invites and content pools stay private.
-    const publicFields = [
-      'id', 'code', 'adminId', 'status', 'isPaused', 'pausedById', 'turnIndex',
-      'currentInteraction', 'lastResult', 'pendingCategory', 'boardConfig',
-      'finishedPlayerIds', 'finalRankings', 'finalizedAt', 'pendingGameEnd',
-      'currentTurnBonusUse', 'pendingChooseQuizBonus', 'pendingQuestionerId',
-      'pendingQuizPlayerId', 'pendingQuizDifficulty', 'availableQuizDifficulties',
-      'pendingTurnOrderIds', 'duelAnswers', 'commandContextId'
-    ];
-    const playerFields = [
-      'id', 'character', 'characterLocked', 'score', 'bonuses', 'presence',
-      'connected', 'isWaiting', 'isDisconnected', 'boardProgress', 'skipNextTurn',
-      'presenceUpdatedAt', 'disconnectDeadlineAt', 'status'
-    ];
-    const pickFields = (source, fields) => Object.fromEntries(
-      fields.filter(field => Object.hasOwn(source, field)).map(field => [field, source[field]])
-    );
-    const payload = {
-      ...pickFields(room, publicFields),
-      players: room.players.map(player => pickFields(player, playerFields)),
+    return createPublicRoomStatePayload(room, viewerId, {
       canUndo: undoSnapshotsByRoomId.has(room.id) && isUndoAllowed(room.status)
-    };
-    const interaction = room.currentInteraction;
-    const revealed = ['REVEAL', 'DUEL_REVEAL'].includes(room.status) || interaction?.zoomResolvedCorrect;
-    if (interaction?.data && !revealed && viewerId !== interaction.readerId
-      && ['QUIZ', 'buzzer', 'vraioufaux', 'chiffres', 'zoom'].includes(interaction.type)) {
-      const data = { ...interaction.data };
-      for (const key of ['correct', 'answer', 'a', 'explanation']) delete data[key];
-      payload.currentInteraction = { ...interaction, data };
-    }
-    return payload;
+    });
   };
   const syncRoom = (room) => {
     for (const player of room.players) {
