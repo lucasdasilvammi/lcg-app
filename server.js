@@ -86,6 +86,11 @@ const {
 } = require('./server/duelContent');
 const { createPublicRoomStatePayload } = require('./server/publicRoomState');
 const { replacePlayerIdReferences } = require('./server/roomIdentity');
+const {
+  cleanupActivitePhotoStore,
+  createActivitePhotoId,
+  getActivitePhotoStore
+} = require('./server/activityPhotoStore');
 
 // Flatten quiz database
 const QUIZ_DB = Object.keys(quizData)
@@ -301,7 +306,6 @@ const DEFAULT_BONUSES = DEBUG_TOOLS_ENABLED ? TEST_DEFAULT_BONUSES : {};
 const activiteTimersByRoomId = new Map();
 const activiteVoteTimersByRoomId = new Map();
 const pickTimersByRoomId = new Map();
-const activitePhotoStoresByRoomId = new Map();
 
 // Libellés des toasts système de room. À raccourcir / retoucher ici.
 const CHARACTER_GENDERS = {
@@ -345,23 +349,6 @@ const clearPendingDisconnectTracking = (sessionToken) => {
 };
 
 const findRoomByPlayerId = (playerId) => Object.values(rooms).find(r => r.players.some(p => p.id === playerId));
-
-const getActivitePhotoStore = (roomId) => {
-  if (!activitePhotoStoresByRoomId.has(roomId)) {
-    activitePhotoStoresByRoomId.set(roomId, new Map());
-  }
-  return activitePhotoStoresByRoomId.get(roomId);
-};
-
-const cleanupActivitePhotoStore = (roomId) => {
-  if (!roomId) return;
-  activitePhotoStoresByRoomId.delete(roomId);
-};
-
-const createActivitePhotoId = (playerId) => {
-  const suffix = Math.random().toString(36).slice(2, 10);
-  return `${playerId}_${Date.now()}_${suffix}`;
-};
 
 const findPlayerBySessionToken = (sessionToken) => {
   if (!sessionToken) return null;
