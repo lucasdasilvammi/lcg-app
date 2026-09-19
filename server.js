@@ -2096,7 +2096,9 @@ io.on('connection', (socket) => {
     const activePlayer = room.players[room.turnIndex];
     const targetPlayer = room.players.find(player => player.id === targetPlayerId);
 
-    if (room.status !== 'EVENT_GAME' || interaction?.type !== 'event' || interaction.data?.effectType !== 'steal-random-bonus') {
+    if (room.status !== 'EVENT_GAME' || interaction?.type !== 'event'
+      || interaction.data?.effectType !== 'steal-random-bonus'
+      || !interaction.awaitingStealTarget || interaction.stolenBonusId || interaction.stealSkippedNoBonus) {
       if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_state' });
       return;
     }
