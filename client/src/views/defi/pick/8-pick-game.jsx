@@ -39,7 +39,7 @@ export default function PickGame({ roomData, currentUserId, serverClockOffsetMs 
   const [hue, setHue] = useState(180)
   const [saturation, setSaturation] = useState(100)
   const [lightness, setLightness] = useState(50)
-  const [hasSubmitted, setHasSubmitted] = useState(false)
+  const hasSubmitted = interaction?.submittedColors?.[currentUserId] !== undefined
   const [isDragging, setIsDragging] = useState(false)
   const [countdown, setCountdown] = useState(15)
   const [player1Hue, setPlayer1Hue] = useState(180)
@@ -81,7 +81,7 @@ export default function PickGame({ roomData, currentUserId, serverClockOffsetMs 
       setSpectatorCountdown(remainingSeconds)
     }, 0)
     return () => window.clearTimeout(timer)
-  }, [pickEndsAt, getSyncedNow])
+  }, [pickEndsAt, getSyncedNow, roomData?.commandContextId])
 
   // Dessiner le gradient du carré sur canvas
   useEffect(() => {
@@ -118,9 +118,6 @@ export default function PickGame({ roomData, currentUserId, serverClockOffsetMs 
   useEffect(() => {
     const timer = window.setTimeout(() => {
       const submitted = interaction?.submittedColors || {}
-      if (submitted[currentUserId]) {
-        setHasSubmitted(true)
-      }
       // Update player submission status for spectators
       if (isSpectator && duelists.length === 2) {
         setPlayer1Submitted(submitted[duelists[0]] !== undefined)
@@ -210,7 +207,6 @@ export default function PickGame({ roomData, currentUserId, serverClockOffsetMs 
 
   const handleSubmit = () => {
     if (hasSubmitted || !socket) return
-    setHasSubmitted(true)
     socket.emit('pick_color_submit', {
       commandContextId: roomData?.commandContextId,
       color: pickedColor
@@ -250,7 +246,6 @@ export default function PickGame({ roomData, currentUserId, serverClockOffsetMs 
           commandContextId: roomData?.commandContextId,
           color: pickedColorRef.current
         })
-        setHasSubmitted(true)
       }
     }, 100)
 

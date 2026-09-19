@@ -21,7 +21,7 @@ export default function ChiffresGame({ roomData, currentUserId }) {
   const digits = data?.digits || 4
   const decimalPosition = data?.decimalPosition || null
   const [answer, setAnswer] = useState(Array(digits).fill(''))
-  const [hasSubmitted, setHasSubmitted] = useState(false)
+  const hasSubmitted = interaction?.submittedAnswers?.[currentUserId] !== undefined
   // États temporaires pour les réponses des joueurs (sera remplacé par socket plus tard)
   const [player1Answer, setPlayer1Answer] = useState(Array(digits).fill(''))
   const [player2Answer, setPlayer2Answer] = useState(Array(digits).fill(''))
@@ -99,7 +99,6 @@ export default function ChiffresGame({ roomData, currentUserId }) {
   const handleSubmit = () => {
     const isComplete = answer.every(d => d !== '')
     if (isComplete && !hasSubmitted) {
-      setHasSubmitted(true)
       const answerValue = answer.join('')
       if (socket) {
         socket.emit('chiffres_answer_submit', {
