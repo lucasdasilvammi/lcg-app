@@ -231,6 +231,7 @@ function createAgent(definition) {
 }
 
 function attachAgentListeners(agent) {
+  require('./command-context-client').attachCommandContext(agent.socket)
   agent.socket.on('update_room_state', (room) => {
     agent.latestRoom = room
     agent.events.push({ type: 'update_room_state', status: room.status, at: Date.now() })

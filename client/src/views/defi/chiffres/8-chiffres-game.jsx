@@ -35,6 +35,7 @@ export default function ChiffresGame({ roomData, currentUserId }) {
   const emitAnswerUpdate = (newAnswer) => {
     if (socket && isMeReader === false) {
       socket.emit('chiffres_answer_update', {
+        commandContextId: roomData?.commandContextId,
         playerId: currentUserId,
         answer: newAnswer,
         roomId: roomData?.id
@@ -102,6 +103,7 @@ export default function ChiffresGame({ roomData, currentUserId }) {
       const answerValue = answer.join('')
       if (socket) {
         socket.emit('chiffres_answer_submit', {
+          commandContextId: roomData?.commandContextId,
           playerId: currentUserId,
           answer: answer,
           roomId: roomData?.id

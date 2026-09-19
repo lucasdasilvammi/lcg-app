@@ -4,6 +4,7 @@ const { spawn } = require('child_process')
 const { randomUUID } = require('crypto')
 const path = require('path')
 const io = require('socket.io-client')
+const { attachCommandContext } = require('./command-context-client')
 
 const SERVER_URL = 'http://127.0.0.1:3001'
 const PORT = '3001'
@@ -103,6 +104,7 @@ function connectAgent(agent) {
       auth: { sessionToken: agent.sessionToken }
     })
     agent.socket = socket
+    attachCommandContext(socket)
 
     socket.on('update_room_state', (room) => {
       agent.latestRoom = room

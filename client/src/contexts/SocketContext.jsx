@@ -287,6 +287,10 @@ export const SocketProvider = ({ children }) => {
   }, [socket, roomData?.id, roomData?.status])
 
   // Emit helpers
+  const emitGameCommand = (event, payload = {}, ack) => socket?.emit(event, {
+    ...payload,
+    commandContextId: roomData?.commandContextId
+  }, ack)
   const createRoom = () => socket?.emit("create_room")
   const joinRoomWithCode = (code) => socket?.emit("join_room_with_code", code)
   const startGame = () => socket?.emit("start_game")
@@ -294,37 +298,37 @@ export const SocketProvider = ({ children }) => {
   const confirmSelection = () => socket?.emit("confirm_selection")
   const updateTurnOrder = (list) => socket?.emit("update_turn_order", list)
   const startGameLoop = () => socket?.emit("start_game_loop")
-  const rollDice = () => socket?.emit("roll_dice")
+  const rollDice = () => emitGameCommand("roll_dice")
   const triggerAction = (actionType) => {
     if (!socket) {
       console.warn('triggerAction called but socket is null', actionType)
       return
     }
     console.log('🎯 triggerAction -> emitting', actionType, 'socket', socket.id, 'connected', socket.connected)
-    socket.emit("trigger_action", actionType, (response) => {
+    emitGameCommand("trigger_action", typeof actionType === 'string' ? { type: actionType } : actionType, (response) => {
       console.log('🎯 triggerAction ack', actionType, response)
     })
   }
-  const startSpecificQuiz = (payload) => socket?.emit("start_specific_quiz", payload)
-  const startDuel = () => socket?.emit("start_duel")
-  const acknowledgeRules = () => socket?.emit("acknowledge_rules")
-  const playerBuzz = () => socket?.emit("player_buzz")
-  const resolveInteraction = (result) => socket?.emit("resolve_interaction", result)
-  const zoomReaderVerdict = (correct, fromTimeoutOptions = false, selectedIndex = null) => socket?.emit('zoom_reader_verdict', { correct, fromTimeoutOptions, selectedIndex })
-  const continueToFeedback = () => socket?.emit("continue_to_feedback")
-  const nextTurn = () => socket?.emit("next_turn")
-  const startNewRound = () => socket?.emit("start_new_round")
-  const acknowledgeChooseQuizBonus = (ack) => socket?.emit('ack_choose_quiz_bonus', {}, ack)
-  const selectQuizDifficulty = (difficulty, ack) => socket?.emit('select_quiz_difficulty', { difficulty }, ack)
-  const claimCaseBonus = (ack) => socket?.emit('claim_case_bonus', {}, ack)
-  const stealEventBonus = (targetPlayerId, ack) => socket?.emit('event_steal_bonus', { targetPlayerId }, ack)
-  const previewEventStealTarget = (targetPlayerId, ack) => socket?.emit('event_preview_steal_target', { targetPlayerId }, ack)
-  const swapEventPositions = (targetPlayerId, ack) => socket?.emit('event_swap_positions', { targetPlayerId }, ack)
-  const declareFinish = (ack) => socket?.emit('declare_finish', {}, ack)
+  const startSpecificQuiz = (payload) => emitGameCommand("start_specific_quiz", payload)
+  const startDuel = () => emitGameCommand("start_duel")
+  const acknowledgeRules = () => emitGameCommand("acknowledge_rules")
+  const playerBuzz = () => emitGameCommand("player_buzz")
+  const resolveInteraction = (result) => emitGameCommand("resolve_interaction", typeof result === 'boolean' ? { correct: result } : result)
+  const zoomReaderVerdict = (correct, fromTimeoutOptions = false, selectedIndex = null) => emitGameCommand('zoom_reader_verdict', { correct, fromTimeoutOptions, selectedIndex })
+  const continueToFeedback = () => emitGameCommand("continue_to_feedback")
+  const nextTurn = () => emitGameCommand("next_turn")
+  const startNewRound = () => emitGameCommand("start_new_round")
+  const acknowledgeChooseQuizBonus = (ack) => emitGameCommand('ack_choose_quiz_bonus', {}, ack)
+  const selectQuizDifficulty = (difficulty, ack) => emitGameCommand('select_quiz_difficulty', { difficulty }, ack)
+  const claimCaseBonus = (ack) => emitGameCommand('claim_case_bonus', {}, ack)
+  const stealEventBonus = (targetPlayerId, ack) => emitGameCommand('event_steal_bonus', { targetPlayerId }, ack)
+  const previewEventStealTarget = (targetPlayerId, ack) => emitGameCommand('event_preview_steal_target', { targetPlayerId }, ack)
+  const swapEventPositions = (targetPlayerId, ack) => emitGameCommand('event_swap_positions', { targetPlayerId }, ack)
+  const declareFinish = (ack) => emitGameCommand('declare_finish', {}, ack)
   
   // Activité: Dessin de Logo
-  const acknowledgeReady = () => socket?.emit("activite_acknowledge_ready")
-  const submitDrawing = () => socket?.emit("activite_submit_drawing")
+  const acknowledgeReady = () => emitGameCommand("activite_acknowledge_ready")
+  const submitDrawing = () => emitGameCommand("activite_submit_drawing")
   const submitPhoto = (photoData, ack) => {
     if (!socket?.connected) {
       if (typeof ack === 'function') {
@@ -342,14 +346,14 @@ export const SocketProvider = ({ children }) => {
       }
     }, 8000)
 
-    socket.emit("activite_submit_photo", { photoData }, (response) => {
+    emitGameCommand("activite_submit_photo", { photoData }, (response) => {
       if (settled) return
       settled = true
       window.clearTimeout(timeout)
       if (typeof ack === 'function') ack(response)
     })
   }
-  const submitVote = (photoIndex, voteType) => socket?.emit("activite_vote", { photoIndex, voteType })
+  const submitVote = (photoIndex, voteType) => emitGameCommand("activite_vote", { photoIndex, voteType })
   const promoteAdmin = (targetPlayerId, ack) => socket?.emit('promote_admin', { targetPlayerId }, ack)
   const kickPlayer = (targetPlayerId, ack) => socket?.emit('kick_player', { targetPlayerId }, ack)
   const createReconnectInvite = (targetPlayerId, ack) => {
@@ -389,7 +393,7 @@ export const SocketProvider = ({ children }) => {
   const useBonus = (bonusId, payloadOrAck, ack) => {
     const payload = typeof payloadOrAck === 'function' ? {} : (payloadOrAck || {})
     const callback = typeof payloadOrAck === 'function' ? payloadOrAck : ack
-    socket?.emit('use_bonus', { bonusId, ...payload }, callback)
+    emitGameCommand('use_bonus', { bonusId, ...payload }, callback)
   }
   const debugGiveBonus = (bonusId = 'ctrl-z', quantity = 1, playerId = socket?.id) => {
     socket?.emit('debug_give_bonus', { bonusId, quantity, playerId }, (response) => {

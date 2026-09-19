@@ -1,4 +1,36 @@
 // These checks run before handlers can destructure a payload or mutate a room.
+const { randomUUID } = require('crypto');
+const commandContexts = new WeakMap();
+const scopedCommands = new Set([
+  'roll_dice', 'trigger_action', 'declare_finish', 'use_bonus',
+  'start_specific_quiz', 'select_quiz_difficulty', 'ack_choose_quiz_bonus',
+  'start_duel', 'acknowledge_rules', 'player_buzz', 'resolve_interaction',
+  'zoom_reader_verdict', 'chiffres_answer_update', 'chiffres_answer_submit',
+  'pick_color_update', 'pick_color_submit', 'pick_opponent_submitted',
+  'activite_acknowledge_ready', 'activite_submit_drawing', 'activite_submit_photo',
+  'activite_vote', 'claim_case_bonus', 'event_steal_bonus',
+  'event_preview_steal_target', 'event_swap_positions', 'continue_to_feedback',
+  'next_turn', 'start_new_round'
+]);
+
+// State updates within a step keep the token; crossing a boundary invalidates queued commands.
+const refreshCommandContext = (room) => {
+  const ci = room.currentInteraction;
+  if (ci && !ci.id) ci.id = randomUUID();
+  const boundary = JSON.stringify([
+    room.status, room.players[room.turnIndex]?.id, Boolean(room.isPaused),
+    room.players.map(player => player.id), room.adminId,
+    ci?.id, ci?.buzzedPlayerId, ci?.currentPhotoIndex,
+    ci?.awaitingStealTarget, ci?.stolenBonusId, ci?.stealSkippedNoBonus,
+    ci?.bonusRewardRevealed, ci?.awaitingSwapTarget, ci?.boardEffectResolved,
+    ci?.resolved, room.lastResult?.feedbackWinnerIndex
+  ]);
+  const previous = commandContexts.get(room);
+  if (!previous || previous.boundary !== boundary || previous.interaction !== ci) {
+    room.commandContextId = randomUUID();
+    commandContexts.set(room, { boundary, interaction: ci });
+  }
+};
 const objectCommands = new Set([
   'create_reconnect_invite', 'confirm_reconnect_invite', 'debug_give_bonus',
   'use_bonus', 'promote_admin', 'kick_player', 'event_steal_bonus',
@@ -35,6 +67,8 @@ const pausedCommands = new Set([
 const getCommandRejection = (event, payload, room, playerId) => {
   if (objectCommands.has(event) && (!payload || typeof payload !== 'object' || Array.isArray(payload))) return 'invalid_payload';
   if (room?.isPaused && pausedCommands.has(event)) return 'invalid_state';
+  if (room && scopedCommands.has(event)
+    && (!payload || payload.commandContextId !== room.commandContextId)) return 'stale_command';
   if (!phases[event] && !hostCommands.has(event)) return null;
   if (!room) return 'room_not_found';
   if (phases[event] && (!phases[event].includes(room.status) || room.isPaused)) return 'invalid_state';
@@ -74,4 +108,4 @@ const getCommandRejection = (event, payload, room, playerId) => {
   return null;
 };
 
-module.exports = { getCommandRejection };
+module.exports = { getCommandRejection, refreshCommandContext };

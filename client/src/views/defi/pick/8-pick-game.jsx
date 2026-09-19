@@ -212,6 +212,7 @@ export default function PickGame({ roomData, currentUserId, serverClockOffsetMs 
     if (hasSubmitted || !socket) return
     setHasSubmitted(true)
     socket.emit('pick_color_submit', {
+      commandContextId: roomData?.commandContextId,
       color: pickedColor
     })
   }
@@ -246,6 +247,7 @@ export default function PickGame({ roomData, currentUserId, serverClockOffsetMs 
       if (remainingSeconds <= 0 && socket && !autoSubmitRef.current) {
         autoSubmitRef.current = true
         socket.emit('pick_color_submit', {
+          commandContextId: roomData?.commandContextId,
           color: pickedColorRef.current
         })
         setHasSubmitted(true)
@@ -253,17 +255,18 @@ export default function PickGame({ roomData, currentUserId, serverClockOffsetMs 
     }, 100)
 
     return () => clearInterval(interval)
-  }, [isDuelist, hasSubmitted, socket, pickEndsAt, getSyncedNow])
+  }, [isDuelist, hasSubmitted, socket, pickEndsAt, getSyncedNow, roomData?.commandContextId])
 
   // Émettre les changements de couleur en temps réel
   useEffect(() => {
     if (!isDuelist || !socket || hasSubmitted) return
     socket.emit('pick_color_update', {
+      commandContextId: roomData?.commandContextId,
       hue,
       saturation,
       lightness
     })
-  }, [hue, saturation, lightness, isDuelist, socket, hasSubmitted])
+  }, [hue, saturation, lightness, isDuelist, socket, hasSubmitted, roomData?.commandContextId])
 
   if (!roomData || !interaction) return null
 

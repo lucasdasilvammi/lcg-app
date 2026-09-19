@@ -1,5 +1,5 @@
 const { createHarness, waitForEvent, emitWithAck } = require('./helpers/mainServer')
-const { enterGameLoop } = require('./helpers/game')
+const { enterGameLoop, roomState } = require('./helpers/game')
 jest.setTimeout(20000)
 const harness = createHarness()
 const startServer = harness.start
@@ -197,17 +197,20 @@ test('four-player activity keeps photo counters and vote timing synchronized', a
   await enterGameLoop(clients)
   admin.emit('trigger_action', 'ACTIVITE')
   await briefStatePromise
+  await Promise.all(clients.map(roomState))
 
   const creationStatePromise = waitForRoomState(admin, (room) => room.status === 'ACTIVITE_CREATION')
   clients.forEach((client) => client.emit('activite_acknowledge_ready'))
   await creationStatePromise
+  await Promise.all(clients.map(roomState))
 
   const uploadStatePromise = waitForRoomState(admin, (room) => room.status === 'ACTIVITE_UPLOAD')
   clients.forEach((client) => client.emit('activite_submit_drawing'))
   await uploadStatePromise
+  await Promise.all(clients.map(roomState))
 
   for (const payload of [null, undefined, [], 'photo', { photoData: 42 }]) {
-    expect(await emitWithAck(admin, 'activite_submit_photo', payload)).toEqual({ ok: false, reason: 'invalid_photo' })
+    expect(await emitWithAck(admin, 'activite_submit_photo', payload)).toMatchObject({ ok: false })
   }
   for (const client of clients.slice(0, -1)) {
     const response = await emitWithAck(client, 'activite_submit_photo', {

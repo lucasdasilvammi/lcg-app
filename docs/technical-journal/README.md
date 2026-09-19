@@ -35,3 +35,5 @@ Garder les entrées courtes, pratiques et faciles à relire plus tard.
 - [2026-09-18 — Résolution autoritaire](decisions/2026-09-18-resolution-autoritaire.md) — acceptée.
 
 - [2026-09-18 — Échéance Pick serveur](decisions/2026-09-18-pick-echeance-serveur.md) — acceptée.
+
+- [2026-09-19 — Contexte des commandes](decisions/2026-09-19-contexte-commandes.md) — acceptée.

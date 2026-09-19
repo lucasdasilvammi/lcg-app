@@ -1,6 +1,7 @@
 const { spawn } = require('child_process')
 const path = require('path')
 const io = require('socket.io-client')
+const { attachCommandContext } = require('../../../scripts/agent-swarm/command-context-client')
 
 const createHarness = () => {
   let processHandle
@@ -24,6 +25,7 @@ const createHarness = () => {
   })
   const connect = (sessionToken) => {
     const client = io(url, { auth: { sessionToken }, reconnection: false, autoConnect: false })
+    attachCommandContext(client)
     clients.add(client)
     return client
   }

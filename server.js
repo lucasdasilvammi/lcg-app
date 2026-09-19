@@ -3,7 +3,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const fs = require('fs');
 const path = require('path');
-const { getCommandRejection } = require('./server/commandGuards');
+const { getCommandRejection, refreshCommandContext } = require('./server/commandGuards');
 
 const app = express();
 const server = http.createServer(app);
@@ -956,6 +956,7 @@ io.on('connection', (socket) => {
   });
 
   const createRoomStatePayload = (room, viewerId) => {
+    refreshCommandContext(room);
     ensureRoomBoardState(room);
     normalizeLogoActivityState(room.currentInteraction);
     // Explicit public contract: session keys, invites and content pools stay private.
@@ -965,7 +966,7 @@ io.on('connection', (socket) => {
       'finishedPlayerIds', 'finalRankings', 'finalizedAt', 'pendingGameEnd',
       'currentTurnBonusUse', 'pendingChooseQuizBonus', 'pendingQuestionerId',
       'pendingQuizPlayerId', 'pendingQuizDifficulty', 'availableQuizDifficulties',
-      'pendingTurnOrderIds', 'duelAnswers'
+      'pendingTurnOrderIds', 'duelAnswers', 'commandContextId'
     ];
     const playerFields = [
       'id', 'character', 'characterLocked', 'score', 'bonuses', 'presence',
