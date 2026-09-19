@@ -106,6 +106,7 @@ const {
 } = require('./server/eventHandlers');
 const { registerActivityHandlers } = require('./server/activityHandlers');
 const { registerChiffresHandlers } = require('./server/chiffresHandlers');
+const { registerPickHandlers } = require('./server/pickHandlers');
 
 // Flatten quiz database
 const QUIZ_DB = Object.keys(quizData)
@@ -1325,6 +1326,18 @@ io.on('connection', (socket) => {
     syncRoom
   });
 
+  const { schedulePickTimer } = registerPickHandlers({
+    emitToOtherRoomMembers: (roomId, event, payload) => socket.to(roomId).emit(event, payload),
+    emitToSocket: (socketId, event, payload) => io.to(socketId).emit(event, payload),
+    findRoom,
+    isCurrentRoom: room => rooms[room.id] === room,
+    pickTimersByRoomId,
+    resolvePickWinner,
+    socket,
+    syncRoom,
+    tightenPickDeadline
+  });
+
   socket.on('start_duel', () => {
     const room = findRoom();
     if (!room || !room.currentInteraction) return;
@@ -1364,161 +1377,6 @@ io.on('connection', (socket) => {
     findRoom,
     socket,
     syncRoom
-  });
-
-  // --- PICK DUEL ---
-  const finishPickAtDeadline = (room) => {
-    const interaction = room.currentInteraction;
-    if (room.status !== 'DUEL_GAME' || interaction?.type !== 'pick') return;
-    for (const playerId of interaction.duelists) {
-      if (!interaction.submittedColors?.[playerId]) {
-        submitPickColor(room, playerId, interaction.draftColors?.[playerId] || '#00FFFF');
-      }
-    }
-  };
-  const schedulePickTimer = (room) => {
-    pickTimersByRoomId.clearTimer(room.id);
-    const interaction = room.currentInteraction;
-    const timer = setTimeout(() => {
-      if (rooms[room.id] !== room || room.currentInteraction !== interaction
-        || pickTimersByRoomId.get(room.id) !== timer) return;
-      pickTimersByRoomId.delete(room.id);
-      finishPickAtDeadline(room);
-    }, Math.max(0, interaction.pickEndsAt - Date.now()));
-    pickTimersByRoomId.set(room.id, timer);
-  };
-  const submitPickColor = (room, playerId, color) => {
-    if (!room || room.status !== 'DUEL_GAME' || room.currentInteraction?.type !== 'pick') return;
-    if (typeof color !== 'string' || !/^#[0-9a-f]{6}$/i.test(color)) return;
-
-    const duelists = room.currentInteraction.duelists || [];
-    if (!duelists.includes(playerId)) return;
-
-    if (!room.currentInteraction.submittedColors) {
-      room.currentInteraction.submittedColors = {};
-    }
-    if (!room.currentInteraction.submissionOrder) {
-      room.currentInteraction.submissionOrder = [];
-    }
-
-    if (room.currentInteraction.submittedColors[playerId]) return;
-
-    room.currentInteraction.submittedColors[playerId] = color;
-    room.currentInteraction.submissionOrder.push(playerId);
-    room.currentInteraction.pickEndsAt = tightenPickDeadline(
-      room.currentInteraction.pickEndsAt
-    );
-
-    const allSubmitted = duelists.every(id => room.currentInteraction.submittedColors[id] !== undefined);
-
-    if (allSubmitted) {
-      const hexToRgb = (hex) => {
-        if (!hex) return null;
-        const clean = hex.replace('#', '');
-        if (clean.length !== 6) return null;
-        const r = parseInt(clean.slice(0, 2), 16);
-        const g = parseInt(clean.slice(2, 4), 16);
-        const b = parseInt(clean.slice(4, 6), 16);
-        return { r, g, b };
-      };
-
-      const colorDistance = (hex1, hex2) => {
-        const c1 = hexToRgb(hex1);
-        const c2 = hexToRgb(hex2);
-        if (!c1 || !c2) return null;
-        const dr = c1.r - c2.r;
-        const dg = c1.g - c2.g;
-        const db = c1.b - c2.b;
-        return Math.sqrt(dr * dr + dg * dg + db * db);
-      };
-
-      const targetColor = room.currentInteraction.data?.targetColor;
-      const player1Id = duelists[0];
-      const player2Id = duelists[1];
-      const player1Color = room.currentInteraction.submittedColors[player1Id];
-      const player2Color = room.currentInteraction.submittedColors[player2Id];
-
-      const distance1 = colorDistance(player1Color, targetColor);
-      const distance2 = colorDistance(player2Color, targetColor);
-
-      const { winnerId, isTie } = resolvePickWinner(
-        player1Id,
-        player2Id,
-        distance1,
-        distance2
-      );
-
-      room.lastResult = {
-        type: 'pick',
-        duelists,
-        targetColor,
-        submittedColors: room.currentInteraction.submittedColors,
-        readerId: room.currentInteraction.readerId,
-        winnerId,
-        points: isTie ? 0 : 3,
-        success: !isTie,
-        isTie
-      };
-
-      if (winnerId) {
-        const winner = room.players.find(p => p.id === winnerId);
-        if (winner) winner.score += 3;
-      }
-
-      room.status = 'DUEL_REVEAL';
-      pickTimersByRoomId.clearTimer(room.id);
-    } else {
-      schedulePickTimer(room);
-    }
-
-    syncRoom(room);
-  };
-  socket.on('pick_color_submit', ({ color }) => {
-    const room = findRoom();
-    if (!room) return;
-    if (Date.now() >= room.currentInteraction?.pickEndsAt) return finishPickAtDeadline(room);
-    submitPickColor(room, socket.id, color);
-  });
-
-  socket.on('pick_color_update', ({ hue, saturation, lightness }) => {
-    const room = findRoom();
-    if (!room || !room.currentInteraction) return;
-    if (![hue, saturation, lightness].every(Number.isFinite)
-      || hue < 0 || hue > 360 || saturation < 0 || saturation > 100 || lightness < 0 || lightness > 100) return;
-
-    const playerId = socket.id;
-    const duelists = room.currentInteraction.duelists || [];
-    if (!duelists.includes(playerId)) return;
-    if (room.currentInteraction.submittedColors?.[playerId]) return;
-    if (Date.now() >= room.currentInteraction.pickEndsAt) return finishPickAtDeadline(room);
-    const l = lightness / 100;
-    const a = (saturation / 100) * Math.min(l, 1 - l);
-    const rgb = [0, 8, 4].map(n => {
-      const k = (n + hue / 30) % 12;
-      return Math.round(255 * (l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)));
-    });
-    room.currentInteraction.draftColors = room.currentInteraction.draftColors || {};
-    room.currentInteraction.draftColors[playerId] = `#${rgb.map(value => value.toString(16).padStart(2, '0')).join('')}`.toUpperCase();
-
-    socket.to(room.id).emit('pick_color_update', {
-      playerId,
-      hue,
-      saturation,
-      lightness
-    });
-  });
-
-  socket.on('pick_opponent_submitted', ({ playerId }) => {
-    const room = findRoom();
-    if (!room || !room.currentInteraction) return;
-
-    const duelists = room.currentInteraction.duelists || [];
-    if (playerId !== socket.id || !duelists.includes(socket.id)) return;
-
-    const opponentId = duelists.find(id => id !== playerId);
-    if (!opponentId) return;
-
-    io.to(opponentId).emit('pick_opponent_submitted', { playerId });
   });
 
   socket.on('ack_choose_quiz_bonus', (_payload = {}, ack) => {
