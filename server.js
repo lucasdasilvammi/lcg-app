@@ -109,6 +109,7 @@ const { registerChiffresHandlers } = require('./server/chiffresHandlers');
 const { registerPickHandlers } = require('./server/pickHandlers');
 const { registerZoomHandlers } = require('./server/zoomHandlers');
 const { registerDuelSetupHandlers } = require('./server/duelSetupHandlers');
+const { registerResolutionHandlers } = require('./server/resolutionHandlers');
 
 // Flatten quiz database
 const QUIZ_DB = Object.keys(quizData)
@@ -1460,79 +1461,10 @@ io.on('connection', (socket) => {
     syncRoom
   });
 
-  // --- RESOLUTION ---
-  socket.on('resolve_interaction', (data, ack) => {
-    const room = findRoom();
-    const reject = (reason) => {
-      if (typeof ack === 'function') ack({ ok: false, reason });
-    };
-    const interaction = room?.currentInteraction;
-    const isQuiz = interaction?.type === 'QUIZ';
-    const isDuel = ['buzzer', 'vraioufaux'].includes(interaction?.type);
-    if (!room || !interaction || (!isQuiz && !isDuel)
-      || room.status !== (isQuiz ? 'INTERACTION' : 'DUEL_GAME') || room.isPaused
-      || interaction.resolved) return reject('invalid_state');
-    if (interaction.readerId !== socket.id) return reject('forbidden');
-    if (isDuel && (!Array.isArray(interaction.duelists)
-      || !interaction.duelists.includes(interaction.buzzedPlayerId))) return reject('invalid_state');
-
-    const isObject = data !== null && typeof data === 'object' && !Array.isArray(data);
-    const selectedIndex = isObject ? data.selectedIndex : null;
-    let result;
-    if (Array.isArray(interaction.data?.options)) {
-      if (!isObject || !Number.isInteger(selectedIndex) || selectedIndex < 0
-        || selectedIndex >= interaction.data.options.length) return reject('invalid_payload');
-      // The reader records the spoken choice; only the server computes its verdict.
-      result = selectedIndex === interaction.data.correct;
-    } else {
-      result = typeof data === 'boolean' ? data : isObject ? data.correct : undefined;
-      if (typeof result !== 'boolean') return reject('invalid_payload');
-    }
-    const participantIds = isQuiz ? [room.players[room.turnIndex]?.id] : interaction.duelists;
-    if (!participantIds.every(id => room.players.some(player => player.id === id))) return reject('invalid_state');
-    interaction.resolved = true;
-
-    let winnerId = null;
-    let points = 0;
-
-    if (room.currentInteraction.type === 'QUIZ') {
-      if (result === true) {
-        winnerId = room.players[room.turnIndex].id;
-        points = room.currentInteraction.potentialPoints || 0;
-        room.players.find(p => p.id === winnerId).score += points;
-      }
-    } else if (room.currentInteraction.type === 'buzzer' || room.currentInteraction.type === 'vraioufaux') {
-      if (result === true) {
-        winnerId = room.currentInteraction.buzzedPlayerId;
-      } else {
-        const otherDuelistId = room.currentInteraction.duelists.find(id => id !== room.currentInteraction.buzzedPlayerId);
-        winnerId = otherDuelistId;
-      }
-
-      if (winnerId) {
-        points = room.currentInteraction.potentialPoints || 0;
-        room.players.find(p => p.id === winnerId).score += points;
-      }
-    }
-
-    const buzzedPlayerObj = room.players.find(p => p.id === room.currentInteraction.buzzedPlayerId);
-    room.lastResult = {
-      success: result,
-      type: room.currentInteraction.type,
-      winnerId: winnerId,
-      points: points,
-      selectedIndex: selectedIndex,
-      buzzedPlayerId: room.currentInteraction.buzzedPlayerId,
-      buzzedPlayerCharacter: buzzedPlayerObj?.character,
-      questionerId: room.currentInteraction?.questionerId || room.currentInteraction?.readerId || room.players[room.turnIndex].id,
-      correctAnswer: Array.isArray(room.currentInteraction?.data?.options)
-        ? room.currentInteraction.data.options[room.currentInteraction.data.correct]
-        : room.currentInteraction.data.answer
-    };
-
-    room.status = room.currentInteraction.type === 'QUIZ' ? 'REVEAL' : 'DUEL_REVEAL';
-    syncRoom(room);
-    if (typeof ack === 'function') ack({ ok: true });
+  registerResolutionHandlers({
+    findRoom,
+    socket,
+    syncRoom
   });
 
   socket.on('continue_to_feedback', () => {
