@@ -100,6 +100,10 @@ const {
 const { TimerRegistry } = require('./server/timerRegistry');
 const { registerSetupHandlers } = require('./server/setupHandlers');
 const { registerBonusHandlers } = require('./server/bonusHandlers');
+const {
+  continueEventInteraction,
+  registerEventHandlers
+} = require('./server/eventHandlers');
 
 // Flatten quiz database
 const QUIZ_DB = Object.keys(quizData)
@@ -1410,127 +1414,15 @@ io.on('connection', (socket) => {
     if (typeof ack === 'function') ack({ ok: true, status: room.status, playerId: activePlayer.id });
   });
 
-  socket.on('event_steal_bonus', ({ targetPlayerId } = {}, ack) => {
-    const room = findRoom();
-    if (!room) {
-      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
-      return;
-    }
-
-    const interaction = room.currentInteraction;
-    const activePlayer = room.players[room.turnIndex];
-    const targetPlayer = room.players.find(player => player.id === targetPlayerId);
-
-    if (room.status !== 'EVENT_GAME' || interaction?.type !== 'event'
-      || interaction.data?.effectType !== 'steal-random-bonus'
-      || !interaction.awaitingStealTarget || interaction.stolenBonusId || interaction.stealSkippedNoBonus) {
-      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_state' });
-      return;
-    }
-
-    if (!activePlayer || activePlayer.id !== socket.id || interaction.readerId !== socket.id) {
-      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
-      return;
-    }
-
-    if (!targetPlayer || targetPlayer.id === activePlayer.id) {
-      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
-      return;
-    }
-
-    const stolenBonusId = stealRandomBonusFromPlayer(activePlayer, targetPlayer);
-    if (!stolenBonusId) {
-      if (typeof ack === 'function') ack({ ok: false, reason: 'target_has_no_bonus' });
-      return;
-    }
-
-    interaction.awaitingStealTarget = false;
-    interaction.stolenBonusId = stolenBonusId;
-    interaction.stolenFromPlayerId = targetPlayer.id;
-    interaction.stolenToPlayerId = activePlayer.id;
-
-    syncRoom(room);
-
-    if (typeof ack === 'function') {
-      ack({
-        ok: true,
-        bonusId: stolenBonusId,
-        targetPlayerId: targetPlayer.id,
-        quantity: activePlayer.bonuses?.[stolenBonusId] || 0
-      });
-    }
-  });
-
-  socket.on('event_preview_steal_target', ({ targetPlayerId } = {}, ack) => {
-    const room = findRoom();
-    if (!room) {
-      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
-      return;
-    }
-
-    const interaction = room.currentInteraction;
-    const activePlayer = room.players[room.turnIndex];
-    const targetPlayer = room.players.find(player => player.id === targetPlayerId);
-
-    if (room.status !== 'EVENT_GAME' || interaction?.type !== 'event' || interaction.data?.effectType !== 'steal-random-bonus' || !interaction.awaitingStealTarget) {
-      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_state' });
-      return;
-    }
-
-    if (!activePlayer || activePlayer.id !== socket.id || interaction.readerId !== socket.id) {
-      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
-      return;
-    }
-
-    if (!targetPlayer || targetPlayer.id === activePlayer.id || getPlayerBonusCards(targetPlayer).length === 0) {
-      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
-      return;
-    }
-
-    interaction.previewStealTargetId = targetPlayer.id;
-    syncRoom(room);
-
-    if (typeof ack === 'function') ack({ ok: true, targetPlayerId: targetPlayer.id });
-  });
-
-  socket.on('event_swap_positions', ({ targetPlayerId } = {}, ack) => {
-    const room = findRoom();
-    if (!room) {
-      if (typeof ack === 'function') ack({ ok: false, reason: 'room_not_found' });
-      return;
-    }
-
-    ensureRoomBoardState(room);
-    const interaction = room.currentInteraction;
-    const activePlayer = getActivePlayer(room);
-    const targetPlayer = room.players.find((player) => player.id === targetPlayerId);
-
-    if (
-      room.status !== 'EVENT_GAME' ||
-      interaction?.type !== 'event' ||
-      interaction?.data?.boardEffectType !== 'swap-with-player' ||
-      !interaction.awaitingSwapTarget
-    ) {
-      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_state' });
-      return;
-    }
-
-    if (!activePlayer || activePlayer.id !== socket.id || interaction.readerId !== socket.id) {
-      if (typeof ack === 'function') ack({ ok: false, reason: 'forbidden' });
-      return;
-    }
-
-    if (!targetPlayer || targetPlayer.id === activePlayer.id) {
-      if (typeof ack === 'function') ack({ ok: false, reason: 'invalid_target' });
-      return;
-    }
-
-    interaction.swapTargetPlayerId = targetPlayer.id;
-    delete interaction.awaitingSwapTarget;
-    applyEventBoardEffect(room);
-    syncRoom(room);
-
-    if (typeof ack === 'function') ack({ ok: true, targetPlayerId: targetPlayer.id });
+  registerEventHandlers({
+    applyEventBoardEffect,
+    ensureRoomBoardState,
+    findRoom,
+    getActivePlayer,
+    getPlayerBonusCards,
+    socket,
+    stealRandomBonusFromPlayer,
+    syncRoom
   });
 
   // --- ACTIVITÉ: DESSIN DE LOGO ---
@@ -2293,38 +2185,14 @@ io.on('connection', (socket) => {
         room.lastResult.verdictViewerId = socket.id;
       }
       if (room.currentInteraction?.type === 'event') {
-        if (room.currentInteraction.data?.effectType === 'steal-random-bonus' && !room.currentInteraction.stolenBonusId && !room.currentInteraction.stealSkippedNoBonus) {
-          const activePlayer = room.players[room.turnIndex];
-          const hasStealableTarget = room.players.some(player =>
-            player.id !== activePlayer?.id && getPlayerBonusCards(player).length > 0
-          );
-
-          if (!hasStealableTarget) {
-            room.currentInteraction.stealSkippedNoBonus = true;
-            syncRoom(room);
-            return;
-          }
-
-          room.currentInteraction.awaitingStealTarget = true;
-          syncRoom(room);
-          return;
-        }
-
-        if (room.currentInteraction.awardedBonusId && !room.currentInteraction.bonusRewardRevealed) {
-          room.currentInteraction.bonusRewardRevealed = true;
-          syncRoom(room);
-          return;
-        }
-
-        if (room.currentInteraction.data?.boardEffectType === 'swap-with-player' && !room.currentInteraction.boardEffectResolved) {
-          room.currentInteraction.awaitingSwapTarget = true;
-          syncRoom(room);
-          return;
-        }
-
-        applyEventBoardEffect(room);
-
-        advanceRoomToNextTurn(room);
+        const waitsForEventStep = continueEventInteraction({
+          advanceRoomToNextTurn,
+          applyEventBoardEffect,
+          getPlayerBonusCards,
+          room,
+          syncRoom
+        });
+        if (waitsForEventStep) return;
       } else if (room.lastResult?.type === 'chiffres' && !room.lastResult.winnerId && (room.lastResult.points || 0) === 0) {
         advanceRoomToNextTurn(room);
       } else {
