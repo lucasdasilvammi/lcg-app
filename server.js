@@ -3,6 +3,11 @@ const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 const { getCommandRejection, refreshCommandContext } = require('./server/commandGuards');
+const {
+  CODE_LENGTH,
+  codesMatch,
+  createRoomCodeGenerator
+} = require('./server/roomCodes');
 
 const app = express();
 const server = http.createServer(app);
@@ -40,13 +45,9 @@ const io = new Server(server, {
 });
 
 // --- DATA LOADING ---
-const CODE_LENGTH = 5;
-const CODE_CHARACTER_COUNT = 4;
 const MAX_PLAYERS = 4;
 const VALID_BONUS_IDS = new Set(['ctrl-z', 'coffee-boss', 'choose-quiz']);
 const DEBUG_TOOLS_ENABLED = process.env.LCG_ENABLE_DEBUG_TOOLS === 'true';
-const USE_FIXED_DEBUG_ROOM_CODE = process.env.LCG_USE_FIXED_ROOM_CODE === 'true';
-const DEBUG_ROOM_CODE = [2, 2, 2, 2, 2];
 const TEST_DEFAULT_BONUSES = { 'ctrl-z': 1, 'coffee-boss': 1, 'choose-quiz': 1 };
 const quizData = require('./server/data/quiz.json');
 const eventsData = require('./server/data/events.json');
@@ -172,81 +173,13 @@ const canTriggerEvent = (room, event, activePlayer) => {
   );
 };
 
-const buildEasyPublicRoomCodes = () => {
-  const codes = [];
-  const seen = new Set();
-  const addCode = (code) => {
-    const key = JSON.stringify(code);
-    if (seen.has(key)) return;
-    seen.add(key);
-    codes.push(code);
-  };
-
-  // Prioritize very easy patterns such as AAAAB and AAABB.
-  for (let offset = 1; offset < CODE_CHARACTER_COUNT; offset += 1) {
-    for (let repeated = 0; repeated < CODE_CHARACTER_COUNT; repeated += 1) {
-      const trailing = (repeated + offset) % CODE_CHARACTER_COUNT;
-      addCode([repeated, repeated, repeated, repeated, trailing]);
-    }
-  }
-
-  for (let offset = 1; offset < CODE_CHARACTER_COUNT; offset += 1) {
-    for (let repeated = 0; repeated < CODE_CHARACTER_COUNT; repeated += 1) {
-      const trailing = (repeated + offset) % CODE_CHARACTER_COUNT;
-      addCode([repeated, repeated, repeated, trailing, trailing]);
-    }
-  }
-
-  for (let firstOffset = 1; firstOffset < CODE_CHARACTER_COUNT; firstOffset += 1) {
-    for (let secondOffset = 1; secondOffset < CODE_CHARACTER_COUNT; secondOffset += 1) {
-      if (firstOffset === secondOffset) continue;
-
-      for (let repeated = 0; repeated < CODE_CHARACTER_COUNT; repeated += 1) {
-        const fourth = (repeated + firstOffset) % CODE_CHARACTER_COUNT;
-        const fifth = (repeated + secondOffset) % CODE_CHARACTER_COUNT;
-        addCode([repeated, repeated, repeated, fourth, fifth]);
-      }
-    }
-  }
-
-  return codes;
-};
-const EASY_PUBLIC_ROOM_CODES = buildEasyPublicRoomCodes();
-let lastPublicRoomCodeKey = null;
-const createRandomCode = () => Array.from(
-  { length: CODE_LENGTH },
-  () => Math.floor(Math.random() * CODE_CHARACTER_COUNT)
-);
-const generateRoomId = () => Math.random().toString(36).substr(2, 9);
-const rememberPublicRoomCode = (code) => {
-  lastPublicRoomCodeKey = JSON.stringify(code);
-  return [...code];
-};
-const generateGameCode = () => {
-  if (USE_FIXED_DEBUG_ROOM_CODE) return [...DEBUG_ROOM_CODE];
-
-  const usedCodeKeys = new Set(
-    Object.values(rooms).map((room) => JSON.stringify(room.code))
-  );
-  const codeConflicts = (code) => (
-    usedCodeKeys.has(JSON.stringify(code))
-    || Boolean(findReconnectInviteByCode(code))
-  );
-  const availableEasyCodes = EASY_PUBLIC_ROOM_CODES.filter((code) => !codeConflicts(code));
-  const variedEasyCodes = availableEasyCodes.filter((code) => JSON.stringify(code) !== lastPublicRoomCodeKey);
-  const availableEasyCode = getRandomItem(variedEasyCodes.length > 0 ? variedEasyCodes : availableEasyCodes);
-
-  if (availableEasyCode) return rememberPublicRoomCode(availableEasyCode);
-
-  for (let attempt = 0; attempt < 80; attempt += 1) {
-    const fallbackCode = createRandomCode();
-    if (!codeConflicts(fallbackCode)) return rememberPublicRoomCode(fallbackCode);
-  }
-
-  return rememberPublicRoomCode(createRandomCode());
-};
-const generatePrivateCode = () => createRandomCode();
-const codesMatch = (left, right) => JSON.stringify(left) === JSON.stringify(right);
+const roomCodeGenerator = createRoomCodeGenerator();
+const generateRoomId = () => roomCodeGenerator.generateRoomId();
+const generateGameCode = () => roomCodeGenerator.generateGameCode({
+  existingRoomCodes: Object.values(rooms).map(room => room.code),
+  reconnectInviteExists: code => Boolean(findReconnectInviteByCode(code))
+});
+const generatePrivateCode = () => roomCodeGenerator.generatePrivateCode();
 const getRoomReconnectInvites = (room) => {
   if (!room.reconnectInvites || typeof room.reconnectInvites !== 'object') {
     room.reconnectInvites = {};
