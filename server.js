@@ -702,6 +702,7 @@ const freezeFinalRankings = (room) => {
 const advanceRoomToNextTurn = (room) => {
   if (!room || !Array.isArray(room.players) || room.players.length === 0) return;
 
+  delete room.actionStart;
   delete room.currentTurnBonusUse;
   const nextIndex = (room.turnIndex + 1) % room.players.length;
   if (nextIndex === 0) {
@@ -838,6 +839,7 @@ const replacePlayerIdInRoom = (room, oldId, newId) => {
   if (room.adminId === oldId) room.adminId = newId;
   if (room.pendingQuestionerId === oldId) room.pendingQuestionerId = newId;
   if (room.pendingQuizPlayerId === oldId) room.pendingQuizPlayerId = newId;
+  if (room.actionStart?.playerId === oldId) room.actionStart.playerId = newId;
   if (room.currentTurnBonusUse?.playerId === oldId) room.currentTurnBonusUse.playerId = newId;
   if (room.pendingChooseQuizBonus?.byPlayerId === oldId) room.pendingChooseQuizBonus.byPlayerId = newId;
   if (room.pendingChooseQuizBonus?.targetPlayerId === oldId) room.pendingChooseQuizBonus.targetPlayerId = newId;
@@ -1089,6 +1091,9 @@ io.on('connection', (socket) => {
     clearRoomUndo(room.id);
 
     const beforeCount = room.players.length;
+    const previousTurnIndex = room.turnIndex;
+    const activePlayerId = room.players[room.turnIndex]?.id;
+    const removedIds = new Set(removedPlayers.map(player => player.id));
     room.players = room.players.filter((p) => !removedPlayers.includes(p));
 
     if (room.players.length === 0) {
@@ -1121,8 +1126,23 @@ io.on('connection', (socket) => {
       console.log(`👑 admin reassigned in room ${room.id}: ${previousAdminId} -> ${room.adminId}`);
     }
 
-    if (room.turnIndex >= room.players.length) {
-      room.turnIndex = 0;
+    const activeIndex = room.players.findIndex(player => player.id === activePlayerId);
+    room.turnIndex = activeIndex >= 0 ? activeIndex : previousTurnIndex % room.players.length;
+    if (activeIndex >= 0 && room.currentTurnBonusUse?.turnIndex === previousTurnIndex) {
+      room.currentTurnBonusUse.turnIndex = activeIndex;
+    }
+    if (Array.isArray(room.pendingTurnOrderIds)) {
+      room.pendingTurnOrderIds = room.pendingTurnOrderIds.filter(id => !removedIds.has(id));
+    }
+    for (const id of removedIds) {
+      if (room.reconnectInvites) delete room.reconnectInvites[id];
+      if (room.quizCategoryHistoryByPlayer) delete room.quizCategoryHistoryByPlayer[id];
+    }
+    if (room.pendingChooseQuizBonus && [room.pendingChooseQuizBonus.byPlayerId,
+      room.pendingChooseQuizBonus.targetPlayerId].some(id => removedIds.has(id))) {
+      delete room.pendingChooseQuizBonus;
+      delete room.pendingQuizDifficulty;
+      if (room.status === 'QUIZ_OPTIONS') room.pendingQuestionerId = room.players[room.turnIndex]?.id;
     }
 
     if (Array.isArray(room.finishedPlayerIds)) {
@@ -1137,6 +1157,45 @@ io.on('connection', (socket) => {
       }
     }
 
+    const ci = room.currentInteraction;
+    const involvedIds = [activePlayerId, ci?.readerId, ci?.questionerId,
+      ...(ci?.duelists || []), ...(ci?.participants || []),
+      ...(room.status === 'FEEDBACK' ? [room.lastResult?.questionerId,
+        room.lastResult?.readerId, room.lastResult?.winnerId, ...(room.lastResult?.winnerIds || [])] : [])];
+    const hasOpenAction = ci || ['QUIZ_OPTIONS', 'FEEDBACK'].includes(room.status);
+    if (hasOpenAction && involvedIds.some(id => removedIds.has(id))) {
+      const settled = ['REVEAL', 'DUEL_REVEAL', 'ACTIVITE_REVEAL', 'FEEDBACK'].includes(room.status)
+        || ci?.resolved || ci?.claimed || ci?.stolenBonusId || ci?.awardedBonusId || ci?.boardEffectResolved;
+      for (const timers of [activiteTimersByRoomId, activiteVoteTimersByRoomId, pickTimersByRoomId]) {
+        clearTimeout(timers.get(room.id));
+        timers.delete(room.id);
+      }
+      cleanupActivitePhotoStore(room.id);
+      if (activeIndex >= 0 && !settled) {
+        const start = room.actionStart;
+        if (start?.playerId === activePlayerId) {
+          room.players[activeIndex].boardProgress = { ...start.boardProgress };
+        }
+        room.status = 'GAME_LOOP';
+      } else if (activeIndex >= 0) {
+        advanceRoomToNextTurn(room);
+      } else {
+        room.status = previousTurnIndex >= room.players.length ? 'ROUND_END' : 'TURN_START';
+        delete room.currentTurnBonusUse;
+      }
+      room.currentInteraction = null;
+      room.lastResult = null;
+      for (const field of ['actionStart', 'duelAnswers', 'pendingCategory', 'pendingQuizPlayerId',
+        'pendingQuestionerId', 'pendingQuizDifficulty', 'availableQuizDifficulties']) delete room[field];
+    } else if (activeIndex < 0 && ['TURN_START', 'GAME_LOOP'].includes(room.status)) {
+      room.status = previousTurnIndex >= room.players.length ? 'ROUND_END' : 'TURN_START';
+      delete room.currentTurnBonusUse;
+    }
+    if (room.status === 'TURN_START' && room.pendingGameEnd?.playerId === room.players[room.turnIndex]?.id) {
+      freezeFinalRankings(room);
+      room.status = 'GAME_END';
+    }
+    if (room.isPaused && removedIds.has(room.pausedById)) room.pausedById = room.adminId;
     syncRoom(room);
 
     removedPlayers.forEach((removedPlayer) => {
@@ -1888,6 +1947,7 @@ io.on('connection', (socket) => {
 
     const commitTileSelection = () => {
       captureUndoSnapshot(room);
+      room.actionStart = { playerId: currentPlayer.id, boardProgress: { ...currentPlayer.boardProgress } };
       applyTileSelectionToPlayer(currentPlayer, actionType);
     };
 

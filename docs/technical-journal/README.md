@@ -37,3 +37,5 @@ Garder les entrées courtes, pratiques et faciles à relire plus tard.
 - [2026-09-18 — Échéance Pick serveur](decisions/2026-09-18-pick-echeance-serveur.md) — acceptée.
 
 - [2026-09-19 — Contexte des commandes](decisions/2026-09-19-contexte-commandes.md) — acceptée.
+
+- [2026-09-19 — Retrait en cours de jeu](decisions/2026-09-19-retrait-en-cours-de-jeu.md) — acceptée.
