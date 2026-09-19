@@ -43,3 +43,41 @@ deux questions, répétitions des sous-actions d’événement (dont vol de bonu
 validation exhaustive des champs imbriqués, cas de retrait de participant au
 milieu d’un duel/activité, tests de partie complète et validation mobile.
 Les tests des scénarios existants ne suffisent pas à déclarer l’étape 2 terminée.
+
+## Complément du 19 septembre 2026
+
+Les constats ouverts ci-dessus sont historiques. Derniers lots :
+
+- Chaque interaction a un identifiant ; commandContextId lie les commandes à
+  leur phase, tour, photo, buzz et sous-étape. Une commande ancienne ou sans
+  contexte est refusée avant mutation, y compris après undo. Client, simulateurs
+  et émetteurs directs Pick/Chiffres sont migrés.
+- Vol : choix de cible requis et effet consommé une seule fois ; échange de
+  positions également testé contre les répétitions.
+- Champs consommés : types contrôlés avant conversion, ordre complet/unique,
+  codes entiers, identifiants scalaires, difficultés, couleurs/HSL, chiffres,
+  votes/verdicts et photos base64 JPEG/PNG/WebP de taille bornée.
+- Retrait définitif : une épreuve devenue impossible est annulée sans nouveaux
+  points ; le joueur actif restant récupère sa progression avant la case.
+  Les résultats acquis restent conservés. Timers/photos sont libérés, le joueur
+  actif est conservé si un joueur précédent part. Le retrait d'un spectateur
+  ne supprime pas un duel jouable. Une déconnexion garde la place et l'épreuve.
+- Parcours ajouté jusqu'au classement final : quiz, cinq duels, activité avec
+  feedbacks de plusieurs gagnants, changements de manche et fin de partie.
+  Les boutons de soumission se verrouillent sur la confirmation serveur.
+
+Décisions : contexte des commandes et retrait en cours de jeu, datées du
+19 septembre dans le journal technique. Les anciens clients sans contexte
+doivent être rechargés lors d'une future livraison conjointe client/serveur.
+
+Limites : la couverture n'est pas une validation exhaustive du protocole.
+Restent à éprouver sur navigateurs/téléphones les mises en veille, reprises
+réseau, caméra/upload, doubles gestes et changements de contexte pendant une
+saisie. Les combinaisons de retraits/reconnexions multiples, d'ordres différés,
+de bonus et de fin de partie méritent des parcours supplémentaires. Les images
+sont validées sur leur format de transport, pas décodées comme preuve de contenu.
+Les étapes 1–2 ne sont donc pas déclarées intégralement closes. Étapes 3–6 exclues.
+
+Validation finale de session : 109/109 tests sur 21 suites, lint/build temporaire,
+11 simulations après migration du protocole et 7 collisions bonus après les
+derniers correctifs. Voir la clôture du 19 septembre dans le journal mensuel.
