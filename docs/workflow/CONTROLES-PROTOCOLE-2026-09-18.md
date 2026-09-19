@@ -94,3 +94,15 @@ veille/réseau, caméra, gestes répétés et réinvitation pendant une épreuve
 bloquent plus le nettoyage structurel de l'étape 3, mais tout défaut reproduit
 rouvrira le correctif concerné avec un test permanent. Cette clôture n'affirme
 pas une preuve exhaustive de toutes les combinaisons possibles du protocole.
+
+## Clôture de l'étape 3
+
+Clôture décidée le 19 septembre 2026 selon le critère de l'audit : `server.js`
+est l'unique moteur, les tests et dépendances serveur sont pilotés à la racine,
+et le build n'installe plus de dépendances. Le runtime validé est Node 22.19.0
+avec npm 10 ; le client conserve son verrou séparé.
+
+Une copie Git propre a réussi `npm ci`, `npm --prefix client ci`, les 109 tests,
+le lint et le build racine. Les restes de template et symboles sans usage
+confirmé ont également été retirés. Le dossier `build/` du checkout principal
+est resté intact. Les étapes 4–6 ne sont pas commencées.

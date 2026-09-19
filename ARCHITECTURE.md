@@ -48,8 +48,8 @@ But : documenter l'organisation du projet et indiquer où trouver chaque respons
     - `perso/` - icônes SVG des 4 personnages code (donatien, lucien, alan, virginie)
     - `game/` - assets pour les interactions (buzzer.svg, questions/, categorie/, defi-tag/)
 
-- `/server` : API socket + logique de jeu (Express + socket.io)
-  - `index.js` - logique serveur : gestion des rooms, events sockets, état (rooms), règles de jeu, validation personnages
+- `/server.js` : point d'entrée unique Express/Socket.IO et orchestration du jeu
+- `/server` : modules métier, données et tests du serveur
   - `data/`
     - `quiz.json` - questions de quiz par catégorie et difficulté
     - `duels.json` - questions de défis par type (buzzer, vraioufaux, chiffres)
@@ -92,7 +92,7 @@ But : documenter l'organisation du projet et indiquer où trouver chaque respons
   - Full-body (`SelectCharacter`, `GameLoop`) : `/public/room/ig/{char}.png`, `-choix.png`, `-pris.png`
   - Icônes (`DefineOrder`, `RoundEnd`, joueurs du tour) : `/public/ordre/{char}.svg`
   - Code de la partie : `/public/perso/{CODE_CHARACTER.name.toLowerCase()}.svg`
-- Les changements d'API socket (nom d'event, shape du payload) doivent être reflétés côté client `SocketContext.jsx` et côté serveur `index.js` simultanément.
+- Les changements d'API socket (nom d'event, shape du payload) doivent être reflétés côté client `SocketContext.jsx` et côté serveur `server.js` simultanément.
 - Utiliser `room` envoyé par `update_room_state` comme source de vérité côté client.werId`).
 - Divers petits composants : `Join`, `Lobby`, `SelectCharacter`, `DefineOrder`, `RoundEnd`, `Toasts` (notifications), `CodeDisplay`.
 
@@ -103,7 +103,7 @@ But : documenter l'organisation du projet et indiquer où trouver chaque respons
 - Phases/statuss : `LOBBY` → `SELECT_CHARACTER` → `DEFINE_ORDER` → `GAME_LOOP` → `QUIZ_OPTIONS` → `INTERACTION` → `REVEAL` → `FEEDBACK` → `ROUND_END`.
 - Points (depuis 2026-01-15) : QUIZ: `difficulty` points (1-5 selon difficulté choisie). DÉFI: 2 points fixes.
 - Évènements socket émis par le client : `create_room`, `join_room_with_code`, `start_game`, `pick_character` (avec string ID), `confirm_selection`, `start_game_loop`, `trigger_action` (ex: QUIZ/DEFI), `start_specific_quiz`, `player_buzz`, `resolve_interaction`, `continue_to_feedback`, `next_turn`, `start_new_round`.
-- Pour ajouter un nouveau type d'interaction : mettre à jour `server/index.js` pour définir `currentInteraction`, mettre à jour `Interaction.jsx` / `Reveal.jsx` / `Feedback.jsx` côté client et les transitions d'état.
+- Pour ajouter un nouveau type d'interaction : mettre à jour `server.js` pour définir `currentInteraction`, mettre à jour les vues concernées côté client et les transitions d'état.
 
 ---
 
@@ -121,15 +121,15 @@ But : documenter l'organisation du projet et indiquer où trouver chaque respons
 
 ## Exécution locale
 - Démarrer le serveur :
-  - `cd server` → `npm run dev` (par défaut écoute `PORT=3001`, utilisable en changeant `PORT`)
+  - depuis la racine, `npm run server:dev` (par défaut écoute `PORT=3001`, utilisable en changeant `PORT`)
 - Démarrer le client :
-  - `cd client` → `npm run dev` (Vite, habituellement sur `5173`)
+  - depuis la racine, `npm run client:dev` (Vite, habituellement sur `5173`)
 - Tester rapidement : ouvrir deux onglets du client et reproduire un flow (création salle, join, trigger QUIZ).
 
 ---
 
 ## Bonnes pratiques et conventions
-- Les changements d'API socket (nom d'event, shape du payload) doivent être reflétés côté client `SocketContext.jsx` et côté serveur `index.js` simultanément.
+- Les changements d'API socket (nom d'event, shape du payload) doivent être reflétés côté client `SocketContext.jsx` et côté serveur `server.js` simultanément.
 - Utiliser `room` envoyé par `update_room_state` comme source de vérité côté client (ne pas stocker copie locale persistante autre que celle fournie par le context).
 - Lors d’ajout d’un nouveau écran de vue, ajouter la logique d’état dans `App.jsx` (`view` basé sur `roomData.status`).
 
@@ -211,9 +211,8 @@ lcg-app/
 │     ├─ room/ (lobby assets)
 │     ├─ ordre/ (SVG personnages)
 │     └─ perso/ (icônes code)
+├─ server.js
 └─ server/
-   ├─ index.js
-   ├─ package.json
    ├─ data/
    │  ├─ quiz.json
    │  └─ duels.json

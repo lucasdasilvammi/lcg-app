@@ -2,6 +2,12 @@
 
 Derniere mise a jour : 2026-09-13
 
+> Mise a jour du 2026-09-19 : `server.js` est desormais l'unique moteur. Les
+> tests Jest et les dependances serveur sont pilotes depuis la racine sous
+> Node 22.19.0/npm 10 ; `server/index.js` et le projet npm secondaire ont ete
+> retires. Les passages plus bas qui les decrivent documentent l'etat historique
+> du POC et ne constituent plus des instructions d'execution.
+
 Objectif : documenter comment le projet existe techniquement aujourd'hui, pourquoi il a pris cette forme, et quelle trajectoire suivre pour le transformer en application mobile Android/iOS commercialisable sans repartir de zero.
 
 ## Conclusion courte
