@@ -8,6 +8,11 @@ const {
   codesMatch,
   createRoomCodeGenerator
 } = require('./server/roomCodes');
+const {
+  canInvitePlayerToReconnect,
+  createReconnectInviteManager,
+  pickNextAdminId
+} = require('./server/roomMembership');
 
 const app = express();
 const server = http.createServer(app);
@@ -175,44 +180,21 @@ const canTriggerEvent = (room, event, activePlayer) => {
 
 const roomCodeGenerator = createRoomCodeGenerator();
 const generateRoomId = () => roomCodeGenerator.generateRoomId();
+const generatePrivateCode = () => roomCodeGenerator.generatePrivateCode();
+const reconnectInviteManager = createReconnectInviteManager({
+  codesMatch,
+  generatePrivateCode,
+  getRooms: () => Object.values(rooms)
+});
+const {
+  findReconnectInviteByCode,
+  generateUniqueReconnectCode,
+  getRoomReconnectInvites
+} = reconnectInviteManager;
 const generateGameCode = () => roomCodeGenerator.generateGameCode({
   existingRoomCodes: Object.values(rooms).map(room => room.code),
   reconnectInviteExists: code => Boolean(findReconnectInviteByCode(code))
 });
-const generatePrivateCode = () => roomCodeGenerator.generatePrivateCode();
-const getRoomReconnectInvites = (room) => {
-  if (!room.reconnectInvites || typeof room.reconnectInvites !== 'object') {
-    room.reconnectInvites = {};
-  }
-  return room.reconnectInvites;
-};
-const canInvitePlayerToReconnect = (player) => {
-  if (!player) return false;
-  return player.presence === 'disconnected'
-    || player.isDisconnected
-    || player.status === 'disconnected'
-    || player.connected === false;
-};
-const findReconnectInviteByCode = (inputCode) => {
-  for (const room of Object.values(rooms)) {
-    const invites = getRoomReconnectInvites(room);
-    for (const invite of Object.values(invites)) {
-      if (invite && codesMatch(invite.code, inputCode)) {
-        return { room, invite };
-      }
-    }
-  }
-  return null;
-};
-const generateUniqueReconnectCode = (room) => {
-  for (let attempt = 0; attempt < 80; attempt += 1) {
-    const code = generatePrivateCode();
-    const conflictsRoomCode = Object.values(rooms).some(existingRoom => codesMatch(existingRoom.code, code));
-    const conflictsInvite = Boolean(findReconnectInviteByCode(code));
-    if (!conflictsRoomCode && !conflictsInvite && !codesMatch(room.code, code)) return code;
-  }
-  return generatePrivateCode();
-};
 
 // --- MIDDLEWARE ---
 app.use(express.json());
@@ -594,15 +576,6 @@ io.on('connection', (socket) => {
     Object.assign(room, cloneRoomState(snapshot));
     clearRoomUndo(room.id);
     return true;
-  };
-  const pickNextAdminId = (room, excludedPlayerId = null) => {
-    if (!room || !Array.isArray(room.players) || room.players.length === 0) return null;
-    const candidates = room.players.filter((player) => player.id !== excludedPlayerId);
-    const connectedPlayer = candidates.find((player) => (
-      player.connected !== false && !player.isWaiting && !player.isDisconnected
-    ));
-    const waitingPlayer = candidates.find((player) => player.isWaiting && !player.isDisconnected);
-    return (connectedPlayer || waitingPlayer || candidates[0] || null)?.id || null;
   };
   const removePlayerFromRoom = ({ room, playerId = null, playerSessionToken = null, reason = 'unknown' }) => {
     if (!room) return;
