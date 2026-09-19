@@ -108,6 +108,7 @@ const { registerActivityHandlers } = require('./server/activityHandlers');
 const { registerChiffresHandlers } = require('./server/chiffresHandlers');
 const { registerPickHandlers } = require('./server/pickHandlers');
 const { registerZoomHandlers } = require('./server/zoomHandlers');
+const { registerDuelSetupHandlers } = require('./server/duelSetupHandlers');
 
 // Flatten quiz database
 const QUIZ_DB = Object.keys(quizData)
@@ -1339,38 +1340,12 @@ io.on('connection', (socket) => {
     tightenPickDeadline
   });
 
-  socket.on('start_duel', () => {
-    const room = findRoom();
-    if (!room || !room.currentInteraction) return;
-    room.status = 'DUEL_RULES';
-    syncRoom(room);
-  });
-
-  socket.on('acknowledge_rules', () => {
-    const room = findRoom();
-    if (!room || !room.currentInteraction) return;
-    const duelists = room.currentInteraction.duelists || [];
-    const acks = room.currentInteraction.acknowledgedRules || [];
-
-    const isDuelist = duelists.includes(socket.id);
-    if (isDuelist && !acks.includes(socket.id)) {
-      room.currentInteraction.acknowledgedRules = [...acks, socket.id];
-    }
-
-    const updatedAcks = room.currentInteraction.acknowledgedRules || [];
-    const allAcknowledged = duelists.length > 0 && duelists.every(id => updatedAcks.includes(id));
-
-    if (allAcknowledged) {
-      if (room.currentInteraction.type === 'zoom') {
-        room.currentInteraction.zoomStartAt = Date.now() + 3000;
-      } else if (room.currentInteraction.type === 'pick') {
-        room.currentInteraction.pickEndsAt = createPickDeadline();
-      }
-      room.status = 'DUEL_GAME';
-      if (room.currentInteraction.type === 'pick') schedulePickTimer(room);
-    }
-
-    syncRoom(room);
+  registerDuelSetupHandlers({
+    createPickDeadline,
+    findRoom,
+    schedulePickTimer,
+    socket,
+    syncRoom
   });
 
   registerChiffresHandlers({
