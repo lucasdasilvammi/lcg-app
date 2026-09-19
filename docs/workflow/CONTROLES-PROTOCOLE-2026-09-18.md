@@ -81,3 +81,16 @@ Les étapes 1–2 ne sont donc pas déclarées intégralement closes. Étapes 3�
 Validation finale de session : 109/109 tests sur 21 suites, lint/build temporaire,
 11 simulations après migration du protocole et 7 collisions bonus après les
 derniers correctifs. Voir la clôture du 19 septembre dans le journal mensuel.
+
+## Critère de sortie des étapes 1–2
+
+Clôture décidée le 19 septembre 2026 : les étapes 1–2 sont terminées dans leur
+périmètre automatisé. Le serveur principal porte les tests ; les régressions
+confirmées, rôles, phases, répétitions, entrées invalides, reconnexions, timers,
+retraits et un parcours jusqu'au classement final sont couverts et verts.
+
+Les essais sur téléphones réels restent une validation préversion séparée :
+veille/réseau, caméra, gestes répétés et réinvitation pendant une épreuve. Ils ne
+bloquent plus le nettoyage structurel de l'étape 3, mais tout défaut reproduit
+rouvrira le correctif concerné avec un test permanent. Cette clôture n'affirme
+pas une preuve exhaustive de toutes les combinaisons possibles du protocole.
