@@ -43,3 +43,5 @@ Garder les entrées courtes, pratiques et faciles à relire plus tard.
 - [2026-09-19 — Serveur, runtime et commandes uniques](decisions/2026-09-19-serveur-runtime-commandes-uniques.md) — acceptée.
 
 - [2026-09-20 — Build généré et références graphiques](decisions/2026-09-20-build-genere-et-references-graphiques.md) — acceptée.
+
+- [2026-09-20 — Main de production et branche V1](decisions/2026-09-20-main-production-et-branche-v1.md) — acceptée.
