@@ -41,3 +41,5 @@ Garder les entrées courtes, pratiques et faciles à relire plus tard.
 - [2026-09-19 — Retrait en cours de jeu](decisions/2026-09-19-retrait-en-cours-de-jeu.md) — acceptée.
 
 - [2026-09-19 — Serveur, runtime et commandes uniques](decisions/2026-09-19-serveur-runtime-commandes-uniques.md) — acceptée.
+
+- [2026-09-20 — Build généré et références graphiques](decisions/2026-09-20-build-genere-et-references-graphiques.md) — acceptée.
