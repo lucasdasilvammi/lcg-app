@@ -25,19 +25,21 @@ Elle doit etre reconstruite en code pour rester dynamique.
 
 ## Dossier de travail actuel
 
-Le dossier cree pour preparer cette animation est :
+Les sources de creation conservees pour cette animation sont archivees dans :
 
-`client/src/anim-VS`
+`docs/graphic-references/anim-vs`
 
-Il contient les assets de reference et les exports de l'animation After Effects.
+Elles restent disponibles pour documenter le travail sans etre publiees avec le
+client. Les assets utilises par l'application restent dans
+`client/public/anim-vs`.
 
 ## Assets actuellement identifies
 
-Dans `client/src/anim-VS`, on a notamment repere :
+Dans `docs/graphic-references/anim-vs/source-files`, on trouve notamment :
 
 - `anime écran VS.mp4` : export video de reference de l'animation.
 - `motion écran VS.aep` : fichier After Effects source.
-- `frame by frame/` : export image par image de l'animation.
+- `../frame-by-frame/` : export image par image de l'animation.
 - `cube.ai` : source Illustrator du cube.
 - `cube.svg` : version SVG du cube central.
 - `Défi donatien.png` : image de reference de l'etat final.
@@ -50,7 +52,8 @@ Dans `client/src/anim-VS`, on a notamment repere :
 - `V.png` et `S.png` : lettres separees.
 - `vs.png` : visuel VS complet.
 
-Le dossier `frame by frame` contient environ 60 images JPG, correspondant a l'animation exportee frame par frame.
+Le dossier `docs/graphic-references/anim-vs/frame-by-frame` contient environ
+60 images JPG, correspondant a l'animation exportee frame par frame.
 
 ## Ce qui a ete observe dans l'animation
 
