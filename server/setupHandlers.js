@@ -1,6 +1,6 @@
-const VALID_CHARACTERS = new Set([
-  'donatien', 'barbara', 'alan', 'alex', 'lucien', 'lucie', 'virginie', 'tanguy'
-]);
+const characters = require('../shared/characters.json');
+
+const VALID_CHARACTERS = new Set(characters.map((character) => character.id));
 
 const registerSetupHandlers = ({ socket, findRoom, syncRoom, resolveTurnOrderPayload }) => {
   socket.on('start_game', () => {

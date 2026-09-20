@@ -8,6 +8,7 @@ import { BONUS_CATALOG, EMPTY_BONUS_SLOTS } from '../data/bonusCatalog'
 import RulesOverlay from './regles/RulesOverlay'
 import { agree, formatCharacterName, queCharacter } from '../utils/frenchGrammar'
 import { requestAppFullscreen } from '../utils/fullscreen'
+import { CODE_CHARACTERS } from '../data/characters'
 
 const popupStyles = `
   @keyframes settingsSlideUpFromBottom {
@@ -49,13 +50,6 @@ const popupStyles = `
   }
 
 `
-
-const CODE_CHARACTERS = [
-  { id: 0, name: 'Donatien' },
-  { id: 1, name: 'Lucien' },
-  { id: 2, name: 'Alan' },
-  { id: 3, name: 'Virginie' }
-]
 
 function MenuIconButton({ label, icon, onClick, onPointerDown }) {
   return (

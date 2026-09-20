@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import ButtonWithIcon from '../components/ButtonWithIcon'
 import CharacterCard from '../components/CharacterCard'
+import { PLAYABLE_CHARACTERS } from '../data/characters'
 
 const popupStyles = `
   @keyframes slideUpFromBottom {
@@ -29,49 +30,6 @@ const popupStyles = `
     animation: slideDownToBottom 0.25s ease-in;
   }
 `
-
-const CHARACTERS = [
-  {
-    id: 'donatien',
-    name: 'Donatien',
-    description: 'Tu n’es surement pas le stagiaire qui rapporte le plus au patron mais vu que tu passes ton temps à tricher et à exploiter les failles, tu pourrais surprendre tout le monde.'
-  },
-  {
-    id: 'barbara',
-    name: 'Barbara',
-    description: 'Tu passes ton temps à la bibliothèque et ce serait génial si seulement t’avais appris autre chose que le nom des familles d’oiseaux en Alsace...'
-  },
-  {
-    id: 'alan',
-    name: 'Alan',
-    description: 'Toi... toi... toi\nt’as une tête à connaître le goûts des crayons de couleurs...\nVoila quoi... bonne chance...'
-  },
-  {
-    id: 'alex',
-    name: 'Alex',
-    description: 'T’es pas la star que tu penses être, tu ferais mieux d’aller réviser que de passer tes journées à scroll sur TikTok'
-  },
-  {
-    id: 'lucien',
-    name: 'Lucien',
-    description: 'Tu passe tellement de temps sur ton PC que j’ai plus de chance de voir Alan lire un livre (à l’endroit !) que de te voir dehors...'
-  },
-  {
-    id: 'lucie',
-    name: 'Lucie',
-    description: 'Tu n’as jamais réussi à dire non à quelqu’un et la dernière fois ça t’as couté un rein... Donc va falloir s’affirmer maintenant.'
-  },
-  {
-    id: 'virginie',
-    name: 'Virginie',
-    description: 'Tu es quelqu’un de timide et tu comprends pas toujours ce qu’on te demande (et c’est ok !) mais c’est ton moment pour prouver ta vraie valeur.'
-  },
-  {
-    id: 'tanguy',
-    name: 'Tanguy',
-    description: 'Y’a les gens extravertis, introverti et il y a Tanguy, il porte bien son prénom... Sans maman, comment qu’on fait ?'
-  }
-]
 
 export default function SelectCharacter({ roomData, pickCharacter, currentUserId, socket }) {
   const [selectedCharForPopup, setSelectedCharForPopup] = useState(null)
@@ -109,7 +67,7 @@ export default function SelectCharacter({ roomData, pickCharacter, currentUserId
     }, 250)
   }
 
-  const selectedCharData = selectedCharForPopup ? CHARACTERS.find(c => c.id === selectedCharForPopup) : null
+  const selectedCharData = selectedCharForPopup ? PLAYABLE_CHARACTERS.find(c => c.id === selectedCharForPopup) : null
 
   const getCharacterImage = (charId, takenBy, isMe) => {
     if (isMe) return `/room/ig/${charId}-choix.png`
@@ -144,7 +102,7 @@ export default function SelectCharacter({ roomData, pickCharacter, currentUserId
           <h2 className="font-hakobi text-4xl uppercase text-light">Incarne ton stagiaire</h2>
 
           <div className="my-auto grid max-w-4xl grid-cols-2 gap-6">
-            {CHARACTERS.map((char) => {
+            {PLAYABLE_CHARACTERS.map((char) => {
               const takenBy = roomData.players.find(p => p.character === char.id)
               const isTaken = Boolean(takenBy)
               const isLocked = Boolean(takenBy?.characterLocked)

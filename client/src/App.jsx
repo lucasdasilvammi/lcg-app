@@ -38,13 +38,7 @@ import Toasts from './components/Toasts'
 import SettingsMenu from './menu/SettingsMenu'
 import MenuOnboarding from './menu/MenuOnboarding'
 import { isFullscreenActive, isIosDevice, requestAppFullscreen } from './utils/fullscreen'
-
-const CODE_CHARACTERS = [
-  { id: 0, name: "Donatien" },
-  { id: 1, name: "Lucien" },
-  { id: 2, name: "Alan" },
-  { id: 3, name: "Virginie" }
-];
+import { CODE_CHARACTERS } from './data/characters'
 
 const PLAYER_MENU_ONBOARDING_STORAGE_KEY = 'lcg-player-menu-onboarding-seen-v3'
 const ADMIN_MENU_ONBOARDING_STORAGE_KEY = 'lcg-admin-menu-onboarding-seen-v2'

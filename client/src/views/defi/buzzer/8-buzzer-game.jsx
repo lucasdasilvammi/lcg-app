@@ -6,6 +6,7 @@ import DuelNavbar from '../shared/DuelNavbar'
 import { getOrderedDuelPlayers } from '../shared/duelPlayers'
 import QuizAnswerButton from '../../../components/QuizAnswerButton'
 import ScoreBar from '../../../components/ScoreBar'
+import { getCharacterPrimaryColor, getCharacterSecondaryColor } from '../../../data/characters'
 
 export default function DuelGame({ roomData, playerBuzz, resolveInteraction, currentUserId }) {
   const [selectedAnswer, setSelectedAnswer] = useState({ key: '', index: null })
@@ -26,34 +27,6 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, cur
   
   const readerPlayer = roomData.players.find(p => p.id === readerId)
   const buzzedPlayer = buzzedPlayerId ? roomData.players.find(p => p.id === buzzedPlayerId) : null
-  const getCharacterColor = (charId) => {
-    const colors = {
-      alan: '#06C0F9',
-      donatien: '#FF37A5',
-      lucien: '#20CA4B',
-      virginie: '#F63609',
-      barbara: '#9D0AFF',
-      alex: '#FFC400',
-      lucie: '#1C51FF',
-      tanguy: '#FF8A04',
-    }
-    return colors[charId] || '#FFF6EF'
-  }
-
-  const getCharacterSecondaryColor = (charId) => {
-    const secondaryColors = {
-      alan: '#0D3C4A',
-      donatien: '#4C1A35',
-      lucien: '#143E1F',
-      virginie: '#3F150B',
-      barbara: '#260A3A',
-      alex: '#4C3E0F',
-      lucie: '#0C173C',
-      tanguy: '#4C2E0D',
-    }
-    return secondaryColors[charId] || '#101010'
-  }
-  
   // Support buzzer et vraioufaux
   if (type === 'buzzer' || type === 'vraioufaux') {
     return (
@@ -136,7 +109,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, cur
                 <div className="flex flex-col items-center px-8 gap-6">
                   <h2 
                     className="font-hakobi text-5xl uppercase"
-                    style={{ color: getCharacterColor(duelPlayers.find(p => p.id === currentUserId)?.character) }}
+                    style={{ color: getCharacterPrimaryColor(duelPlayers.find(p => p.id === currentUserId)?.character) }}
                   >
                     Votre buzzer
                   </h2>
@@ -146,7 +119,7 @@ export default function DuelGame({ roomData, playerBuzz, resolveInteraction, cur
                   >
                     <svg width="393" height="400" viewBox="0 0 393 400" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-fit">
                       <path d="M173.46 123.505L145.13 137.145L131.637 165.475V247.316L173.46 279.843L238.513 270.4L257.4 247.316V165.475L238.513 137.145L207.036 123.505H173.46Z" fill={getCharacterSecondaryColor(duelPlayers.find(p => p.id === currentUserId)?.character)}/>
-                      <path fillRule="evenodd" clipRule="evenodd" d="M30.3972 392.758L119.046 400L343.544 400L381.491 389.399L392.048 358.829V148.483V43.8946L368.781 12.2363L310.843 2.88048L47.7016 0L12.3084 11.377L1.67671 60.2217L0 315.639L8.31936 380.063L30.3972 392.758ZM145.13 137.145L173.46 123.505H207.036L238.513 137.145L257.4 165.475V247.316L238.513 270.4L173.46 279.843L131.637 247.316V165.475L145.13 137.145Z" fill={getCharacterColor(duelPlayers.find(p => p.id === currentUserId)?.character)}/>
+                      <path fillRule="evenodd" clipRule="evenodd" d="M30.3972 392.758L119.046 400L343.544 400L381.491 389.399L392.048 358.829V148.483V43.8946L368.781 12.2363L310.843 2.88048L47.7016 0L12.3084 11.377L1.67671 60.2217L0 315.639L8.31936 380.063L30.3972 392.758ZM145.13 137.145L173.46 123.505H207.036L238.513 137.145L257.4 165.475V247.316L238.513 270.4L173.46 279.843L131.637 247.316V165.475L145.13 137.145Z" fill={getCharacterPrimaryColor(duelPlayers.find(p => p.id === currentUserId)?.character)}/>
                     </svg>
                   </button>
                   <p className="font-funnel text-lg text-light opacity-60">Soyez le plus rapide !</p>

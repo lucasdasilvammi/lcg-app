@@ -1,13 +1,4 @@
-const CHARACTER_GENDERS = {
-  donatien: 'm',
-  tanguy: 'm',
-  alan: 'm',
-  lucien: 'm',
-  virginie: 'f',
-  lucie: 'f',
-  barbara: 'f',
-  alex: 'f'
-}
+import { getCharacter } from '../data/characters'
 
 const VOWEL_SOUND_RE = /^[aeiouyàâäéèêëîïôöùûü]/i
 
@@ -21,7 +12,7 @@ export function formatCharacterName(character) {
 }
 
 export function getCharacterGender(character) {
-  return CHARACTER_GENDERS[normalizeCharacterId(character)] || 'm'
+  return getCharacter(normalizeCharacterId(character))?.gender || 'm'
 }
 
 export function isFeminineCharacter(character) {

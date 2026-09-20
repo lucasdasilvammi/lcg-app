@@ -1,6 +1,7 @@
 import React from 'react'
 import { createPortal } from 'react-dom'
 import { useSocket } from '../contexts/SocketContext'
+import { getCharacterSecondaryCssColor } from '../data/characters'
 
 const TOAST_STYLES = {
   error: {
@@ -21,24 +22,13 @@ const TOAST_STYLES = {
   }
 }
 
-const CHARACTER_SECONDARY_COLORS = {
-  alan: 'var(--color-blue-secondary)',
-  donatien: 'var(--color-pink-secondary)',
-  lucien: 'var(--color-green-secondary)',
-  virginie: 'var(--color-red-secondary)',
-  barbara: 'var(--color-purple-secondary)',
-  alex: 'var(--color-yellow-secondary)',
-  lucie: 'var(--color-darkblue-secondary)',
-  tanguy: 'var(--color-orange-secondary)'
-}
-
 function ToastTag({ toast }) {
   const style = TOAST_STYLES[toast.type] || TOAST_STYLES.info
   const character = toast.player?.character
   const characterStyle = character
     ? {
         color: `var(--color-${character})`,
-        backgroundColor: CHARACTER_SECONDARY_COLORS[character] || 'var(--color-light5)'
+        backgroundColor: getCharacterSecondaryCssColor(character)
       }
     : null
 

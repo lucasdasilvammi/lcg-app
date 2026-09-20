@@ -1,0 +1,78 @@
+[
+  {
+    "id": "donatien",
+    "name": "Donatien",
+    "gender": "m",
+    "primaryColor": "#FF37A5",
+    "secondaryColor": "#4C1A35",
+    "secondaryCssVar": "--color-pink-secondary",
+    "codeIndex": 0,
+    "description": "Tu n’es surement pas le stagiaire qui rapporte le plus au patron mais vu que tu passes ton temps à tricher et à exploiter les failles, tu pourrais surprendre tout le monde."
+  },
+  {
+    "id": "barbara",
+    "name": "Barbara",
+    "gender": "f",
+    "primaryColor": "#9D0AFF",
+    "secondaryColor": "#260A3A",
+    "secondaryCssVar": "--color-purple-secondary",
+    "description": "Tu passes ton temps à la bibliothèque et ce serait génial si seulement t’avais appris autre chose que le nom des familles d’oiseaux en Alsace..."
+  },
+  {
+    "id": "alan",
+    "name": "Alan",
+    "gender": "m",
+    "primaryColor": "#06C0F9",
+    "secondaryColor": "#0D3C4A",
+    "secondaryCssVar": "--color-blue-secondary",
+    "codeIndex": 2,
+    "description": "Toi... toi... toi\nt’as une tête à connaître le goûts des crayons de couleurs...\nVoila quoi... bonne chance..."
+  },
+  {
+    "id": "alex",
+    "name": "Alex",
+    "gender": "f",
+    "primaryColor": "#FFC400",
+    "secondaryColor": "#4C3E0F",
+    "secondaryCssVar": "--color-yellow-secondary",
+    "description": "T’es pas la star que tu penses être, tu ferais mieux d’aller réviser que de passer tes journées à scroll sur TikTok"
+  },
+  {
+    "id": "lucien",
+    "name": "Lucien",
+    "gender": "m",
+    "primaryColor": "#20CA4B",
+    "secondaryColor": "#143E1F",
+    "secondaryCssVar": "--color-green-secondary",
+    "codeIndex": 1,
+    "description": "Tu passe tellement de temps sur ton PC que j’ai plus de chance de voir Alan lire un livre (à l’endroit !) que de te voir dehors..."
+  },
+  {
+    "id": "lucie",
+    "name": "Lucie",
+    "gender": "f",
+    "primaryColor": "#1C51FF",
+    "secondaryColor": "#0C173C",
+    "secondaryCssVar": "--color-darkblue-secondary",
+    "description": "Tu n’as jamais réussi à dire non à quelqu’un et la dernière fois ça t’as couté un rein... Donc va falloir s’affirmer maintenant."
+  },
+  {
+    "id": "virginie",
+    "name": "Virginie",
+    "gender": "f",
+    "primaryColor": "#F63609",
+    "secondaryColor": "#3F150B",
+    "secondaryCssVar": "--color-red-secondary",
+    "codeIndex": 3,
+    "description": "Tu es quelqu’un de timide et tu comprends pas toujours ce qu’on te demande (et c’est ok !) mais c’est ton moment pour prouver ta vraie valeur."
+  },
+  {
+    "id": "tanguy",
+    "name": "Tanguy",
+    "gender": "m",
+    "primaryColor": "#FF8A04",
+    "secondaryColor": "#4C2E0D",
+    "secondaryCssVar": "--color-orange-secondary",
+    "description": "Y’a les gens extravertis, introverti et il y a Tanguy, il porte bien son prénom... Sans maman, comment qu’on fait ?"
+  }
+]

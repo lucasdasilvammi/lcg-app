@@ -1,23 +1,11 @@
 import React from 'react'
 import { formatCharacterName, labelBeforeCharacter } from '../utils/frenchGrammar'
-
-const CHAR_COLORS = {
-  alan: '#06C0F9',
-  donatien: '#FF37A5',
-  lucien: '#20CA4B',
-  virginie: '#F63609',
-  barbara: '#9D0AFF',
-  alex: '#FFC400',
-  lucie: '#1C51FF',
-  tanguy: '#FF8A04',
-}
-
-const getColorHex = (charId) => CHAR_COLORS[charId] || '#FFF6EF'
+import { getCharacterPrimaryColor } from '../data/characters'
 
 export default function CharacterTag({ charId, text, className = '', hideName = false, showAvatar = !hideName, icon = null, reversed = false, nameOnly = false, variant = 'default' }) {
   if (!charId) return null
 
-  const baseColor = getColorHex(charId)
+  const baseColor = getCharacterPrimaryColor(charId)
   const backgroundColor = `${baseColor}33` // ~20% opacity
   const charName = formatCharacterName(charId)
   const displayText = text || `${charName} pose la question`
