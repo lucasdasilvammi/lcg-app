@@ -221,7 +221,7 @@
     {
       "type": "zoom",
       "question": "Quel est ce logo ?",
-      "image": "/game/defi-logo/logo-starbucks.png",
+      "image": "/defis/zoom/starbucks.jpg",
       "answer": "Starbucks",
       "options": [
         "Starbucks",
