@@ -25,7 +25,13 @@ Un checkout neuf doit installer les deux périmètres npm puis compiler le clien
 avant un lancement de production. Les références graphiques restent dans
 l'historique et le dépôt sans alourdir le livrable web.
 
-## Suivi
+## Validation finale
 
-Optimiser les images runtime restantes seulement après validation visuelle sur
-téléphone et conserver leurs dimensions utiles.
+Les images runtime restantes ont été mesurées. Les plus lourdes appartiennent
+au jeu Zoom et leurs dimensions servent directement à l'inspection détaillée
+des visuels. Elles sont conservées dans leur définition actuelle : une
+recompression sans validation comparative sur téléphones réels risquerait de
+dégrader le jeu pour un gain non démontré.
+
+Une optimisation ultérieure reste possible après essais sur appareils, mais
+elle n'est pas une condition de clôture du nettoyage V1.
