@@ -1,6 +1,7 @@
 import React from 'react'
 import QuizAnswerButton from '../../components/QuizAnswerButton'
 import ButtonWithIcon from '../../components/ButtonWithIcon'
+import { getQuizCategoryId } from '../../data/quizCategories'
 
 export default function Reveal({ roomData, continueToFeedback, currentUserId }) {
   if (!roomData || (!roomData.currentInteraction && !roomData.lastResult)) return null
@@ -11,18 +12,6 @@ export default function Reveal({ roomData, continueToFeedback, currentUserId }) 
   const isQuestioner = questionerId === currentUserId
   const activePlayer = roomData.players[roomData.turnIndex]
   
-  const getCategoryId = (categoryName) => {
-    const mapping = {
-      'Culture graphique': 'culture',
-      'Signe et couleur': 'couleur',
-      'Typographie': 'typo',
-      'Logo': 'logo',
-      'Composition': 'compo',
-      'Production': 'prod'
-    }
-    return mapping[categoryName] || (categoryName ? categoryName.toLowerCase() : '')
-  }
-
   if (type === 'QUIZ' && data) {
     const selectedIndex = roomData.lastResult?.selectedIndex ?? null
     const correctIndex = data.correct
@@ -35,7 +24,7 @@ export default function Reveal({ roomData, continueToFeedback, currentUserId }) 
  <img src={`/game/${activePlayer.character}.svg`} alt={activePlayer.character} className="w-10 h-10 object-contain" />
             )}
  <img src="/game/categorie/tag-quizz.png" alt="Quizz" className="h-7" />
- <img src={`/game/categorie/${getCategoryId(data.category)}.png`} alt={data.category} className="h-7" />
+ <img src={`/game/categorie/${getQuizCategoryId(data.category)}.png`} alt={data.category} className="h-7" />
  <img src={`/game/categorie/diff-${data.diff}.png`} alt={`Difficulté ${data.diff}`} className="h-7" />
           </div>
 

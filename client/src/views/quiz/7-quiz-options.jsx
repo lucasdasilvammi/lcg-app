@@ -7,6 +7,7 @@ import CharacterCard from '../../components/CharacterCard'
 import CharacterTag from '../../components/CharacterTag'
 import ScoreBar from '../../components/ScoreBar'
 import { BONUS_CATALOG } from '../../data/bonusCatalog'
+import { getQuizCategoryId } from '../../data/quizCategories'
 import { deCharacter, formatCharacterName, tonicPronoun } from '../../utils/frenchGrammar'
 
 const CHOOSE_QUIZ_BONUS = BONUS_CATALOG.find((bonus) => bonus.id === 'choose-quiz')
@@ -66,19 +67,6 @@ function ChooseQuizInfoCard() {
 export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeChooseQuizBonus, selectQuizDifficulty, currentUserId }) {
   const [selectedDiff, setSelectedDiff] = useState(null)
   if (!roomData) return null
-
-  const getCategoryId = (categoryName) => {
-    if (!categoryName) return ''
-    const mapping = {
-      'Culture graphique': 'culture',
-      'Signe et couleur': 'couleur',
-      'Typographie': 'typo',
-      'Logo': 'logo',
-      'Composition': 'compo',
-      'Production': 'prod'
-    }
-    return mapping[categoryName] || categoryName.toLowerCase()
-  }
 
   const pendingQuestionerId = roomData.pendingQuestionerId
   const activePlayer = roomData.players[roomData.turnIndex]
@@ -175,7 +163,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
  <p className="text-light opacity-75 text-lg font-family-funnel">Thème :</p>
             <div className="flex w-full items-center justify-center gap-2">
               <img
-                src={`/game/categorie/icon-${getCategoryId(roomData.pendingCategory)}.png`}
+                src={`/game/categorie/icon-${getQuizCategoryId(roomData.pendingCategory)}.png`}
                 alt={roomData.pendingCategory}
  className="h-9 object-contain"
               />
@@ -311,7 +299,7 @@ export default function QuizOptions({ roomData, startSpecificQuiz, acknowledgeCh
             <div className='flex gap-0 flex-col items-center justify-center'>
  <p className='font-family-funnel text-light text-lg font-medium'>Thème du quizz :</p>
               <img
-                src={`/game/categorie/${getCategoryId(roomData.pendingCategory)}.png`}
+                src={`/game/categorie/${getQuizCategoryId(roomData.pendingCategory)}.png`}
                 alt={roomData.pendingCategory}
  className="h-8 mt-2 object-contain"
               />

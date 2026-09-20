@@ -1,4 +1,6 @@
-const DUEL_REWARD_POINTS = 3;
+const gameRules = require('../shared/gameRules.json');
+
+const DUEL_REWARD_POINTS = gameRules.duelRewardPoints;
 
 const getDuelRewardPoints = (interaction = {}) => {
   const explicitPoints = Number(interaction.potentialPoints ?? interaction.points);

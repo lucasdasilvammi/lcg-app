@@ -3,6 +3,7 @@ import QuizAnswerButton from '../../components/QuizAnswerButton'
 import ButtonWithIcon from '../../components/ButtonWithIcon'
 import CharacterCard from '../../components/CharacterCard'
 import ScoreBar from '../../components/ScoreBar'
+import { getQuizCategoryId } from '../../data/quizCategories'
 
 export default function Interaction({ roomData, resolveInteraction, playerBuzz, currentUserId }) {
   const [selectedAnswer, setSelectedAnswer] = useState({ key: '', index: null })
@@ -18,18 +19,6 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
     const activePlayer = roomData.players[roomData.turnIndex]
     const isActivePlayer = activePlayer?.id === currentUserId
     const readerPlayer = roomData.players.find(p => p.id === readerId)
-    const getCategoryId = (categoryName) => {
-      const mapping = {
-        'Culture graphique': 'culture',
-        'Signe et couleur': 'couleur',
-        'Typographie': 'typo',
-        'Logo': 'logo',
-        'Composition': 'compo',
-        'Production': 'prod'
-      }
-      return mapping[categoryName] || (categoryName ? categoryName.toLowerCase() : '')
-    }
-
     return (
  <div className="relative w-full overflow-hidden bg-bg">
         {!isMeReader && (
@@ -61,7 +50,7 @@ export default function Interaction({ roomData, resolveInteraction, playerBuzz, 
  <img src={`/game/${activePlayer.character}.svg`} alt={activePlayer.character} className="w-10 h-10 object-contain" />
             )}
  <img src="/game/categorie/tag-quizz.png" alt="Quizz" className="h-7" />
- <img src={`/game/categorie/${getCategoryId(data.category)}.png`} alt={data.category} className="h-7" />
+ <img src={`/game/categorie/${getQuizCategoryId(data.category)}.png`} alt={data.category} className="h-7" />
  <img src={`/game/categorie/diff-${data.diff}.png`} alt={`Difficulté ${data.diff}`} className="h-7" />
           </div>
 
