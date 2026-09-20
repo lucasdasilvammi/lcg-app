@@ -6,25 +6,8 @@ import CharacterCard from '../../../components/CharacterCard'
 import CharacterTag from '../../../components/CharacterTag'
 import ScoreBar from '../../../components/ScoreBar'
 import { useSocket } from '../../../contexts/SocketContext'
-
-// Conversion HSL vers RGB (optimisée pour canvas)
-const hslToRgb = (h, s, l) => {
-  s /= 100
-  l /= 100
-  const a = s * Math.min(l, 1 - l)
-  const f = n => {
-    const k = (n + h / 30) % 12
-    const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1)
-    return Math.round(255 * color)
-  }
-  return [f(0), f(8), f(4)]
-}
-
-// Conversion HSL vers Hex pour socket
-const hslToHex = (h, s, l) => {
-  const [r, g, b] = hslToRgb(h, s, l)
-  return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`.toUpperCase()
-}
+import PickColorSwatch from './PickColorSwatch'
+import { hslToHex, hslToRgb } from './pickColor'
 
 export default function PickGame({ roomData, currentUserId, serverClockOffsetMs = 0 }) {
   const { socket } = useSocket()
@@ -298,51 +281,31 @@ export default function PickGame({ roomData, currentUserId, serverClockOffsetMs 
             {/* Couleur cible */}
             <div className="flex flex-col items-center gap-2">
               <p className="font-funnel text-lg text-light">Cible :</p>
-              <div className="relative h-32 w-32 overflow-hidden">
-                <div className="w-full h-full" style={{ backgroundColor: targetColor }} />
-                <svg width="111" height="158" viewBox="0 0 111 158" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-0.5 -left-0.5 w-16 h-22 pointer-events-none text-bg"><path d="M21.899 24.2268L13.0242 65.0001L0 157.794V0H110.972L51.4437 14.7298L21.899 24.2268Z" fill="currentColor"/></svg>
-                <svg width="168" height="224" viewBox="0 0 168 224" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-0.5 -right-0.5 w-12 h-16 pointer-events-none text-bg"><path d="M144.05 26.7421L85.492 17.1343L0 0H167.278V223.788L153.278 138.676L144.05 26.7421Z" fill="currentColor"/></svg>
-                <svg width="136" height="137" viewBox="0 0 136 137" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -bottom-0.5 -right-0.5 w-18 h-18 pointer-events-none text-bg"><path d="M112.263 114.125L80.5867 122.974L0 136.974H135.075V0L121.075 88.6065L112.263 114.125Z" fill="currentColor"/></svg>
-                <svg width="170" height="210" viewBox="0 0 170 210" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -bottom-0.5 -left-1.5 w-20 h-22 pointer-events-none text-bg"><path d="M23.2769 187.536L11.6245 124.918L0 0V209.339H169.849L107.077 200.319L23.2769 187.536Z" fill="currentColor"/></svg>
-              </div>
+              <PickColorSwatch color={targetColor} className="relative h-32 w-32 overflow-hidden" variant="target" />
             </div>
 
             {/* Joueurs */}
             <div className="flex items-center justify-center gap-6">
               <div className="flex flex-col items-center gap-4">
                 <CharacterCard charId={duelPlayers[0]?.character} size="mini" />
-                <div className="relative h-18 w-18">
-                  <div className="w-full h-full" style={{ backgroundColor: hslToHex(player1Hue, player1Saturation, player1Lightness) }} />
-                  <svg width="111" height="158" viewBox="0 0 111 158" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-0.5 -left-0.5 w-10 h-13 pointer-events-none text-bg"><path d="M21.899 24.2268L13.0242 65.0001L0 157.794V0H110.972L51.4437 14.7298L21.899 24.2268Z" fill="currentColor"/></svg>
-                  <svg width="168" height="224" viewBox="0 0 168 224" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-0.5 -right-0.5 w-7 h-10 pointer-events-none text-bg"><path d="M144.05 26.7421L85.492 17.1343L0 0H167.278V223.788L153.278 138.676L144.05 26.7421Z" fill="currentColor"/></svg>
-                  <svg width="136" height="137" viewBox="0 0 136 137" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -bottom-0.5 -right-0.5 w-11 h-11 pointer-events-none text-bg"><path d="M112.263 114.125L80.5867 122.974L0 136.974H135.075V0L121.075 88.6065L112.263 114.125Z" fill="currentColor"/></svg>
-                  <svg width="170" height="210" viewBox="0 0 170 210" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -bottom-0.5 -left-0.5 w-12 h-14 pointer-events-none text-bg"><path d="M23.2769 187.536L11.6245 124.918L0 0V209.339H169.849L107.077 200.319L23.2769 187.536Z" fill="currentColor"/></svg>
-                  {/* Tag indicateur d'état */}
-                  <img 
-                    src={player1Submitted ? '/game/questions/bonne-reponse.svg' : '/game/questions/inprogress-reponse.svg'} 
-                    alt={player1Submitted ? 'Validé' : 'En cours'}
-                    className='absolute -top-2 -right-3 h-7 w-7 rotate-10'
-                  />
-                </div>
+                <PickColorSwatch
+                  color={hslToHex(player1Hue, player1Saturation, player1Lightness)}
+                  className="relative h-18 w-18"
+                  variant="player"
+                  submitted={player1Submitted}
+                />
               </div>
 
               <img src="/game/categorie/vs.png" alt="vs" className="h-14" />
 
               <div className="flex flex-col items-center gap-4">
                 <CharacterCard charId={duelPlayers[1]?.character} size="mini" />
-                <div className="relative h-18 w-18">
-                  <div className="w-full h-full" style={{ backgroundColor: hslToHex(player2Hue, player2Saturation, player2Lightness) }} />
-                  <svg width="111" height="158" viewBox="0 0 111 158" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-0.5 -left-0.5 w-10 h-13 pointer-events-none text-bg"><path d="M21.899 24.2268L13.0242 65.0001L0 157.794V0H110.972L51.4437 14.7298L21.899 24.2268Z" fill="currentColor"/></svg>
-                  <svg width="168" height="224" viewBox="0 0 168 224" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-0.5 -right-0.5 w-7 h-10 pointer-events-none text-bg"><path d="M144.05 26.7421L85.492 17.1343L0 0H167.278V223.788L153.278 138.676L144.05 26.7421Z" fill="currentColor"/></svg>
-                  <svg width="136" height="137" viewBox="0 0 136 137" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -bottom-0.5 -right-0.5 w-11 h-11 pointer-events-none text-bg"><path d="M112.263 114.125L80.5867 122.974L0 136.974H135.075V0L121.075 88.6065L112.263 114.125Z" fill="currentColor"/></svg>
-                  <svg width="170" height="210" viewBox="0 0 170 210" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -bottom-0.5 -left-0.5 w-12 h-14 pointer-events-none text-bg"><path d="M23.2769 187.536L11.6245 124.918L0 0V209.339H169.849L107.077 200.319L23.2769 187.536Z" fill="currentColor"/></svg>
-                  {/* Tag indicateur d'état */}
-                  <img 
-                    src={player2Submitted ? '/game/questions/bonne-reponse.svg' : '/game/questions/inprogress-reponse.svg'} 
-                    alt={player2Submitted ? 'Validé' : 'En cours'}
-                    className='absolute -top-2 -right-3 h-7 w-7 rotate-10'
-                  />
-                </div>
+                <PickColorSwatch
+                  color={hslToHex(player2Hue, player2Saturation, player2Lightness)}
+                  className="relative h-18 w-18"
+                  variant="player"
+                  submitted={player2Submitted}
+                />
               </div>
             </div>
 
@@ -512,58 +475,14 @@ export default function PickGame({ roomData, currentUserId, serverClockOffsetMs 
             {/* Couleur cible */}
             <div className="flex flex-col items-center gap-3 w-full">
             <p className="font-funnel text-lg text-light opacity-80">Couleur cible</p>
-            <div className="relative h-24 w-full overflow-hidden">
-                <div
-                    className="w-full h-full"
-                    style={{ backgroundColor: targetColor }}
-                />
-                {/* Décoration coins */}
-                {/* Top-left */}
-                <svg width="111" height="158" viewBox="0 0 111 158" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-0.5 -left-0.5 w-11 h-15 pointer-events-none text-bg">
-                  <path d="M21.899 24.2268L13.0242 65.0001L0 157.794V0H110.972L51.4437 14.7298L21.899 24.2268Z" fill="currentColor"/>
-                </svg>
-                {/* Top-right */}
-                <svg width="168" height="224" viewBox="0 0 168 224" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-0.5 -right-0.5 w-12 h-16 pointer-events-none text-bg">
-                  <path d="M144.05 26.7421L85.492 17.1343L0 0H167.278V223.788L153.278 138.676L144.05 26.7421Z" fill="currentColor"/>
-                </svg>
-                {/* Bottom-right */}
-                <svg width="136" height="137" viewBox="0 0 136 137" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -bottom-0.5 -right-0.5 w-10 h-10 pointer-events-none text-bg">
-                  <path d="M112.263 114.125L80.5867 122.974L0 136.974H135.075V0L121.075 88.6065L112.263 114.125Z" fill="currentColor"/>
-                </svg>
-                {/* Bottom-left */}
-                <svg width="170" height="210" viewBox="0 0 170 210" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -bottom-0.5 -left-0.5 w-13 h-16 pointer-events-none text-bg">
-                  <path d="M23.2769 187.536L11.6245 124.918L0 0V209.339H169.849L107.077 200.319L23.2769 187.536Z" fill="currentColor"/>
-                </svg>
-            </div>
+            <PickColorSwatch color={targetColor} className="relative h-24 w-full overflow-hidden" />
             </div>
 
             
             {/* Prisme de preview */}
             <div className="flex flex-col items-center gap-3 w-full">
                 <p className="font-funnel text-lg text-light opacity-80">Ta couleur</p>
-                <div className="relative h-24 w-full ">
-                    <div
-                        className="w-full h-full"
-                        style={{ backgroundColor: pickedColor }}
-                    />
-                    {/* Décoration coins */}
-                    {/* Top-left */}
-                    <svg width="111" height="158" viewBox="0 0 111 158" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-0.5 -left-0.5 w-11 h-15 pointer-events-none text-bg">
-                    <path d="M21.899 24.2268L13.0242 65.0001L0 157.794V0H110.972L51.4437 14.7298L21.899 24.2268Z" fill="currentColor"/>
-                    </svg>
-                    {/* Top-right */}
-                    <svg width="168" height="224" viewBox="0 0 168 224" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -top-0.5 -right-0.5 w-12 h-16 pointer-events-none text-bg">
-                    <path d="M144.05 26.7421L85.492 17.1343L0 0H167.278V223.788L153.278 138.676L144.05 26.7421Z" fill="currentColor"/>
-                    </svg>
-                    {/* Bottom-right */}
-                    <svg width="136" height="137" viewBox="0 0 136 137" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -bottom-0.5 -right-0.5 w-10 h-10 pointer-events-none text-bg">
-                    <path d="M112.263 114.125L80.5867 122.974L0 136.974H135.075V0L121.075 88.6065L112.263 114.125Z" fill="currentColor"/>
-                    </svg>
-                    {/* Bottom-left */}
-                    <svg width="170" height="210" viewBox="0 0 170 210" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute -bottom-0.5 -left-0.5 w-13 h-16 pointer-events-none text-bg">
-                    <path d="M23.2769 187.536L11.6245 124.918L0 0V209.339H169.849L107.077 200.319L23.2769 187.536Z" fill="currentColor"/>
-                    </svg>
-                </div>
+                <PickColorSwatch color={pickedColor} className="relative h-24 w-full " />
             </div>
         </div>
 
