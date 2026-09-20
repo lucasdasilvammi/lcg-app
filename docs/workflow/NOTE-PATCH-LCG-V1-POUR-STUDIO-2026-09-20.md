@@ -297,6 +297,7 @@ souvent arrondies aux cinq minutes.
 | 2026-09-20T15:31:00+02:00 | 2026-09-20T15:46:00+02:00 | 15 min | Validation finale des étapes 5 et 6 |
 | 2026-09-20T16:01:00+02:00 | 2026-09-20T16:05:00+02:00 | environ 5 min | Première note de transmission |
 | 2026-09-20T16:16:00+02:00 | 2026-09-20T16:20:00+02:00 | environ 5 min | Rapport complet au format Worklog |
+| 2026-09-20T16:51:00+02:00 | 2026-09-20T16:56:00+02:00 | 5 min | Correctif du bloc structuré importable |
 
 * La session de 2 h 55 contient une interruption prolongée explicitement
 signalée dans le journal. Elle est comptée comme intervalle écoulé, pas comme
@@ -311,13 +312,159 @@ Répartition des 8 h 20 min consignées avant la rédaction de ce rapport :
 - interface, ressources et automatisation, étapes 5-6 : 1 h ;
 - première note de transmission : 5 min.
 
-**Temps du patch : 8 h 25 min**
+**Temps du patch : 8 h 30 min**
 
 Ce total est un temps de sessions journalisé, pas une mesure exacte de temps
 actif. Il inclut la plage interrompue signalée ci-dessus et des durées arrondies.
 Il n'inclut pas les périodes entre les sessions, les temps d'attente hors session
 ni les futurs essais sur téléphones.
 
-> Ce document reprend la forme visible du modèle Worklog fourni. Il ne contient
-> pas de bloc JSON propriétaire de réimport, dont le schéma n'a pas été utilisé
-> pour cette rédaction.
+<!-- lcg-worklog:v1 ; les donnees JSON ci-dessous font foi pour la reimportation -->
+```json
+{
+  "format": "lcg-worklog/v1",
+  "id": "patch-0.1.0",
+  "version": "0.1.0",
+  "title": "Consolidation et sécurisation LCG V1",
+  "status": "released",
+  "summary": "Consolidation complète du proof of concept LCG en une base V1 plus sûre, testée et maintenable. Les étapes 0 à 6 couvrent l'audit, la sécurisation du protocole multijoueur, l'unification du runtime, les refactors serveur et client, l'allègement du livrable et la CI. Les parcours, le rendu, les règles, le transfert d'hôte, la réinvitation avec progression et la confidentialité des clés sont préservés. Validation finale : 166 tests serveur, 11 scénarios multijoueurs, 7 scénarios bonus, lint, build et CI réussis. Les essais caméra, plein écran, reprise réseau et gestes tactiles restent à effectuer sur téléphones physiques. Le patch n'est ni fusionné dans main ni déployé.",
+  "initialMinutes": 7,
+  "changes": [
+    "[Étape 0] Mise en place du journal de session, du journal technique et des guides de reprise.",
+    "[Étape 0] Audit complet du POC : client React, serveurs, scripts, tests, dépendances, données et ressources.",
+    "[Étape 0] Création de la branche codex/lcg-v1-cleanup et conservation de main comme production.",
+    "[Étape 1] Migration des intégrations vers le serveur principal server.js sur ports éphémères.",
+    "[Étape 1] Remplacement du test de quantité de questions par des contrôles de schéma, d'unicité et d'invariants.",
+    "[Étape 1] Ajout d'une matrice permanente de commandes, phases et rôles.",
+    "[Étape 1] Ajout d'un parcours complet couvrant quiz, cinq duels, activité, votes, manches et classement.",
+    "[Étape 2] Projection publique des salles et retrait des clés, invitations et réserves privées.",
+    "[Étape 2] Réinvitation à usage unique sans doublon, avec personnage, score et progression restaurés.",
+    "[Étape 2] Transfert d'hôte conservé ; le nouvel hôte garde son rôle après le retour de l'ancien.",
+    "[Étape 2] Résolution autoritaire des Quiz, Buzzer, Vrai/Faux, Chiffres, Pick et Zoom.",
+    "[Étape 2] Calcul serveur des verdicts QCM et rejet des verdicts client contradictoires.",
+    "[Étape 2] Réponses et explications privées avant révélation selon le rôle.",
+    "[Étape 2] Filtrage des payloads avant déstructuration et validation complète des champs imbriqués.",
+    "[Étape 2] Validation des difficultés, ordres, codes, identifiants, couleurs, chiffres, votes, verdicts et photos.",
+    "[Étape 2] Ajout d'identifiants de contexte pour rejeter les commandes retardées d'une ancienne interaction.",
+    "[Étape 2] Migration des commandes client et des simulateurs vers le contexte d'interaction.",
+    "[Étape 2] Registre central des timers et annulation des callbacks obsolètes après undo ou changement d'interaction.",
+    "[Étape 2] Échéances Pick 15/5 secondes autoritaires côté serveur et résilientes à la reconnexion.",
+    "[Étape 2] Contrôle des transitions continue_to_feedback, next_turn et des écrans de résultat.",
+    "[Étape 2] Unicité des sous-actions d'événement, notamment du vol de bonus.",
+    "[Étape 2] Protection contre les collisions Coffee Boss et sabotage avec restitution d'inventaire.",
+    "[Étape 2] Distinction entre déconnexion temporaire et retrait définitif pendant duels et activités.",
+    "[Étape 2] Nettoyage des timers, photos, sélections et snapshots lors d'un retrait devenu bloquant.",
+    "[Étape 2] Verrouillage des soumissions Chiffres/Pick confirmé par l'état serveur.",
+    "[Étape 3] Suppression des restes de template, imports, fonctions, assets et dépendances inutilisés.",
+    "[Étape 3] Suppression du serveur hérité server/index.js après vérification de la parité des événements.",
+    "[Étape 3] Centralisation des commandes npm et suppression de la réinstallation implicite pendant le build.",
+    "[Étape 3] Validation d'un checkout propre après npm ci racine et client.",
+    "[Étape 4] Découpage du serveur par domaines sans changer les contrats Socket.IO ni les règles.",
+    "[Étape 4] Isolation des duels, projections, identités, photos, timers, setup, codes et membres de salle.",
+    "[Étape 4] Isolation des bonus, événements, activités, quiz, résolutions, actions, tours, sessions, lobby et administration.",
+    "[Étape 4] Réduction de server.js d'environ 3 232 à 936 lignes.",
+    "[Étape 5] Centralisation des huit personnages, catégories de quiz et récompense de duel.",
+    "[Étape 5] Extraction de la coque responsive et des overlays ; App réduit de 840 à 627 lignes.",
+    "[Étape 5] Découpage de SettingsMenu de 1 381 à 673 lignes.",
+    "[Étape 5] Isolation des commandes Socket.IO ; SocketContext réduit de 490 à 348 lignes.",
+    "[Étape 5] Isolation des utilitaires photo et réduction de la vue d'upload de 507 à 379 lignes.",
+    "[Étape 5] Centralisation des couleurs Pick et réduction de la vue de 580 à 499 lignes.",
+    "[Étape 6] Déplacement des sources graphiques et maquettes hors des ressources runtime.",
+    "[Étape 6] Réduction du build temporaire d'environ 45,18 Mo à 11,27 Mo.",
+    "[Étape 6] Retrait du suivi Git de 365 artefacts build générés et ajout de leur exclusion.",
+    "[Étape 6] Ajout de npm run validate et d'une CI GitHub reproductible.",
+    "[Étape 6] Conservation mesurée des images Zoom à leur définition actuelle pour préserver les détails.",
+    "[Validation] 166 tests serveur réussis sur 38 suites.",
+    "[Validation] 11 scénarios multijoueurs et 7 scénarios de collisions bonus réussis.",
+    "[Validation] Lint client, build Vite temporaire, 2 tests Worklog et CI GitHub réussis.",
+    "[Validation] Contrôle responsive automatisé sans débordement horizontal détecté.",
+    "[Limite] Caméra, import photo, plein écran, veille, réseau et gestes Pick à valider sur téléphones physiques.",
+    "[Livraison] Aucun merge ou push vers main et aucun déploiement ; le patch reste sur codex/lcg-v1-cleanup.",
+    "[Contenu] Aucune migration des questions ou modification du format de contenu Studio demandée."
+  ],
+  "sessions": [
+    {
+      "startedAt": "2026-09-17T22:39:00+02:00",
+      "endedAt": "2026-09-17T23:14:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-17T23:14:00+02:00",
+      "endedAt": "2026-09-17T23:58:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-18T08:13:00+02:00",
+      "endedAt": "2026-09-18T08:17:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-18T10:59:00+02:00",
+      "endedAt": "2026-09-18T11:12:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-18T11:14:00+02:00",
+      "endedAt": "2026-09-18T11:15:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-18T11:19:00+02:00",
+      "endedAt": "2026-09-18T14:14:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-19T13:08:00+02:00",
+      "endedAt": "2026-09-19T13:37:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-19T19:18:00+02:00",
+      "endedAt": "2026-09-19T19:37:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-19T20:22:00+02:00",
+      "endedAt": "2026-09-19T20:52:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-19T21:38:00+02:00",
+      "endedAt": "2026-09-19T21:46:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-19T21:50:00+02:00",
+      "endedAt": "2026-09-19T21:53:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-19T21:55:00+02:00",
+      "endedAt": "2026-09-19T21:58:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-20T00:18:00+02:00",
+      "endedAt": "2026-09-20T01:04:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-20T01:10:00+02:00",
+      "endedAt": "2026-09-20T01:30:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-20T10:21:00+02:00",
+      "endedAt": "2026-09-20T11:00:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-20T11:07:00+02:00",
+      "endedAt": "2026-09-20T11:13:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-20T15:31:00+02:00",
+      "endedAt": "2026-09-20T15:46:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-20T16:01:00+02:00",
+      "endedAt": "2026-09-20T16:05:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-20T16:16:00+02:00",
+      "endedAt": "2026-09-20T16:20:00+02:00"
+    },
+    {
+      "startedAt": "2026-09-20T16:51:00+02:00",
+      "endedAt": "2026-09-20T16:56:00+02:00"
+    }
+  ],
+  "createdAt": "2026-09-17T22:39:00+02:00",
+  "updatedAt": "2026-09-20T16:56:00+02:00"
+}
+```
