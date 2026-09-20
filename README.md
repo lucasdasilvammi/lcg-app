@@ -29,10 +29,12 @@ npm start         # serveur principal
 npm test          # suite Jest sur server.js
 npm run lint      # lint du client
 npm run build     # compilation du client dans build/
+npm run validate  # tests, lint et build temporaire sans toucher build/
 ```
 
-Le build ne lance aucune installation. Pour le vérifier sans modifier le
-dossier `build/` suivi par Git :
+Le build ne lance aucune installation. Le dossier `build/` est un artefact
+généré, ignoré par Git et reconstruit au déploiement. Pour vérifier la
+compilation sans modifier un éventuel build local :
 
 ```sh
 npm --prefix client run build -- --outDir ../tmp/poc-audit/client-build

@@ -12,6 +12,7 @@
     "client:dev": "npm --prefix client run dev",
     "lint": "npm --prefix client run lint",
     "test": "jest --runInBand server/tests",
+    "validate": "npm test && npm run lint && npm --prefix client run build -- --outDir ../tmp/poc-audit/client-build",
     "test:swarm": "node scripts/agent-swarm/run-four-player-simulation.js --spawn-server --scenario scripts/agent-swarm/scenarios/default-four-player.json",
     "worklog": "node docs/worklog-site/server.js",
     "test:worklog": "node --test docs/worklog-site/server.test.js",
