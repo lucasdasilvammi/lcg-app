@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import io from 'socket.io-client'
+import { createSocketCommands } from './socketCommands'
 
 const SocketContext = createContext()
 
@@ -79,6 +80,7 @@ export const SocketProvider = ({ children }) => {
   const toastQueueRef = useRef([])
   const addToastRef = useRef(null)
   const activeToastIdRef = useRef(null)
+  const toastIdCounterRef = useRef(0)
   const toastTimersRef = useRef([])
   const restoredRoomIdRef = useRef(roomData?.id || null)
   const roomStateConfirmedRef = useRef(false)
@@ -94,7 +96,8 @@ export const SocketProvider = ({ children }) => {
     if (activeToastIdRef.current || toastQueueRef.current.length === 0) return
 
     const payload = toastQueueRef.current.shift()
-    const id = payload.id || Date.now() + Math.random()
+    toastIdCounterRef.current += 1
+    const id = payload.id || `toast-${toastIdCounterRef.current}`
     const exitDuration = 240
     const toastDuration = payload.duration || 3600
     const visibleDuration = Math.max(0, toastDuration - exitDuration)
@@ -128,7 +131,9 @@ export const SocketProvider = ({ children }) => {
     })
     showNextToast()
   }
-  addToastRef.current = addToast
+  useEffect(() => {
+    addToastRef.current = addToast
+  })
 
   useEffect(() => () => {
     clearToastTimers()
@@ -159,6 +164,8 @@ export const SocketProvider = ({ children }) => {
       reconnectionDelayMax: 5000,
       reconnectionAttempts: Infinity
     })
+    // The socket is an external connection created by this effect and must be exposed immediately.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSocket(s)
     const clockSyncTimers = []
     const syncServerClock = () => {
@@ -286,140 +293,21 @@ export const SocketProvider = ({ children }) => {
     return () => window.clearInterval(interval)
   }, [socket, roomData?.id, roomData?.status])
 
-  // Emit helpers
-  const emitGameCommand = (event, payload = {}, ack) => socket?.emit(event, {
-    ...payload,
-    commandContextId: roomData?.commandContextId
-  }, ack)
-  const createRoom = () => socket?.emit("create_room")
-  const joinRoomWithCode = (code) => socket?.emit("join_room_with_code", code)
-  const startGame = () => socket?.emit("start_game")
-  const pickCharacter = (id) => socket?.emit("pick_character", id)
-  const confirmSelection = () => socket?.emit("confirm_selection")
-  const updateTurnOrder = (list) => socket?.emit("update_turn_order", list)
-  const startGameLoop = () => socket?.emit("start_game_loop")
-  const rollDice = () => emitGameCommand("roll_dice")
-  const triggerAction = (actionType) => {
-    if (!socket) {
-      console.warn('triggerAction called but socket is null', actionType)
-      return
-    }
-    console.log('🎯 triggerAction -> emitting', actionType, 'socket', socket.id, 'connected', socket.connected)
-    emitGameCommand("trigger_action", typeof actionType === 'string' ? { type: actionType } : actionType, (response) => {
-      console.log('🎯 triggerAction ack', actionType, response)
-    })
-  }
-  const startSpecificQuiz = (payload) => emitGameCommand("start_specific_quiz", payload)
-  const startDuel = () => emitGameCommand("start_duel")
-  const acknowledgeRules = () => emitGameCommand("acknowledge_rules")
-  const playerBuzz = () => emitGameCommand("player_buzz")
-  const resolveInteraction = (result) => emitGameCommand("resolve_interaction", typeof result === 'boolean' ? { correct: result } : result)
-  const zoomReaderVerdict = (correct, fromTimeoutOptions = false, selectedIndex = null) => emitGameCommand('zoom_reader_verdict', { correct, fromTimeoutOptions, selectedIndex })
-  const continueToFeedback = () => emitGameCommand("continue_to_feedback")
-  const nextTurn = () => emitGameCommand("next_turn")
-  const startNewRound = () => emitGameCommand("start_new_round")
-  const acknowledgeChooseQuizBonus = (ack) => emitGameCommand('ack_choose_quiz_bonus', {}, ack)
-  const selectQuizDifficulty = (difficulty, ack) => emitGameCommand('select_quiz_difficulty', { difficulty }, ack)
-  const claimCaseBonus = (ack) => emitGameCommand('claim_case_bonus', {}, ack)
-  const stealEventBonus = (targetPlayerId, ack) => emitGameCommand('event_steal_bonus', { targetPlayerId }, ack)
-  const previewEventStealTarget = (targetPlayerId, ack) => emitGameCommand('event_preview_steal_target', { targetPlayerId }, ack)
-  const swapEventPositions = (targetPlayerId, ack) => emitGameCommand('event_swap_positions', { targetPlayerId }, ack)
-  const declareFinish = (ack) => emitGameCommand('declare_finish', {}, ack)
-  
-  // Activité: Dessin de Logo
-  const acknowledgeReady = () => emitGameCommand("activite_acknowledge_ready")
-  const submitDrawing = () => emitGameCommand("activite_submit_drawing")
-  const submitPhoto = (photoData, ack) => {
-    if (!socket?.connected) {
-      if (typeof ack === 'function') {
-        ack({ ok: false, reason: 'Connexion en cours, réessaie dans une seconde.' })
-      }
-      return
-    }
-
-    let settled = false
-    const timeout = window.setTimeout(() => {
-      if (settled) return
-      settled = true
-      if (typeof ack === 'function') {
-        ack({ ok: false, reason: 'Connexion instable, réessaie.' })
-      }
-    }, 8000)
-
-    emitGameCommand("activite_submit_photo", { photoData }, (response) => {
-      if (settled) return
-      settled = true
-      window.clearTimeout(timeout)
-      if (typeof ack === 'function') ack(response)
-    })
-  }
-  const submitVote = (photoIndex, voteType) => emitGameCommand("activite_vote", { photoIndex, voteType })
-  const promoteAdmin = (targetPlayerId, ack) => socket?.emit('promote_admin', { targetPlayerId }, ack)
-  const kickPlayer = (targetPlayerId, ack) => socket?.emit('kick_player', { targetPlayerId }, ack)
-  const createReconnectInvite = (targetPlayerId, ack) => {
-    if (!socket) {
-      if (typeof ack === 'function') ack({ ok: false, reason: 'socket_not_ready' })
-      return
-    }
-
-    let settled = false
-    const timeout = window.setTimeout(() => {
-      if (settled) return
-      settled = true
-      console.warn('create_reconnect_invite: no server ack', { targetPlayerId })
-      if (typeof ack === 'function') ack({ ok: false, reason: 'server_no_ack' })
-    }, 1500)
-
-    socket.emit('create_reconnect_invite', { targetPlayerId }, (response) => {
-      if (settled) return
-      settled = true
-      window.clearTimeout(timeout)
-      console.log('create_reconnect_invite ack', response)
-      if (typeof ack === 'function') ack(response)
-    })
-  }
-  const confirmReconnectInvite = (code, ack) => {
-    socket?.emit('confirm_reconnect_invite', { code }, (response) => {
-      if (response?.ok) setPendingReconnectInvite(null)
-      if (typeof ack === 'function') ack(response)
-    })
-  }
-  const dismissReconnectInvite = () => {
-    setPendingReconnectInvite(null)
-  }
-  const undoLastAction = (ack) => socket?.emit('undo_last_action', {}, ack)
-  const pauseGame = (ack) => socket?.emit('pause_game', {}, ack)
-  const resumeGame = (ack) => socket?.emit('resume_game', {}, ack)
-  const useBonus = (bonusId, payloadOrAck, ack) => {
-    const payload = typeof payloadOrAck === 'function' ? {} : (payloadOrAck || {})
-    const callback = typeof payloadOrAck === 'function' ? payloadOrAck : ack
-    emitGameCommand('use_bonus', { bonusId, ...payload }, callback)
-  }
-  const debugGiveBonus = (bonusId = 'ctrl-z', quantity = 1, playerId = socket?.id) => {
-    socket?.emit('debug_give_bonus', { bonusId, quantity, playerId }, (response) => {
-      console.log('debug_give_bonus ack', response)
-    })
-  }
-  const leaveRoom = () => {
-    console.log('🚪 leaveRoom() called, socket:', socket?.id, 'connected:', socket?.connected)
-    if (!socket) {
-      console.error('❌ leaveRoom: socket is null')
-      return
-    }
-
-    console.log('📤 emitting leave_room...')
-    socket.emit('leave_room', {}, (response) => {
-      console.log('✅ leave_room ack received', response)
+  const socketCommands = createSocketCommands({
+    socket,
+    commandContextId: roomData?.commandContextId,
+    setPendingReconnectInvite,
+    resetRoomState: () => {
       setRoomData(null)
       setIsAdmin(false)
-      setErrorMsg("")
-    })
-  }
+      setErrorMsg('')
+    }
+  })
+  const { debugGiveBonus, ...publicSocketCommands } = socketCommands
 
-  // Helpers for debugging from browser console
-  if (typeof window !== 'undefined') {
+  useEffect(() => {
     window.__ADD_TOAST = (msg, type='info') => addToast(msg, type)
-    window.__JOIN = (code) => joinRoomWithCode(code)
+    window.__JOIN = (code) => socketCommands.joinRoomWithCode(code)
     window.__LOG_SOCKET = () => console.log('socket id', socket?.id, 'connected', socket?.connected)
     if (DEBUG_TOOLS_ENABLED) {
       window.__GIVE_BONUS = debugGiveBonus
@@ -428,7 +316,15 @@ export const SocketProvider = ({ children }) => {
       delete window.__GIVE_BONUS
       delete window.__BONUS_IDS
     }
-  }
+
+    return () => {
+      delete window.__ADD_TOAST
+      delete window.__JOIN
+      delete window.__LOG_SOCKET
+      delete window.__GIVE_BONUS
+      delete window.__BONUS_IDS
+    }
+  })
 
   return (
     <SocketContext.Provider value={{
@@ -442,45 +338,7 @@ export const SocketProvider = ({ children }) => {
       addToast,
       pendingReconnectInvite,
       consumedReconnectInvite,
-      confirmReconnectInvite,
-      dismissReconnectInvite,
-      createRoom,
-      joinRoomWithCode,
-      startGame,
-      pickCharacter,
-      confirmSelection,
-      updateTurnOrder,
-      startGameLoop,
-      rollDice,
-      triggerAction,
-      startSpecificQuiz,
-      startDuel,
-      acknowledgeRules,
-      playerBuzz,
-      resolveInteraction,
-      zoomReaderVerdict,
-      continueToFeedback,
-      nextTurn,
-      startNewRound,
-      acknowledgeChooseQuizBonus,
-      selectQuizDifficulty,
-      claimCaseBonus,
-      stealEventBonus,
-      previewEventStealTarget,
-      swapEventPositions,
-      declareFinish,
-      acknowledgeReady,
-      submitDrawing,
-      submitPhoto,
-      submitVote,
-      promoteAdmin,
-      kickPlayer,
-      createReconnectInvite,
-      undoLastAction,
-      pauseGame,
-      resumeGame,
-      useBonus,
-      leaveRoom
+      ...publicSocketCommands
     }}>
       {children}
     </SocketContext.Provider>
